@@ -1,0 +1,12 @@
+{
+    "require": {
+        "pimple/pimple": "^3.2",
+        "guzzlehttp/psr7": "^1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "CarbonFramework\\": "src/"
+        },
+        "files": ["config.php"]
+    }
+}
