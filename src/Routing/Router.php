@@ -41,8 +41,6 @@ class Router {
 	}
 
 	protected function handle( $handler ) {
-		// TODO middleware implementation
-		// TODO exception handling
 		$request = ServerRequest::fromGlobals();
 		$response = $handler->execute( $request );
 

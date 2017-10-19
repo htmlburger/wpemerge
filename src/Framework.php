@@ -13,10 +13,6 @@ use CarbonFramework\Support\AliasLoader;
 use CarbonFramework\Routing\Router;
 use CarbonFramework\Facades\Router as RouterFacade;
 
-/**
- * TODO flash
- * TODO twig/blade support
- */
 class Framework {
 	protected static $booted = false;
 
