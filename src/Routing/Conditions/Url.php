@@ -8,14 +8,14 @@ class Url implements ConditionInterface {
 	protected $url = 0;
 
 	public function __construct( $url ) {
-		// TODO convert to relative
-		// TODO leading slash it
+		$url = UrlUtility::addLeadingSlash( $url );
+		$url = UrlUtility::addTrailingSlash( $url );
 		// TODO support parameters
-		$this->url = trailingslashit( $url );
+		$this->url = $url;
 	}
 
 	public function satisfied() {
-		$url = trailingslashit( UrlUtility::getCurrentPath() );
+		$url = UrlUtility::addTrailingSlash( UrlUtility::getCurrentPath() );
 		return $this->url === $url;
 	}
 
@@ -24,6 +24,6 @@ class Url implements ConditionInterface {
 	}
 
 	public function concatenate( Url $url ) {
-		return new static( untrailingslashit( $this->getUrl() ) . $url->getUrl() );
+		return new static( UrlUtility::removeTrailingSlash( $this->getUrl() ) . $url->getUrl() );
 	}
 }
