@@ -12,4 +12,8 @@ class PostId implements ConditionInterface {
 	public function satisfied() {
 		return intval( $this->post_id ) === intval( get_the_ID() );
 	}
+
+	public function getArguments() {
+		return [];
+	}
 }

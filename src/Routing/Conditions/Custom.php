@@ -12,4 +12,8 @@ class Custom implements ConditionInterface {
 	public function satisfied() {
 		return call_user_func( $this->callable );
 	}
+
+	public function getArguments() {
+		return [];
+	}
 }

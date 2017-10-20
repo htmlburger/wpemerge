@@ -47,15 +47,16 @@ class Handler {
 		$this->handler = $handler;
 	}
 
-	public function execute( $request ) {
+	public function execute() {
+		$arguments = func_get_args();
 		if ( ! is_array( $this->handler ) ) {
-			return call_user_func( $this->handler );
+			return call_user_func_array( $this->handler, $arguments );
 		}
 
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
 		$controller = Framework::instantiate( $class );
-		return $controller->$method( $request );
+		return call_user_func_array( [$controller, $method], $arguments );
 	}
 }

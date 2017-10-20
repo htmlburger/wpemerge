@@ -4,6 +4,7 @@ namespace CarbonFramework\Routing;
 
 use ReflectionClass;
 use Exception;
+use Psr\Http\Message\RequestInterface;
 use CarbonFramework\Url;
 use CarbonFramework\Framework;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
@@ -41,8 +42,9 @@ class Route implements RouteInterface {
 		return $this->target->satisfied();
 	}
 
-	public function getHandler() {
-		return $this->handler;
+	public function handle( RequestInterface $request ) {
+		$arguments = array_merge( [$request], $this->target->getArguments() );
+		return call_user_func_array( [$this->handler, 'execute'], $arguments );
 	}
 
 	public function condition( $options ) {

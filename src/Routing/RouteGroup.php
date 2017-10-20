@@ -4,6 +4,7 @@ namespace CarbonFramework\Routing;
 
 use Closure;
 use Exception;
+use Psr\Http\Message\RequestInterface;
 use CarbonFramework\Url;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
@@ -45,9 +46,9 @@ class RouteGroup implements RouteInterface {
 		return $route !== null;
 	}
 
-	public function getHandler() {
+	public function handle( RequestInterface $request ) {
 		$route = $this->getSatisfiedRoute();
-		return $route ? $route->getHandler() : null;
+		return $route ? $route->handle( $request ) : null;
 	}
 
 	public function addRoute( $methods, $target, $handler ) {

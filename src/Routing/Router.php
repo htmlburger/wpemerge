@@ -19,15 +19,15 @@ class Router {
 		$routes = $this->getRoutes();
 		foreach ( $routes as $route ) {
 			if ( $route->satisfied() ) {
-				return $this->handle( $route->getHandler() );
+				return $this->handle( $route );
 			}
 		}
 		return $template;
 	}
 
-	protected function handle( $handler ) {
+	protected function handle( RouteInterface $route ) {
 		$request = ServerRequest::fromGlobals();
-		$response = $handler->execute( $request );
+		$response = $route->handle( $request );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
 			if ( Framework::debug() ) {
