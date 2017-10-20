@@ -10,8 +10,8 @@ abstract class Controller {
 		return FrameworkResponse::response();
 	}
 
-	protected function echo( $output ) {
-		return FrameworkResponse::echo( $this->response(), $output );
+	protected function output( $output ) {
+		return FrameworkResponse::output( $this->response(), $output );
 	}
 
 	protected function template( $templates, $context = array() ) {

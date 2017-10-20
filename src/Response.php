@@ -10,7 +10,7 @@ class Response {
 		return new Psr7Response();
 	}
 
-	public static function echo( $response, $output ) {
+	public static function output( $response, $output ) {
 		$response = $response->withBody( Psr7\stream_for( $output ) );
 		return $response;
 	}
