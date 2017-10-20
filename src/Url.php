@@ -13,7 +13,7 @@ class Url {
 	}
 
 	public static function addLeadingSlash( $url ) {
-		return '/' . static::removeTrailingSlash( $url );
+		return '/' . static::removeLeadingSlash( $url );
 	}
 
 	public static function removeLeadingSlash( $url ) {
