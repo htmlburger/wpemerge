@@ -44,7 +44,7 @@ class Url implements ConditionInterface {
 		$arguments = [];
 		$parameter_names = $this->getParameterNames( $this->getUrl() );
 		foreach ( $parameter_names as $parameter_name ) {
-			$arguments[] = $matches[ $parameter_name ];
+			$arguments[] = ! empty( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
 		}
 		
 		return $arguments;
