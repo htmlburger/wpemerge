@@ -2,6 +2,7 @@
 
 namespace CarbonFramework\Routing;
 
+use ReflectionClass;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -9,31 +10,16 @@ use CarbonFramework\Framework;
 use CarbonFramework\Response as FrameworkResponse;
 
 class Router {
-	protected $endpoints = array();
-
-	protected $routes = array();
+	use Routable;
 
 	public function hook() {
-		add_action( 'init', array( $this, 'registerEndpoints' ) );
-		add_action( 'init', array( $this, 'validateRoutes' ) );
-		add_action( 'template_include', array( $this, 'route' ) );
-	}
-
-	public function registerEndpoints() {
-		foreach ( $this->endpoints as $endpoint ) {
-			add_rewrite_endpoint( $endpoint['name'], $endpoint['mask'] );
-		}
-	}
-
-	public function validateRoutes() {
-		foreach ( $this->routes as $route ) {
-			$route->validate();
-		}
+		add_action( 'template_include', array( $this, 'route' ), 1000 );
 	}
 
 	public function route( $template ) {
-		foreach ( $this->routes as $route ) {
-			if ( $route->matches() ) {
+		$routes = $this->getRoutes();
+		foreach ( $routes as $route ) {
+			if ( $route->satisfied() ) {
 				return $this->handle( $route->getHandler() );
 			}
 		}
@@ -58,56 +44,22 @@ class Router {
 		return CARBON_FRAMEWORK_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
 	}
 
-	protected function addRoute( $options = array() ) {
-		$route = new Route( $options );
-		$this->routes[] = $route;
-		return $route->config();
-	}
+	public function condition() {
+		$args = func_get_args();
+		if ( count( $args ) === 0 ) {
+			throw new Exception( 'No condition type specified.' );
+		}
 
-	public function addEndpoint( $name, $mask = null ) {
-		$this->endpoints[ $name ] = array(
-			'name' => $name,
-			'mask' => $mask ? $mask : EP_ROOT,
-		);
-	}
+		$condition_type = $args[0];
+		$arguments = array_slice( $args, 1 );
 
-	public function get() {
-		return $this->addRoute( array(
-			'methods' => ['GET', 'HEAD'],
-		) );
-	}
+		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
+		if ( $condition_class === null ) {
+			throw new Exception( 'Unknown condition type specified: ' . $condition_type );
+		}
 
-	public function post() {
-		return $this->addRoute( array(
-			'methods' => ['POST'],
-		) );
-	}
-
-	public function put() {
-		return $this->addRoute( array(
-			'methods' => ['PUT'],
-		) );
-	}
-
-	public function patch() {
-		return $this->addRoute( array(
-			'methods' => ['PATCH'],
-		) );
-	}
-
-	public function delete() {
-		return $this->addRoute( array(
-			'methods' => ['DELETE'],
-		) );
-	}
-
-	public function options() {
-		return $this->addRoute( array(
-			'methods' => ['OPTIONS'],
-		) );
-	}
-
-	public function any() {
-		return $this->addRoute();
+		$reflection = new ReflectionClass( $condition_class );
+		$condition = $reflection->newInstanceArgs( $arguments );
+		return $condition;
 	}
 }

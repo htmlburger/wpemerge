@@ -4,7 +4,6 @@ namespace CarbonFramework;
 
 use Exception;
 use ReflectionException;
-use ReflectionClass;
 use ReflectionMethod;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
@@ -55,6 +54,10 @@ class Framework {
 		$container['framework.router'] = function( $c ) {
 			return new Router();
 		};
+
+		$container['framework.routing.conditions.custom'] = \CarbonFramework\Routing\Conditions\Custom::class;
+		$container['framework.routing.conditions.url'] = \CarbonFramework\Routing\Conditions\Url::class;
+		$container['framework.routing.conditions.post_id'] = \CarbonFramework\Routing\Conditions\PostId::class;
 
 		static::facade( 'Router', RouterFacade::class );
 	}

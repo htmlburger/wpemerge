@@ -2,84 +2,40 @@
 
 namespace CarbonFramework\Routing;
 
-use CarbonFramework\Url;
-use CarbonFramework\Support\StrictFluent;
-
 use Exception;
+use CarbonFramework\Url;
+use CarbonFramework\Routing\Conditions\ConditionInterface;
+use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 
-class Route {
-	protected $config = null;
+class Route implements RouteInterface {
+	protected $methods = [];
 
-	public function __construct( $options ) {
-		$default_config = array(
-			'endpoint' => '',
-			'postId' => 0,
-			'template' => '',
-			'path' => '',
-			'methods' => ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-			'to' => '',
-		);
-		$this->config = new StrictFluent( array_merge( $default_config, $options ) );
-	}
+	protected $target = null;
 
-	public function config() {
-		return $this->config;
-	}
+	protected $handler = null;
 
-	public function validate() {
-		if ( empty( $this->config()->methods ) ) {
-			throw new Exception( 'Route: Cannot register route with no methods.' );
+	public function __construct( $methods, $target, $handler ) {
+		if ( is_string( $target ) ) {
+			$target = new UrlCondition( $target );
 		}
 
-		try {
-			$handler = $this->getHandler();
-		} catch ( Exception $e ) {
-			throw new Exception( 'Route: No or invalid handler provided (missed to call `to()` on route?).' );
+		if ( ! is_a( $target, ConditionInterface::class ) ) {
+			throw new Exception( 'Route target is not a valid route string or condition.' );
 		}
+
+		$this->methods = $methods;
+		$this->target = $target;
+		$this->handler = new Handler( $handler );
+	}
+
+	public function satisfied() {
+		if ( ! in_array( $_SERVER['REQUEST_METHOD'], $this->methods) ) {
+			return false;
+		}
+		return $this->target->satisfied();
 	}
 
 	public function getHandler() {
-		return new Handler( $this->config()->to );
-	}
-
-	public function matches() {
-		if ( $this->config()->endpoint ) {
-			$value = get_query_var( $this->config()->endpoint, null );
-			if ( $value === null ) {
-				return false;
-			}
-		}
-
-		if ( $this->config()->postId ) {
-			if ( intval( get_the_ID() ) !== intval( $this->config()->postId ) ) {
-				return false;
-			}
-		}
-
-		if ( $this->config()->template ) {
-			$post = get_post();
-			if ( ! $post ) {
-				return false;
-			}
-
-			$template = get_post_meta( $post->ID, '_wp_page_template', true );
-			$template = $template ? $template : 'default';
-			if ( $template !== $this->config()->template ) {
-				return false;
-			}
-		}
-
-		if ( $this->config()->path ) {
-			$path = trailingslashit( Url::getCurrentPath() );
-			if ( $path !== trailingslashit( $this->config()->path ) ) {
-				return false;
-			}
-		}
-
-		if ( ! in_array( $_SERVER['REQUEST_METHOD'], $this->config()->methods ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->handler;
 	}
 }
