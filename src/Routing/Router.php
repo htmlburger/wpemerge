@@ -2,7 +2,6 @@
 
 namespace CarbonFramework\Routing;
 
-use ReflectionClass;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -42,24 +41,5 @@ class Router {
 		} );
 
 		return CARBON_FRAMEWORK_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
-	}
-
-	public function condition() {
-		$args = func_get_args();
-		if ( count( $args ) === 0 ) {
-			throw new Exception( 'No condition type specified.' );
-		}
-
-		$condition_type = $args[0];
-		$arguments = array_slice( $args, 1 );
-
-		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
-		if ( $condition_class === null ) {
-			throw new Exception( 'Unknown condition type specified: ' . $condition_type );
-		}
-
-		$reflection = new ReflectionClass( $condition_class );
-		$condition = $reflection->newInstanceArgs( $arguments );
-		return $condition;
 	}
 }

@@ -2,8 +2,10 @@
 
 namespace CarbonFramework\Routing;
 
+use ReflectionClass;
 use Exception;
 use CarbonFramework\Url;
+use CarbonFramework\Framework;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 
@@ -17,6 +19,10 @@ class Route implements RouteInterface {
 	public function __construct( $methods, $target, $handler ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
+		}
+
+		if ( is_array( $target ) ) {
+			$target = $this->condition( $target );
 		}
 
 		if ( ! is_a( $target, ConditionInterface::class ) ) {
@@ -37,5 +43,23 @@ class Route implements RouteInterface {
 
 	public function getHandler() {
 		return $this->handler;
+	}
+
+	public function condition( $options ) {
+		if ( count( $options ) === 0 ) {
+			throw new Exception( 'No condition type specified.' );
+		}
+
+		$condition_type = $options[0];
+		$arguments = array_slice( $options, 1 );
+
+		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
+		if ( $condition_class === null ) {
+			throw new Exception( 'Unknown condition type specified: ' . $condition_type );
+		}
+
+		$reflection = new ReflectionClass( $condition_class );
+		$condition = $reflection->newInstanceArgs( $arguments );
+		return $condition;
 	}
 }
