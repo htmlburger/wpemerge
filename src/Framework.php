@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use CarbonFramework\Facades\Facade;
 use CarbonFramework\Support\AliasLoader;
 use CarbonFramework\ServiceProviders\Routing as RoutingServiceProvider;
+use CarbonFramework\ServiceProviders\Flash as FlashServiceProvider;
 
 class Framework {
 	protected static $booted = false;
@@ -18,6 +19,7 @@ class Framework {
 
 	protected static $service_providers = [
 		RoutingServiceProvider::class,
+		FlashServiceProvider::class,
 	];
 
 	public static function debug() {
