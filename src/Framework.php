@@ -2,20 +2,24 @@
 
 namespace CarbonFramework;
 
-use Exception;
+use ArrayAccess;
 use ReflectionException;
 use ReflectionMethod;
+use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
 use CarbonFramework\Facades\Facade;
 use CarbonFramework\Support\AliasLoader;
-use CarbonFramework\Routing\Router;
-use CarbonFramework\Facades\Router as RouterFacade;
+use CarbonFramework\ServiceProviders\Routing;
 
 class Framework {
 	protected static $booted = false;
 
 	protected static $container = null;
+
+	protected static $service_providers = [
+		Routing::class,
+	];
 
 	public static function debug() {
 		return ( defined( 'WP_DEBUG' ) && WP_DEBUG );
@@ -31,35 +35,42 @@ class Framework {
 		}
 	}
 
-	public static function boot( $bootstrap = null ) {
+	public static function getContainer() {
+		if ( static::$container === null ) {
+			static::$container = new Container();
+		}
+		return static::$container;
+	}
+
+	public static function boot() {
 		if ( static::isBooted() ) {
 			throw new Exception( get_called_class() . ' already booted.' );
 		}
 		static::$booted = true;
 
-		static::$container = new Container();
-
-		static::bindDefaults( static::$container );
-		if ( is_callable( $bootstrap ) ) {
-			call_user_func( $bootstrap, static::$container );
-		}
-
-		Facade::setFacadeApplication( static::$container );
+		Facade::setFacadeApplication( static::getContainer() );
 		AliasLoader::getInstance()->register();
 
-		\Router::hook(); // facade
+		static::$service_providers = apply_filters( 'carbon_framework_service_providers', static::$service_providers );
+
+		$service_providers = array_map( function( $service_provider ) {
+			return new $service_provider();
+		}, static::$service_providers );
+
+		static::registerServiceProviders( $service_providers, static::getContainer() );
+		static::bootServiceProviders( $service_providers, static::getContainer() );
 	}
 
-	protected static function bindDefaults( $container ) {
-		$container['framework.router'] = function( $c ) {
-			return new Router();
-		};
+	protected static function registerServiceProviders( $service_providers, ArrayAccess $container ) {
+		foreach ( $service_providers as $provider ) {
+			$provider->register( $container );
+		}
+	}
 
-		$container['framework.routing.conditions.custom'] = \CarbonFramework\Routing\Conditions\Custom::class;
-		$container['framework.routing.conditions.url'] = \CarbonFramework\Routing\Conditions\Url::class;
-		$container['framework.routing.conditions.post_id'] = \CarbonFramework\Routing\Conditions\PostId::class;
-
-		static::facade( 'Router', RouterFacade::class );
+	protected static function bootServiceProviders( $service_providers, ArrayAccess $container ) {
+		foreach ( $service_providers as $provider ) {
+			$provider->boot( $container );
+		}
 	}
 
 	public static function facade( $alias, $facade_class ) {
@@ -69,10 +80,10 @@ class Framework {
 	public static function resolve( $key ) {
 		static::verifyBoot();
 
-		if ( ! isset( static::$container[ $key ] ) ) {
+		if ( ! isset( static::getContainer()[ $key ] ) ) {
 			return null;
 		}
-		return static::$container[ $key ];
+		return static::getContainer()[ $key ];
 	}
 
 	public static function instantiate( $class ) {

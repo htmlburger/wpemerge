@@ -11,7 +11,7 @@ use CarbonFramework\Response as FrameworkResponse;
 class Router {
 	use HasRoutesTrait;
 
-	public function hook() {
+	public function boot() {
 		add_action( 'template_include', array( $this, 'route' ), 1000 );
 	}
 

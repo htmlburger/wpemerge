@@ -6,6 +6,6 @@ class Router extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'framework.router';
+        return 'framework.routing.router';
     }
 }
