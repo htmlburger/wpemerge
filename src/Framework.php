@@ -17,11 +17,6 @@ class Framework {
 
 	protected static $container = null;
 
-	protected static $service_providers = [
-		RoutingServiceProvider::class,
-		FlashServiceProvider::class,
-	];
-
 	public static function debug() {
 		return ( defined( 'WP_DEBUG' ) && WP_DEBUG );
 	}
@@ -49,19 +44,33 @@ class Framework {
 		}
 		static::$booted = true;
 
-		Facade::setFacadeApplication( static::getContainer() );
+		$config = array_merge( [
+			'providers' => [],
+			'global_middleware' => [],
+		], $config );
+
+		$container = static::getContainer();
+
+		$container['framework.service_providers'] = array_merge( [
+			RoutingServiceProvider::class,
+			FlashServiceProvider::class,
+		], $config['providers'] );
+
+		Facade::setFacadeApplication( $container );
 		AliasLoader::getInstance()->register();
 
-		$user_service_providers = isset( $config['providers'] ) ? $config['providers'] : [];
-		static::$service_providers = array_merge( static::$service_providers, $user_service_providers );
-		static::$service_providers = apply_filters( 'carbon_framework_service_providers', static::$service_providers );
+		static::loadServiceProviders( $container );
+	}
+
+	protected static function loadServiceProviders( $container ) {
+		$container['framework.service_providers'] = apply_filters( 'carbon_framework_service_providers', $container['framework.service_providers'] );
 
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
-		}, static::$service_providers );
+		}, $container['framework.service_providers'] );
 
-		static::registerServiceProviders( $service_providers, static::getContainer() );
-		static::bootServiceProviders( $service_providers, static::getContainer() );
+		static::registerServiceProviders( $service_providers, $container );
+		static::bootServiceProviders( $service_providers, $container );
 	}
 
 	protected static function registerServiceProviders( $service_providers, $container ) {
