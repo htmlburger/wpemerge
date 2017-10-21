@@ -11,43 +11,46 @@ trait HasRoutesTrait {
 		return $this->routes;
 	}
 
-	public function addRoute( $methods, $target, $handler ) {
-		$route = new Route( $methods, $target, $handler );
+	public function addRoute( $route ) {
 		$this->routes[] = $route;
 		return $route;
 	}
 
+	public function route( $methods, $target, $handler ) {
+		$route = new Route( $methods, $target, $handler );
+		return $this->addRoute( $route );
+	}
+
 	public function group( $target, Closure $callable ) {
 		$routeGroup = new RouteGroup( $target, $callable );
-		$this->routes[] = $routeGroup;
-		return $routeGroup;
+		return $this->addRoute( $routeGroup );
 	}
 
 	public function get( $target, $handler ) {
-		return $this->addRoute( ['GET', 'HEAD'], $target, $handler );
+		return $this->route( ['GET', 'HEAD'], $target, $handler );
 	}
 
 	public function post( $target, $handler ) {
-		return $this->addRoute( ['POST'], $target, $handler );
+		return $this->route( ['POST'], $target, $handler );
 	}
 
 	public function put( $target, $handler ) {
-		return $this->addRoute( ['PUT'], $target, $handler );
+		return $this->route( ['PUT'], $target, $handler );
 	}
 
 	public function patch( $target, $handler ) {
-		return $this->addRoute( ['PATCH'], $target, $handler );
+		return $this->route( ['PATCH'], $target, $handler );
 	}
 
 	public function delete( $target, $handler ) {
-		return $this->addRoute( ['DELETE'], $target, $handler );
+		return $this->route( ['DELETE'], $target, $handler );
 	}
 
 	public function options( $target, $handler ) {
-		return $this->addRoute( ['OPTIONS'], $target, $handler );
+		return $this->route( ['OPTIONS'], $target, $handler );
 	}
 
 	public function any( $target, $handler ) {
-		return $this->addRoute( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $target, $handler );
+		return $this->route( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $target, $handler );
 	}
 }

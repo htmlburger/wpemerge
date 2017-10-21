@@ -13,5 +13,5 @@ interface HasMiddlewareInterface {
 
 	public function add( $middleware );
 
-	public function executeMiddleware( RequestInterface $request, Closure $next );
+	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next );
 }

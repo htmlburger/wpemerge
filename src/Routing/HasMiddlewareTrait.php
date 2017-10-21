@@ -51,8 +51,9 @@ trait HasMiddlewareTrait {
 	public function addMiddleware( $middleware ) {
 		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
 
-		foreach ( $middleware as $layer ) {
-			if ( ! $this->isMiddleware( $layer ) ) {
+		foreach ( $middleware as $item ) {
+			if ( ! $this->isMiddleware( $item ) ) {
+				var_dump($item);
 				throw new Exception( 'Passed middleware must be a callable or the name of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
 			}
 		}
@@ -72,40 +73,29 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Execute all registered middleware last in, first out
-	 * 
+	 * Execute an array of middleware recursively (last in, first out)
+	 *
+	 * @param  array             $middleware
 	 * @param  RequestInterface  $request
 	 * @param  Closure           $next
 	 * @return ResponseInterface
 	 */
-	public function executeMiddleware( RequestInterface $request, Closure $next ) {
-		return $this->executeMiddlewareLayers( $this->getMiddleware(), $request, $next );
-	}
+	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
+		$top_middleware = array_pop( $middleware );
 
-	/**
-	 * Execute middleware layers recursively last in, first out
-	 * 
-	 * @param  array             $layers
-	 * @param  RequestInterface  $request
-	 * @param  Closure           $next
-	 * @return ResponseInterface
-	 */
-	protected function executeMiddlewareLayers( $layers, RequestInterface $request, Closure $next ) {
-		$top_layer = array_pop( $layers );
-
-		if ( $top_layer === null ) {
+		if ( $top_middleware === null ) {
 			return $next( $request );
 		}
 
-		$top_layer_next = function( $request ) use ( $layers, $next ) {
-			return $this->executeMiddlewareLayers( $layers, $request, $next );
+		$top_middleware_next = function( $request ) use ( $middleware, $next ) {
+			return $this->executeMiddleware( $middleware, $request, $next );
 		};
 
-		if ( is_callable( $top_layer ) ) {
-			return call_user_func( $top_layer, $request, $top_layer_next );
+		if ( is_callable( $top_middleware ) ) {
+			return call_user_func( $top_middleware, $request, $top_middleware_next );
 		}
 
-		$instance = new $top_layer();
-		return $instance->handle( $request, $top_layer_next );
+		$instance = new $top_middleware();
+		return $instance->handle( $request, $top_middleware_next );
 	}
 }

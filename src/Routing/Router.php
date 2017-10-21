@@ -12,16 +12,23 @@ class Router {
 	use HasRoutesTrait;
 
 	public function boot() {
-		add_action( 'template_include', array( $this, 'route' ), 1000 );
+		add_action( 'template_include', array( $this, 'execute' ), 1000 );
 	}
 
-	public function route( $template ) {
+	public function execute( $template ) {
 		$routes = $this->getRoutes();
+		$global_middleware = Framework::resolve( 'framework.global_middleware' );
+
+		foreach ( $routes as $route ) {
+			$route->addMiddleware( $global_middleware );
+		}
+
 		foreach ( $routes as $route ) {
 			if ( $route->satisfied() ) {
 				return $this->handle( $route );
 			}
 		}
+		
 		return $template;
 	}
 

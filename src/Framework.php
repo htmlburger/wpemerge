@@ -44,16 +44,16 @@ class Framework {
 		}
 		static::$booted = true;
 
-		$config = array_merge( [
+		$container = static::getContainer();
+
+		$container['framework.config'] = array_merge( [
 			'providers' => [],
 		], $config );
-
-		$container = static::getContainer();
 
 		$container['framework.service_providers'] = array_merge( [
 			RoutingServiceProvider::class,
 			FlashServiceProvider::class,
-		], $config['providers'] );
+		], $container['framework.config']['providers'] );
 
 		Facade::setFacadeApplication( $container );
 		AliasLoader::getInstance()->register();

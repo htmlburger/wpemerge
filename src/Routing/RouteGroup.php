@@ -12,7 +12,7 @@ use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 
 class RouteGroup implements RouteInterface {
 	use HasRoutesTrait {
-		addRoute as traitAddRoute;
+		route as traitRoute;
 	}
 	use HasMiddlewareTrait {
 		addMiddleware as traitAddMiddleware;
@@ -54,7 +54,7 @@ class RouteGroup implements RouteInterface {
 		return $route ? $route->handle( $request ) : null;
 	}
 
-	public function addRoute( $methods, $target, $handler ) {
+	public function route( $methods, $target, $handler ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
 		}
@@ -64,7 +64,7 @@ class RouteGroup implements RouteInterface {
 		}
 
 		$target = $this->target->concatenate( $target );
-		return $this->traitAddRoute( $methods, $target, $handler );
+		return $this->traitRoute( $methods, $target, $handler );
 	}
 
 	public function addMiddleware( $middleware ) {
