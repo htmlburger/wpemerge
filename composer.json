@@ -1,5 +1,6 @@
 {
     "require": {
+        "php": ">=5.5",
         "pimple/pimple": "^3.2",
         "guzzlehttp/psr7": "^1.4"
     },
