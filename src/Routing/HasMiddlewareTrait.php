@@ -2,6 +2,7 @@
 
 namespace CarbonFramework\Routing;
 
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -24,15 +25,15 @@ trait HasMiddlewareTrait {
 	 * @return object
 	 */
 	public function addMiddleware( $middleware ) {
-		$middleware = (array) $middleware;
+		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
 
 		foreach ( $middleware as $layer ) {
-			if ( ! is_callable( $middleware ) ) {
+			if ( ! is_callable( $layer ) ) {
 				throw new Exception( 'Passed middleware must be a callable.' );
 			}
 		}
 
-		$this->middleware[] = array_merge( (array) $middleware );
+		$this->middleware = array_merge( $this->getMiddleware(), $middleware );
 		return $this;
 	}
 
@@ -47,20 +48,33 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Execute all registered middleware
+	 * Execute all registered middleware last in, first out
 	 * 
 	 * @param  RequestInterface  $request
 	 * @param  callable          $next
 	 * @return ResponseInterface
 	 */
-	public function execute( RequestInterface $request, $next ) {
-		$middleware = array_reverse( $this->getMiddleware() ); // last in, first out
-		foreach ( $middleware as $layer ) {
-			$layer( $request, $next );
-		}
+	public function executeMiddleware( RequestInterface $request, $next ) {
+		return $this->executeMiddlewareLayers( $this->getMiddleware(), $request, $next );
 	}
 
-	protected function executeLayer( $layer, RequestInterface $request, $next ) {
-		
+	/**
+	 * Execute middleware layers recursively last in, first out
+	 * 
+	 * @param  array<callable>   $layers
+	 * @param  RequestInterface  $request
+	 * @param  callable          $next
+	 * @return ResponseInterface
+	 */
+	protected function executeMiddlewareLayers( $layers, RequestInterface $request, $next ) {
+		$top_layer = array_pop( $layers );
+
+		if ( $top_layer === null ) {
+			return $next( $request );
+		}
+
+		return call_user_func( $top_layer, $request, function( $request ) use ( $layers, $next ) {
+			return $this->executeMiddlewareLayers( $layers, $request, $next );
+		} );
 	}
 }

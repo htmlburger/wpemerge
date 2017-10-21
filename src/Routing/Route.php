@@ -11,6 +11,8 @@ use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 
 class Route implements RouteInterface {
+	use HasMiddlewareTrait;
+
 	protected $methods = [];
 
 	protected $target = null;
@@ -44,7 +46,9 @@ class Route implements RouteInterface {
 
 	public function handle( RequestInterface $request ) {
 		$arguments = array_merge( [$request], $this->target->getArguments() );
-		return call_user_func_array( [$this->handler, 'execute'], $arguments );
+		return $this->executeMiddleware( $request, function() use ( $arguments ) {
+			return call_user_func_array( [$this->handler, 'execute'], $arguments );
+		} );
 	}
 
 	public function condition( $options ) {

@@ -16,7 +16,7 @@ class Response {
 	}
 
 	public static function template( $response, $templates, $context = array() ) {
-		$templates = (array) $templates;
+		$templates = is_array( $templates ) ? $templates : [$templates];
 
 		$__template = locate_template( $templates, false );
 		$__context = $context;

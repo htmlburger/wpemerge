@@ -14,6 +14,9 @@ class RouteGroup implements RouteInterface {
 	use HasRoutesTrait {
 		addRoute as traitAddRoute;
 	}
+	use HasMiddlewareTrait {
+		addMiddleware as traitAddMiddleware;
+	}
 
 	protected $target = null;
 
@@ -62,5 +65,15 @@ class RouteGroup implements RouteInterface {
 
 		$target = $this->target->concatenate( $target );
 		return $this->traitAddRoute( $methods, $target, $handler );
+	}
+
+	public function addMiddleware( $middleware ) {
+		$routes = $this->getRoutes();
+
+		foreach ( $routes as $route ) {
+			$route->addMiddleware( $middleware );
+		}
+		
+		return $this->traitAddMiddleware( $middleware );
 	}
 }

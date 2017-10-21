@@ -12,11 +12,15 @@ trait HasRoutesTrait {
 	}
 
 	public function addRoute( $methods, $target, $handler ) {
-		$this->routes[] = new Route( $methods, $target, $handler );
+		$route = new Route( $methods, $target, $handler );
+		$this->routes[] = $route;
+		return $route;
 	}
 
 	public function group( $target, Closure $callable ) {
-		$this->routes[] = new RouteGroup( $target, $callable );
+		$routeGroup = new RouteGroup( $target, $callable );
+		$this->routes[] = $routeGroup;
+		return $routeGroup;
 	}
 
 	public function get( $target, $handler ) {
