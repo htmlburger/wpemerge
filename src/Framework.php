@@ -2,7 +2,6 @@
 
 namespace CarbonFramework;
 
-use ArrayAccess;
 use ReflectionException;
 use ReflectionMethod;
 use Exception;
@@ -61,13 +60,13 @@ class Framework {
 		static::bootServiceProviders( $service_providers, static::getContainer() );
 	}
 
-	protected static function registerServiceProviders( $service_providers, ArrayAccess $container ) {
+	protected static function registerServiceProviders( $service_providers, $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->register( $container );
 		}
 	}
 
-	protected static function bootServiceProviders( $service_providers, ArrayAccess $container ) {
+	protected static function bootServiceProviders( $service_providers, $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->boot( $container );
 		}

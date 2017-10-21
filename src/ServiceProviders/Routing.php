@@ -2,11 +2,10 @@
 
 namespace CarbonFramework\ServiceProviders;
 
-use ArrayAccess;
 use CarbonFramework\Framework;
 
 class Routing implements ServiceProviderInterface {
-	public function register( ArrayAccess $container ) {
+	public function register( $container ) {
 		$container['framework.routing.conditions.custom'] = \CarbonFramework\Routing\Conditions\Custom::class;
 		$container['framework.routing.conditions.url'] = \CarbonFramework\Routing\Conditions\Url::class;
 		$container['framework.routing.conditions.post_id'] = \CarbonFramework\Routing\Conditions\PostId::class;

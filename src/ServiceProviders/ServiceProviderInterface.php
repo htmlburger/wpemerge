@@ -2,10 +2,8 @@
 
 namespace CarbonFramework\ServiceProviders;
 
-use ArrayAccess;
-
 interface ServiceProviderInterface {
-	public function register( ArrayAccess $container );
+	public function register( $container );
 
 	public function boot();
 }
