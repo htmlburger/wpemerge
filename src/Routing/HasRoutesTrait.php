@@ -4,7 +4,7 @@ namespace CarbonFramework\Routing;
 
 use Closure;
 
-trait Routable {
+trait HasRoutesTrait {
 	protected $routes = [];
 
 	public function getRoutes() {

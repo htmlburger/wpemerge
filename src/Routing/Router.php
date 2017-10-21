@@ -9,7 +9,7 @@ use CarbonFramework\Framework;
 use CarbonFramework\Response as FrameworkResponse;
 
 class Router {
-	use Routable;
+	use HasRoutesTrait;
 
 	public function hook() {
 		add_action( 'template_include', array( $this, 'route' ), 1000 );

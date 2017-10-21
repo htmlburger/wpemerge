@@ -11,8 +11,8 @@ use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 
 
 class RouteGroup implements RouteInterface {
-	use Routable {
-		addRoute as routableAddRoute;
+	use HasRoutesTrait {
+		addRoute as traitAddRoute;
 	}
 
 	protected $target = null;
@@ -61,6 +61,6 @@ class RouteGroup implements RouteInterface {
 		}
 
 		$target = $this->target->concatenate( $target );
-		return $this->routableAddRoute( $methods, $target, $handler );
+		return $this->traitAddRoute( $methods, $target, $handler );
 	}
 }
