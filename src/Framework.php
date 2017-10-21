@@ -43,7 +43,7 @@ class Framework {
 		return static::$container;
 	}
 
-	public static function boot() {
+	public static function boot( $config ) {
 		if ( static::isBooted() ) {
 			throw new Exception( get_called_class() . ' already booted.' );
 		}
@@ -52,6 +52,8 @@ class Framework {
 		Facade::setFacadeApplication( static::getContainer() );
 		AliasLoader::getInstance()->register();
 
+		$user_service_providers = isset( $config['providers'] ) ? $config['providers'] : [];
+		static::$service_providers = array_merge( static::$service_providers, $user_service_providers );
 		static::$service_providers = apply_filters( 'carbon_framework_service_providers', static::$service_providers );
 
 		$service_providers = array_map( function( $service_provider ) {

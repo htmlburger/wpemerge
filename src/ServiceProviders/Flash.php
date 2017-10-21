@@ -19,7 +19,7 @@ class Flash implements ServiceProviderInterface {
 		Framework::facade( 'Flash', \CarbonFramework\Facades\Flash::class );
 	}
 
-	public function boot() {
+	public function boot( $container ) {
 		// nothing to boot
 	}
 }

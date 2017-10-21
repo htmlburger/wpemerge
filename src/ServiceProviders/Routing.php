@@ -17,7 +17,7 @@ class Routing implements ServiceProviderInterface {
 		Framework::facade( 'Router', \CarbonFramework\Facades\Router::class );
 	}
 
-	public function boot() {
+	public function boot( $container ) {
 		\Router::boot(); // facade
 	}
 }
