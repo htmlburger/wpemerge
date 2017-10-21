@@ -46,7 +46,6 @@ class Framework {
 
 		$config = array_merge( [
 			'providers' => [],
-			'global_middleware' => [],
 		], $config );
 
 		$container = static::getContainer();
