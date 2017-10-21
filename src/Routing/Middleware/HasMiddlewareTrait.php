@@ -1,10 +1,9 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace CarbonFramework\Routing\Middleware;
 
 use Closure;
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 trait HasMiddlewareTrait {
@@ -76,11 +75,11 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array             $middleware
-	 * @param  RequestInterface  $request
+	 * @param  any               $request
 	 * @param  Closure           $next
 	 * @return ResponseInterface
 	 */
-	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
+	public function executeMiddleware( $middleware, $request, Closure $next ) {
 		$top_middleware = array_pop( $middleware );
 
 		if ( $top_middleware === null ) {

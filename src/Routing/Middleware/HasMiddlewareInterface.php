@@ -1,9 +1,8 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace CarbonFramework\Routing\Middleware;
 
 use Closure;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 interface HasMiddlewareInterface {
@@ -13,5 +12,5 @@ interface HasMiddlewareInterface {
 
 	public function add( $middleware );
 
-	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next );
+	public function executeMiddleware( $middleware, $request, Closure $next );
 }

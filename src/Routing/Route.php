@@ -4,11 +4,11 @@ namespace CarbonFramework\Routing;
 
 use ReflectionClass;
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use CarbonFramework\Url;
 use CarbonFramework\Framework;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use CarbonFramework\Routing\Middleware\HasMiddlewareTrait;
 
 class Route implements RouteInterface {
 	use HasMiddlewareTrait;
@@ -44,7 +44,7 @@ class Route implements RouteInterface {
 		return $this->target->satisfied();
 	}
 
-	public function handle( RequestInterface $request ) {
+	public function handle( $request ) {
 		$arguments = array_merge( [$request], $this->target->getArguments() );
 		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );

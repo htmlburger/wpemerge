@@ -2,10 +2,10 @@
 
 namespace CarbonFramework\Routing;
 
-use Psr\Http\Message\RequestInterface;
+use CarbonFramework\Routing\Middleware\HasMiddlewareInterface;
 
 interface RouteInterface extends HasMiddlewareInterface {
 	public function satisfied();
 
-	public function handle( RequestInterface $request );
+	public function handle( $request );
 }

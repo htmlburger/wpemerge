@@ -4,8 +4,8 @@ namespace CarbonFramework\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Psr7\ServerRequest;
 use CarbonFramework\Framework;
+use CarbonFramework\Request;
 use CarbonFramework\Response as FrameworkResponse;
 
 class Router {
@@ -33,7 +33,7 @@ class Router {
 	}
 
 	protected function handle( RouteInterface $route ) {
-		$request = ServerRequest::fromGlobals();
+		$request = Request::fromGlobals();
 		$response = $route->handle( $request );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {

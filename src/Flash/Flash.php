@@ -28,6 +28,10 @@ class Flash {
 		}
 	}
 
+	public function enabled() {
+		return $this->isValidStorage( $this->storage );
+	}
+
 	public function get( $key = null ) {
 		$this->validateStorage();
 
