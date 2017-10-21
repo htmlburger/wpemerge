@@ -10,7 +10,7 @@ use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
 use CarbonFramework\Facades\Facade;
 use CarbonFramework\Support\AliasLoader;
-use CarbonFramework\ServiceProviders\Routing;
+use CarbonFramework\ServiceProviders\Routing as RoutingServiceProvider;
 
 class Framework {
 	protected static $booted = false;
@@ -18,7 +18,7 @@ class Framework {
 	protected static $container = null;
 
 	protected static $service_providers = [
-		Routing::class,
+		RoutingServiceProvider::class,
 	];
 
 	public static function debug() {
