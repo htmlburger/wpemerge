@@ -1,10 +1,8 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use CarbonFramework\Url;
 
-class UrlTest extends TestCase {
+class UrlTest extends WP_UnitTestCase {
     public function testAddLeadingSlash() {
         $this->assertEquals( '/example', Url::addLeadingSlash('example') );
         $this->assertEquals( '/example', Url::addLeadingSlash('/example') );
