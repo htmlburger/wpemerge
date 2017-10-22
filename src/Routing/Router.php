@@ -37,7 +37,7 @@ class Router {
 		$response = $route->handle( $request );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
-			if ( Framework::debug() ) {
+			if ( Framework::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = FrameworkResponse::error( FrameworkResponse::response(), 500 );

@@ -18,7 +18,7 @@ class Framework {
 
 	protected static $container = null;
 
-	public static function debug() {
+	public static function debugging() {
 		return ( defined( 'WP_DEBUG' ) && WP_DEBUG );
 	}
 
