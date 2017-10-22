@@ -13,7 +13,7 @@ class Handler {
 	/**
 	 * Actual handler
 	 * 
-	 * @var string|Closure|null
+	 * @var string|array|Closure|null
 	 */
 	protected $handler = null;
 
@@ -59,7 +59,7 @@ class Handler {
 	/**
 	 * Set the handler
 	 * 
-	 * @param string|Closure $new_handler
+	 * @param  string|Closure $new_handler
 	 * @return null
 	 */
 	public function set( $new_handler ) {
@@ -79,7 +79,7 @@ class Handler {
 	 */
 	public function execute() {
 		$arguments = func_get_args();
-		if ( ! is_array( $this->handler ) ) {
+		if ( is_callable( $this->handler ) ) {
 			return call_user_func_array( $this->handler, $arguments );
 		}
 
