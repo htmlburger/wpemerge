@@ -483,9 +483,7 @@ class Arr
         $key = is_array($key) ? $key : explode('.', $key);
         while (! is_null($segment = array_shift($key))) {
             if ($segment === '*') {
-                if ($target instanceof Collection) {
-                    $target = $target->all();
-                } elseif (! is_array($target)) {
+                if (! is_array($target)) {
                     return $default;
                 }
                 $result = static::pluck($target, $key);
