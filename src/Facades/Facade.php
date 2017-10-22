@@ -53,7 +53,7 @@ abstract class Facade
                     ? static::$resolvedInstance[$name]
                     : static::createFreshMockInstance();
 
-        return $mock->shouldReceive(...func_get_args());
+        return call_user_func_array([$mock, 'shouldReceive'], func_get_args());
     }
 
     /**
@@ -222,6 +222,6 @@ abstract class Facade
             throw new RuntimeException('A facade root has not been set.');
         }
 
-        return $instance->$method(...$args);
+        return call_user_func_array([$instance, $method], $args);
     }
 }
