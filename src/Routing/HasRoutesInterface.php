@@ -1,0 +1,107 @@
+<?php
+
+namespace CarbonFramework\Routing;
+
+use Closure;
+
+/**
+ * Interface for HasRoutesTrait
+ */
+interface HasRoutesInterface {
+	/**
+	 * Get registered routes
+	 * 
+	 * @return RouteInterface[]
+	 */
+	public function getRoutes();
+
+	/**
+	 * Add a route
+	 * 
+	 * @param RouteInterface  $route
+	 * @return RouteInterface
+	 */
+	public function addRoute( $route );
+
+	/**
+	 * Create and add a new route
+	 * 
+	 * @param  string[]       $methods
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function route( $methods, $target, $handler );
+
+	/**
+	 * Create and add a route group
+	 * 
+	 * @param  string         $target
+	 * @param  Closure        $callable
+	 * @return RouteInterface
+	 */
+	public function group( $target, Closure $callable );
+
+	/**
+	 * Create and add a route for the GET and HEAD methods
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function get( $target, $handler );
+
+	/**
+	 * Create and add a route for the POST method
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function post( $target, $handler );
+
+	/**
+	 * Create and add a route for the PUT method
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function put( $target, $handler );
+
+	/**
+	 * Create and add a route for the PATCH method
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function patch( $target, $handler );
+
+	/**
+	 * Create and add a route for the DELETE method
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function delete( $target, $handler );
+
+	/**
+	 * Create and add a route for the OPTIONS method
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function options( $target, $handler );
+
+	/**
+	 * Create and add a route for all supported methods
+	 * 
+	 * @param  any            $target
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public function any( $target, $handler );
+}
