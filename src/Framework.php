@@ -82,7 +82,7 @@ class Framework {
 	 * @throws Exception
 	 * @return null
 	 */
-	public static function boot( $config ) {
+	public static function boot( $config = [] ) {
 		if ( static::isBooted() ) {
 			throw new Exception( get_called_class() . ' already booted.' );
 		}
@@ -185,7 +185,7 @@ class Framework {
 		static::verifyBoot();
 
 		$instance = static::resolve( $class );
-		
+
 		if ( $instance === null ) {
 			$instance = new $class();
 		}
