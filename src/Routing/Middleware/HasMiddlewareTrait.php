@@ -55,7 +55,6 @@ trait HasMiddlewareTrait {
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
-				var_dump($item);
 				throw new Exception( 'Passed middleware must be a callable or the name of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
 			}
 		}
