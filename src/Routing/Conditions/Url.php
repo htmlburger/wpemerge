@@ -5,8 +5,18 @@ namespace CarbonFramework\Routing\Conditions;
 use CarbonFramework\Url as UrlUtility;
 
 class Url implements ConditionInterface {
+	/**
+	 * URL to check against
+	 * 
+	 * @var string
+	 */
 	protected $url = '';
 
+	/**
+	 * Regex to detect parameters in urls
+	 * 
+	 * @var string
+	 */
 	protected $url_regex = '~
 		(?:/)                     # require leading slash
 		(?:\{)                    # require opening curly brace
@@ -17,23 +27,39 @@ class Url implements ConditionInterface {
 		(?=/)                     # lookahead for a slash but do not consume it as it may be used by the next match
 	~ix';
 
+	/**
+	 * Regex to detect valid parameters in url segments
+	 * 
+	 * @var string
+	 */
 	protected $parameter_regex = '[^/]+';
 
+	/**
+	 * Constructor
+	 * 
+	 * @param string $url
+	 */
 	public function __construct( $url ) {
 		$url = UrlUtility::addLeadingSlash( $url );
 		$url = UrlUtility::addTrailingSlash( $url );
 		$this->url = $url;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function satisfied() {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = $this->getCurrentUrl();
+		$url = $this->getCurrentPath();
 		return preg_match( $validation_regex, $url );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getArguments() {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = $this->getCurrentUrl();
+		$url = $this->getCurrentPath();
 		$matches = [];
 		$success = preg_match( $validation_regex, $url, $matches );
 
@@ -50,24 +76,52 @@ class Url implements ConditionInterface {
 		return $arguments;
 	}
 
+	/**
+	 * Return the url for this condition
+	 * 
+	 * @return string
+	 */
 	public function getUrl() {
 		return $this->url;
 	}
 
-	protected function getCurrentUrl() {
+	/**
+	 * Return the current requested path from the server, relative to the home url
+	 * 
+	 * @return string
+	 */
+	protected function getCurrentPath() {
 		return UrlUtility::addTrailingSlash( UrlUtility::getCurrentPath() );
 	}
 
+	/**
+	 * Concatenate 2 url conditions into a new one
+	 * 
+	 * @param  Url $url
+	 * @return Url
+	 */
 	public function concatenate( Url $url ) {
 		return new static( UrlUtility::removeTrailingSlash( $this->getUrl() ) . $url->getUrl() );
 	}
 
+	/**
+	 * Return parameter names as defined in the url
+	 * 
+	 * @param  string   $url
+	 * @return string[]
+	 */
 	protected function getParameterNames( $url ) {
 		$matches = [];
 		preg_match_all( $this->url_regex, $url, $matches );
 		return $matches['name'];
 	}
 
+	/**
+	 * Return regex to test whether normal urls match the parameter-based one
+	 * 
+	 * @param  string $url
+	 * @return string
+	 */
 	protected function getValidationRegex( $url ) {
 		$parameters = [];
 
