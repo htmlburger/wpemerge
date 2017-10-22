@@ -15,7 +15,7 @@ class OldInput implements MiddlewareInterface {
 			Flash::clear( OldInputService::getFlashKey() );
 
 			if ( $request->getMethod() === 'POST' ) {
-				Flash::add( OldInputService::getFlashKey(), $request->request->all() );
+				Flash::add( OldInputService::getFlashKey(), $request->post() );
 			}
 		}
 		

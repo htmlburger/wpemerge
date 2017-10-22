@@ -2,8 +2,7 @@
     "require": {
         "php": ">=5.5",
         "pimple/pimple": "^3.2",
-        "guzzlehttp/psr7": "^1.4",
-        "symfony/http-foundation": "^3.3"
+        "guzzlehttp/psr7": "^1.4"
     },
     "autoload": {
         "psr-4": {
