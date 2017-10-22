@@ -17,7 +17,7 @@ class OldInput implements ServiceProviderInterface {
 			OldInputMiddleware::class,
 		] );
 
-		$container['framework.old_input.old_input'] = function( $c ) {
+		$container['framework.old_input.old_input'] = function() {
 			return new \CarbonFramework\Input\OldInput();
 		};
 

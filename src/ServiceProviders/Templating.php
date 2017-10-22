@@ -12,7 +12,7 @@ class Templating implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.templating.engine'] = function( $c ) {
+		$container['framework.templating.engine'] = function() {
 			return new \CarbonFramework\Templating\Php();
 		};
 	}
