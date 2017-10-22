@@ -1,4 +1,4 @@
-dist: precise
+dist: trusty
 
 language: php
 
@@ -30,7 +30,7 @@ before_script:
   - mysql -e "create database IF NOT EXISTS carbon_framework_tests;" -uroot
   - bash tests/bin/install.sh carbon_framework_tests root '' localhost $WP_VERSION
 
-script: ./vendor/bin/phpunit --coverage-clover=./tmp/clover.xml
+script: phpunit --coverage-clover=./tmp/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
