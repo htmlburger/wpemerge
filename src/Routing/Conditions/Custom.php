@@ -2,6 +2,8 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+use CarbonFramework\Request;
+
 /**
  * Check against a custom callable
  */
@@ -34,14 +36,14 @@ class Custom implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		return call_user_func_array( $this->callable, $this->arguments );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		return $this->arguments;
 	}
 }

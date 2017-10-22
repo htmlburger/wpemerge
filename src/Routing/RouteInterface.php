@@ -2,6 +2,7 @@
 
 namespace CarbonFramework\Routing;
 
+use CarbonFramework\Request;
 use CarbonFramework\Routing\Middleware\HasMiddlewareInterface;
 
 /**
@@ -11,15 +12,16 @@ interface RouteInterface extends HasMiddlewareInterface {
 	/**
 	 * Return whether the route is satisfied
 	 * 
+	 * @param  Request $request
 	 * @return boolean
 	 */
-	public function satisfied();
+	public function satisfied( Request $request );
 
 	/**
 	 * Return a response for the given request
 	 * 
-	 * @param  \CarbonFramework\Request            $request
+	 * @param  Request                             $request
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( $request );
+	public function handle( Request $request );
 }

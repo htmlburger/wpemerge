@@ -2,6 +2,8 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+use CarbonFramework\Request;
+
 /**
  * Check against the current post's type
  */
@@ -25,14 +27,14 @@ class PostType implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		return $this->post_type === get_post_type();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		return [$this->post_type];
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+use CarbonFramework\Request;
+
 /**
  * Check against the current post's id
  */
@@ -25,14 +27,14 @@ class PostId implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		return $this->post_id === get_the_ID();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		return [$this->post_id];
 	}
 }

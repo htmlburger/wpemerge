@@ -6,6 +6,7 @@ use ReflectionClass;
 use Exception;
 use CarbonFramework\Url;
 use CarbonFramework\Framework;
+use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 use CarbonFramework\Routing\Middleware\HasMiddlewareTrait;
@@ -65,18 +66,18 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
-		if ( ! in_array( $_SERVER['REQUEST_METHOD'], $this->methods) ) {
+	public function satisfied( Request $request ) {
+		if ( ! in_array( $request->getMethod(), $this->methods) ) {
 			return false;
 		}
-		return $this->target->satisfied();
+		return $this->target->satisfied( $request );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( $request ) {
-		$arguments = array_merge( [$request], $this->target->getArguments() );
+	public function handle( Request $request ) {
+		$arguments = array_merge( [$request], $this->target->getArguments( $request ) );
 		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );
 		} );

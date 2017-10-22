@@ -5,6 +5,7 @@ namespace CarbonFramework\Routing;
 use Closure;
 use Exception;
 use CarbonFramework\Url;
+use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 use CarbonFramework\Routing\Middleware\HasMiddlewareTrait;
@@ -49,10 +50,10 @@ class RouteGroup implements RouteInterface {
 	 * 
 	 * @return RouteInterface|null
 	 */
-	protected function getSatisfiedRoute() {
+	protected function getSatisfiedRoute( Request $request ) {
 		$routes = $this->getRoutes();
 		foreach ( $routes as $route ) {
-			if ( $route->satisfied() ) {
+			if ( $route->satisfied( $request ) ) {
 				return $route;
 			}
 		}
@@ -62,16 +63,16 @@ class RouteGroup implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
-		$route = $this->getSatisfiedRoute();
+	public function satisfied( Request $request ) {
+		$route = $this->getSatisfiedRoute( $request );
 		return $route !== null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( $request ) {
-		$route = $this->getSatisfiedRoute();
+	public function handle( Request $request ) {
+		$route = $this->getSatisfiedRoute( $request );
 		return $route ? $route->handle( $request ) : null;
 	}
 

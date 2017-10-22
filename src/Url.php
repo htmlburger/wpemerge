@@ -2,6 +2,8 @@
 
 namespace CarbonFramework;
 
+use CarbonFramework\Request;
+
 /**
  * A collection of tools dealing with urls
  */
@@ -11,18 +13,10 @@ class Url {
 	 * 
 	 * @return string
 	 */
-	public static function getCurrentPath() {
-		global $wp;
-		return '/' . $wp->request;
-	}
-
-	/**
-	 * Return the current absolute url
-	 * 
-	 * @return string
-	 */
-	public static function getCurrentUrl() {
-		return home_url( add_query_arg( array() ) );
+	public static function getCurrentPath( Request $request ) {
+		$url = $request->getUrl();
+		$relative_url = substr( $url, strlen( home_url( '/' ) ) );
+		return static::addTrailingSlash( static::addLeadingSlash( $relative_url ) );
 	}
 
 	/**

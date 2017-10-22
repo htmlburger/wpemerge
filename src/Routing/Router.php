@@ -32,14 +32,15 @@ class Router {
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
 		$global_middleware = Framework::resolve( 'framework.global_middleware' );
+		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
 			$route->addMiddleware( $global_middleware );
 		}
 
 		foreach ( $routes as $route ) {
-			if ( $route->satisfied() ) {
-				return $this->handle( $route );
+			if ( $route->satisfied( $request ) ) {
+				return $this->handle( $request, $route );
 			}
 		}
 		
@@ -52,8 +53,7 @@ class Router {
 	 * @param  RouteInterface $route
 	 * @return string
 	 */
-	protected function handle( RouteInterface $route ) {
-		$request = Request::fromGlobals();
+	protected function handle( Request $request, RouteInterface $route ) {
 		$response = $route->handle( $request );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {

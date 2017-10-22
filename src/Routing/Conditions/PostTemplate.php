@@ -2,6 +2,8 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+use CarbonFramework\Request;
+
 /**
  * Check against the current post's template
  */
@@ -34,7 +36,7 @@ class PostTemplate implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		$template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 		$template = $template ? $template : 'default';
 		return ( is_singular( $this->post_types ) && $this->post_template === $template );
@@ -43,7 +45,7 @@ class PostTemplate implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		return [$this->post_template, $this->post_types];
 	}
 }

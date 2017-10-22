@@ -2,6 +2,8 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+use CarbonFramework\Request;
+
 /**
  * Check against the current post's slug
  */
@@ -25,7 +27,7 @@ class PostSlug implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		$post = get_post();
 		return ( $post && $this->post_slug === $post->post_name );
 	}
@@ -33,7 +35,7 @@ class PostSlug implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		return [$this->post_slug];
 	}
 }

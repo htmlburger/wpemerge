@@ -3,6 +3,7 @@
 namespace CarbonFramework\Routing\Conditions;
 
 use CarbonFramework\Url as UrlUtility;
+use CarbonFramework\Request;
 
 /**
  * Check against the current url
@@ -51,18 +52,18 @@ class Url implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied() {
+	public function satisfied( Request $request ) {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = $this->getCurrentPath();
+		$url = UrlUtility::getCurrentPath( $request );
 		return (bool) preg_match( $validation_regex, $url );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments() {
+	public function getArguments( Request $request ) {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = $this->getCurrentPath();
+		$url = UrlUtility::getCurrentPath( $request );
 		$matches = [];
 		$success = preg_match( $validation_regex, $url, $matches );
 
@@ -86,15 +87,6 @@ class Url implements ConditionInterface {
 	 */
 	public function getUrl() {
 		return $this->url;
-	}
-
-	/**
-	 * Return the current requested path from the server, relative to the home url
-	 * 
-	 * @return string
-	 */
-	protected function getCurrentPath() {
-		return UrlUtility::addTrailingSlash( UrlUtility::getCurrentPath() );
 	}
 
 	/**
