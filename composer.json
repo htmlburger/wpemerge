@@ -9,5 +9,8 @@
             "CarbonFramework\\": "src/"
         },
         "files": ["config.php"]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2"
     }
 }
