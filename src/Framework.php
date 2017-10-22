@@ -12,6 +12,7 @@ use CarbonFramework\Support\AliasLoader;
 use CarbonFramework\ServiceProviders\Routing as RoutingServiceProvider;
 use CarbonFramework\ServiceProviders\Flash as FlashServiceProvider;
 use CarbonFramework\ServiceProviders\OldInput as OldInputServiceProvider;
+use CarbonFramework\ServiceProviders\Templating as TemplatingServiceProvider;
 
 class Framework {
 	protected static $booted = false;
@@ -55,6 +56,7 @@ class Framework {
 			RoutingServiceProvider::class,
 			FlashServiceProvider::class,
 			OldInputServiceProvider::class,
+			TemplatingServiceProvider::class,
 		], $container['framework.config']['providers'] );
 
 		Facade::setFacadeApplication( $container );
