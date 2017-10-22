@@ -185,27 +185,8 @@ class Framework {
 		static::verifyBoot();
 
 		$instance = static::resolve( $class );
+		
 		if ( $instance === null ) {
-			try {
-				$reflection = new ReflectionMethod( $class, '__construct' );
-
-				if ( ! $reflection->isPublic() ) {
-					throw new Exception( $class . '::__construct() is not public.' );
-				}
-
-				$parameters = $reflection->getParameters();
-
-				$required_parameters = array_filter( $parameters, function( $parameter ) {
-					return ! $parameter->isOptional();
-				} );
-
-				if ( ! empty( $required_parameters ) ) {
-					throw new Exception( $class . '::__construct() has requird parameters but could not be resolved from container. Did you miss to define it into the container?' );
-				}
-			} catch ( ReflectionException $e ) {
-				// __constructor is not defined so we are free to create a new instance
-			}
-
 			$instance = new $class();
 		}
 
