@@ -24,7 +24,7 @@ class Flash {
 	/**
 	 * Constructor
 	 * 
-	 * @param array|\ArrayAccess &$storage
+	 * @param array|\ArrayAccess $storage
 	 */
 	public function __construct( &$storage ) {
 		if ( $this->isValidStorage( $storage ) ) {
@@ -84,7 +84,7 @@ class Flash {
 	 * Get the entire storage or the values for a key
 	 * 
 	 * @param  string|null $key
-	 * @return array
+	 * @return array|\ArrayAccess
 	 */
 	public function peek( $key = null ) {
 		$this->validateStorage();
