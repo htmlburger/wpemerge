@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Templating;
 
+/**
+ * Include template files with php
+ */
 class Php implements EngineInterface {
 	/**
 	 * {@inheritDoc}

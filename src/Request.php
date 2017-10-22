@@ -4,6 +4,9 @@ namespace CarbonFramework;
 
 use CarbonFramework\Support\Arr;
 
+/**
+ * A server request representation
+ */
 class Request {
 	/**
 	 * GET parameters

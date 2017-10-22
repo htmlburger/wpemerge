@@ -6,13 +6,32 @@ use Closure;
 use Exception;
 use CarbonFramework\Framework;
 
+/**
+ * Represent a closure or a controller method to be executed in response to a request
+ */
 class Handler {
+	/**
+	 * Actual handler
+	 * 
+	 * @var string|Closure|null
+	 */
 	protected $handler = null;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param string|Closure $handler
+	 */
 	public function __construct( $handler ) {
 		$this->set( $handler );
 	}
 
+	/**
+	 * Parse a handler to a callable
+	 * 
+	 * @param  string|Closure $handler
+	 * @return callable|null
+	 */
 	protected function parse( $handler ) {
 		if ( $handler instanceof Closure ) {
 			return $handler;
@@ -37,6 +56,12 @@ class Handler {
 		return null;
 	}
 
+	/**
+	 * Set the handler
+	 * 
+	 * @param string|Closure $new_handler
+	 * @return null
+	 */
 	public function set( $new_handler ) {
 		$handler = $this->parse( $new_handler );
 
@@ -47,6 +72,11 @@ class Handler {
 		$this->handler = $handler;
 	}
 
+	/**
+	 * Execute the handler
+	 * 
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
 	public function execute() {
 		$arguments = func_get_args();
 		if ( ! is_array( $this->handler ) ) {

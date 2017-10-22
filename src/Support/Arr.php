@@ -1,12 +1,13 @@
 <?php
-/**
- * @credit (limited version of) illuminate/support
- */
 
 namespace CarbonFramework\Support;
 
 use ArrayAccess;
 
+/**
+ * A collection of tools dealing with arrays
+ * @credit (limited version of) illuminate/support
+ */
 class Arr
 {
     /**

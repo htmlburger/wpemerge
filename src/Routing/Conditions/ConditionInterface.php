@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Interface that condition types must implement
+ */
 interface ConditionInterface {
 	/**
 	 * Return whether the condition is satisfied

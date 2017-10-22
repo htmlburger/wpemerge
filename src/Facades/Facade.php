@@ -1,7 +1,4 @@
 <?php
-/**
- * @credit illuminate/support
- */
 
 namespace CarbonFramework\Facades;
 
@@ -9,12 +6,16 @@ use Mockery;
 use RuntimeException;
 use Mockery\MockInterface;
 
+/**
+ * Base facade class that should be extended by all facades
+ * @credit illuminate/support
+ */
 abstract class Facade
 {
     /**
      * The application instance being facaded.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var object
      */
     protected static $app;
 
@@ -186,7 +187,7 @@ abstract class Facade
     /**
      * Get the application instance behind the facade.
      *
-     * @return \Illuminate\Contracts\Foundation\Application
+     * @return object
      */
     public static function getFacadeApplication()
     {
@@ -196,7 +197,7 @@ abstract class Facade
     /**
      * Set the application instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  object $app
      * @return void
      */
     public static function setFacadeApplication($app)

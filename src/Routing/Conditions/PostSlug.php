@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Check against the current post's slug
+ */
 class PostSlug implements ConditionInterface {
 	/**
 	 * Post slug to check against

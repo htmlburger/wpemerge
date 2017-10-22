@@ -17,8 +17,19 @@ class RouteGroup implements RouteInterface {
 		addMiddleware as traitAddMiddleware;
 	}
 
+	/**
+	 * Route target
+	 * 
+	 * @var ConditionInterface
+	 */
 	protected $target = null;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param string|ConditionInterface $target
+	 * @param Closure                   $callable
+	 */
 	public function __construct( $target, Closure $callable ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
@@ -33,6 +44,11 @@ class RouteGroup implements RouteInterface {
 		$callable( $this );
 	}
 
+	/**
+	 * Return the first child route which is satisfied
+	 * 
+	 * @return RouteInterface|null
+	 */
 	protected function getSatisfiedRoute() {
 		$routes = $this->getRoutes();
 		foreach ( $routes as $route ) {
@@ -43,16 +59,25 @@ class RouteGroup implements RouteInterface {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function satisfied() {
 		$route = $this->getSatisfiedRoute();
 		return $route !== null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function handle( $request ) {
 		$route = $this->getSatisfiedRoute();
 		return $route ? $route->handle( $request ) : null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function route( $methods, $target, $handler ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
@@ -66,6 +91,9 @@ class RouteGroup implements RouteInterface {
 		return $this->traitRoute( $methods, $target, $handler );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function addMiddleware( $middleware ) {
 		$routes = $this->getRoutes();
 

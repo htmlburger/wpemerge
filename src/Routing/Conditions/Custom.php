@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Check against a custom callable
+ */
 class Custom implements ConditionInterface {
 	/**
 	 * Callable to use

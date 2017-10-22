@@ -6,11 +6,14 @@ use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Allow objects to have middleware
+ */
 trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware
 	 * 
-	 * @var array
+	 * @var \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
 	 */
 	protected $middleware = [];
 
@@ -35,7 +38,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Get registered middleware
 	 *
-	 * @return array
+	 * @return \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
 	 */
 	public function getMiddleware() {
 		return $this->middleware;
@@ -44,7 +47,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|callable|array $middleware
+	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
 	 * @return object
 	 */
 	public function addMiddleware( $middleware ) {
@@ -64,7 +67,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|array $middleware
+	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
 	 * @return object
 	 */
 	public function add( $middleware ) {
@@ -74,9 +77,9 @@ trait HasMiddlewareTrait {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  array             $middleware
-	 * @param  any               $request
-	 * @param  Closure           $next
+	 * @param  \CarbonFramework\Routing\Middleware\MiddlewareInterface[] $middleware
+	 * @param  any                                                       $request
+	 * @param  Closure                                                   $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next ) {

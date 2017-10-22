@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Templating;
 
+/**
+ * Interface that template engines must implement
+ */
 interface EngineInterface {
 	/**
 	 * Render a template to a string

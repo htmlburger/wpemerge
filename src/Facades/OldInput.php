@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Facades;
 
+/**
+ * Provide access to old input service
+ */
 class OldInput extends Facade
 {
     protected static function getFacadeAccessor()

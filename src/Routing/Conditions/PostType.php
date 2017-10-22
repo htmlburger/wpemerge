@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Check against the current post's type
+ */
 class PostType implements ConditionInterface {
 	/**
 	 * Post type to check against

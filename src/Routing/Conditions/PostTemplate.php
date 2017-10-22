@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Check against the current post's template
+ */
 class PostTemplate implements ConditionInterface {
 	/**
 	 * Post template to check against

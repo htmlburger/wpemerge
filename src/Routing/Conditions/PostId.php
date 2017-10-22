@@ -2,6 +2,9 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
+/**
+ * Check against the current post's id
+ */
 class PostId implements ConditionInterface {
 	/**
 	 * Post id to check against

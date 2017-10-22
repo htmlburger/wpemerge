@@ -4,6 +4,9 @@ namespace CarbonFramework\Routing\Conditions;
 
 use CarbonFramework\Url as UrlUtility;
 
+/**
+ * Check against the current url
+ */
 class Url implements ConditionInterface {
 	/**
 	 * URL to check against

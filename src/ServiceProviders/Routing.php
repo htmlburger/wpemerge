@@ -4,7 +4,13 @@ namespace CarbonFramework\ServiceProviders;
 
 use CarbonFramework\Framework;
 
+/**
+ * Provide routing dependencies
+ */
 class Routing implements ServiceProviderInterface {
+	/**
+	 * {@inheritDoc}
+	 */
 	public function register( $container ) {
 		$container['framework.config'] = array_merge( [
 			'global_middleware' => [],
@@ -27,6 +33,9 @@ class Routing implements ServiceProviderInterface {
 		Framework::facade( 'Router', \CarbonFramework\Facades\Router::class );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function boot( $container ) {
 		\Router::boot(); // facade
 	}

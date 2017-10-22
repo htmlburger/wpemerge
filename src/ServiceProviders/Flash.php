@@ -4,7 +4,13 @@ namespace CarbonFramework\ServiceProviders;
 
 use CarbonFramework\Framework;
 
+/**
+ * Provide flash dependencies
+ */
 class Flash implements ServiceProviderInterface {
+	/**
+	 * {@inheritDoc}
+	 */
 	public function register( $container ) {
 		$container['framework.flash.flash'] = function( $c ) {
 			$session = null;
@@ -19,6 +25,9 @@ class Flash implements ServiceProviderInterface {
 		Framework::facade( 'Flash', \CarbonFramework\Facades\Flash::class );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function boot( $container ) {
 		// nothing to boot
 	}

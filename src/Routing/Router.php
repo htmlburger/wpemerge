@@ -8,13 +8,27 @@ use CarbonFramework\Framework;
 use CarbonFramework\Request;
 use CarbonFramework\Response as FrameworkResponse;
 
+/**
+ * Provide routing
+ */
 class Router {
 	use HasRoutesTrait;
 
+	/**
+	 * Hook into WordPress actions
+	 * 
+	 * @return null
+	 */
 	public function boot() {
 		add_action( 'template_include', array( $this, 'execute' ), 1000 );
 	}
 
+	/**
+	 * Add global middlewares and execute the first satisfied route (if any)
+	 * 
+	 * @param  string $template
+	 * @return string
+	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
 		$global_middleware = Framework::resolve( 'framework.global_middleware' );
@@ -32,6 +46,12 @@ class Router {
 		return $template;
 	}
 
+	/**
+	 * Execute a route
+	 * 
+	 * @param  RouteInterface $route
+	 * @return string
+	 */
 	protected function handle( RouteInterface $route ) {
 		$request = Request::fromGlobals();
 		$response = $route->handle( $request );
