@@ -29,7 +29,7 @@ class Handler {
 	/**
 	 * Parse a handler to a callable or a [class, method] array
 	 * 
-	 * @param  string|Closure $handler
+	 * @param  string|Closure      $handler
 	 * @return callable|array|null
 	 */
 	protected function parse( $handler ) {
@@ -42,15 +42,13 @@ class Handler {
 			if ( count( $handlerPieces ) === 1 ) {
 				if ( is_callable( $handlerPieces[0] ) ) {
 					return $handlerPieces[0];
-				} else {
-					return null;
 				}
-			} else {
-				return array(
-					'class' => $handlerPieces[0],
-					'method' => $handlerPieces[1],
-				);
+				return null;
 			}
+			return array(
+				'class' => $handlerPieces[0],
+				'method' => $handlerPieces[1],
+			);
 		}
 
 		return null;
