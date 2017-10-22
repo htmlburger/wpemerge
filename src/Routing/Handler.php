@@ -27,10 +27,10 @@ class Handler {
 	}
 
 	/**
-	 * Parse a handler to a callable
+	 * Parse a handler to a callable or a [class, method] array
 	 * 
 	 * @param  string|Closure $handler
-	 * @return callable|null
+	 * @return callable|array|null
 	 */
 	protected function parse( $handler ) {
 		if ( $handler instanceof Closure ) {
