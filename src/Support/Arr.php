@@ -475,7 +475,7 @@ class Arr
      * @param  mixed         $default
      * @return mixed
      */
-    public static function function data_get($target, $key, $default = null)
+    public static function data_get($target, $key, $default = null)
     {
         if (is_null($key)) {
             return $target;
