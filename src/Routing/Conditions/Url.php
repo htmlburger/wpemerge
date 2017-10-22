@@ -54,7 +54,7 @@ class Url implements ConditionInterface {
 	public function satisfied() {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
 		$url = $this->getCurrentPath();
-		return preg_match( $validation_regex, $url );
+		return (bool) preg_match( $validation_regex, $url );
 	}
 
 	/**
