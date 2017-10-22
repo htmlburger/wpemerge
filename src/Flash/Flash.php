@@ -70,7 +70,7 @@ class Flash {
 	 * Get and clear the entire storage or the values for a key
 	 * 
 	 * @param  string|null $key
-	 * @return array
+	 * @return array|\ArrayAccess
 	 */
 	public function get( $key = null ) {
 		$this->validateStorage();
@@ -103,15 +103,15 @@ class Flash {
 	/**
 	 * Add values for a key
 	 * 
-	 * @param string    $key
-	 * @param any|array $new_items
+	 * @param string $key
+	 * @param any    $new_items
 	 */
 	public function add( $key, $new_items ) {
 		$this->validateStorage();
 		
 		$new_items = is_array( $new_items ) ? $new_items : [$new_items];
 
-		$items = $this->peek( $key );
+		$items = (array) $this->peek( $key );
 		$items = array_merge( $items, $new_items );
 		
 		if ( $key === null ) {
