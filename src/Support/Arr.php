@@ -39,6 +39,24 @@ class Arr
     }
 
     /**
+     * Collapse an array of arrays into a single array.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    public static function collapse($array)
+    {
+        $results = [];
+        foreach ($array as $values) {
+            if (! is_array($values)) {
+                continue;
+            }
+            $results = array_merge($results, $values);
+        }
+        return $results;
+    }
+
+    /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
      * @param  array  $array
@@ -308,7 +326,7 @@ class Arr
         list($value, $key) = static::explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
-            $itemValue = data_get($item, $value);
+            $itemValue = static::data_get($item, $value);
 
             // If the key is "null", we will just append the value to the array and keep
             // looping. Otherwise we will key the array using the value of the key we
@@ -316,7 +334,7 @@ class Arr
             if (is_null($key)) {
                 $results[] = $itemValue;
             } else {
-                $itemKey = data_get($item, $key);
+                $itemKey = static::data_get($item, $key);
 
                 $results[$itemKey] = $itemValue;
             }
@@ -447,5 +465,40 @@ class Arr
         }
 
         return $array;
+    }
+
+    /**
+     * Get an item from an array or object using "dot" notation.
+     *
+     * @param  mixed         $target
+     * @param  string|array  $key
+     * @param  mixed         $default
+     * @return mixed
+     */
+    public static function function data_get($target, $key, $default = null)
+    {
+        if (is_null($key)) {
+            return $target;
+        }
+        $key = is_array($key) ? $key : explode('.', $key);
+        while (! is_null($segment = array_shift($key))) {
+            if ($segment === '*') {
+                if ($target instanceof Collection) {
+                    $target = $target->all();
+                } elseif (! is_array($target)) {
+                    return $default;
+                }
+                $result = static::pluck($target, $key);
+                return in_array('*', $key) ? static::collapse($result) : $result;
+            }
+            if (static::accessible($target) && static::exists($target, $segment)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return $default;
+            }
+        }
+        return $target;
     }
 }
