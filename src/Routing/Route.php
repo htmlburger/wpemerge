@@ -41,7 +41,7 @@ class Route implements RouteInterface {
 	 * Constructor
 	 * 
 	 * @param string[]        $methods
-	 * @param any             $target
+	 * @param mixed           $target
 	 * @param string|\Closure $handler
 	 */
 	public function __construct( $methods, $target, $handler ) {

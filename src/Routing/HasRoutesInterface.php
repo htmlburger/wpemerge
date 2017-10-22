@@ -27,7 +27,7 @@ interface HasRoutesInterface {
 	 * Create and add a new route
 	 * 
 	 * @param  string[]       $methods
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -45,7 +45,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the GET and HEAD methods
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -54,7 +54,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the POST method
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -63,7 +63,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the PUT method
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -72,7 +72,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the PATCH method
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -81,7 +81,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the DELETE method
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -90,7 +90,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for the OPTIONS method
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
@@ -99,7 +99,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route for all supported methods
 	 * 
-	 * @param  any            $target
+	 * @param  mixed          $target
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */

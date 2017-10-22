@@ -20,7 +20,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Check if the passed entity is a valid middleware
 	 * 
-	 * @param  any     $middleware
+	 * @param  mixed   $middleware
 	 * @return boolean
 	 */
 	protected function isMiddleware( $middleware ) {
@@ -77,7 +77,7 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  \CarbonFramework\Routing\Middleware\MiddlewareInterface[] $middleware
-	 * @param  any                                                       $request
+	 * @param  mixed                                                     $request
 	 * @param  Closure                                                   $next
 	 * @return ResponseInterface
 	 */

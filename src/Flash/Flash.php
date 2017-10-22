@@ -38,7 +38,7 @@ class Flash {
 	/**
 	 * Return whether a storage object is valid
 	 * 
-	 * @param  any     $storage
+	 * @param  mixed   $storage
 	 * @return boolean
 	 */
 	protected function isValidStorage( $storage ) {
@@ -104,7 +104,7 @@ class Flash {
 	 * Add values for a key
 	 * 
 	 * @param string $key
-	 * @param any    $new_items
+	 * @param mixed  $new_items
 	 */
 	public function add( $key, $new_items ) {
 		$this->validateStorage();

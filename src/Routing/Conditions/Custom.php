@@ -24,7 +24,7 @@ class Custom implements ConditionInterface {
 	 * Constructor
 	 * 
 	 * @param callable $callable
-	 * @param any      ...$arguments
+	 * @param mixed    ...$arguments
 	 */
 	public function __construct( $callable ) {
 		$this->callable = $callable;

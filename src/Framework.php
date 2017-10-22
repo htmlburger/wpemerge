@@ -163,7 +163,7 @@ class Framework {
 	 * Resolve a dependency from the IoC container
 	 * 
 	 * @param  string   $key
-	 * @return any|null
+	 * @return mixed|null
 	 */
 	public static function resolve( $key ) {
 		static::verifyBoot();
