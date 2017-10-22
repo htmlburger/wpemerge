@@ -40,7 +40,7 @@ class Handler {
 		if ( is_string( $handler ) )  {
 			$handlerPieces = preg_split( '/@|::/', $handler, 2 );
 			if ( count( $handlerPieces ) === 1 ) {
-				if ( is_callable( $handlerPieces ) ) {
+				if ( is_callable( $handlerPieces[0] ) ) {
 					return $handlerPieces[0];
 				} else {
 					return null;
