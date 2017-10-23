@@ -23,7 +23,7 @@ filter:
     - 'tests/*'
     - 'tmp/*'
 checks:
-  php: true
+  php:
     coding_standard:
       name: WordPress
 coding_style:
