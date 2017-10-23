@@ -86,7 +86,7 @@ tools:
         use_statement_alias_conflict: true
         precedence_in_condition_assignment: true
       verify_php_doc_comments:
-          enabled: true
+        enabled: true
         parameters: true
         return: true
         suggest_more_specific_types: true
