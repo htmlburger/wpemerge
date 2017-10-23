@@ -28,6 +28,18 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
+     * @covers \CarbonFramework\Url::getCurrentPath
+     */
+    public function testGetCurrentPath_QueryString_StripsQueryString() {
+        $expected = '/foo/bar/';
+
+        $mock_request = $this->getMockBuilder( CarbonFramework\Request::class )->disableOriginalConstructor()->getMock();
+        $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
+
+        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
+    }
+
+    /**
      * @covers \CarbonFramework\Url::addLeadingSlash
      */
     public function testAddLeadingSlash() {

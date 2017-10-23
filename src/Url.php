@@ -16,7 +16,10 @@ class Url {
 	public static function getCurrentPath( Request $request ) {
 		$url = $request->getUrl();
 		$relative_url = substr( $url, strlen( home_url( '/' ) ) );
-		return static::addTrailingSlash( static::addLeadingSlash( $relative_url ) );
+		$relative_url = static::addLeadingSlash( $relative_url );
+		$relative_url = preg_replace( '~\?.*~', '', $relative_url );
+		$relative_url = static::addTrailingSlash( $relative_url );
+		return $relative_url;
 	}
 
 	/**
