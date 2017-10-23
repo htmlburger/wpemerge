@@ -1,9 +1,25 @@
 {
-    "require": {
-        "php": ">=5.5",
-        "pimple/pimple": "^3.2",
-        "guzzlehttp/psr7": "^1.4",
-        "ralouphie/getallheaders": "^2.0"
+    "name": "htmlburger/carbon-framework",
+    "description": "WordPress *VC micro-framework for theme development.",
+    "license": "GPL-2.0",
+    "homepage": "https://github.com/htmlburger/carbon-framework",
+    "authors": [
+        {
+            "name": "htmlBurger",
+            "email": "wordpress@htmlburger.com",
+            "homepage": "https://htmlburger.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Atanas Angelov",
+            "email": "atanas.angelov.dev@gmail.com",
+            "role": "Developer"
+        },
+    ],
+    "support": {
+        "source": "https://github.com/htmlburger/carbon-framework",
+        "issues": "https://github.com/htmlburger/carbon-framework/issues",
+        "email": "wordpress@htmlburger.com"
     },
     "autoload": {
         "psr-4": {
@@ -11,6 +27,12 @@
             "CarbonFrameworkTestTools\\": "tests/tools"
         },
         "files": ["config.php"]
+    },
+    "require": {
+        "php": ">=5.5",
+        "pimple/pimple": "^3.2",
+        "guzzlehttp/psr7": "^1.4",
+        "ralouphie/getallheaders": "^2.0"
     },
     "require-dev": {
     }
