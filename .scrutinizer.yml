@@ -2,20 +2,6 @@ build:
   environment:
     php:
       version: 5.5
-  nodes:
-    analysis:
-      project_setup:
-        override:
-          - 'true'
-      tests:
-        override:
-          - php-scrutinizer-run
-          -
-            command: phpcs-run
-            use_website_config: true
-      environment:
-        node:
-          version: 6.0.0
           
 filter:
   excluded_paths:
