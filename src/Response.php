@@ -21,54 +21,69 @@ class Response {
 
 	/**
 	 * Send output based on a response object
-	 * @credit slimphp/slim Slim/App.php
+	 * @credit modified version of slimphp/slim - Slim/App.php
 	 * 
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
 	public static function respond( ResponseInterface $response ) {
-		// Send response
-		if (!headers_sent()) {
-			// Status
-			header(sprintf(
-				'HTTP/%s %s %s',
-				$response->getProtocolVersion(),
-				$response->getStatusCode(),
-				$response->getReasonPhrase()
-			));
-			// Headers
-			foreach ($response->getHeaders() as $name => $values) {
-				foreach ($values as $value) {
-					header(sprintf('%s: %s', $name, $value), false);
-				}
+		if ( ! headers_sent() ) {
+			static::sendHeaders( $response );
+		}
+		static::sendBody( $response );
+	}
+
+	/**
+	 * Send a request's headers to the client
+	 *
+	 * @param  ResponseInterface $response
+	 * @return null
+	 */
+	protected static function sendHeaders( $response ) {
+		// Status
+		header( sprintf(
+			'HTTP/%s %s %s',
+			$response->getProtocolVersion(),
+			$response->getStatusCode(),
+			$response->getReasonPhrase()
+		) );
+
+		// Headers
+		foreach ( $response->getHeaders() as $name => $values ) {
+			foreach ( $values as $value ) {
+				header( sprintf( '%s: %s', $name, $value ), false );
 			}
 		}
-		// Body
+	}
+
+	/**
+	 * Send a request's body to the client
+	 *
+	 * @param  ResponseInterface $response
+	 * @return null
+	 */
+	protected static function sendBody( $response, $chunk_size = 4096 ) {
 		$body = $response->getBody();
-		if ($body->isSeekable()) {
+		if ( $body->isSeekable() ) {
 			$body->rewind();
 		}
-		$chunkSize = 4096;
-		$contentLength = $response->getHeaderLine('Content-Length');
-		if (!$contentLength) {
-			$contentLength = $body->getSize();
+
+		$content_length = $response->getHeaderLine( 'Content-Length' );
+		if ( ! $content_length ) {
+			$content_length = $body->getSize();
 		}
-		if (isset($contentLength)) {
-			$amountToRead = $contentLength;
-			while ($amountToRead > 0 && !$body->eof()) {
-				$data = $body->read(min($chunkSize, $amountToRead));
-				echo $data;
-				$amountToRead -= strlen($data);
-				if (connection_status() != CONNECTION_NORMAL) {
-					break;
-				}
+
+		$content_left = $content_length ? $content_length : -1;
+		$amount_to_read = $content_left > -1 ? min( $chunk_size, $content_left ) : $chunk_size;
+		while ( ! $body->eof() ) {
+			echo $body->read( $amount_to_read );
+
+			if ( $content_left > -1 ) {
+				$content_left -= $amount_to_read;
 			}
-		} else {
-			while (!$body->eof()) {
-				echo $body->read($chunkSize);
-				if (connection_status() != CONNECTION_NORMAL) {
-					break;
-				}
+
+			if ( connection_status() != CONNECTION_NORMAL ) {
+				break;
 			}
 		}
 	}
