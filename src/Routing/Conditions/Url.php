@@ -145,8 +145,8 @@ class Url implements ConditionInterface {
 		// add a question mark to the end to make the trailing slash optional
 		$validation_regex = $validation_regex . '?';
 
-		// make sure the regex matches the beginning of the url
-		$validation_regex = '^' . $validation_regex;
+		// make sure the regex matches the entire url
+		$validation_regex = '^' . $validation_regex . '$';
 
 		if ( $wrap ) {
 			$validation_regex = '~' . $validation_regex . '~';
