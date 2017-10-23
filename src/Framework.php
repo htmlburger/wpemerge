@@ -56,7 +56,7 @@ class Framework {
 	 * @throws Exception
 	 * @return null
 	 */
-	public static function verifyBoot() {
+	protected static function verifyBoot() {
 		if ( ! static::isBooted() ) {
 			throw new Exception( get_called_class() . ' must be booted first.' );
 		}
@@ -196,6 +196,7 @@ class Framework {
 	/**
 	 * Send output based on a response object
 	 * 
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */

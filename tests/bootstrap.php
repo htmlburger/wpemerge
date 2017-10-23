@@ -24,11 +24,11 @@ class Carbon_Framework_Tests_Bootstrap {
 	public $tests_dir;
 
 	/** 
-	 * Plugin directory.
+	 * Library directory.
 	 *
 	 * @var string
 	 */
-	public $plugin_dir;
+	public $library_directory;
 
 	/**
 	 * Setup the unit testing environment
@@ -37,9 +37,9 @@ class Carbon_Framework_Tests_Bootstrap {
 		ini_set( 'display_errors','on' );
 		error_reporting( E_ALL );
 
-		$this->tests_dir    = __DIR__;
-		$this->plugin_dir   = dirname( $this->tests_dir );
-		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->plugin_dir . '/tmp/wordpress-tests-lib';
+		$this->tests_dir = __DIR__;
+		$this->library_directory = dirname( $this->tests_dir );
+		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->library_directory . '/tmp/wordpress-tests-lib';
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );
@@ -63,7 +63,7 @@ class Carbon_Framework_Tests_Bootstrap {
 	 * Load the plugin
 	 */
 	public function load_plugin() {
-		require_once( $this->plugin_dir . '/vendor/autoload.php' );
+		require_once( $this->library_directory . '/vendor/autoload.php' );
 	}
 
 	/**
