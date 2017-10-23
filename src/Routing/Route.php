@@ -64,6 +64,30 @@ class Route implements RouteInterface {
 	}
 
 	/**
+	 * Create and return a new condition
+	 * 
+	 * @param  array              $options
+	 * @return ConditionInterface
+	 */
+	protected function condition( $options ) {
+		if ( count( $options ) === 0 ) {
+			throw new Exception( 'No condition type specified.' );
+		}
+
+		$condition_type = $options[0];
+		$arguments = array_slice( $options, 1 );
+
+		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
+		if ( $condition_class === null ) {
+			throw new Exception( 'Unknown condition type specified: ' . $condition_type );
+		}
+
+		$reflection = new ReflectionClass( $condition_class );
+		$condition = $reflection->newInstanceArgs( $arguments );
+		return $condition;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function satisfied( Request $request ) {
@@ -84,26 +108,24 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Create and return a new condition
+	 * Add a rewrite rule to WordPress for url-based routes
 	 * 
-	 * @param  array $options
-	 * @return ConditionInterface
+	 * @param  string $rewrite_to
+	 * @return RouteInterface
 	 */
-	public function condition( $options ) {
-		if ( count( $options ) === 0 ) {
-			throw new Exception( 'No condition type specified.' );
+	public function rewrite( $rewrite_to ) {
+		if ( ! is_a( $this->target, UrlCondition::class ) ) {
+			throw new Exception( 'Only routes with url targets can add rewrite rules.' );
 		}
 
-		$condition_type = $options[0];
-		$arguments = array_slice( $options, 1 );
+		$regex = $this->target->getValidationRegex( $this->target->getUrl(), false );
+		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
 
-		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
-		if ( $condition_class === null ) {
-			throw new Exception( 'Unknown condition type specified: ' . $condition_type );
-		}
+		add_filter( 'carbon_framework_routing_rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
+			$rules[ $regex ] = $rewrite_to;
+			return $rules;
+		} );
 
-		$reflection = new ReflectionClass( $condition_class );
-		$condition = $reflection->newInstanceArgs( $arguments );
-		return $condition;
+		return $this;
 	}
 }

@@ -22,13 +22,13 @@ class Url implements ConditionInterface {
 	 * @var string
 	 */
 	protected $url_regex = '~
-		(?:/)                     # require leading slash
+		(?<=/)                    # lookbehind for a slash
 		(?:\{)                    # require opening curly brace
 			(?P<name>[a-z]\w*)    # require a string starting with a-z and followed by any number of word characters for the parameter name
 			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using literal ?
 			(?::(?P<regex>.*?))?  # optionally allow the user to supply a regex to match the argument against
 		(?:\})                    # require closing curly brace
-		(?=/)                     # lookahead for a slash but do not consume it as it may be used by the next match
+		(?=/)                     # lookahead for a slash
 	~ix';
 
 	/**
@@ -114,18 +114,19 @@ class Url implements ConditionInterface {
 	/**
 	 * Return regex to test whether normal urls match the parameter-based one
 	 * 
-	 * @param  string $url
+	 * @param  string  $url
+	 * @param  boolean $wrap
 	 * @return string
 	 */
-	protected function getValidationRegex( $url ) {
+	public function getValidationRegex( $url, $wrap = true ) {
 		$parameters = [];
-
+		
 		// Replace all parameters with placeholders
 		$validation_regex = preg_replace_callback( $this->url_regex, function( $matches ) use ( &$parameters ) {
 			$name = $matches['name'];
 			$optional = ! empty( $matches['optional'] );
 			$regex = ! empty( $matches['regex'] ) ? $matches['regex'] : $this->parameter_regex;
-			$replacement = '(?:/(?P<' . $name . '>' . $regex . '))';
+			$replacement = '(?P<' . $name . '>' . $regex . ')';
 			if ( $optional ) {
 				$replacement .= '?';
 			}
@@ -141,8 +142,15 @@ class Url implements ConditionInterface {
 		// replace the placeholders with the real parameter regexes
 		$validation_regex = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_regex );
 
-		// make sure that the regex matches the entire string
-		$validation_regex = '~\A' . $validation_regex . '\z~';
+		// add a question mark to the end to make the trailing slash optional
+		$validation_regex = $validation_regex . '?';
+
+		// make sure the regex matches the beginning of the url
+		$validation_regex = '^' . $validation_regex;
+
+		if ( $wrap ) {
+			$validation_regex = '~' . $validation_regex . '~';
+		}
 
 		return $validation_regex;
 	}

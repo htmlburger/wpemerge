@@ -13,7 +13,7 @@ class OldInput implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.global_middleware'] = array_merge( $container['framework.global_middleware'], [
+		$container['framework.routing.global_middleware'] = array_merge( $container['framework.routing.global_middleware'], [
 			OldInputMiddleware::class,
 		] );
 

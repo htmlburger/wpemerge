@@ -20,7 +20,20 @@ class Router {
 	 * @return null
 	 */
 	public function boot() {
+		add_action( 'init', array( $this, 'registerRewriteRules' ), 1000 );
 		add_action( 'template_include', array( $this, 'execute' ), 1000 );
+	}
+
+	/**
+	 * Register route rewrite rules with WordPress
+	 * 
+	 * @return null
+	 */
+	public function registerRewriteRules() {
+		$rules = apply_filters( 'carbon_framework_routing_rewrite_rules', [] );
+		foreach ( $rules as $rule => $rewrite_to ) {
+			add_rewrite_rule( $rule, $rewrite_to, 'top' );
+		}
 	}
 
 	/**
@@ -31,7 +44,7 @@ class Router {
 	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
-		$global_middleware = Framework::resolve( 'framework.global_middleware' );
+		$global_middleware = Framework::resolve( 'framework.routing.global_middleware' );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
