@@ -1,10 +1,10 @@
 <?php
 
-use CarbonFramework\Url as Subject;
+use CarbonFramework\Url;
 
 class UrlTest extends WP_UnitTestCase {
     /**
-     * @covers Subject::getCurrentPath
+     * @covers Url::getCurrentPath
      */
     public function testGetCurrentPath_Home_Slash() {
         $expected = '/';
@@ -12,11 +12,11 @@ class UrlTest extends WP_UnitTestCase {
         $mock_request = $this->createMock( CarbonFramework\Request::class );
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/' );
 
-        $this->assertEquals( $expected, Subject::getCurrentPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
     }
 
     /**
-     * @covers Subject::getCurrentPath
+     * @covers Url::getCurrentPath
      */
     public function testGetCurrentPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
@@ -24,38 +24,38 @@ class UrlTest extends WP_UnitTestCase {
         $mock_request = $this->createMock( CarbonFramework\Request::class );
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/' );
 
-        $this->assertEquals( $expected, Subject::getCurrentPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
     }
 
     /**
-     * @covers Subject::addLeadingSlash
+     * @covers Url::addLeadingSlash
      */
     public function testAddLeadingSlash() {
-        $this->assertEquals( '/example', Subject::addLeadingSlash('example') );
-        $this->assertEquals( '/example', Subject::addLeadingSlash('/example') );
+        $this->assertEquals( '/example', Url::addLeadingSlash('example') );
+        $this->assertEquals( '/example', Url::addLeadingSlash('/example') );
     }
 
     /**
-     * @covers Subject::removeLeadingSlash
+     * @covers Url::removeLeadingSlash
      */
     public function testRemoveLeadingSlash() {
-        $this->assertEquals( 'example', Subject::removeLeadingSlash('/example') );
-        $this->assertEquals( 'example', Subject::removeLeadingSlash('example') );
+        $this->assertEquals( 'example', Url::removeLeadingSlash('/example') );
+        $this->assertEquals( 'example', Url::removeLeadingSlash('example') );
     }
 
     /**
-     * @covers Subject::addTrailingSlash
+     * @covers Url::addTrailingSlash
      */
     public function testAddTrailingSlash() {
-        $this->assertEquals( 'example/', Subject::addTrailingSlash('example') );
-        $this->assertEquals( 'example/', Subject::addTrailingSlash('example/') );
+        $this->assertEquals( 'example/', Url::addTrailingSlash('example') );
+        $this->assertEquals( 'example/', Url::addTrailingSlash('example/') );
     }
 
     /**
-     * @covers Subject::removeTrailingSlash
+     * @covers Url::removeTrailingSlash
      */
     public function testRemoveTrailingSlash() {
-        $this->assertEquals( 'example', Subject::removeTrailingSlash('example/') );
-        $this->assertEquals( 'example', Subject::removeTrailingSlash('example') );
+        $this->assertEquals( 'example', Url::removeTrailingSlash('example/') );
+        $this->assertEquals( 'example', Url::removeTrailingSlash('example') );
     }
 }
