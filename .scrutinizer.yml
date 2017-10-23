@@ -6,13 +6,10 @@ build:
     analysis:
       project_setup:
         override:
-            - 'true'
+          - 'true'
       tests:
         override:
-          - php-scrutinizer-run
-          -
-              command: phpcs-run
-              use_website_config: true
+          - 'true'
       environment:
         node:
           version: 6.0.0
