@@ -4,7 +4,7 @@ use CarbonFramework\Url;
 
 class UrlTest extends WP_UnitTestCase {
     /**
-     * @covers Url::getCurrentPath
+     * @covers \CarbonFramework\Url::getCurrentPath
      */
     public function testGetCurrentPath_Home_Slash() {
         $expected = '/';
@@ -16,7 +16,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Url::getCurrentPath
+     * @covers \CarbonFramework\Url::getCurrentPath
      */
     public function testGetCurrentPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
@@ -28,7 +28,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Url::addLeadingSlash
+     * @covers \CarbonFramework\Url::addLeadingSlash
      */
     public function testAddLeadingSlash() {
         $this->assertEquals( '/example', Url::addLeadingSlash('example') );
@@ -36,7 +36,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Url::removeLeadingSlash
+     * @covers \CarbonFramework\Url::removeLeadingSlash
      */
     public function testRemoveLeadingSlash() {
         $this->assertEquals( 'example', Url::removeLeadingSlash('/example') );
@@ -44,7 +44,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Url::addTrailingSlash
+     * @covers \CarbonFramework\Url::addTrailingSlash
      */
     public function testAddTrailingSlash() {
         $this->assertEquals( 'example/', Url::addTrailingSlash('example') );
@@ -52,7 +52,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Url::removeTrailingSlash
+     * @covers \CarbonFramework\Url::removeTrailingSlash
      */
     public function testRemoveTrailingSlash() {
         $this->assertEquals( 'example', Url::removeTrailingSlash('example/') );

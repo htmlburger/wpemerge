@@ -5,7 +5,7 @@ use CarbonFramework\Framework;
 
 class FrameworkTest extends WP_UnitTestCase {
     /**
-     * @covers Framework::debugging
+     * @covers \CarbonFramework\Framework::debugging
      */
     public function testDebugging() {
         $this->assertEquals( true, Framework::debugging() );
@@ -13,7 +13,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::isBooted
+     * @covers \CarbonFramework\Framework::isBooted
      */
     public function testIsBooted() {
         $this->assertEquals( true, Framework::isBooted() );
@@ -21,7 +21,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::getContainer
+     * @covers \CarbonFramework\Framework::getContainer
      */
     public function testGetContainer_ReturnsContainer() {
         $container = Framework::getContainer();
@@ -29,7 +29,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::getContainer
+     * @covers \CarbonFramework\Framework::getContainer
      */
     public function testGetContainer_CalledMultipleTimes_ReturnsSameContainer() {
         $container1 = Framework::getContainer();
@@ -38,7 +38,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::boot
+     * @covers \CarbonFramework\Framework::boot
      * @expectedException \Exception
      */
     public function testBoot_CalledMultipleTimes_ThrowsException() {
@@ -46,7 +46,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::facade
+     * @covers \CarbonFramework\Framework::facade
      */
     public function testFacade() {
         $expected = 'foobar';
@@ -62,7 +62,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::resolve
+     * @covers \CarbonFramework\Framework::resolve
      */
     public function testResolve_NonexistantKey_ReturnsNull() {
         $expected = null;
@@ -72,7 +72,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::resolve
+     * @covers \CarbonFramework\Framework::resolve
      */
     public function testResolve_ExistingKey_IsResolved() {
         $expected = 'foobar';
@@ -86,7 +86,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::instantiate
+     * @covers \CarbonFramework\Framework::instantiate
      */
     public function testInstantiate_UnknownClass_CreatesFreshInstance() {
         $class = \CarbonFrameworkTestTools\TestService::class;
@@ -99,7 +99,7 @@ class FrameworkTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers Framework::instantiate
+     * @covers \CarbonFramework\Framework::instantiate
      */
     public function testInstantiate_KnownClass_ResolvesInstanceFromContainer() {
         $expected = rand(1, 999999);
