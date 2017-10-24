@@ -11,8 +11,9 @@ interface MiddlewareInterface {
 	/**
 	 * Execute middleware
 	 *
-	 * @param \CarbonFramework\Request $request
-	 * @param  Closure                 $next
+	 * @param  \CarbonFramework\Request            $request
+	 * @param  Closure                             $next
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function handle( $request, Closure $next );
 }
