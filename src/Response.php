@@ -22,7 +22,8 @@ class Response {
 	/**
 	 * Send output based on a response object
 	 * @credit modified version of slimphp/slim - Slim/App.php
-	 * 
+	 *
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
