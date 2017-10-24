@@ -7,20 +7,20 @@ use Exception;
 use CarbonFramework\Framework;
 
 /**
- * Represent a closure or a controller method to be executed in response to a request
+ * Represent a callable or a controller method to be executed in response to a request
  */
 class Handler {
 	/**
 	 * Actual handler
 	 * 
-	 * @var string|array|Closure|null
+	 * @var callable|array|null
 	 */
 	protected $handler = null;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param string|Closure $handler
+	 * @param string|callable $handler
 	 */
 	public function __construct( $handler ) {
 		$this->set( $handler );
@@ -29,7 +29,7 @@ class Handler {
 	/**
 	 * Parse a handler to a callable or a [class, method] array
 	 * 
-	 * @param  string|Closure      $handler
+	 * @param  string|callable     $handler
 	 * @return callable|array|null
 	 */
 	protected function parse( $handler ) {
@@ -57,7 +57,7 @@ class Handler {
 	/**
 	 * Set the handler
 	 * 
-	 * @param  string|Closure $new_handler
+	 * @param  string|callable $new_handler
 	 * @return null
 	 */
 	public function set( $new_handler ) {
