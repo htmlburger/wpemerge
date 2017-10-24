@@ -105,13 +105,15 @@ class Request {
 		$protocol = $https ? 'https' : 'http';
 		$host = (string) Arr::get( $this->server, 'HTTP_HOST', '' );
 		$uri = (string) Arr::get( $this->server, 'REQUEST_URI', '' );
+		$uri = Url::addLeadingSlash( $uri );
 
 		return $protocol . '://' . $host . $uri;
 	}
 
 	/**
 	 * Return a value from any of the request parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	protected function input() {
@@ -128,7 +130,8 @@ class Request {
 
 	/**
 	 * Return a value from the GET parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function get() {
@@ -137,7 +140,8 @@ class Request {
 
 	/**
 	 * Return a value from the POST parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function post() {
@@ -146,7 +150,8 @@ class Request {
 
 	/**
 	 * Return a value from the COOKIE parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function cookie() {
@@ -155,7 +160,8 @@ class Request {
 
 	/**
 	 * Return a value from the FILES parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function files() {
@@ -164,7 +170,8 @@ class Request {
 
 	/**
 	 * Return a value from the SERVER parameters
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function server() {
@@ -173,7 +180,8 @@ class Request {
 
 	/**
 	 * Return a value from the headers
-	 * 
+	 *
+	 * @see  \CarbonFramework\Support\Arr
 	 * @return mixed
 	 */
 	public function headers() {
