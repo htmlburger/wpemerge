@@ -67,20 +67,6 @@ class Flash {
 	}
 
 	/**
-	 * Get and clear the entire storage or the values for a key
-	 * 
-	 * @param  string|null $key
-	 * @return array|\ArrayAccess
-	 */
-	public function get( $key = null ) {
-		$this->validateStorage();
-
-		$items = $this->peek( $key );
-		$this->clear( $key );
-		return $items;
-	}
-
-	/**
 	 * Get the entire storage or the values for a key
 	 * 
 	 * @param  string|null $key
@@ -98,6 +84,20 @@ class Flash {
 		}
 
 		return [];
+	}
+
+	/**
+	 * Get and clear the entire storage or the values for a key
+	 * 
+	 * @param  string|null $key
+	 * @return array|\ArrayAccess
+	 */
+	public function get( $key = null ) {
+		$this->validateStorage();
+
+		$items = $this->peek( $key );
+		$this->clear( $key );
+		return $items;
 	}
 
 	/**
@@ -131,7 +131,9 @@ class Flash {
 		$this->validateStorage();
 		
 		if ( $key === null ) {
-			$this->storage = [];
+			foreach ( $this->storage as $key => $value ) {
+				$this->storage[ $key ] = [];
+			}
 		} else {
 			$this->storage[ $key ] = [];
 		}
