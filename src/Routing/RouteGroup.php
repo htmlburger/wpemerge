@@ -4,7 +4,6 @@ namespace CarbonFramework\Routing;
 
 use Closure;
 use Exception;
-use CarbonFramework\Url;
 use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;

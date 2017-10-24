@@ -48,7 +48,7 @@ trait HasMiddlewareTrait {
 	 * Add middleware
 	 *
 	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
-	 * @return object
+	 * @return HasMiddlewareTrait
 	 */
 	public function addMiddleware( $middleware ) {
 		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
@@ -66,8 +66,8 @@ trait HasMiddlewareTrait {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
-	 * @return object
+	 * @param  string|callable|\CarbonFramework\Routing\Middleware\middlewareInterface|array $middleware
+	 * @return HasMiddlewareTrait
 	 */
 	public function add( $middleware ) {
 		return $this->addMiddleware( $middleware );
@@ -77,7 +77,7 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  \CarbonFramework\Routing\Middleware\MiddlewareInterface[] $middleware
-	 * @param  mixed                                                     $request
+	 * @param  \CarbonFramework\Request                                  $request
 	 * @param  Closure                                                   $next
 	 * @return ResponseInterface
 	 */

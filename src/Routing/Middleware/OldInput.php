@@ -3,7 +3,6 @@
 namespace CarbonFramework\Routing\Middleware;
 
 use Closure;
-use GuzzleHttp\Psr7;
 use Flash;
 use OldInput as OldInputService;
 
