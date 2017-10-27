@@ -10,49 +10,49 @@ use CarbonFramework\Support\Arr;
 class Request {
 	/**
 	 * GET parameters
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $get = [];
 
 	/**
 	 * POST parameters
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $post = [];
 
 	/**
 	 * COOKIE parameters
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $cookie = [];
 
 	/**
 	 * FILES parameters
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $files = [];
 
 	/**
 	 * SERVER parameters
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $server = [];
 
 	/**
 	 * Headers
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $headers = [];
 
 	/**
 	 * Create a new instance from php superglobals
-	 * 
+	 *
 	 * @return Request
 	 */
 	public static function fromGlobals() {
@@ -61,7 +61,7 @@ class Request {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param array $get
 	 * @param array $post
 	 * @param array $cookie
@@ -80,12 +80,12 @@ class Request {
 
 	/**
 	 * Return the request method
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMethod() {
 		$method = (string) Arr::get( $this->server, 'REQUEST_METHOD', 'GET' );
-		
+
 		$override = (string) Arr::get( $this->headers, 'X-HTTP-METHOD-OVERRIDE' );
 		if ( $method === 'POST' && $override ) {
 			$method = $override;
@@ -96,7 +96,7 @@ class Request {
 
 	/**
 	 * Return the request url
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getUrl() {

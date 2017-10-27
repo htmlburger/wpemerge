@@ -11,7 +11,7 @@ use CarbonFramework\Routing\Middleware\HasMiddlewareInterface;
 interface RouteInterface extends HasMiddlewareInterface {
 	/**
 	 * Return whether the route is satisfied
-	 * 
+	 *
 	 * @param  Request $request
 	 * @return boolean
 	 */
@@ -19,7 +19,7 @@ interface RouteInterface extends HasMiddlewareInterface {
 
 	/**
 	 * Return a response for the given request
-	 * 
+	 *
 	 * @param  Request                             $request
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

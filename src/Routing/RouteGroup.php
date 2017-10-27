@@ -19,14 +19,14 @@ class RouteGroup implements RouteInterface {
 
 	/**
 	 * Route target
-	 * 
+	 *
 	 * @var ConditionInterface
 	 */
 	protected $target = null;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string|ConditionInterface $target
 	 * @param Closure                   $callable
 	 */
@@ -46,7 +46,7 @@ class RouteGroup implements RouteInterface {
 
 	/**
 	 * Return the first child route which is satisfied
-	 * 
+	 *
 	 * @return RouteInterface|null
 	 */
 	protected function getSatisfiedRoute( Request $request ) {
@@ -100,7 +100,7 @@ class RouteGroup implements RouteInterface {
 		foreach ( $routes as $route ) {
 			$route->addMiddleware( $middleware );
 		}
-		
+
 		return $this->traitAddMiddleware( $middleware );
 	}
 }

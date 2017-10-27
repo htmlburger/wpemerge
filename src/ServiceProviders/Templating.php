@@ -16,7 +16,7 @@ class Templating implements ServiceProviderInterface {
 			return new \CarbonFramework\Templating\Php();
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

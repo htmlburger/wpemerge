@@ -10,21 +10,21 @@ use CarbonFramework\Request;
 class Custom implements ConditionInterface {
 	/**
 	 * Callable to use
-	 * 
+	 *
 	 * @var callable
 	 */
 	protected $callable = null;
 
 	/**
 	 * Arguments to pass to the callable and controller
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arguments = [];
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param callable $callable
 	 * @param mixed    ...$arguments
 	 */

@@ -11,14 +11,14 @@ use CarbonFramework\Request;
 class Url implements ConditionInterface {
 	/**
 	 * URL to check against
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $url = '';
 
 	/**
 	 * Regex to detect parameters in urls
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $url_regex = '~
@@ -33,14 +33,14 @@ class Url implements ConditionInterface {
 
 	/**
 	 * Regex to detect valid parameters in url segments
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $parameter_regex = '[^/]+';
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string $url
 	 */
 	public function __construct( $url ) {
@@ -76,13 +76,13 @@ class Url implements ConditionInterface {
 		foreach ( $parameter_names as $parameter_name ) {
 			$arguments[] = ! empty( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
 		}
-		
+
 		return $arguments;
 	}
 
 	/**
 	 * Return the url for this condition
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getUrl() {
@@ -91,7 +91,7 @@ class Url implements ConditionInterface {
 
 	/**
 	 * Concatenate 2 url conditions into a new one
-	 * 
+	 *
 	 * @param  Url $url
 	 * @return Url
 	 */
@@ -101,7 +101,7 @@ class Url implements ConditionInterface {
 
 	/**
 	 * Return parameter names as defined in the url
-	 * 
+	 *
 	 * @param  string   $url
 	 * @return string[]
 	 */
@@ -113,14 +113,14 @@ class Url implements ConditionInterface {
 
 	/**
 	 * Return regex to test whether normal urls match the parameter-based one
-	 * 
+	 *
 	 * @param  string  $url
 	 * @param  boolean $wrap
 	 * @return string
 	 */
 	public function getValidationRegex( $url, $wrap = true ) {
 		$parameters = [];
-		
+
 		// Replace all parameters with placeholders
 		$validation_regex = preg_replace_callback( $this->url_regex, function( $matches ) use ( &$parameters ) {
 			$name = $matches['name'];

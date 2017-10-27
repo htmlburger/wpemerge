@@ -10,7 +10,7 @@ use CarbonFramework\Request;
 interface ConditionInterface {
 	/**
 	 * Return whether the condition is satisfied
-	 * 
+	 *
 	 * @param  Request $request
 	 * @return boolean
 	 */

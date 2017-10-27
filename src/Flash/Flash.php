@@ -16,14 +16,14 @@ class Flash {
 
 	/**
 	 * Key to store flashed data in storage with
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $storage_key = '__carbonFrameworkFlash';
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param array|\ArrayAccess $storage
 	 */
 	public function __construct( &$storage ) {
@@ -37,7 +37,7 @@ class Flash {
 
 	/**
 	 * Return whether a storage object is valid
-	 * 
+	 *
 	 * @param  mixed   $storage
 	 * @return boolean
 	 */
@@ -47,7 +47,7 @@ class Flash {
 
 	/**
 	 * Throw an exception if storage is not valid
-	 * 
+	 *
 	 * @throws Exception
 	 * @return null
 	 */
@@ -59,7 +59,7 @@ class Flash {
 
 	/**
 	 * Return whether the flash service is enabled
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function enabled() {
@@ -68,17 +68,17 @@ class Flash {
 
 	/**
 	 * Get the entire storage or the values for a key
-	 * 
+	 *
 	 * @param  string|null $key
 	 * @return array|\ArrayAccess
 	 */
 	public function peek( $key = null ) {
 		$this->validateStorage();
-		
+
 		if ( $key === null ) {
 			return $this->storage;
 		}
-		
+
 		if ( isset( $this->storage[ $key ] ) ) {
 			return $this->storage[ $key ];
 		}
@@ -88,7 +88,7 @@ class Flash {
 
 	/**
 	 * Get and clear the entire storage or the values for a key
-	 * 
+	 *
 	 * @param  string|null $key
 	 * @return array|\ArrayAccess
 	 */
@@ -102,18 +102,18 @@ class Flash {
 
 	/**
 	 * Add values for a key
-	 * 
+	 *
 	 * @param string $key
 	 * @param mixed  $new_items
 	 */
 	public function add( $key, $new_items ) {
 		$this->validateStorage();
-		
+
 		$new_items = is_array( $new_items ) ? $new_items : [$new_items];
 
 		$items = (array) $this->peek( $key );
 		$items = array_merge( $items, $new_items );
-		
+
 		if ( $key === null ) {
 			$this->storage = $items;
 		} else {
@@ -123,13 +123,13 @@ class Flash {
 
 	/**
 	 * Clear the entire storage or the values for a key
-	 * 
+	 *
 	 * @param  string|null $key
 	 * @return null
 	 */
 	public function clear( $key = null ) {
 		$this->validateStorage();
-		
+
 		if ( $key === null ) {
 			foreach ( $this->storage as $key => $value ) {
 				$this->storage[ $key ] = [];

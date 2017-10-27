@@ -10,7 +10,7 @@ use CarbonFramework\Request;
 class Url {
 	/**
 	 * Return the current path relative to the home url
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getCurrentPath( Request $request ) {
@@ -24,7 +24,7 @@ class Url {
 
 	/**
 	 * Ensure url has a leading slash
-	 * 
+	 *
 	 * @param  string $url
 	 * @return string
 	 */
@@ -34,7 +34,7 @@ class Url {
 
 	/**
 	 * Ensure url does not have a leading slash
-	 * 
+	 *
 	 * @param  string $url
 	 * @return string
 	 */
@@ -44,7 +44,7 @@ class Url {
 
 	/**
 	 * Ensure url has a trailing slash
-	 * 
+	 *
 	 * @param  string $url
 	 * @return string
 	 */
@@ -54,7 +54,7 @@ class Url {
 
 	/**
 	 * Ensure url does not have a trailing slash
-	 * 
+	 *
 	 * @param  string $url
 	 * @return string
 	 */

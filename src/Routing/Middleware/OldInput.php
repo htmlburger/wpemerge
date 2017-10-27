@@ -23,7 +23,7 @@ class OldInput implements MiddlewareInterface {
 				Flash::add( OldInputService::getFlashKey(), $request->post() );
 			}
 		}
-		
+
 		return $response;
 	}
 }

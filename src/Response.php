@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 class Response {
 	/**
 	 * Create a new response object
-	 * 
+	 *
 	 * @return Psr7Response
 	 */
 	public static function response() {
@@ -91,7 +91,7 @@ class Response {
 
 	/**
 	 * Return a cloned response with the passed string as the body
-	 * 
+	 *
 	 * @param  Psr7Response $response
 	 * @param  string       $output
 	 * @return Psr7Response
@@ -103,7 +103,7 @@ class Response {
 
 	/**
 	 * Return a cloned response, resolving and rendering a template as the body
-	 * 
+	 *
 	 * @param  Psr7Response    $response
 	 * @param  string|string[] $templates
 	 * @param  array           $context
@@ -123,7 +123,7 @@ class Response {
 
 	/**
 	 * Return a cloned response, json encoding the passed array as the body
-	 * 
+	 *
 	 * @param  Psr7Response $response
 	 * @param  array        $data
 	 * @return Psr7Response
@@ -136,7 +136,7 @@ class Response {
 
 	/**
 	 * Return a cloned response, with location and status headers
-	 * 
+	 *
 	 * @param  Psr7Response $response
 	 * @param  string       $url
 	 * @param  integer      $status
@@ -150,7 +150,7 @@ class Response {
 
 	/**
 	 * Return a cloned response, with status headers and rendering a suitable template as the body
-	 * 
+	 *
 	 * @param  Psr7Response $response
 	 * @param  integer      $status
 	 * @return Psr7Response

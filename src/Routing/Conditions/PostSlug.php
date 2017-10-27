@@ -10,14 +10,14 @@ use CarbonFramework\Request;
 class PostSlug implements ConditionInterface {
 	/**
 	 * Post slug to check against
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $post_slug = '';
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string $post_slug
 	 */
 	public function __construct( $post_slug ) {

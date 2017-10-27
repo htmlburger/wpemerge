@@ -10,21 +10,21 @@ use CarbonFramework\Request;
 class PostTemplate implements ConditionInterface {
 	/**
 	 * Post template to check against
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $post_template = '';
 
 	/**
 	 * Post types to check against
-	 * 
+	 *
 	 * @var string[]
 	 */
 	protected $post_types = [];
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string          $post_template
 	 * @param string|string[] $post_types
 	 */

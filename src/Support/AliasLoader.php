@@ -4,7 +4,7 @@ namespace CarbonFramework\Support;
 
 /**
  * Register class aliases for facades
- * 
+ *
  * @credit illuminate/foundation
  */
 class AliasLoader

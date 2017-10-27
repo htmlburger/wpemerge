@@ -10,14 +10,14 @@ use CarbonFramework\Request;
 class PostId implements ConditionInterface {
 	/**
 	 * Post id to check against
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $post_id = '';
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string $post_id
 	 */
 	public function __construct( $post_id ) {

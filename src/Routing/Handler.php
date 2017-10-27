@@ -12,14 +12,14 @@ use CarbonFramework\Framework;
 class Handler {
 	/**
 	 * Actual handler
-	 * 
+	 *
 	 * @var callable|array|null
 	 */
 	protected $handler = null;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string|callable $handler
 	 */
 	public function __construct( $handler ) {
@@ -28,7 +28,7 @@ class Handler {
 
 	/**
 	 * Parse a handler to a callable or a [class, method] array
-	 * 
+	 *
 	 * @param  string|callable     $handler
 	 * @return callable|array|null
 	 */
@@ -56,7 +56,7 @@ class Handler {
 
 	/**
 	 * Set the handler
-	 * 
+	 *
 	 * @param  string|callable $new_handler
 	 * @return null
 	 */
@@ -72,7 +72,7 @@ class Handler {
 
 	/**
 	 * Execute the handler
-	 * 
+	 *
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function execute() {

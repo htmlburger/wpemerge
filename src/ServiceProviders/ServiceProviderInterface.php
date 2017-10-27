@@ -8,7 +8,7 @@ namespace CarbonFramework\ServiceProviders;
 interface ServiceProviderInterface {
 	/**
 	 * Register all dependencies in the IoC container
-	 * 
+	 *
 	 * @param  \Pimple\Container $container
 	 * @return null
 	 */
@@ -16,7 +16,7 @@ interface ServiceProviderInterface {
 
 	/**
 	 * Bootstrap any services if needed
-	 * 
+	 *
 	 * @param  \Pimple\Container $container
 	 * @return null
 	 */

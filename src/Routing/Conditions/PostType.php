@@ -10,14 +10,14 @@ use CarbonFramework\Request;
 class PostType implements ConditionInterface {
 	/**
 	 * Post type to check against
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $post_type = '';
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string $post_type
 	 */
 	public function __construct( $post_type ) {

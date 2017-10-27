@@ -16,7 +16,7 @@ class Router {
 
 	/**
 	 * Hook into WordPress actions
-	 * 
+	 *
 	 * @return null
 	 */
 	public function boot() {
@@ -26,7 +26,7 @@ class Router {
 
 	/**
 	 * Register route rewrite rules with WordPress
-	 * 
+	 *
 	 * @return null
 	 */
 	public function registerRewriteRules() {
@@ -38,7 +38,7 @@ class Router {
 
 	/**
 	 * Add global middlewares and execute the first satisfied route (if any)
-	 * 
+	 *
 	 * @param  string $template
 	 * @return string
 	 */
@@ -56,13 +56,13 @@ class Router {
 				return $this->handle( $request, $route );
 			}
 		}
-		
+
 		return $template;
 	}
 
 	/**
 	 * Execute a route
-	 * 
+	 *
 	 * @param  RouteInterface $route
 	 * @return string
 	 */

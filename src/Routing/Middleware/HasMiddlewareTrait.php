@@ -12,14 +12,14 @@ use Psr\Http\Message\ResponseInterface;
 trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware
-	 * 
+	 *
 	 * @var \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
 	 */
 	protected $middleware = [];
 
 	/**
 	 * Check if the passed entity is a valid middleware
-	 * 
+	 *
 	 * @param  mixed   $middleware
 	 * @return boolean
 	 */
@@ -27,7 +27,7 @@ trait HasMiddlewareTrait {
 		if ( is_callable( $middleware ) ) {
 			return true;
 		}
-		
+
 		if ( is_a( $middleware, MiddlewareInterface::class, true ) ) {
 			return true;
 		}

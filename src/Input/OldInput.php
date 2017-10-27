@@ -11,14 +11,14 @@ use CarbonFramework\Support\Arr;
 class OldInput {
 	/**
 	 * Key to store the flashed data with
-	 * 
+	 *
 	 * @var string
 	 */
 	const FLASH_KEY = '__carbonFrameworkOldInput';
 
 	/**
 	 * Return the flashed data key
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getFlashKey() {
@@ -27,7 +27,7 @@ class OldInput {
 
 	/**
 	 * Return all previously flashed request data
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function all() {
@@ -36,7 +36,7 @@ class OldInput {
 
 	/**
 	 * Return any previously flashed request data value
-	 * 
+	 *
 	 * @see Arr::get()
 	 */
 	public static function get() {

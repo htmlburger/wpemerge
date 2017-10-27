@@ -20,21 +20,21 @@ use CarbonFramework\ServiceProviders\Templating as TemplatingServiceProvider;
 class Framework {
 	/**
 	 * Flag whether the framework has been booted
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected static $booted = false;
 
 	/**
 	 * IoC container
-	 * 
+	 *
 	 * @var Container
 	 */
 	protected static $container = null;
 
 	/**
 	 * Return whether WordPress is in debug mode
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function debugging() {
@@ -43,7 +43,7 @@ class Framework {
 
 	/**
 	 * Return whether the framework has been booted
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function isBooted() {
@@ -64,7 +64,7 @@ class Framework {
 
 	/**
 	 * Return the IoC container instance
-	 * 
+	 *
 	 * @return Container
 	 */
 	public static function getContainer() {
@@ -77,7 +77,7 @@ class Framework {
 	/**
 	 * Boot the framework
 	 * WordPress's 'init' action is a good place to call this
-	 * 
+	 *
 	 * @param  array     $config
 	 * @throws Exception
 	 * @return null
@@ -109,7 +109,7 @@ class Framework {
 
 	/**
 	 * Register and boot all service providers
-	 * 
+	 *
 	 * @param  Container $container
 	 * @return null
 	 */
@@ -126,7 +126,7 @@ class Framework {
 
 	/**
 	 * Register all service providers
-	 * 
+	 *
 	 * @param  Container $container
 	 * @return null
 	 */
@@ -138,7 +138,7 @@ class Framework {
 
 	/**
 	 * Boot all service providers
-	 * 
+	 *
 	 * @param  Container $container
 	 * @return null
 	 */
@@ -150,7 +150,7 @@ class Framework {
 
 	/**
 	 * Register a facade class
-	 * 
+	 *
 	 * @param  string $alias
 	 * @param  string $facade_class
 	 * @return null
@@ -161,7 +161,7 @@ class Framework {
 
 	/**
 	 * Resolve a dependency from the IoC container
-	 * 
+	 *
 	 * @param  string   $key
 	 * @return mixed|null
 	 */
@@ -177,7 +177,7 @@ class Framework {
 
 	/**
 	 * Create and return a class instance
-	 * 
+	 *
 	 * @param  string $class
 	 * @return object
 	 */
@@ -195,7 +195,7 @@ class Framework {
 
 	/**
 	 * Send output based on a response object
-	 * 
+	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return null
