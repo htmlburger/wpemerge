@@ -102,14 +102,12 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, resolving and rendering a template as the body
+	 * Resolve a template or a template array to an absolute filepath
 	 *
-	 * @param  Psr7Response    $response
 	 * @param  string|string[] $templates
-	 * @param  array           $context
-	 * @return Psr7Response
+	 * @return string
 	 */
-	public static function template( Psr7Response $response, $templates, $context = array() ) {
+	protected static function resolveTemplate( $templates ) {
 		$templates = is_array( $templates ) ? $templates : [$templates];
 		$template = locate_template( $templates, false );
 
@@ -122,6 +120,20 @@ class Response {
 				}
 			}
 		}
+
+		return $template;
+	}
+
+	/**
+	 * Return a cloned response, resolving and rendering a template as the body
+	 *
+	 * @param  Psr7Response    $response
+	 * @param  string|string[] $templates
+	 * @param  array           $context
+	 * @return Psr7Response
+	 */
+	public static function template( Psr7Response $response, $templates, $context = array() ) {
+		$template = static::resolveTemplate( $templates );
 
 		$engine = Framework::resolve( 'framework.templating.engine' );
 		$html = $engine->render( $template, $context );
