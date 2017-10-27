@@ -4,6 +4,8 @@ namespace CarbonFramework\Facades;
 
 /**
  * Provide access to router service
+ *
+ * @codeCoverageIgnore
  */
 class Router extends Facade
 {

@@ -8,7 +8,9 @@ use Mockery\MockInterface;
 
 /**
  * Base facade class that should be extended by all facades
+ *
  * @credit illuminate/support
+ * @codeCoverageIgnore
  */
 abstract class Facade
 {

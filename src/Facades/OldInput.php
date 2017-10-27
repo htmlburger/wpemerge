@@ -4,6 +4,8 @@ namespace CarbonFramework\Facades;
 
 /**
  * Provide access to old input service
+ *
+ * @codeCoverageIgnore
  */
 class OldInput extends Facade
 {
