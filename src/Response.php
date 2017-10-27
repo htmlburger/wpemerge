@@ -113,6 +113,16 @@ class Response {
 		$templates = is_array( $templates ) ? $templates : [$templates];
 		$template = locate_template( $templates, false );
 
+		// locate_template failed to find the template - test if a valid absolute path was passed
+		if ( ! $template ) {
+			foreach ( $templates as $tpl ) {
+				if ( file_exists( $tpl ) ) {
+					$template = $tpl;
+					break;
+				}
+			}
+		}
+
 		$engine = Framework::resolve( 'framework.templating.engine' );
 		$html = $engine->render( $template, $context );
 

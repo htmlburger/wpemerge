@@ -70,9 +70,9 @@ class RouteGroup implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request ) {
+	public function handle( Request $request, $template ) {
 		$route = $this->getSatisfiedRoute( $request );
-		return $route ? $route->handle( $request ) : null;
+		return $route ? $route->handle( $request, $template ) : null;
 	}
 
 	/**

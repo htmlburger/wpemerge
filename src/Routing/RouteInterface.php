@@ -21,7 +21,8 @@ interface RouteInterface extends HasMiddlewareInterface {
 	 * Return a response for the given request
 	 *
 	 * @param  Request                             $request
+	 * @param  string                              $template
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( Request $request );
+	public function handle( Request $request, $template );
 }

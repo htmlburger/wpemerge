@@ -53,7 +53,7 @@ class Router {
 
 		foreach ( $routes as $route ) {
 			if ( $route->satisfied( $request ) ) {
-				return $this->handle( $request, $route );
+				return $this->handle( $request, $route, $template );
 			}
 		}
 
@@ -63,11 +63,13 @@ class Router {
 	/**
 	 * Execute a route
 	 *
+	 * @param  Request        $request
 	 * @param  RouteInterface $route
+	 * @param  string         $template
 	 * @return string
 	 */
-	protected function handle( Request $request, RouteInterface $route ) {
-		$response = $route->handle( $request );
+	protected function handle( Request $request, RouteInterface $route, $template ) {
+		$response = $route->handle( $request, $template );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
 			if ( Framework::debugging() ) {
