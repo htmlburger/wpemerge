@@ -5,9 +5,9 @@ namespace CarbonFramework\Routing\Conditions;
 use CarbonFramework\Request;
 
 /**
- * Check if a certain endpoint (query var) is set
+ * Check if a certain query var is set
  */
-class Endpoint extends QueryVar {
+class HasQueryVar extends QueryVar {
 	/**
 	 * {@inheritDoc}
 	 */
