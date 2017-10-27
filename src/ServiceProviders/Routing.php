@@ -21,6 +21,7 @@ class Routing implements ServiceProviderInterface {
 
 		$container['framework.routing.conditions.custom'] = \CarbonFramework\Routing\Conditions\Custom::class;
 		$container['framework.routing.conditions.url'] = \CarbonFramework\Routing\Conditions\Url::class;
+		$container['framework.routing.conditions.multiple'] = \CarbonFramework\Routing\Conditions\Multiple::class;
 		$container['framework.routing.conditions.post_id'] = \CarbonFramework\Routing\Conditions\PostId::class;
 		$container['framework.routing.conditions.post_slug'] = \CarbonFramework\Routing\Conditions\PostSlug::class;
 		$container['framework.routing.conditions.post_template'] = \CarbonFramework\Routing\Conditions\PostTemplate::class;
