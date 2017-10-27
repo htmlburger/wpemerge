@@ -2,28 +2,28 @@
 
 class Carbon_Framework_Tests_Bootstrap {
 
-	/** 
+	/**
 	 * The bootstrap instance.
 	 *
 	 * @var Carbon_Framework_Tests_Bootstrap
 	 */
 	protected static $instance = null;
 
-	/** 
+	/**
 	 * Directory where wordpress-tests-lib is installed
 	 *
 	 * @var string
 	 */
 	public $wp_tests_dir;
 
-	/** 
+	/**
 	 * Testing directory.
 	 *
 	 * @var string
 	 */
 	public $tests_dir;
 
-	/** 
+	/**
 	 * Library directory.
 	 *
 	 * @var string
@@ -40,6 +40,8 @@ class Carbon_Framework_Tests_Bootstrap {
 		$this->tests_dir = __DIR__;
 		$this->library_directory = dirname( $this->tests_dir );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->library_directory . '/tmp/wordpress-tests-lib';
+
+		define( 'CARBON_FRAMEWORK_TEST_DIR', $this->tests_dir );
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );

@@ -56,7 +56,7 @@ class FrameworkTest extends WP_UnitTestCase {
             return new \CarbonFrameworkTestTools\TestService();
         };
         $alias = 'TestServiceAlias';
-        
+
         Framework::facade( $alias, \CarbonFrameworkTestTools\TestServiceFacade::class );
         $this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
     }
@@ -81,7 +81,7 @@ class FrameworkTest extends WP_UnitTestCase {
 
         $container = Framework::getContainer();
         $container[ $container_key ] = $expected;
-        
+
         $this->assertSame( $expected, Framework::resolve( $container_key ) );
     }
 
@@ -92,7 +92,7 @@ class FrameworkTest extends WP_UnitTestCase {
         $class = \CarbonFrameworkTestTools\TestService::class;
         $instance1 = Framework::instantiate( $class );
         $instance2 = Framework::instantiate( $class );
-        
+
         $this->assertInstanceOf( $class, $instance1 );
         $this->assertInstanceOf( $class, $instance2 );
         $this->assertNotSame( $instance1, $instance2 );

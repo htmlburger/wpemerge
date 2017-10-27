@@ -36,7 +36,7 @@ class RequestTest extends WP_UnitTestCase {
         $expected1 = 'POST';
         $subject1 = new Request( [], [], [], [], ['REQUEST_METHOD' => $expected1], [] );
         $this->assertEquals( $expected1, $subject1->getMethod() );
-        
+
         $expected2 = 'PUT';
         $subject2 = new Request( [], [], [], [], ['REQUEST_METHOD' => $expected2], [] );
         $this->assertEquals( $expected2, $subject2->getMethod() );
