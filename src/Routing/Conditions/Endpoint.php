@@ -5,7 +5,7 @@ namespace CarbonFramework\Routing\Conditions;
 use CarbonFramework\Request;
 
 /**
- * Check against the current post's type
+ * Check if a certain endpoint (query var) is set
  */
 class Endpoint extends QueryVar {
 	/**

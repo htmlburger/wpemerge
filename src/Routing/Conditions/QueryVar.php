@@ -5,7 +5,7 @@ namespace CarbonFramework\Routing\Conditions;
 use CarbonFramework\Request;
 
 /**
- * Check against the current post's type
+ * Check against a query var value
  */
 class QueryVar implements ConditionInterface {
 	/**
