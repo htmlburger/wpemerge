@@ -30,10 +30,6 @@ class Factory {
 		}
 
 		if ( is_array( $options ) ) {
-			if ( count( $options ) > 0 && is_array( $options[0] ) ) {
-				return static::makeFromArrayOfConditions( $options );
-			}
-
 			return static::makeFromArray( $options );
 		}
 
@@ -69,6 +65,10 @@ class Factory {
 	protected static function makeFromArray( $options ) {
 		if ( count( $options ) === 0 ) {
 			throw new Exception( 'No condition type specified.' );
+		}
+
+		if ( is_array( $options[0] ) ) {
+			return static::makeFromArrayOfConditions( $options );
 		}
 
 		$condition_type = $options[0];
