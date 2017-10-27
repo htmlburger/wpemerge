@@ -2,12 +2,14 @@
 
 namespace CarbonFramework\Routing;
 
+use Closure;
 use ReflectionClass;
 use Exception;
 use CarbonFramework\Framework;
 use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use CarbonFramework\Routing\Conditions\Custom as CustomCondition;
 use CarbonFramework\Routing\Middleware\HasMiddlewareTrait;
 
 /**
@@ -18,28 +20,28 @@ class Route implements RouteInterface {
 
 	/**
 	 * Allowed methods
-	 * 
+	 *
 	 * @var string[]
 	 */
 	protected $methods = [];
 
 	/**
 	 * Route target
-	 * 
+	 *
 	 * @var ConditionInterface
 	 */
 	protected $target = null;
 
 	/**
 	 * Route handler
-	 * 
+	 *
 	 * @var Handler|null
 	 */
 	protected $handler = null;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param string[]        $methods
 	 * @param mixed           $target
 	 * @param string|\Closure $handler
@@ -47,6 +49,10 @@ class Route implements RouteInterface {
 	public function __construct( $methods, $target, $handler ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
+		}
+
+		if ( is_a( $target, Closure::class ) ) {
+			$target = new CustomCondition( $target );
 		}
 
 		if ( is_array( $target ) ) {
@@ -64,7 +70,7 @@ class Route implements RouteInterface {
 
 	/**
 	 * Create and return a new condition
-	 * 
+	 *
 	 * @param  array              $options
 	 * @return ConditionInterface
 	 */
@@ -108,7 +114,7 @@ class Route implements RouteInterface {
 
 	/**
 	 * Add a rewrite rule to WordPress for url-based routes
-	 * 
+	 *
 	 * @param  string $rewrite_to
 	 * @return RouteInterface
 	 */
