@@ -6,6 +6,8 @@ use CarbonFramework\Framework;
 
 /**
  * Provide templating dependencies
+ *
+ * @codeCoverageIgnore
  */
 class Templating implements ServiceProviderInterface {
 	/**

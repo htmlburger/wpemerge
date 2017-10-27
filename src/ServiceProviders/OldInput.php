@@ -7,6 +7,8 @@ use CarbonFramework\Routing\Middleware\OldInput as OldInputMiddleware;
 
 /**
  * Provide old input dependencies
+ *
+ * @codeCoverageIgnore
  */
 class OldInput implements ServiceProviderInterface {
 	/**

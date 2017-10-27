@@ -6,6 +6,8 @@ use CarbonFramework\Framework;
 
 /**
  * Provide flash dependencies
+ *
+ * @codeCoverageIgnore
  */
 class Flash implements ServiceProviderInterface {
 	/**

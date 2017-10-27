@@ -4,6 +4,8 @@ namespace CarbonFramework\ServiceProviders;
 
 /**
  * Interface that service providers must implement
+ *
+ * @codeCoverageIgnore
  */
 interface ServiceProviderInterface {
 	/**

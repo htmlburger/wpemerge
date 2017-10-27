@@ -6,6 +6,8 @@ use CarbonFramework\Framework;
 
 /**
  * Provide routing dependencies
+ *
+ * @codeCoverageIgnore
  */
 class Routing implements ServiceProviderInterface {
 	/**
