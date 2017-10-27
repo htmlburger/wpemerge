@@ -6,7 +6,9 @@ use ArrayAccess;
 
 /**
  * A collection of tools dealing with arrays
+ *
  * @credit (limited version of) illuminate/support
+ * @codeCoverageIgnore
  */
 class Arr
 {
