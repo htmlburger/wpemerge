@@ -17,21 +17,12 @@ class OldInput {
 	const FLASH_KEY = '__carbonFrameworkOldInput';
 
 	/**
-	 * Return the flashed data key
-	 *
-	 * @return string
-	 */
-	public static function getFlashKey() {
-		return static::FLASH_KEY;
-	}
-
-	/**
 	 * Return all previously flashed request data
 	 *
 	 * @return array
 	 */
 	public static function all() {
-		return Flash::peek( static::getFlashKey() );
+		return Flash::peek( static::FLASH_KEY );
 	}
 
 	/**
@@ -44,5 +35,29 @@ class OldInput {
 			static::all(),
 		], func_get_args() );
 		return call_user_func_array( [Arr::class, 'get'], $arguments );
+	}
+
+	/**
+	 * Clear previously stored input
+	 */
+	public static function clear() {
+		if ( ! Flash::enabled() ) {
+			return;
+		}
+
+		Flash::clear( static::FLASH_KEY );
+	}
+
+	/**
+	 * Store the current input
+	 *
+	 * @param array $input
+	 */
+	public static function store( $input ) {
+		if ( ! Flash::enabled() ) {
+			return;
+		}
+
+		Flash::add( static::FLASH_KEY, $input );
 	}
 }
