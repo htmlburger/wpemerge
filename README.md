@@ -335,4 +335,44 @@ TODO
 
 ## Templating
 
-TODO
+Carbon Framework comes with a single template engine built-in - Php.
+This template engine uses `extract()` for the template context and then includes the template file.
+The resulting output is then passed as the rendered template string.
+
+Implementing your own or a third-party engine is simple and straightforward - here's an example of how to use Twig:
+
+1. `composer require twig/twig`
+1. Create a new `TwigEngine.php` file
+    ```php
+    <?php
+
+    use CarbonFramework\Templating\EngineInterface;
+
+    class TwigEngine implements EngineInterface {
+        protected $twig = null;
+
+        public function __construct( $twig ) {
+            $this->twig = $twig;
+        }
+
+        public function render( $file, $context ) {
+            $template = $this->twig->load( substr( $file, strlen( ABSPATH ) ) );
+            return $template->render( $context );
+        }
+    }
+    ```
+1. Replace the template engine used immediately after `\CarbonFramework\Framework::boot()` is called:
+    ```php
+    \CarbonFramework\Framework::boot();
+
+    $container = \CarbonFramework\Framework::getContainer();
+    $container['framework.templating.engine'] = function() {
+        $loader = new Twig_Loader_Filesystem( ABSPATH );
+        $twig = new Twig_Environment( $loader, array(
+            'cache' => false, // you should add a cache - we're skipping it here for simplicity's sake
+        ) );
+        return new TwigEngine( $twig );
+    };
+    ```
+
+With the above changes, templates rendered using `cf_template()` will now be processed using Twig instead of the default Php engine.
