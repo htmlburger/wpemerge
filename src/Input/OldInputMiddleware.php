@@ -4,7 +4,7 @@ namespace CarbonFramework\Input;
 
 use Closure;
 use Flash;
-use OldInput;
+use OldInput as OldInputService;
 use CarbonFramework\Middleware\MiddlewareInterface;
 
 /**
@@ -18,10 +18,10 @@ class OldInputMiddleware implements MiddlewareInterface {
 		$response = $next( $request );
 
 		if ( Flash::enabled() ) {
-			Flash::clear( OldInput::getFlashKey() );
+			Flash::clear( OldInputService::getFlashKey() );
 
 			if ( $request->getMethod() === 'POST' ) {
-				Flash::add( OldInput::getFlashKey(), $request->post() );
+				Flash::add( OldInputService::getFlashKey(), $request->post() );
 			}
 		}
 
