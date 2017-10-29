@@ -144,10 +144,10 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, json encoding the passed array as the body
+	 * Return a cloned response, json encoding the passed data as the body
 	 *
 	 * @param  Psr7Response $response
-	 * @param  array        $data
+	 * @param  mixed        $data
 	 * @return Psr7Response
 	 */
 	public static function json( Psr7Response $response, $data ) {

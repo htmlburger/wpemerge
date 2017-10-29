@@ -26,7 +26,10 @@
             "CarbonFramework\\": "src/",
             "CarbonFrameworkTestTools\\": "tests/tools"
         },
-        "files": ["config.php"]
+        "files": [
+            "config.php",
+            "src/functions.php"
+        ]
     },
     "require": {
         "php": ">=5.5",

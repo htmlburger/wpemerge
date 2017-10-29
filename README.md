@@ -16,7 +16,7 @@ Carbon Framework is a micro framework for WordPress which provides tools for M*V
         \CarbonFramework\Framework::boot();
 
         Router::get( '/', function() {
-            exit('Hello World!');
+            return cf_output( 'Hello World!' );
         } );
     } );
     ```
@@ -218,7 +218,7 @@ Route::group( '/foo/', function( $group ) {
 
 ### Route handlers
 
-A route handler can be any callable or a controller reference in the `CONTROLLER_CLASS@CONTROLLER_METHOD` format. For example:
+A route handler can be any callable or a reference in the `CONTROLLER_CLASS@CONTROLLER_METHOD` format. For example:
 
 ```php
 Router::get( '/', 'HomeController@index' );
@@ -237,14 +237,7 @@ $container[ HomeController::class ] = function() {
 }
 ```
 
-Route handlers have a couple of requirements:
-
-1. Must receive at least 2 arguments
-    1. `$request` - an object representing the current request to the server
-    1. `$template` - the template filepath WordPress is currently attempting to load
-1. Must return an object implementing the `Psr\Http\Message\ResponseInterface` interface
-
-Your controllers can extend the `\CarbonFramework\Controllers\Controller` abstract class which contains a number of utility methods for returning proper response objects - see the Controllers section below for more information.
+Refer to the Controllers section for more info on route handlers.
 
 ### Route middleware
 
@@ -255,9 +248,8 @@ A common example for middleware usage is protecting certain routes to be accessi
 ```php
 class AuthenticationMiddleware implements \CarbonFramework\Middleware\MiddlewareInterface {
     public function handle( $request, Closure $next ) {
-        if ( is_user_logged_in() ) {
-            wp_safe_redirect( wp_login_url() );
-            exit;
+        if ( ! is_user_logged_in() ) {
+            return cf_redirect( wp_login_url() );
         }
         return $next( $request );
     }
@@ -279,19 +271,55 @@ You can also define global middleware which is applied to all defined routes whe
 
 ## Controllers
 
-TODO
+A controller can be any class and any method of that class can be used as a route handler.
+
+Route handlers have a couple of requirements:
+
+1. Must receive at least 2 arguments
+    1. `$request` - an object representing the current request to the server
+    1. `$template` - the template filepath WordPress is currently attempting to load
+    1. You may have additional arguments depending on the route condition(s) you are using (e.g. URL parameters, custom condition arguments etc.)
+1. Must return an object implementing the `Psr\Http\Message\ResponseInterface` interface.
+
+To return a suitable response object you can use one of the built-in utility functions:
 
 ```php
-class MyController extends \CarbonFramework\Controllers\Controller {
+class MyController {
     public function someHandlerMethod( $request, $template ) {
-        return $this->output( 'Hello World!' );
-        return $this->template( 'templates/about-us.php' );
-        return $this->json( ['foo' => 'bar'] );
-        return $this->redirect( home_url( '/' ) );
-        return $this->error( 404 );
+        return cf_output( 'Hello World!' );
+        return cf_template( 'templates/about-us.php' );
+        return cf_json( ['foo' => 'bar'] );
+        return cf_redirect( home_url( '/' ) );
+        return cf_error( 404 );
+        return cf_response();
     }
 }
 ```
+
+### cf_output( $output );
+
+Returns a new response object with the supplied string as the body.
+
+### cf_template( $templates, $context = [] );
+
+Uses `locate_template( $templates )` to resolve a template and applies the template output as the response body.
+Optionally, a context array can be supplied to be used from inside the template.
+
+### cf_json( $data );
+
+Returns a new response object json encoding the passed data as the body.
+
+### cf_redirect( $url, $status = 302 );
+
+Returns a new response object with location and status headers to redirect the user.
+
+### cf_error( $status );
+
+Returns a new response object with the supplied status code. Additionally, attempts to render a suitable `{$status}.php` template file.
+
+### cf_response();
+
+Returns a blank response object.
 
 ## Flash
 
