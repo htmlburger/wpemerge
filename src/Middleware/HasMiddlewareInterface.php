@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Routing\Middleware;
+namespace CarbonFramework\Middleware;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
@@ -12,14 +12,14 @@ interface HasMiddlewareInterface {
 	/**
 	 * Get registered middleware
 	 *
-	 * @return \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
+	 * @return \CarbonFramework\Middleware\MiddlewareInterface[]
 	 */
 	public function getMiddleware();
 
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|callable|\CarbonFramework\Middleware\MiddlewareInterface|array $middleware
 	 * @return object
 	 */
 	public function addMiddleware( $middleware );
@@ -27,7 +27,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|callable|\CarbonFramework\Middleware\MiddlewareInterface|array $middleware
 	 * @return object
 	 */
 	public function add( $middleware );
@@ -35,9 +35,9 @@ interface HasMiddlewareInterface {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  \CarbonFramework\Routing\Middleware\MiddlewareInterface[] $middleware
-	 * @param  mixed                                                     $request
-	 * @param  Closure                                                   $next
+	 * @param  \CarbonFramework\Middleware\MiddlewareInterface[] $middleware
+	 * @param  mixed                                             $request
+	 * @param  Closure                                           $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next );

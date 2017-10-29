@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Routing\Middleware;
+namespace CarbonFramework\Middleware;
 
 use Closure;
 

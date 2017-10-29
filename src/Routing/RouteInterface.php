@@ -3,7 +3,7 @@
 namespace CarbonFramework\Routing;
 
 use CarbonFramework\Request;
-use CarbonFramework\Routing\Middleware\HasMiddlewareInterface;
+use CarbonFramework\Middleware\HasMiddlewareInterface;
 
 /**
  * Interface that routes must implement

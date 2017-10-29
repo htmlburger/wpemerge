@@ -1,15 +1,16 @@
 <?php
 
-namespace CarbonFramework\ServiceProviders;
+namespace CarbonFramework\Templating;
 
 use CarbonFramework\Framework;
+use CarbonFramework\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide templating dependencies
  *
  * @codeCoverageIgnore
  */
-class Templating implements ServiceProviderInterface {
+class TemplatingServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */

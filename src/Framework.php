@@ -7,12 +7,12 @@ use ReflectionMethod;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use CarbonFramework\Facades\Facade;
+use CarbonFramework\Support\Facade;
 use CarbonFramework\Support\AliasLoader;
-use CarbonFramework\ServiceProviders\Routing as RoutingServiceProvider;
-use CarbonFramework\ServiceProviders\Flash as FlashServiceProvider;
-use CarbonFramework\ServiceProviders\OldInput as OldInputServiceProvider;
-use CarbonFramework\ServiceProviders\Templating as TemplatingServiceProvider;
+use CarbonFramework\Routing\RoutingServiceProvider;
+use CarbonFramework\Flash\FlashServiceProvider;
+use CarbonFramework\Input\OldInputServiceProvider;
+use CarbonFramework\Templating\TemplatingServiceProvider;
 
 /**
  * Main communication channel with the framework

@@ -1,15 +1,16 @@
 <?php
 
-namespace CarbonFramework\Routing\Middleware;
+namespace CarbonFramework\Input;
 
 use Closure;
 use Flash;
-use OldInput as OldInputService;
+use OldInput;
+use CarbonFramework\Middleware\MiddlewareInterface;
 
 /**
  * Flash current request data and clear old request data
  */
-class OldInput implements MiddlewareInterface {
+class OldInputMiddleware implements MiddlewareInterface {
 	/**
 	 * {@inheritDoc}
 	 */
@@ -17,10 +18,10 @@ class OldInput implements MiddlewareInterface {
 		$response = $next( $request );
 
 		if ( Flash::enabled() ) {
-			Flash::clear( OldInputService::getFlashKey() );
+			Flash::clear( OldInput::getFlashKey() );
 
 			if ( $request->getMethod() === 'POST' ) {
-				Flash::add( OldInputService::getFlashKey(), $request->post() );
+				Flash::add( OldInput::getFlashKey(), $request->post() );
 			}
 		}
 

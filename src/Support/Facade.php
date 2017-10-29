@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Facades;
+namespace CarbonFramework\Support;
 
 use Mockery;
 use RuntimeException;

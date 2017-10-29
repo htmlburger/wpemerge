@@ -1,15 +1,16 @@
 <?php
 
-namespace CarbonFramework\ServiceProviders;
+namespace CarbonFramework\Flash;
 
 use CarbonFramework\Framework;
+use CarbonFramework\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide flash dependencies
  *
  * @codeCoverageIgnore
  */
-class Flash implements ServiceProviderInterface {
+class FlashServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */
@@ -24,7 +25,7 @@ class Flash implements ServiceProviderInterface {
 			return new \CarbonFramework\Flash\Flash( $session );
 		};
 
-		Framework::facade( 'Flash', \CarbonFramework\Facades\Flash::class );
+		Framework::facade( 'Flash', \CarbonFramework\Flash\FlashFacade::class );
 	}
 
 	/**

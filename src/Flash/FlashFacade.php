@@ -1,13 +1,15 @@
 <?php
 
-namespace CarbonFramework\Facades;
+namespace CarbonFramework\Flash;
+
+use CarbonFramework\Support\Facade;
 
 /**
  * Provide access to session flashing service
  *
  * @codeCoverageIgnore
  */
-class Flash extends Facade
+class FlashFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {

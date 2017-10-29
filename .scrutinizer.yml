@@ -16,7 +16,6 @@ build:
 
 filter:
   excluded_paths:
-    - 'src/Facades/Facade.php'
     - 'src/Support/*'
     - 'tests/*'
     - 'tmp/*'

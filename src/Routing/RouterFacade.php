@@ -1,13 +1,15 @@
 <?php
 
-namespace CarbonFramework\Facades;
+namespace CarbonFramework\Routing;
+
+use CarbonFramework\Support\Facade;
 
 /**
  * Provide access to router service
  *
  * @codeCoverageIgnore
  */
-class Router extends Facade
+class RouterFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {

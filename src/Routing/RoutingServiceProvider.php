@@ -1,15 +1,16 @@
 <?php
 
-namespace CarbonFramework\ServiceProviders;
+namespace CarbonFramework\Routing;
 
 use CarbonFramework\Framework;
+use CarbonFramework\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide routing dependencies
  *
  * @codeCoverageIgnore
  */
-class Routing implements ServiceProviderInterface {
+class RoutingServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */
@@ -35,7 +36,7 @@ class Routing implements ServiceProviderInterface {
 			return new \CarbonFramework\Routing\Router();
 		};
 
-		Framework::facade( 'Router', \CarbonFramework\Facades\Router::class );
+		Framework::facade( 'Router', \CarbonFramework\Routing\RouterFacade::class );
 	}
 
 	/**

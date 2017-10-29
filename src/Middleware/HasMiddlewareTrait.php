@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Routing\Middleware;
+namespace CarbonFramework\Middleware;
 
 use Closure;
 use Exception;
@@ -13,7 +13,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware
 	 *
-	 * @var \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
+	 * @var \CarbonFramework\Middleware\MiddlewareInterface[]
 	 */
 	protected $middleware = [];
 
@@ -38,7 +38,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Get registered middleware
 	 *
-	 * @return \CarbonFramework\Routing\Middleware\MiddlewareInterface[]
+	 * @return \CarbonFramework\Middleware\MiddlewareInterface[]
 	 */
 	public function getMiddleware() {
 		return $this->middleware;
@@ -47,8 +47,8 @@ trait HasMiddlewareTrait {
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Routing\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                                        $this
+	 * @param  string|callable|\CarbonFramework\Middleware\MiddlewareInterface|array $middleware
+	 * @return object                                                                $this
 	 */
 	public function addMiddleware( $middleware ) {
 		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
@@ -66,8 +66,8 @@ trait HasMiddlewareTrait {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Routing\Middleware\middlewareInterface|array $middleware
-	 * @return object                                                                        $this
+	 * @param  string|callable|\CarbonFramework\Middleware\middlewareInterface|array $middleware
+	 * @return object                                                                $this
 	 */
 	public function add( $middleware ) {
 		return $this->addMiddleware( $middleware );
@@ -76,9 +76,9 @@ trait HasMiddlewareTrait {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  \CarbonFramework\Routing\Middleware\MiddlewareInterface[] $middleware
-	 * @param  \CarbonFramework\Request                                  $request
-	 * @param  Closure                                                   $next
+	 * @param  \CarbonFramework\Middleware\MiddlewareInterface[] $middleware
+	 * @param  \CarbonFramework\Request                          $request
+	 * @param  Closure                                           $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next ) {

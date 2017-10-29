@@ -7,7 +7,7 @@ use Exception;
 use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
-use CarbonFramework\Routing\Middleware\HasMiddlewareTrait;
+use CarbonFramework\Middleware\HasMiddlewareTrait;
 
 class RouteGroup implements RouteInterface {
 	use HasRoutesTrait {

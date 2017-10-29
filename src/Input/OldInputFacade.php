@@ -1,13 +1,15 @@
 <?php
 
-namespace CarbonFramework\Facades;
+namespace CarbonFramework\Input;
+
+use CarbonFramework\Support\Facade;
 
 /**
  * Provide access to old input service
  *
  * @codeCoverageIgnore
  */
-class OldInput extends Facade
+class OldInputFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
