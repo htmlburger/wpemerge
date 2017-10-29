@@ -13,7 +13,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware
 	 *
-	 * @var \CarbonFramework\Middleware\MiddlewareInterface[]
+	 * @var array
 	 */
 	protected $middleware = [];
 
@@ -38,7 +38,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Get registered middleware
 	 *
-	 * @return \CarbonFramework\Middleware\MiddlewareInterface[]
+	 * @return array
 	 */
 	public function getMiddleware() {
 		return $this->middleware;
@@ -76,9 +76,9 @@ trait HasMiddlewareTrait {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  \CarbonFramework\Middleware\MiddlewareInterface[] $middleware
-	 * @param  \CarbonFramework\Request                          $request
-	 * @param  Closure                                           $next
+	 * @param  array                    $middleware
+	 * @param  \CarbonFramework\Request $request
+	 * @param  Closure                  $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next ) {

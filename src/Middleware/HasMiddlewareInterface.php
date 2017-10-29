@@ -12,7 +12,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Get registered middleware
 	 *
-	 * @return \CarbonFramework\Middleware\MiddlewareInterface[]
+	 * @return array
 	 */
 	public function getMiddleware();
 
@@ -20,24 +20,24 @@ interface HasMiddlewareInterface {
 	 * Add middleware
 	 *
 	 * @param  string|callable|\CarbonFramework\Middleware\MiddlewareInterface|array $middleware
-	 * @return object
+	 * @return object                                                                $this
 	 */
 	public function addMiddleware( $middleware );
 
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\CarbonFramework\Middleware\MiddlewareInterface|array $middleware
-	 * @return object
+	 * @param  string|callable|\CarbonFramework\Middleware\middlewareInterface|array $middleware
+	 * @return object                                                                $this
 	 */
 	public function add( $middleware );
 
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  \CarbonFramework\Middleware\MiddlewareInterface[] $middleware
-	 * @param  mixed                                             $request
-	 * @param  Closure                                           $next
+	 * @param  array                    $middleware
+	 * @param  \CarbonFramework\Request $request
+	 * @param  Closure                  $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next );
