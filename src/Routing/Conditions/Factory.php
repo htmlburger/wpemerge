@@ -2,13 +2,13 @@
 
 namespace CarbonFramework\Routing\Conditions;
 
-use Closure;
-use ReflectionClass;
-use Exception;
 use CarbonFramework\Framework;
-use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 use CarbonFramework\Routing\Conditions\Custom as CustomCondition;
 use CarbonFramework\Routing\Conditions\Multiple as MultipleCondition;
+use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use Closure;
+use Exception;
+use ReflectionClass;
 
 /**
  * Check against the current url

@@ -2,10 +2,10 @@
 
 namespace CarbonFramework\Input;
 
+use CarbonFramework\Middleware\MiddlewareInterface;
 use Closure;
 use Flash;
 use OldInput as OldInputService;
-use CarbonFramework\Middleware\MiddlewareInterface;
 
 /**
  * Flash current request data and clear old request data

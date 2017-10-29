@@ -2,12 +2,12 @@
 
 namespace CarbonFramework\Routing;
 
-use Closure;
-use Exception;
+use CarbonFramework\Middleware\HasMiddlewareTrait;
 use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Url as UrlCondition;
-use CarbonFramework\Middleware\HasMiddlewareTrait;
+use Closure;
+use Exception;
 
 class RouteGroup implements RouteInterface {
 	use HasRoutesTrait {

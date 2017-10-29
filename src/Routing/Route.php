@@ -2,13 +2,13 @@
 
 namespace CarbonFramework\Routing;
 
-use Exception;
-use CarbonFramework\Request;
 use CarbonFramework\Middleware\HasMiddlewareTrait;
+use CarbonFramework\Request;
 use CarbonFramework\Routing\Conditions\ConditionInterface;
 use CarbonFramework\Routing\Conditions\Factory;
-use CarbonFramework\Routing\Conditions\Url as UrlCondition;
 use CarbonFramework\Routing\Conditions\InvalidRouteConditionException;
+use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use Exception;
 
 /**
  * Represent a route
