@@ -2,13 +2,13 @@
 
 namespace Obsidian\Routing;
 
+use Exception;
 use Obsidian\Middleware\HasMiddlewareTrait;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\Routing\Conditions\Factory;
 use Obsidian\Routing\Conditions\InvalidRouteConditionException;
 use Obsidian\Routing\Conditions\Url as UrlCondition;
-use Exception;
 
 /**
  * Represent a route

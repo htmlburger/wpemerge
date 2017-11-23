@@ -2,12 +2,12 @@
 
 namespace Obsidian\Routing;
 
+use Closure;
+use Exception;
 use Obsidian\Middleware\HasMiddlewareTrait;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\Routing\Conditions\Url as UrlCondition;
-use Closure;
-use Exception;
 
 class RouteGroup implements RouteInterface {
 	use HasRoutesTrait {
