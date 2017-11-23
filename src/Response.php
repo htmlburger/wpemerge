@@ -2,6 +2,7 @@
 
 namespace Obsidian;
 
+use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use Psr\Http\Message\ResponseInterface;
@@ -37,6 +38,7 @@ class Response {
 	/**
 	 * Send a request's headers to the client
 	 *
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
@@ -60,6 +62,7 @@ class Response {
 	/**
 	 * Return a response's body stream so it is ready to be read
 	 *
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface                 $response
 	 * @return \Psr\Http\Message\StreamInterface
 	 */
@@ -74,6 +77,7 @@ class Response {
 	/**
 	 * Return a response's body's content length
 	 *
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return integer
 	 */
@@ -95,6 +99,7 @@ class Response {
 	/**
 	 * Send a request's body to the client
 	 *
+	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
@@ -173,6 +178,10 @@ class Response {
 	 */
 	public static function template( ResponseInterface $response, $templates, $context = array() ) {
 		$template = static::resolveTemplate( $templates );
+
+		if ( ! $template ) {
+			throw new Exception( 'Could not resolve template.' );
+		}
 
 		$engine = Framework::resolve( 'framework.templating.engine' );
 		$html = $engine->render( $template, $context );
