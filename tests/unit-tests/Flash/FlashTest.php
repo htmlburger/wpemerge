@@ -16,6 +16,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers \CarbonFramework\Flash\Flash::setStorage
      * @covers \CarbonFramework\Flash\Flash::getStorage
+     * @covers \CarbonFramework\Flash\Flash::isValidStorage
      */
     public function testSetStorage_ValidStorage_Assigned() {
         $expected = array();
@@ -30,6 +31,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers \CarbonFramework\Flash\Flash::setStorage
      * @covers \CarbonFramework\Flash\Flash::getStorage
+     * @covers \CarbonFramework\Flash\Flash::isValidStorage
      */
     public function testSetStorage_InvalidStorage_Ignored() {
         $expected = array();
@@ -57,7 +59,9 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
+     * @covers \CarbonFramework\Flash\Flash::peek
      * @covers \CarbonFramework\Flash\Flash::validateStorage
+     * @covers \CarbonFramework\Flash\Flash::isValidStorage
      * @expectedException \Exception
      * @expectedExceptionMessage without an active session
      */
