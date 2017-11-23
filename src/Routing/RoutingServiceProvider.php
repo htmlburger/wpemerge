@@ -16,7 +16,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @var string[string]
 	 */
-	protected static $condition_class_dictionary = [
+	protected static $condition_classes = [
 		'url' => \CarbonFramework\Routing\Conditions\Url::class,
 		'custom' => \CarbonFramework\Routing\Conditions\Custom::class,
 		'multiple' => \CarbonFramework\Routing\Conditions\Multiple::class,
@@ -42,7 +42,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			$container['framework.routing.global_middleware']
 		);
 
-		foreach ( static::$condition_class_dictionary as $key => $class ) {
+		foreach ( static::$condition_classes as $key => $class ) {
 			$container[ 'framework.routing.conditions.' . $key ] = $class;
 		}
 

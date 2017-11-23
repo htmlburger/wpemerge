@@ -60,8 +60,8 @@ class Response {
 	/**
 	 * Return a response's body stream so it is ready to be read
 	 *
-	 * @param  ResponseInterface $response
-	 * @return ResponseInterface
+	 * @param  ResponseInterface                 $response
+	 * @return \Psr\Http\Message\StreamInterface
 	 */
 	protected static function getBody( ResponseInterface $response ) {
 		$body = $response->getBody();
