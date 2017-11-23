@@ -38,20 +38,32 @@ class Handler {
 		}
 
 		if ( is_string( $handler ) )  {
-			$handlerPieces = preg_split( '/@|::/', $handler, 2 );
-			if ( count( $handlerPieces ) === 1 ) {
-				if ( is_callable( $handlerPieces[0] ) ) {
-					return $handlerPieces[0];
-				}
-				return null;
-			}
-			return array(
-				'class' => $handlerPieces[0],
-				'method' => $handlerPieces[1],
-			);
+			return $this->parseFromString( $handler );
 		}
 
 		return null;
+	}
+
+	/**
+	 * Parse a string handler to a callable or a [class, method] array
+	 *
+	 * @param  string              $handler
+	 * @return callable|array|null
+	 */
+	protected function parseFromString( $handler ) {
+		$handlerPieces = preg_split( '/@|::/', $handler, 2 );
+
+		if ( count( $handlerPieces ) === 1 ) {
+			if ( is_callable( $handlerPieces[0] ) ) {
+				return $handlerPieces[0];
+			}
+			return null;
+		}
+
+		return array(
+			'class' => $handlerPieces[0],
+			'method' => $handlerPieces[1],
+		);
 	}
 
 	/**
