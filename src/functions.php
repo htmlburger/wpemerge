@@ -4,8 +4,9 @@ use CarbonFramework\Response;
 
 if ( ! function_exists( 'cf_response' ) ) {
 	/**
-	 * @see Response::response()
 	 * @codeCoverageIgnore
+	 * @see Response::response()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_response() {
 		return Response::response();
@@ -14,8 +15,9 @@ if ( ! function_exists( 'cf_response' ) ) {
 
 if ( ! function_exists( 'cf_output' ) ) {
 	/**
-	 * @see Response::output()
 	 * @codeCoverageIgnore
+	 * @see Response::output()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_output( $output ) {
 		return Response::output( cf_response(), $output );
@@ -24,8 +26,9 @@ if ( ! function_exists( 'cf_output' ) ) {
 
 if ( ! function_exists( 'cf_template' ) ) {
 	/**
-	 * @see Response::template()
 	 * @codeCoverageIgnore
+	 * @see Response::template()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_template( $templates, $context = array() ) {
 		return Response::template( cf_response(), $templates, $context );
@@ -34,8 +37,9 @@ if ( ! function_exists( 'cf_template' ) ) {
 
 if ( ! function_exists( 'cf_json' ) ) {
 	/**
-	 * @see Response::json()
 	 * @codeCoverageIgnore
+	 * @see Response::json()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_json( $data ) {
 		return Response::json( cf_response(), $data );
@@ -44,8 +48,9 @@ if ( ! function_exists( 'cf_json' ) ) {
 
 if ( ! function_exists( 'cf_redirect' ) ) {
 	/**
-	 * @see Response::redirect()
 	 * @codeCoverageIgnore
+	 * @see Response::redirect()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_redirect( $url, $status = 302 ) {
 		return Response::redirect( cf_response(), $url, $status );
@@ -54,8 +59,9 @@ if ( ! function_exists( 'cf_redirect' ) ) {
 
 if ( ! function_exists( 'cf_error' ) ) {
 	/**
-	 * @see Response::error()
 	 * @codeCoverageIgnore
+	 * @see Response::error()
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function cf_error( $code ) {
 		return Response::error( cf_response(), $code );

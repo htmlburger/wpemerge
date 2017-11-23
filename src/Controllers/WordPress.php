@@ -13,7 +13,7 @@ class WordPress {
 	/**
 	 * Default WordPress handler
 	 *
-	 * @param  Request           $file
+	 * @param  Request           $request
 	 * @param  string            $template
 	 * @return ResponseInterface
 	 */
