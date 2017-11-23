@@ -1,6 +1,6 @@
 <?php
 
-use GuzzleHttp\Psr7\Response as Psr7Response;
+use Psr\Http\Message\ResponseInterface;
 use CarbonFramework\Response;
 
 class ResponseTest extends WP_UnitTestCase {
@@ -8,7 +8,7 @@ class ResponseTest extends WP_UnitTestCase {
      * @covers \CarbonFramework\Response::response
      */
     public function testFromGlobals() {
-        $expected = Psr7Response::class;
+        $expected = ResponseInterface::class;
         $subject = Response::response();
         $this->assertInstanceOf( $expected, $subject );
     }

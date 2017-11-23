@@ -13,7 +13,7 @@ class Response {
 	/**
 	 * Create a new response object
 	 *
-	 * @return Psr7Response
+	 * @return ResponseInterface
 	 */
 	public static function response() {
 		return new Psr7Response();
@@ -92,11 +92,11 @@ class Response {
 	/**
 	 * Return a cloned response with the passed string as the body
 	 *
-	 * @param  Psr7Response $response
-	 * @param  string       $output
-	 * @return Psr7Response
+	 * @param  ResponseInterface $response
+	 * @param  string            $output
+	 * @return ResponseInterface
 	 */
-	public static function output( Psr7Response $response, $output ) {
+	public static function output( ResponseInterface $response, $output ) {
 		$response = $response->withBody( Psr7\stream_for( $output ) );
 		return $response;
 	}
@@ -127,12 +127,12 @@ class Response {
 	/**
 	 * Return a cloned response, resolving and rendering a template as the body
 	 *
-	 * @param  Psr7Response    $response
-	 * @param  string|string[] $templates
-	 * @param  array           $context
-	 * @return Psr7Response
+	 * @param  ResponseInterface $response
+	 * @param  string|string[]   $templates
+	 * @param  array             $context
+	 * @return ResponseInterface
 	 */
-	public static function template( Psr7Response $response, $templates, $context = array() ) {
+	public static function template( ResponseInterface $response, $templates, $context = array() ) {
 		$template = static::resolveTemplate( $templates );
 
 		$engine = Framework::resolve( 'framework.templating.engine' );
@@ -146,11 +146,11 @@ class Response {
 	/**
 	 * Return a cloned response, json encoding the passed data as the body
 	 *
-	 * @param  Psr7Response $response
-	 * @param  mixed        $data
-	 * @return Psr7Response
+	 * @param  ResponseInterface $response
+	 * @param  mixed             $data
+	 * @return ResponseInterface
 	 */
-	public static function json( Psr7Response $response, $data ) {
+	public static function json( ResponseInterface $response, $data ) {
 		$response = $response->withHeader( 'Content-Type', 'application/json' );
 		$response = $response->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
 		return $response;
@@ -159,12 +159,12 @@ class Response {
 	/**
 	 * Return a cloned response, with location and status headers
 	 *
-	 * @param  Psr7Response $response
-	 * @param  string       $url
-	 * @param  integer      $status
-	 * @return Psr7Response
+	 * @param  ResponseInterface $response
+	 * @param  string            $url
+	 * @param  integer           $status
+	 * @return ResponseInterface
 	 */
-	public static function redirect( Psr7Response $response, $url, $status = 302 ) {
+	public static function redirect( ResponseInterface $response, $url, $status = 302 ) {
 		$response = $response->withStatus( $status );
 		$response = $response->withHeader( 'Location', $url );
 		return $response;
@@ -173,11 +173,11 @@ class Response {
 	/**
 	 * Return a cloned response, with status headers and rendering a suitable template as the body
 	 *
-	 * @param  Psr7Response $response
-	 * @param  integer      $status
-	 * @return Psr7Response
+	 * @param  ResponseInterface $response
+	 * @param  integer           $status
+	 * @return ResponseInterface
 	 */
-	public static function error( Psr7Response $response, $status ) {
+	public static function error( ResponseInterface $response, $status ) {
 		global $wp_query;
 		if ( $status === 404 ) {
 			$wp_query->set_404();
