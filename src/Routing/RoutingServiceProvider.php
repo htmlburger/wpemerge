@@ -20,7 +20,10 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		], $container['framework.config'] );
 
 		$container['framework.routing.global_middleware'] = $container['framework.config']['global_middleware'];
-		$container['framework.routing.global_middleware'] = apply_filters( 'carbon_framework_global_middleware', $container['framework.routing.global_middleware'] );
+		$container['framework.routing.global_middleware'] = apply_filters(
+			'carbon_framework_global_middleware',
+			$container['framework.routing.global_middleware']
+		);
 
 		$container['framework.routing.conditions.custom'] = \CarbonFramework\Routing\Conditions\Custom::class;
 		$container['framework.routing.conditions.url'] = \CarbonFramework\Routing\Conditions\Url::class;

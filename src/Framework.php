@@ -126,7 +126,10 @@ class Framework {
 	 * @return null
 	 */
 	protected static function loadServiceProviders( $container ) {
-		$container['framework.service_providers'] = apply_filters( 'carbon_framework_service_providers', $container['framework.service_providers'] );
+		$container['framework.service_providers'] = apply_filters(
+			'carbon_framework_service_providers',
+			$container['framework.service_providers']
+		);
 
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
