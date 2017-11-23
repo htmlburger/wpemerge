@@ -136,15 +136,25 @@ class Response {
 
 		// locate_template failed to find the template - test if a valid absolute path was passed
 		if ( ! $template ) {
-			foreach ( $templates as $tpl ) {
-				if ( file_exists( $tpl ) ) {
-					$template = $tpl;
-					break;
-				}
-			}
+			$template = static::resolveTemplateFromFilesystem( $templates );
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Resolve the first existing absolute template filepath from an array of template filepaths
+	 *
+	 * @param  string[] $templates
+	 * @return string
+	 */
+	protected static function resolveTemplateFromFilesystem( $templates ) {
+		foreach ( $templates as $template ) {
+			if ( file_exists( $template ) ) {
+				return $template;
+			}
+		}
+		return '';
 	}
 
 	/**
