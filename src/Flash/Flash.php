@@ -2,6 +2,7 @@
 
 namespace CarbonFramework\Flash;
 
+use ArrayAccess;
 use Exception;
 
 /**
@@ -9,7 +10,15 @@ use Exception;
  */
 class Flash {
 	/**
-	 * Storage array or object implementing ArrayAccess
+	 * Root storage array or object implementing ArrayAccess
+	 *
+	 * @var array|\ArrayAccess
+	 */
+	protected $root_storage = null;
+
+	/**
+	 * Child storage array or object implementing ArrayAccess
+	 *
 	 * @var array|\ArrayAccess
 	 */
 	protected $storage = null;
@@ -27,12 +36,7 @@ class Flash {
 	 * @param array|\ArrayAccess $storage
 	 */
 	public function __construct( &$storage ) {
-		if ( $this->isValidStorage( $storage ) ) {
-			if ( ! isset( $storage[ $this->storage_key ] ) ) {
-				$storage[ $this->storage_key ] = [];
-			}
-			$this->storage = &$storage[ $this->storage_key ];
-		}
+		$this->setStorage( $storage );
 	}
 
 	/**
@@ -42,7 +46,7 @@ class Flash {
 	 * @return boolean
 	 */
 	protected function isValidStorage( $storage ) {
-		return $storage !== null;
+		return ( is_array( $storage ) || is_a( $storage, ArrayAccess::class ) );
 	}
 
 	/**
@@ -55,6 +59,34 @@ class Flash {
 		if ( ! $this->isValidStorage( $this->storage ) ) {
 			throw new Exception( 'Attempted to use Flash without an active session. Did you forget to call session_start()?' );
 		}
+	}
+
+	/**
+	 * Get the storage for flash messages
+	 *
+	 * @return array|\ArrayAccess
+	 */
+	public function getStorage() {
+		return $this->root_storage;
+	}
+
+	/**
+	 * Set the storage for flash messages
+	 *
+	 * @param  array|\ArrayAccess $storage
+	 * @return null
+	 */
+	public function setStorage( &$storage ) {
+		if ( ! $this->isValidStorage( $storage ) ) {
+			return;
+		}
+
+		if ( ! isset( $storage[ $this->storage_key ] ) ) {
+			$storage[ $this->storage_key ] = [];
+		}
+
+		$this->root_storage = &$storage;
+		$this->storage = &$this->root_storage[ $this->storage_key ];
 	}
 
 	/**
@@ -114,11 +146,7 @@ class Flash {
 		$items = (array) $this->peek( $key );
 		$items = array_merge( $items, $new_items );
 
-		if ( $key === null ) {
-			$this->storage = $items;
-		} else {
-			$this->storage[ $key ] = $items;
-		}
+		$this->storage[ $key ] = $items;
 	}
 
 	/**

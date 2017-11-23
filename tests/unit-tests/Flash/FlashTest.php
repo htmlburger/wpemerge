@@ -4,6 +4,44 @@ use CarbonFramework\Flash\Flash;
 
 class FlashTest extends WP_UnitTestCase {
     /**
+     * @covers \CarbonFramework\Flash\Flash::__construct
+     * @covers \CarbonFramework\Flash\Flash::getStorage
+     */
+    public function testConstruct() {
+        $expected = array();
+        $subject = new Flash( $expected );
+        $this->assertSame( $expected, $subject->getStorage() );
+    }
+
+    /**
+     * @covers \CarbonFramework\Flash\Flash::setStorage
+     * @covers \CarbonFramework\Flash\Flash::getStorage
+     */
+    public function testSetStorage_ValidStorage_Assigned() {
+        $expected = array();
+        $initial_storage = array();
+
+        $subject = new Flash( $initial_storage );
+        $subject->setStorage( $expected );
+
+        $this->assertSame( $expected, $subject->getStorage() );
+    }
+
+    /**
+     * @covers \CarbonFramework\Flash\Flash::setStorage
+     * @covers \CarbonFramework\Flash\Flash::getStorage
+     */
+    public function testSetStorage_InvalidStorage_Ignored() {
+        $expected = array();
+        $invalid_storage = new stdClass();
+
+        $subject = new Flash( $expected );
+        $subject->setStorage( $invalid_storage );
+
+        $this->assertSame( $expected, $subject->getStorage() );
+    }
+
+    /**
      * @covers \CarbonFramework\Flash\Flash::enabled
      */
     public function testEnabled() {
@@ -16,6 +54,17 @@ class FlashTest extends WP_UnitTestCase {
         $storage2 = [];
         $subject2 = new Flash( $storage2 );
         $this->assertEquals( $expected2, $subject2->enabled() );
+    }
+
+    /**
+     * @covers \CarbonFramework\Flash\Flash::validateStorage
+     * @expectedException \Exception
+     * @expectedExceptionMessage without an active session
+     */
+    public function testPeek_InvalidStorage_ThrowsException() {
+        $invalid_storage = new stdClass();
+        $subject = new Flash( $invalid_storage );
+        $subject->peek( 'foobar' );
     }
 
     /**
