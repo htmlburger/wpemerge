@@ -103,7 +103,7 @@ class Factory {
 		$condition_type = $options[0];
 		$arguments = array_slice( $options, 1 );
 
-		if ( ! $this->conditionTypeRegistered( $condition_type ) ) {
+		if ( ! static::conditionTypeRegistered( $condition_type ) ) {
 			if ( is_callable( $condition_type ) ) {
 				$condition_type = 'custom';
 				$arguments = $options;
