@@ -69,6 +69,12 @@ Route::get( '/foo/bar/', $handler )
     ->rewrite( 'index.php' ); // see https://codex.wordpress.org/Rewrite_API/add_rewrite_rule
 ```
 
+If you wish to match _any_ url:
+
+```php
+Route::get( '*', $handler );
+```
+
 #### Post ID
 
 Matches against the current post id:
@@ -270,6 +276,14 @@ You can also define global middleware which is applied to all defined routes whe
     ]
 ] );
 ```
+
+_Note: global middleware is only applied on defined routes - normal WordPress requests that do not match any route will NOT have middleware applied. To apply global middleware to ALL requests add this route definition after all your route definitions:_
+
+```php
+Router::get( '*' );
+```
+
+This route defintion will match any url (i.e. any request) and the missing handler means that it will be handled as any normal WordPress request. Since all requests are matched this will also cause global middleware to all requests.
 
 ## Controllers
 
