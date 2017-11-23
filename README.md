@@ -69,7 +69,7 @@ Route::get( '/foo/bar/', $handler )
     ->rewrite( 'index.php' ); // see https://codex.wordpress.org/Rewrite_API/add_rewrite_rule
 ```
 
-If you wish to match _any_ url:
+If you wish to match __any__ url:
 
 ```php
 Route::get( '*', $handler );
@@ -154,7 +154,7 @@ Route::get( ['query_var', 'some_query_var_name', 'some_query_var_value'], $handl
 
 The custom condition allows you to add a callable which must return a boolean (whether the route has matched the current request or not):
 
-__Note: adding `'custom'` literally is optional and all examples will not use it for simplicity.__
+_Note: adding `'custom'` literally is optional and all examples will not use it for simplicity._
 
 ```php
 Route::get( [function() {
@@ -277,13 +277,13 @@ You can also define global middleware which is applied to all defined routes whe
 ] );
 ```
 
-_Note: global middleware is only applied on defined routes - normal WordPress requests that do not match any route will NOT have middleware applied. To apply global middleware to ALL requests add this route definition after all your route definitions:_
+_Note: global middleware is only applied on defined routes - normal WordPress requests that do not match any route will NOT have middleware applied. To apply global middleware to all requests add this route definition after all your route definitions:_
 
 ```php
 Router::get( '*' );
 ```
 
-This route defintion will match any url (i.e. any request) and the missing handler means that it will be handled as any normal WordPress request. Since all requests are matched this will also cause global middleware to all requests.
+This route defintion will match any url (i.e. any request) and not specifying a handler means that it will be handled as any normal WordPress request. Since all requests are matched this will also apply global middleware to all requests.
 
 ## Controllers
 
