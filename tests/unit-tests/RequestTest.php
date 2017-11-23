@@ -8,6 +8,7 @@ use CarbonFramework\Request;
 class RequestTest extends WP_UnitTestCase {
     /**
      * @covers ::fromGlobals
+     * @covers ::__construct
      */
     public function testFromGlobals() {
         $expected_get = 'foo';
@@ -43,6 +44,10 @@ class RequestTest extends WP_UnitTestCase {
         $expected2 = 'PUT';
         $subject2 = new Request( [], [], [], [], ['REQUEST_METHOD' => $expected2], [] );
         $this->assertEquals( $expected2, $subject2->getMethod() );
+
+        $expected3 = 'PUT';
+        $subject3 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'POST'], ['X-HTTP-METHOD-OVERRIDE' => $expected3] );
+        $this->assertEquals( $expected3, $subject3->getMethod() );
     }
 
     /**
@@ -89,6 +94,7 @@ class RequestTest extends WP_UnitTestCase {
      * @covers ::files
      * @covers ::server
      * @covers ::headers
+     * @covers ::input
      */
     public function testGet_ExistingKey_ReturnValue() {
         $expected = 'foo';
@@ -106,6 +112,7 @@ class RequestTest extends WP_UnitTestCase {
      * @covers ::files
      * @covers ::server
      * @covers ::headers
+     * @covers ::input
      */
     public function testGet_NonExistantKey_ReturnNull() {
         $expected = null;
@@ -121,6 +128,7 @@ class RequestTest extends WP_UnitTestCase {
      * @covers ::files
      * @covers ::server
      * @covers ::headers
+     * @covers ::input
      */
     public function testGet_NonExistantKeyWithDefault_ReturnDefault() {
         $expected = 'foo';
