@@ -69,67 +69,6 @@ Route::get( '/foo/bar/', $handler )
     ->rewrite( 'index.php' ); // see https://codex.wordpress.org/Rewrite_API/add_rewrite_rule
 ```
 
-#### Custom
-
-The custom condition allows you to add a callable which must return a boolean (whether the route has matched the current request or not):
-
-```php
-Route::get( ['custom', function() {
-    $my_condition = true; // your custom code here
-    return $my_condition;
-}], $handler );
-```
-
-You can also pass parameters to use built-in callables, for example:
-
-```php
-Route::get( ['custom', 'is_tax', 'crb_custom_taxonomy'], $handler );
-```
-
-Any parameters you pass will be provided to both the callable AND the $handler:
-
-```php
-Route::get( ['custom', 'is_tax', 'crb_custom_taxonomy'], function( $request, $template, $taxonomy ) {
-    // $taxonomy is passed after $request and $tempalte which are always passed to handlers
-} );
-```
-
-This works with closures as well, which can be used to reduce duplication:
-
-```php
-Route::get( ['custom', function( $foo, $bar ) {
-    // $foo and $bar are available here
-    return true;
-}, 'foo', 'bar'], function( $request, $template, $foo, $bar ) {
-    // ... and here!
-} );
-// you may notice this use-case is a bit hard to read - exact same usage is not advisable
-```
-
-#### Multiple
-
-The multiple condition allows you to specify an array of conditions which must ALL match:
-
-```php
-Route::get( ['multiple', [
-    ['custom', 'is_tax', 'crb_custom_taxonomy'],
-    ['custom', function() {
-        return true;
-    } ],
-]], $handler );
-```
-
-The syntax can also be simplified by directly passing an array of conditions:
-
-```php
-Route::get( [
-    ['custom', 'is_tax', 'crb_custom_taxonomy'],
-    ['custom', function() {
-        return true;
-    } ],
-], $handler );
-```
-
 #### Post ID
 
 Matches against the current post id:
@@ -203,6 +142,69 @@ Similar to the previous one, but this time match the query var to a specific val
 
 ```php
 Route::get( ['query_var', 'some_query_var_name', 'some_query_var_value'], $handler );
+```
+
+#### Custom
+
+The custom condition allows you to add a callable which must return a boolean (whether the route has matched the current request or not):
+
+__Note: adding `'custom'` literally is optional and all examples will not use it for simplicity.__
+
+```php
+Route::get( [function() {
+    $my_condition = true; // your custom code here
+    return $my_condition;
+}], $handler );
+```
+
+You can also pass parameters to use built-in callables, for example:
+
+```php
+Route::get( ['is_tax', 'crb_custom_taxonomy'], $handler );
+```
+
+Any parameters you pass will be provided to both the callable AND the $handler:
+
+```php
+Route::get( ['is_tax', 'crb_custom_taxonomy'], function( $request, $template, $taxonomy ) {
+    // $taxonomy is passed after $request and $tempalte which are always passed to handlers
+} );
+```
+
+This works with closures as well, which can be used to reduce duplication:
+
+```php
+Route::get( [function( $foo, $bar ) {
+    // $foo and $bar are available here
+    return true;
+}, 'foo', 'bar'], function( $request, $template, $foo, $bar ) {
+    // ... and here!
+} );
+// you may notice this use-case is a bit hard to read - exact same usage is not advisable
+```
+
+#### Multiple
+
+The multiple condition allows you to specify an array of conditions which must ALL match:
+
+```php
+Route::get( ['multiple', [
+    ['is_tax', 'crb_custom_taxonomy'],
+    [function() {
+        return true;
+    }],
+]], $handler );
+```
+
+The syntax can also be simplified by directly passing an array of conditions:
+
+```php
+Route::get( [
+    ['is_tax', 'crb_custom_taxonomy'],
+    [function() {
+        return true;
+    }],
+], $handler );
 ```
 
 ### Route groups
