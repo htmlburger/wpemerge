@@ -13,6 +13,7 @@ use CarbonFramework\Routing\RoutingServiceProvider;
 use CarbonFramework\Flash\FlashServiceProvider;
 use CarbonFramework\Input\OldInputServiceProvider;
 use CarbonFramework\Templating\TemplatingServiceProvider;
+use CarbonFramework\Controllers\ControllersServiceProvider;
 
 /**
  * Main communication channel with the framework
@@ -99,6 +100,7 @@ class Framework {
 			FlashServiceProvider::class,
 			OldInputServiceProvider::class,
 			TemplatingServiceProvider::class,
+			ControllersServiceProvider::class,
 		], $container['framework.config']['providers'] );
 
 		Facade::setFacadeApplication( $container );

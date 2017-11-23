@@ -3,6 +3,7 @@
 namespace CarbonFramework\Routing;
 
 use Closure;
+use CarbonFramework\Controllers\WordPress;
 
 /**
  * Allow objects to have routes
@@ -27,7 +28,7 @@ trait HasRoutesTrait {
 	/**
 	 * Add a route
 	 *
-	 * @param RouteInterface  $route
+	 * @param  RouteInterface $route
 	 * @return RouteInterface
 	 */
 	public function addRoute( $route ) {
@@ -38,12 +39,16 @@ trait HasRoutesTrait {
 	/**
 	 * Create and add a new route
 	 *
-	 * @param  string[]       $methods
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  string[]            $methods
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function route( $methods, $target, $handler ) {
+	public function route( $methods, $target, $handler = null ) {
+		if ( $handler === null ) {
+			$handler = WordPress::class . '@handle';
+		}
+
 		$route = new Route( $methods, $target, $handler );
 		return $this->addRoute( $route );
 	}
@@ -63,77 +68,77 @@ trait HasRoutesTrait {
 	/**
 	 * Create and add a route for the GET and HEAD methods
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function get( $target, $handler ) {
+	public function get( $target, $handler = null ) {
 		return $this->route( ['GET', 'HEAD'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for the POST method
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function post( $target, $handler ) {
+	public function post( $target, $handler = null ) {
 		return $this->route( ['POST'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for the PUT method
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function put( $target, $handler ) {
+	public function put( $target, $handler = null ) {
 		return $this->route( ['PUT'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for the PATCH method
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function patch( $target, $handler ) {
+	public function patch( $target, $handler = null ) {
 		return $this->route( ['PATCH'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for the DELETE method
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function delete( $target, $handler ) {
+	public function delete( $target, $handler = null ) {
 		return $this->route( ['DELETE'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for the OPTIONS method
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function options( $target, $handler ) {
+	public function options( $target, $handler = null ) {
 		return $this->route( ['OPTIONS'], $target, $handler );
 	}
 
 	/**
 	 * Create and add a route for all supported methods
 	 *
-	 * @param  mixed          $target
-	 * @param  string|Closure $handler
+	 * @param  mixed               $target
+	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function any( $target, $handler ) {
+	public function any( $target, $handler = null ) {
 		return $this->route( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $target, $handler );
 	}
 }
