@@ -40,6 +40,7 @@ class FrameworkTest extends WP_UnitTestCase {
     /**
      * @covers \CarbonFramework\Framework::boot
      * @expectedException \Exception
+     * @expectedExceptionMessage already booted
      */
     public function testBoot_CalledMultipleTimes_ThrowsException() {
         Framework::boot();
