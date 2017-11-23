@@ -2,6 +2,6 @@
 /**
  * Absolute path to framework's directory
  */
-if ( ! defined( 'CARBON_FRAMEWORK_DIR' ) ) {
-	define( 'CARBON_FRAMEWORK_DIR', __DIR__ );
+if ( ! defined( 'OBSIDIAN_DIR' ) ) {
+	define( 'OBSIDIAN_DIR', __DIR__ );
 }

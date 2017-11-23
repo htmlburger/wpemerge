@@ -1,8 +1,8 @@
 {
-    "name": "htmlburger/carbon-framework",
+    "name": "htmlburger/obsidian",
     "description": "WordPress *VC micro-framework for theme development.",
     "license": "GPL-2.0",
-    "homepage": "https://github.com/htmlburger/carbon-framework",
+    "homepage": "https://github.com/htmlburger/obsidian",
     "authors": [
         {
             "name": "htmlBurger",
@@ -17,14 +17,14 @@
         }
     ],
     "support": {
-        "source": "https://github.com/htmlburger/carbon-framework",
-        "issues": "https://github.com/htmlburger/carbon-framework/issues",
+        "source": "https://github.com/htmlburger/obsidian",
+        "issues": "https://github.com/htmlburger/obsidian/issues",
         "email": "wordpress@htmlburger.com"
     },
     "autoload": {
         "psr-4": {
-            "CarbonFramework\\": "src/",
-            "CarbonFrameworkTestTools\\": "tests/tools"
+            "Obsidian\\": "src/",
+            "ObsidianTestTools\\": "tests/tools"
         },
         "files": [
             "config.php",

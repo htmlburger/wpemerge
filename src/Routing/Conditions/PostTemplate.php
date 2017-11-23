@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Routing\Conditions;
+namespace Obsidian\Routing\Conditions;
 
-use CarbonFramework\Request;
+use Obsidian\Request;
 
 /**
  * Check against the current post's template

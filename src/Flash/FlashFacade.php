@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Flash;
+namespace Obsidian\Flash;
 
-use CarbonFramework\Support\Facade;
+use Obsidian\Support\Facade;
 
 /**
  * Provide access to session flashing service

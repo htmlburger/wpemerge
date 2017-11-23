@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Support;
+namespace Obsidian\Support;
 
 use ArrayAccess;
 

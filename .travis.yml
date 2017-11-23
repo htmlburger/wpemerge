@@ -24,8 +24,8 @@ before_install:
   - composer self-update
 
 before_script:
-  - mysql -e "create database IF NOT EXISTS carbon_framework_tests;" -uroot
-  - bash tests/bin/install.sh carbon_framework_tests root '' localhost $WP_VERSION
+  - mysql -e "create database IF NOT EXISTS obsidian_tests;" -uroot
+  - bash tests/bin/install.sh obsidian_tests root '' localhost $WP_VERSION
 
 script: phpunit --coverage-clover=./tmp/clover.xml
 

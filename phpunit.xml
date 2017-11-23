@@ -11,7 +11,7 @@
 	backupGlobals="false"
 	>
 	<testsuites>
-		<testsuite name="Carbon Framework Test Suite">
+		<testsuite name="Оbsidian Test Suite">
 			<directory suffix=".php">./tests/unit-tests/</directory>
 		</testsuite>
 	</testsuites>

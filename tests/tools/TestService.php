@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFrameworkTestTools;
+namespace ObsidianTestTools;
 
 class TestService {
 	protected $test = 'foobar';

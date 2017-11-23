@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\ServiceProviders;
+namespace Obsidian\ServiceProviders;
 
 /**
  * Interface that service providers must implement

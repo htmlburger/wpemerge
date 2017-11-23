@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Support;
+namespace Obsidian\Support;
 
 /**
  * Register class aliases for facades
@@ -27,7 +27,7 @@ class AliasLoader
     /**
      * The singleton instance of the loader.
      *
-     * @var \CarbonFramework\Support\AliasLoader
+     * @var \Obsidian\Support\AliasLoader
      */
     protected static $instance;
 
@@ -44,8 +44,8 @@ class AliasLoader
     /**
      * Get or create the singleton alias loader instance.
      *
-     * @param  array  $aliases
-     * @return \CarbonFramework\Support\AliasLoader
+     * @param  array                         $aliases
+     * @return \Obsidian\Support\AliasLoader
      */
     public static function getInstance(array $aliases = [])
     {
@@ -154,7 +154,7 @@ class AliasLoader
     /**
      * Set the value of the singleton alias loader.
      *
-     * @param  \CarbonFramework\Support\AliasLoader $loader
+     * @param  \Obsidian\Support\AliasLoader $loader
      * @return void
      */
     public static function setInstance($loader)

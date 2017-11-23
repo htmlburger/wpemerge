@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
 use Closure;
 

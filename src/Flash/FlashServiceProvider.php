@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Flash;
+namespace Obsidian\Flash;
 
-use CarbonFramework\Framework;
-use CarbonFramework\ServiceProviders\ServiceProviderInterface;
+use Obsidian\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide flash dependencies
@@ -22,10 +22,10 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			} else if ( isset( $_SESSION ) ) {
 				$session = &$_SESSION;
 			}
-			return new \CarbonFramework\Flash\Flash( $session );
+			return new \Obsidian\Flash\Flash( $session );
 		};
 
-		Framework::facade( 'Flash', \CarbonFramework\Flash\FlashFacade::class );
+		Framework::facade( 'Flash', \Obsidian\Flash\FlashFacade::class );
 	}
 
 	/**

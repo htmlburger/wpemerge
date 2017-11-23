@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Routing\Conditions;
+namespace Obsidian\Routing\Conditions;
 
-use CarbonFramework\Request;
+use Obsidian\Request;
 
 /**
  * Check if a certain query var is set

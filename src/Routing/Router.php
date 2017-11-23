@@ -1,12 +1,12 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use CarbonFramework\Framework;
-use CarbonFramework\Request;
-use CarbonFramework\Response as FrameworkResponse;
+use Obsidian\Framework;
+use Obsidian\Request;
+use Obsidian\Response as FrameworkResponse;
 
 /**
  * Provide routing
@@ -30,7 +30,7 @@ class Router {
 	 * @return null
 	 */
 	public function registerRewriteRules() {
-		$rules = apply_filters( 'carbon_framework_routing_rewrite_rules', [] );
+		$rules = apply_filters( 'obsidian_routing_rewrite_rules', [] );
 		foreach ( $rules as $rule => $rewrite_to ) {
 			add_rewrite_rule( $rule, $rewrite_to, 'top' );
 		}
@@ -78,10 +78,10 @@ class Router {
 			$response = FrameworkResponse::error( FrameworkResponse::response(), 500 );
 		}
 
-		add_filter( 'carbon_framework_response', function() use ( $response ) {
+		add_filter( 'obsidian_response', function() use ( $response ) {
 			return $response;
 		} );
 
-		return CARBON_FRAMEWORK_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+		return OBSIDIAN_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
 	}
 }

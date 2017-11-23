@@ -1,10 +1,10 @@
 <?php
 
 use Pimple\Container;
-use CarbonFramework\Framework;
+use Obsidian\Framework;
 
 /**
- * @coversDefaultClass \CarbonFramework\Framework
+ * @coversDefaultClass \Obsidian\Framework
  */
 class FrameworkTest extends WP_UnitTestCase {
     /**
@@ -57,11 +57,11 @@ class FrameworkTest extends WP_UnitTestCase {
 
         $container = Framework::getContainer();
         $container['test_service'] = function() {
-            return new \CarbonFrameworkTestTools\TestService();
+            return new \ObsidianTestTools\TestService();
         };
         $alias = 'TestServiceAlias';
 
-        Framework::facade( $alias, \CarbonFrameworkTestTools\TestServiceFacade::class );
+        Framework::facade( $alias, \ObsidianTestTools\TestServiceFacade::class );
         $this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
     }
 
@@ -93,7 +93,7 @@ class FrameworkTest extends WP_UnitTestCase {
      * @covers ::instantiate
      */
     public function testInstantiate_UnknownClass_CreatesFreshInstance() {
-        $class = \CarbonFrameworkTestTools\TestService::class;
+        $class = \ObsidianTestTools\TestService::class;
         $instance1 = Framework::instantiate( $class );
         $instance2 = Framework::instantiate( $class );
 
@@ -107,7 +107,7 @@ class FrameworkTest extends WP_UnitTestCase {
      */
     public function testInstantiate_KnownClass_ResolvesInstanceFromContainer() {
         $expected = rand(1, 999999);
-        $class = \CarbonFrameworkTestTools\TestService::class;
+        $class = \ObsidianTestTools\TestService::class;
 
         $container = Framework::getContainer();
         $container[ $class ] = function() use ( $expected, $class ) {

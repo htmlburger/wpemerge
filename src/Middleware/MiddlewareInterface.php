@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Middleware;
+namespace Obsidian\Middleware;
 
 use Closure;
 
@@ -11,7 +11,7 @@ interface MiddlewareInterface {
 	/**
 	 * Execute middleware
 	 *
-	 * @param  \CarbonFramework\Request            $request
+	 * @param  \Obsidian\Request                   $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

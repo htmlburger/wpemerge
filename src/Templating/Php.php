@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Templating;
+namespace Obsidian\Templating;
 
 /**
  * Include template files with php

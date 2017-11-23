@@ -1,6 +1,6 @@
 <?php
 
-use CarbonFramework\Response;
+use Obsidian\Response;
 
 if ( ! function_exists( 'cf_response' ) ) {
 	/**

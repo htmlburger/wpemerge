@@ -1,9 +1,9 @@
 <?php
 
-use CarbonFramework\Request;
+use Obsidian\Request;
 
 /**
- * @coversDefaultClass \CarbonFramework\Request
+ * @coversDefaultClass \Obsidian\Request
  */
 class RequestTest extends WP_UnitTestCase {
     /**

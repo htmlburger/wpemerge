@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Routing\Conditions;
+namespace Obsidian\Routing\Conditions;
 
-use CarbonFramework\Url as UrlUtility;
-use CarbonFramework\Request;
+use Obsidian\Url as UrlUtility;
+use Obsidian\Request;
 
 /**
  * Check against the current url

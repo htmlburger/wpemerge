@@ -1,11 +1,11 @@
 <?php
 
-namespace CarbonFramework\Routing\Conditions;
+namespace Obsidian\Routing\Conditions;
 
-use CarbonFramework\Framework;
-use CarbonFramework\Routing\Conditions\Custom as CustomCondition;
-use CarbonFramework\Routing\Conditions\Multiple as MultipleCondition;
-use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use Obsidian\Framework;
+use Obsidian\Routing\Conditions\Custom as CustomCondition;
+use Obsidian\Routing\Conditions\Multiple as MultipleCondition;
+use Obsidian\Routing\Conditions\Url as UrlCondition;
 use Closure;
 use Exception;
 use ReflectionClass;

@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Controllers;
+namespace Obsidian\Controllers;
 
-use CarbonFramework\Framework;
-use CarbonFramework\ServiceProviders\ServiceProviderInterface;
+use Obsidian\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide controller dependencies

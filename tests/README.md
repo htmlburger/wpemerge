@@ -1,4 +1,4 @@
-# Carbon Framework Unit Tests
+# Obsidian Unit Tests
 
 ## Initial Setup
 
@@ -8,7 +8,7 @@ Install WordPress and the WP Unit Test lib using the `install.sh` script. Change
 
 Sample usage:
 
-    $ tests/bin/install.sh carbon_framework_tests root root localhost 4.8
+    $ tests/bin/install.sh obsidian_tests root root localhost 4.8
 
 **Important**: Make sure that the `<db-name>` database has been created. Note that all data will be removed during testing.
 

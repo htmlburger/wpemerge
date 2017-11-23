@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Input;
+namespace Obsidian\Input;
 
 use Flash;
-use CarbonFramework\Support\Arr;
+use Obsidian\Support\Arr;
 
 /**
  * Provide a way to get values from the previous request
@@ -14,7 +14,7 @@ class OldInput {
 	 *
 	 * @var string
 	 */
-	const FLASH_KEY = '__carbonFrameworkOldInput';
+	const FLASH_KEY = '__obsidianOldInput';
 
 	/**
 	 * Return all previously flashed request data

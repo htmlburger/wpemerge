@@ -1,13 +1,13 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
-use CarbonFramework\Middleware\HasMiddlewareTrait;
-use CarbonFramework\Request;
-use CarbonFramework\Routing\Conditions\ConditionInterface;
-use CarbonFramework\Routing\Conditions\Factory;
-use CarbonFramework\Routing\Conditions\InvalidRouteConditionException;
-use CarbonFramework\Routing\Conditions\Url as UrlCondition;
+use Obsidian\Middleware\HasMiddlewareTrait;
+use Obsidian\Request;
+use Obsidian\Routing\Conditions\ConditionInterface;
+use Obsidian\Routing\Conditions\Factory;
+use Obsidian\Routing\Conditions\InvalidRouteConditionException;
+use Obsidian\Routing\Conditions\Url as UrlCondition;
 use Exception;
 
 /**
@@ -92,7 +92,7 @@ class Route implements RouteInterface {
 		$regex = $this->target->getValidationRegex( $this->target->getUrl(), false );
 		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
 
-		add_filter( 'carbon_framework_routing_rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
+		add_filter( 'obsidian_routing_rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
 			$rules[ $regex ] = $rewrite_to;
 			return $rules;
 		} );

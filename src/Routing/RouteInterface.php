@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
-use CarbonFramework\Request;
-use CarbonFramework\Middleware\HasMiddlewareInterface;
+use Obsidian\Request;
+use Obsidian\Middleware\HasMiddlewareInterface;
 
 /**
  * Interface that routes must implement

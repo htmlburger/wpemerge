@@ -4,8 +4,8 @@
  *
  * @codeCoverageIgnore
  */
-use CarbonFramework\Framework;
-$response = apply_filters( 'carbon_framework_response', null );
+use Obsidian\Framework;
+$response = apply_filters( 'obsidian_response', null );
 if ( $response !== null ) {
 	Framework::respond( $response );
 }

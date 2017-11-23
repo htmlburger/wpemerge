@@ -1,9 +1,9 @@
 <?php
 
-use CarbonFramework\Flash\Flash;
+use Obsidian\Flash\Flash;
 
 /**
- * @coversDefaultClass \CarbonFramework\Flash\Flash
+ * @coversDefaultClass \Obsidian\Flash\Flash
  */
 class FlashTest extends WP_UnitTestCase {
     /**

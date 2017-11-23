@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Input;
+namespace Obsidian\Input;
 
-use CarbonFramework\Support\Facade;
+use Obsidian\Support\Facade;
 
 /**
  * Provide access to old input service

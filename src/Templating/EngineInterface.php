@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Templating;
+namespace Obsidian\Templating;
 
 /**
  * Interface that template engines must implement

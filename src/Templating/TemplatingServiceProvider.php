@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Templating;
+namespace Obsidian\Templating;
 
-use CarbonFramework\Framework;
-use CarbonFramework\ServiceProviders\ServiceProviderInterface;
+use Obsidian\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide templating dependencies
@@ -16,7 +16,7 @@ class TemplatingServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$container['framework.templating.engine'] = function() {
-			return new \CarbonFramework\Templating\Php();
+			return new \Obsidian\Templating\Php();
 		};
 	}
 

@@ -1,10 +1,10 @@
 <?php
 
 use Psr\Http\Message\ResponseInterface;
-use CarbonFramework\Response;
+use Obsidian\Response;
 
 /**
- * @coversDefaultClass \CarbonFramework\Response
+ * @coversDefaultClass \Obsidian\Response
  */
 class ResponseTest extends WP_UnitTestCase {
     /**

@@ -1,9 +1,9 @@
 <?php
 
-use CarbonFramework\Url;
+use Obsidian\Url;
 
 /**
- * @coversDefaultClass \CarbonFramework\Url
+ * @coversDefaultClass \Obsidian\Url
  */
 class UrlTest extends WP_UnitTestCase {
     /**
@@ -12,7 +12,7 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetCurrentPath_Home_Slash() {
         $expected = '/';
 
-        $mock_request = $this->getMockBuilder( CarbonFramework\Request::class )->disableOriginalConstructor()->getMock();
+        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/' );
 
         $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
@@ -24,7 +24,7 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetCurrentPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
 
-        $mock_request = $this->getMockBuilder( CarbonFramework\Request::class )->disableOriginalConstructor()->getMock();
+        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/' );
 
         $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
@@ -36,7 +36,7 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetCurrentPath_QueryString_StripsQueryString() {
         $expected = '/foo/bar/';
 
-        $mock_request = $this->getMockBuilder( CarbonFramework\Request::class )->disableOriginalConstructor()->getMock();
+        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
 
         $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );

@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Controllers;
+namespace Obsidian\Controllers;
 
-use CarbonFramework\Request;
+use Obsidian\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework;
+namespace Obsidian;
 
-use CarbonFramework\Request;
+use Obsidian\Request;
 
 /**
  * A collection of tools dealing with urls

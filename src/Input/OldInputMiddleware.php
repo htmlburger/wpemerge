@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Input;
+namespace Obsidian\Input;
 
-use CarbonFramework\Middleware\MiddlewareInterface;
+use Obsidian\Middleware\MiddlewareInterface;
 use Closure;
 use OldInput as OldInputService;
 

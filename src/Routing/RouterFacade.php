@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
-use CarbonFramework\Support\Facade;
+use Obsidian\Support\Facade;
 
 /**
  * Provide access to router service

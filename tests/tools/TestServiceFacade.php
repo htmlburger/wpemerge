@@ -1,8 +1,8 @@
 <?php
 
-namespace CarbonFrameworkTestTools;
+namespace ObsidianTestTools;
 
-class TestServiceFacade extends \CarbonFramework\Support\Facade {
+class TestServiceFacade extends \Obsidian\Support\Facade {
     protected static function getFacadeAccessor() {
         return 'test_service';
     }

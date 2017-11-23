@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Routing\Conditions;
+namespace Obsidian\Routing\Conditions;
 
 use Exception;
 

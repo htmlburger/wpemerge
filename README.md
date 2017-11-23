@@ -1,10 +1,10 @@
-# Carbon Framework [![Build Status](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/carbon-framework/?branch=master)
+# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master)
 
-Carbon Framework is a micro framework for WordPress which provides tools for M*VC and routing.
+Obsidian is a micro framework for WordPress which provides tools for M*VC and routing.
 
 ## Quickstart
 
-1. `composer require htmlburger/carbon-framework:dev-master`
+1. `composer require htmlburger/obsidian:dev-master`
 1. Make sure you've included the generated `autoload.php` file
 1. Add the following to your functions.php:
     ```php
@@ -13,7 +13,7 @@ Carbon Framework is a micro framework for WordPress which provides tools for M*V
     } );
 
     add_action( 'after_setup_theme', function() {
-        \CarbonFramework\Framework::boot();
+        \Obsidian\Framework::boot();
 
         Router::get( '/', function() {
             return cf_output( 'Hello World!' );
@@ -232,7 +232,7 @@ If your controller class is registered in the IoC container with it's class name
 from the container instead of directly being instantiated:
 
 ```php
-$container = \CarbonFramework\Framework::getContainer();
+$container = \Obsidian\Framework::getContainer();
 $container[ HomeController::class ] = function() {
     // your custom instantiation code here, e.g.:
     return new HomeController();
@@ -248,7 +248,7 @@ Middleware allow you to modify the request and/or response before it reaches the
 A common example for middleware usage is protecting certain routes to be accessible by logged in users only:
 
 ```php
-class AuthenticationMiddleware implements \CarbonFramework\Middleware\MiddlewareInterface {
+class AuthenticationMiddleware implements \Obsidian\Middleware\MiddlewareInterface {
     public function handle( $request, Closure $next ) {
         if ( ! is_user_logged_in() ) {
             return cf_redirect( wp_login_url() );
@@ -264,7 +264,7 @@ Router::get( '/protected-url/')
 You can also define global middleware which is applied to all defined routes when booting the framework:
 
 ```php
-\CarbonFramework\Framework::boot( [
+\Obsidian\Framework::boot( [
     'global_middleware' => [
         AuthenticationMiddleware::class
     ]
@@ -350,7 +350,7 @@ TODO
 
 ## Templating
 
-Carbon Framework comes with a single template engine built-in - Php.
+Obsidian comes with a single template engine built-in - Php.
 This template engine uses `extract()` for the template context and then includes the template file.
 The resulting output is then passed as the rendered template string.
 
@@ -361,7 +361,7 @@ Implementing your own or a third-party engine is simple and straightforward - he
     ```php
     <?php
 
-    use CarbonFramework\Templating\EngineInterface;
+    use Obsidian\Templating\EngineInterface;
 
     class TwigEngine implements EngineInterface {
         protected $twig = null;
@@ -376,11 +376,11 @@ Implementing your own or a third-party engine is simple and straightforward - he
         }
     }
     ```
-1. Replace the template engine used immediately after `\CarbonFramework\Framework::boot()` is called:
+1. Replace the template engine used immediately after `\Obsidian\Framework::boot()` is called:
     ```php
-    \CarbonFramework\Framework::boot();
+    \Obsidian\Framework::boot();
 
-    $container = \CarbonFramework\Framework::getContainer();
+    $container = \Obsidian\Framework::getContainer();
     $container['framework.templating.engine'] = function() {
         $loader = new Twig_Loader_Filesystem( ABSPATH );
         $twig = new Twig_Environment( $loader, array(

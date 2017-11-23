@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Input;
+namespace Obsidian\Input;
 
-use CarbonFramework\Framework;
-use CarbonFramework\ServiceProviders\ServiceProviderInterface;
+use Obsidian\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide old input dependencies
@@ -16,14 +16,14 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$container['framework.routing.global_middleware'] = array_merge( $container['framework.routing.global_middleware'], [
-			\CarbonFramework\Input\OldInputMiddleware::class,
+			\Obsidian\Input\OldInputMiddleware::class,
 		] );
 
 		$container['framework.old_input.old_input'] = function() {
-			return new \CarbonFramework\Input\OldInput();
+			return new \Obsidian\Input\OldInput();
 		};
 
-		Framework::facade( 'OldInput', \CarbonFramework\Input\OldInputFacade::class );
+		Framework::facade( 'OldInput', \Obsidian\Input\OldInputFacade::class );
 	}
 
 	/**

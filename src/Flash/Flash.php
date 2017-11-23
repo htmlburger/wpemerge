@@ -1,6 +1,6 @@
 <?php
 
-namespace CarbonFramework\Flash;
+namespace Obsidian\Flash;
 
 use ArrayAccess;
 use Exception;
@@ -28,7 +28,7 @@ class Flash {
 	 *
 	 * @var string
 	 */
-	protected $storage_key = '__carbonFrameworkFlash';
+	protected $storage_key = '__obsidianFlash';
 
 	/**
 	 * Constructor

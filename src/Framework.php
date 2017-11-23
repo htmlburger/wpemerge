@@ -1,19 +1,19 @@
 <?php
 
-namespace CarbonFramework;
+namespace Obsidian;
 
 use ReflectionException;
 use ReflectionMethod;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use CarbonFramework\Support\Facade;
-use CarbonFramework\Support\AliasLoader;
-use CarbonFramework\Routing\RoutingServiceProvider;
-use CarbonFramework\Flash\FlashServiceProvider;
-use CarbonFramework\Input\OldInputServiceProvider;
-use CarbonFramework\Templating\TemplatingServiceProvider;
-use CarbonFramework\Controllers\ControllersServiceProvider;
+use Obsidian\Support\Facade;
+use Obsidian\Support\AliasLoader;
+use Obsidian\Routing\RoutingServiceProvider;
+use Obsidian\Flash\FlashServiceProvider;
+use Obsidian\Input\OldInputServiceProvider;
+use Obsidian\Templating\TemplatingServiceProvider;
+use Obsidian\Controllers\ControllersServiceProvider;
 
 /**
  * Main communication channel with the framework
@@ -127,7 +127,7 @@ class Framework {
 	 */
 	protected static function loadServiceProviders( $container ) {
 		$container['framework.service_providers'] = apply_filters(
-			'carbon_framework_service_providers',
+			'obsidian_service_providers',
 			$container['framework.service_providers']
 		);
 

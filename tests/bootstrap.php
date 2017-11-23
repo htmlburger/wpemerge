@@ -1,11 +1,11 @@
 <?php
 
-class Carbon_Framework_Tests_Bootstrap {
+class Obsidian_Tests_Bootstrap {
 
 	/**
 	 * The bootstrap instance.
 	 *
-	 * @var Carbon_Framework_Tests_Bootstrap
+	 * @var Obsidian_Tests_Bootstrap
 	 */
 	protected static $instance = null;
 
@@ -41,7 +41,7 @@ class Carbon_Framework_Tests_Bootstrap {
 		$this->library_directory = dirname( $this->tests_dir );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->library_directory . '/tmp/wordpress-tests-lib';
 
-		define( 'CARBON_FRAMEWORK_TEST_DIR', $this->tests_dir );
+		define( 'OBSIDIAN_TEST_DIR', $this->tests_dir );
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );
@@ -58,7 +58,7 @@ class Carbon_Framework_Tests_Bootstrap {
 			$wp->query_vars = array();
 		}
 
-		\CarbonFramework\Framework::boot();
+		\Obsidian\Framework::boot();
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Carbon_Framework_Tests_Bootstrap {
 	/**
 	 * Get the single tests boostrap instance
 	 *
-	 * @return Carbon_Framework_Tests_Bootstrap
+	 * @return Obsidian_Tests_Bootstrap
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
@@ -83,4 +83,4 @@ class Carbon_Framework_Tests_Bootstrap {
 
 }
 
-Carbon_Framework_Tests_Bootstrap::instance();
+Obsidian_Tests_Bootstrap::instance();

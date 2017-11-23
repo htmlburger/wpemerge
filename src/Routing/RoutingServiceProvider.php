@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
-use CarbonFramework\Framework;
-use CarbonFramework\ServiceProviders\ServiceProviderInterface;
+use Obsidian\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide routing dependencies
@@ -17,15 +17,15 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @var string[string]
 	 */
 	protected static $condition_classes = [
-		'url' => \CarbonFramework\Routing\Conditions\Url::class,
-		'custom' => \CarbonFramework\Routing\Conditions\Custom::class,
-		'multiple' => \CarbonFramework\Routing\Conditions\Multiple::class,
-		'post_id' => \CarbonFramework\Routing\Conditions\PostId::class,
-		'post_slug' => \CarbonFramework\Routing\Conditions\PostSlug::class,
-		'post_template' => \CarbonFramework\Routing\Conditions\PostTemplate::class,
-		'post_type' => \CarbonFramework\Routing\Conditions\PostType::class,
-		'query_var' => \CarbonFramework\Routing\Conditions\QueryVar::class,
-		'has_query_var' => \CarbonFramework\Routing\Conditions\HasQueryVar::class,
+		'url' => \Obsidian\Routing\Conditions\Url::class,
+		'custom' => \Obsidian\Routing\Conditions\Custom::class,
+		'multiple' => \Obsidian\Routing\Conditions\Multiple::class,
+		'post_id' => \Obsidian\Routing\Conditions\PostId::class,
+		'post_slug' => \Obsidian\Routing\Conditions\PostSlug::class,
+		'post_template' => \Obsidian\Routing\Conditions\PostTemplate::class,
+		'post_type' => \Obsidian\Routing\Conditions\PostType::class,
+		'query_var' => \Obsidian\Routing\Conditions\QueryVar::class,
+		'has_query_var' => \Obsidian\Routing\Conditions\HasQueryVar::class,
 	];
 
 	/**
@@ -38,7 +38,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 
 		$container['framework.routing.global_middleware'] = $container['framework.config']['global_middleware'];
 		$container['framework.routing.global_middleware'] = apply_filters(
-			'carbon_framework_global_middleware',
+			'obsidian_global_middleware',
 			$container['framework.routing.global_middleware']
 		);
 
@@ -47,10 +47,10 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		}
 
 		$container['framework.routing.router'] = function() {
-			return new \CarbonFramework\Routing\Router();
+			return new \Obsidian\Routing\Router();
 		};
 
-		Framework::facade( 'Router', \CarbonFramework\Routing\RouterFacade::class );
+		Framework::facade( 'Router', \Obsidian\Routing\RouterFacade::class );
 	}
 
 	/**

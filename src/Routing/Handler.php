@@ -1,10 +1,10 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
 use Closure;
 use Exception;
-use CarbonFramework\Framework;
+use Obsidian\Framework;
 
 /**
  * Represent a callable or a controller method to be executed in response to a request

@@ -1,9 +1,9 @@
 <?php
 
-namespace CarbonFramework\Routing;
+namespace Obsidian\Routing;
 
 use Closure;
-use CarbonFramework\Controllers\WordPress;
+use Obsidian\Controllers\WordPress;
 
 /**
  * Allow objects to have routes
