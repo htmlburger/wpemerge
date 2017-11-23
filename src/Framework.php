@@ -34,6 +34,19 @@ class Framework {
 	protected static $container = null;
 
 	/**
+	 * Array of framework service providers
+	 *
+	 * @var string[]
+	 */
+	protected static $service_proviers = [
+		RoutingServiceProvider::class,
+		FlashServiceProvider::class,
+		OldInputServiceProvider::class,
+		TemplatingServiceProvider::class,
+		ControllersServiceProvider::class,
+	];
+
+	/**
 	 * Return whether WordPress is in debug mode
 	 *
 	 * @return boolean
@@ -95,13 +108,10 @@ class Framework {
 			'providers' => [],
 		], $config );
 
-		$container['framework.service_providers'] = array_merge( [
-			RoutingServiceProvider::class,
-			FlashServiceProvider::class,
-			OldInputServiceProvider::class,
-			TemplatingServiceProvider::class,
-			ControllersServiceProvider::class,
-		], $container['framework.config']['providers'] );
+		$container['framework.service_providers'] = array_merge(
+			static::$service_proviers,
+			$container['framework.config']['providers']
+		);
 
 		Facade::setFacadeApplication( $container );
 		AliasLoader::getInstance()->register();
