@@ -40,7 +40,7 @@ class Response {
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
-	protected static function sendHeaders( $response ) {
+	protected static function sendHeaders( ResponseInterface $response ) {
 		// Status
 		header( sprintf(
 			'HTTP/%s %s %s',
@@ -58,24 +58,47 @@ class Response {
 	}
 
 	/**
+	 * Return a response's body stream so it is ready to be read
+	 *
+	 * @param  ResponseInterface $response
+	 * @return ResponseInterface
+	 */
+	protected static function getBody( ResponseInterface $response ) {
+		$body = $response->getBody();
+		if ( $body->isSeekable() ) {
+			$body->rewind();
+		}
+		return $body;
+	}
+
+	/**
+	 * Return a response's body's content length
+	 *
+	 * @param  ResponseInterface $response
+	 * @return integer
+	 */
+	protected static function getBodyContentLength( ResponseInterface $response ) {
+		$content_length = $response->getHeaderLine( 'Content-Length' );
+		if ( ! $content_length ) {
+			$body = static::getBody( $response );
+			$content_length = $body->getSize();
+		}
+		return $content_length;
+	}
+
+	/**
 	 * Send a request's body to the client
 	 *
 	 * @param  ResponseInterface $response
 	 * @return null
 	 */
-	protected static function sendBody( $response, $chunk_size = 4096 ) {
-		$body = $response->getBody();
-		if ( $body->isSeekable() ) {
-			$body->rewind();
-		}
-
-		$content_length = $response->getHeaderLine( 'Content-Length' );
-		if ( ! $content_length ) {
-			$content_length = $body->getSize();
-		}
+	protected static function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
+		$body = static::getBody( $response );
+		$content_length = static::getBodyContentLength( $response );
 
 		$content_left = $content_length ? $content_length : -1;
 		$amount_to_read = $content_left > -1 ? min( $chunk_size, $content_left ) : $chunk_size;
+
 		while ( ! $body->eof() ) {
 			echo $body->read( $amount_to_read );
 
