@@ -55,6 +55,24 @@ class Handler {
 	}
 
 	/**
+	 * Execute the handler returning raw result
+	 *
+	 * @return string|array|\Psr\Http\Message\ResponseInterface
+	 */
+	protected function executeHandler() {
+		$arguments = func_get_args();
+		if ( is_callable( $this->handler ) ) {
+			return call_user_func_array( $this->handler, $arguments );
+		}
+
+		$class = $this->handler['class'];
+		$method = $this->handler['method'];
+
+		$controller = Framework::instantiate( $class );
+		return call_user_func_array( [$controller, $method], $arguments );
+	}
+
+	/**
 	 * Set the handler
 	 *
 	 * @param  string|callable $new_handler
@@ -76,15 +94,16 @@ class Handler {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function execute() {
-		$arguments = func_get_args();
-		if ( is_callable( $this->handler ) ) {
-			return call_user_func_array( $this->handler, $arguments );
+		$response = call_user_func_array( [$this, 'executeHandler'], func_get_args() );
+
+		if ( is_string( $response ) ) {
+			return cf_output( $response );
 		}
 
-		$class = $this->handler['class'];
-		$method = $this->handler['method'];
+		if ( is_array( $response ) ) {
+			return cf_json( $response );
+		}
 
-		$controller = Framework::instantiate( $class );
-		return call_user_func_array( [$controller, $method], $arguments );
+		return $response;
 	}
 }

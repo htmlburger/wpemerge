@@ -279,19 +279,32 @@ Route handlers have a couple of requirements:
     1. `$request` - an object representing the current request to the server
     1. `$template` - the template filepath WordPress is currently attempting to load
     1. You may have additional arguments depending on the route condition(s) you are using (e.g. URL parameters, custom condition arguments etc.)
-1. Must return an object implementing the `Psr\Http\Message\ResponseInterface` interface.
+1. Must return one the following:
+    1. Any `string` which will be output literally
+    1. Any `array` which will be output as a JSON response
+    1. an object implementing the `Psr\Http\Message\ResponseInterface` interface.
 
 To return a suitable response object you can use one of the built-in utility functions:
 
 ```php
 class MyController {
     public function someHandlerMethod( $request, $template ) {
-        return cf_output( 'Hello World!' );
         return cf_template( 'templates/about-us.php' );
-        return cf_json( ['foo' => 'bar'] );
         return cf_redirect( home_url( '/' ) );
         return cf_error( 404 );
-        return cf_response();
+        return cf_response(); // a blank response object
+        return cf_output( 'Hello World!' ); // same as returning a string
+        return cf_json( ['foo' => 'bar'] ); // same as returning an array
+    }
+}
+```
+
+Since all of the above functions return an object implementing the `ResponseInterface` interface, you can use immutable chain calls to modify the response, e.g. changing the status:
+
+```php
+class MyController {
+    public function someHandlerMethod( $request, $template ) {
+        return cf_template( 'templates/about-us.php' )->withStatus( 201 );
     }
 }
 ```
