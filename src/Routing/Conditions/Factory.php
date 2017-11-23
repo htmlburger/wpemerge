@@ -48,11 +48,7 @@ class Factory {
 		}
 
 		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
-		if ( $condition_class === null ) {
-			return false;
-		}
-
-		return true;
+		return ( $condition_class !== null );
 	}
 
 	/**
