@@ -82,6 +82,31 @@ class Factory {
 	}
 
 	/**
+	 * Resolve the condition type and it's arguments from an options array
+	 *
+	 * @param  array $options
+	 * @return array
+	 */
+	protected static function getConditionTypeAndArguments( $options ) {
+		$type = $options[0];
+		$arguments = array_slice( $options, 1 );
+
+		if ( ! static::conditionTypeRegistered( $type ) ) {
+			if ( is_callable( $type ) ) {
+				$type = 'custom';
+				$arguments = $options;
+			} else {
+				throw new Exception( 'Unknown condition type specified: ' . $type );
+			}
+		}
+
+		return array(
+			'type' => $type,
+			'arguments' => $arguments,
+		);
+	}
+
+	/**
 	 * Create a new condition from an array
 	 *
 	 * @param  array               $options
@@ -96,22 +121,11 @@ class Factory {
 			return static::makeFromArrayOfConditions( $options );
 		}
 
-		$condition_type = $options[0];
-		$arguments = array_slice( $options, 1 );
-
-		if ( ! static::conditionTypeRegistered( $condition_type ) ) {
-			if ( is_callable( $condition_type ) ) {
-				$condition_type = 'custom';
-				$arguments = $options;
-			} else {
-				throw new Exception( 'Unknown condition type specified: ' . $condition_type );
-			}
-		}
-
-		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_type );
+		$condition_options = static::getConditionTypeAndArguments( $options );
+		$condition_class = Framework::resolve( 'framework.routing.conditions.' . $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
-		$condition = $reflection->newInstanceArgs( $arguments );
+		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );
 		return $condition;
 	}
 }
