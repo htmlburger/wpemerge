@@ -28,11 +28,7 @@ trait HasMiddlewareTrait {
 			return true;
 		}
 
-		if ( is_a( $middleware, MiddlewareInterface::class, true ) ) {
-			return true;
-		}
-
-		return false;
+		return is_a( $middleware, MiddlewareInterface::class, true );
 	}
 
 	/**
