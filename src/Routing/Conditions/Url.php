@@ -9,6 +9,8 @@ use CarbonFramework\Request;
  * Check against the current url
  */
 class Url implements ConditionInterface {
+	const WILDCARD = '*';
+
 	/**
 	 * URL to check against
 	 *
@@ -44,8 +46,10 @@ class Url implements ConditionInterface {
 	 * @param string $url
 	 */
 	public function __construct( $url ) {
-		$url = UrlUtility::addLeadingSlash( $url );
-		$url = UrlUtility::addTrailingSlash( $url );
+		if ( $url !== static::WILDCARD ) {
+			$url = UrlUtility::addLeadingSlash( $url );
+			$url = UrlUtility::addTrailingSlash( $url );
+		}
 		$this->url = $url;
 	}
 
@@ -53,6 +57,10 @@ class Url implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function satisfied( Request $request ) {
+		if ( $this->url === static::WILDCARD ) {
+			return true;
+		}
+
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
 		$url = UrlUtility::getCurrentPath( $request );
 		return (bool) preg_match( $validation_regex, $url );
