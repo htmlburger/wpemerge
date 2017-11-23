@@ -99,10 +99,25 @@ class RequestTest extends WP_UnitTestCase {
     public function testGet_ExistingKey_ReturnValue() {
         $expected = 'foo';
         $key = 'key';
-        $subject = new Request( [
-            $key => $expected,
-        ], [], [], [], [], [] );
-        $this->assertEquals( $expected, $subject->get( $key ) );
+        $values = [$key => $expected];
+
+        $subject1 = new Request( $values, [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject1->get( $key ) );
+
+        $subject2 = new Request( [], $values, [], [], [], [] );
+        $this->assertEquals( $expected, $subject2->post( $key ) );
+
+        $subject3 = new Request( [], [], $values, [], [], [] );
+        $this->assertEquals( $expected, $subject3->cookie( $key ) );
+
+        $subject4 = new Request( [], [], [], $values, [], [] );
+        $this->assertEquals( $expected, $subject4->files( $key ) );
+
+        $subject5 = new Request( [], [], [], [], $values, [] );
+        $this->assertEquals( $expected, $subject5->server( $key ) );
+
+        $subject6 = new Request( [], [], [], [], [], $values );
+        $this->assertEquals( $expected, $subject6->headers( $key ) );
     }
 
     /**
@@ -117,8 +132,24 @@ class RequestTest extends WP_UnitTestCase {
     public function testGet_NonExistantKey_ReturnNull() {
         $expected = null;
         $key = 'key';
-        $subject = new Request( [], [], [], [], [], [] );
-        $this->assertEquals( $expected, $subject->get( $key ) );
+
+        $subject1 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject1->get( $key ) );
+
+        $subject2 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject2->post( $key ) );
+
+        $subject3 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject3->cookie( $key ) );
+
+        $subject4 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject4->files( $key ) );
+
+        $subject5 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject5->server( $key ) );
+
+        $subject6 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject6->headers( $key ) );
     }
 
     /**
@@ -133,8 +164,24 @@ class RequestTest extends WP_UnitTestCase {
     public function testGet_NonExistantKeyWithDefault_ReturnDefault() {
         $expected = 'foo';
         $key = 'key';
-        $subject = new Request( [], [], [], [], [], [] );
-        $this->assertEquals( $expected, $subject->get( $key, $expected ) );
+
+        $subject1 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject1->get( $key, $expected ) );
+
+        $subject2 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject2->post( $key, $expected ) );
+
+        $subject3 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject3->cookie( $key, $expected ) );
+
+        $subject4 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject4->files( $key, $expected ) );
+
+        $subject5 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject5->server( $key, $expected ) );
+
+        $subject6 = new Request( [], [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject6->headers( $key, $expected ) );
     }
 
     /**
@@ -148,7 +195,23 @@ class RequestTest extends WP_UnitTestCase {
      */
     public function testGet_NoKey_ReturnAll() {
         $expected = ['foo' => 'bar'];
-        $subject = new Request( $expected, [], [], [], [], [] );
-        $this->assertEquals( $expected, $subject->get() );
+
+        $subject1 = new Request( $expected, [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject1->get() );
+
+        $subject2 = new Request( [], $expected, [], [], [], [] );
+        $this->assertEquals( $expected, $subject2->post() );
+
+        $subject3 = new Request( [], [], $expected, [], [], [] );
+        $this->assertEquals( $expected, $subject3->cookie() );
+
+        $subject4 = new Request( [], [], [], $expected, [], [] );
+        $this->assertEquals( $expected, $subject4->files() );
+
+        $subject5 = new Request( [], [], [], [], $expected, [] );
+        $this->assertEquals( $expected, $subject5->server() );
+
+        $subject6 = new Request( [], [], [], [], [], $expected );
+        $this->assertEquals( $expected, $subject6->headers() );
     }
 }
