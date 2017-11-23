@@ -8,6 +8,8 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Handles normal WordPress requests without interfering
  * Useful if you only want to add a middleware to a route without handling the output
+ *
+ * @codeCoverageIgnore
  */
 class WordPress {
 	/**
