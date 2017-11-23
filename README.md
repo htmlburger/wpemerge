@@ -4,7 +4,7 @@ Carbon Framework is a micro framework for WordPress which provides tools for M*V
 
 ## Quickstart
 
-1. `composer require htmlburger/carbon-fields:dev-master`
+1. `composer require htmlburger/carbon-framework:dev-master`
 1. Make sure you've included the generated `autoload.php` file
 1. Add the following to your functions.php:
     ```php
