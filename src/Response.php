@@ -79,11 +79,17 @@ class Response {
 	 */
 	protected static function getBodyContentLength( ResponseInterface $response ) {
 		$content_length = $response->getHeaderLine( 'Content-Length' );
+
 		if ( ! $content_length ) {
 			$body = static::getBody( $response );
 			$content_length = $body->getSize();
 		}
-		return $content_length;
+
+		if ( ! is_numeric( $content_length ) ) {
+			$content_length = 0;
+		}
+
+		return (integer) $content_length;
 	}
 
 	/**
