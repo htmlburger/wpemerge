@@ -2,9 +2,12 @@
 
 use CarbonFramework\Url;
 
+/**
+ * @coversDefaultClass \CarbonFramework\Url
+ */
 class UrlTest extends WP_UnitTestCase {
     /**
-     * @covers \CarbonFramework\Url::getCurrentPath
+     * @covers ::getCurrentPath
      */
     public function testGetCurrentPath_Home_Slash() {
         $expected = '/';
@@ -16,7 +19,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::getCurrentPath
+     * @covers ::getCurrentPath
      */
     public function testGetCurrentPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
@@ -28,7 +31,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::getCurrentPath
+     * @covers ::getCurrentPath
      */
     public function testGetCurrentPath_QueryString_StripsQueryString() {
         $expected = '/foo/bar/';
@@ -40,7 +43,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::addLeadingSlash
+     * @covers ::addLeadingSlash
      */
     public function testAddLeadingSlash() {
         $this->assertEquals( '/example', Url::addLeadingSlash('example') );
@@ -48,7 +51,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::removeLeadingSlash
+     * @covers ::removeLeadingSlash
      */
     public function testRemoveLeadingSlash() {
         $this->assertEquals( 'example', Url::removeLeadingSlash('/example') );
@@ -56,7 +59,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::addTrailingSlash
+     * @covers ::addTrailingSlash
      */
     public function testAddTrailingSlash() {
         $this->assertEquals( 'example/', Url::addTrailingSlash('example') );
@@ -64,7 +67,7 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Url::removeTrailingSlash
+     * @covers ::removeTrailingSlash
      */
     public function testRemoveTrailingSlash() {
         $this->assertEquals( 'example', Url::removeTrailingSlash('example/') );

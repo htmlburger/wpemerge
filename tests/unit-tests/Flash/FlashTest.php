@@ -2,10 +2,13 @@
 
 use CarbonFramework\Flash\Flash;
 
+/**
+ * @coversDefaultClass \CarbonFramework\Flash\Flash
+ */
 class FlashTest extends WP_UnitTestCase {
     /**
-     * @covers \CarbonFramework\Flash\Flash::__construct
-     * @covers \CarbonFramework\Flash\Flash::getStorage
+     * @covers ::__construct
+     * @covers ::getStorage
      */
     public function testConstruct() {
         $expected = array();
@@ -14,9 +17,9 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::setStorage
-     * @covers \CarbonFramework\Flash\Flash::getStorage
-     * @covers \CarbonFramework\Flash\Flash::isValidStorage
+     * @covers ::setStorage
+     * @covers ::getStorage
+     * @covers ::isValidStorage
      */
     public function testSetStorage_ValidStorage_Assigned() {
         $expected = array();
@@ -29,9 +32,9 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::setStorage
-     * @covers \CarbonFramework\Flash\Flash::getStorage
-     * @covers \CarbonFramework\Flash\Flash::isValidStorage
+     * @covers ::setStorage
+     * @covers ::getStorage
+     * @covers ::isValidStorage
      */
     public function testSetStorage_InvalidStorage_Ignored() {
         $expected = array();
@@ -44,7 +47,7 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::enabled
+     * @covers ::enabled
      */
     public function testEnabled() {
         $expected1 = false;
@@ -59,9 +62,9 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::peek
-     * @covers \CarbonFramework\Flash\Flash::validateStorage
-     * @covers \CarbonFramework\Flash\Flash::isValidStorage
+     * @covers ::peek
+     * @covers ::validateStorage
+     * @covers ::isValidStorage
      * @expectedException \Exception
      * @expectedExceptionMessage without an active session
      */
@@ -72,8 +75,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::add
-     * @covers \CarbonFramework\Flash\Flash::peek
+     * @covers ::add
+     * @covers ::peek
      */
     public function testPeek_ExistingKey_ReturnValue() {
         $expected = ['foo'];
@@ -87,7 +90,7 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::peek
+     * @covers ::peek
      */
     public function testPeek_NonExistantKey_ReturnEmptyArray() {
         $expected = [];
@@ -100,8 +103,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::add
-     * @covers \CarbonFramework\Flash\Flash::peek
+     * @covers ::add
+     * @covers ::peek
      */
     public function testPeek_StringValue_ReturnValueInArray() {
         $expected_value = 'foo';
@@ -116,8 +119,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::add
-     * @covers \CarbonFramework\Flash\Flash::get
+     * @covers ::add
+     * @covers ::get
      */
     public function testGet_ExistingKey_ReturnValueAndClear() {
         $expected1 = ['foo'];
@@ -133,8 +136,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::add
-     * @covers \CarbonFramework\Flash\Flash::peek
+     * @covers ::add
+     * @covers ::peek
      */
     public function testAdd_CalledMultipledTimes_ReturnArrayOfValues() {
         $expected = ['foo', 'bar', 'baz'];
@@ -150,8 +153,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::add
-     * @covers \CarbonFramework\Flash\Flash::peek
+     * @covers ::add
+     * @covers ::peek
      */
     public function testAdd_CalledWithDifferentKeys_StoreNestedArray() {
         $expected = ['key1' => ['foo'], 'key2' => ['bar']];
@@ -167,8 +170,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::peek
-     * @covers \CarbonFramework\Flash\Flash::clear
+     * @covers ::peek
+     * @covers ::clear
      */
     public function testClear_WithKey_ClearKey() {
         $expected = ['key1' => [], 'key2'=>['bar']];
@@ -183,8 +186,8 @@ class FlashTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Flash\Flash::peek
-     * @covers \CarbonFramework\Flash\Flash::clear
+     * @covers ::peek
+     * @covers ::clear
      */
     public function testClear_WithoutKey_ClearAll() {
         $expected = ['key1' => [], 'key2'=>[]];

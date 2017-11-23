@@ -2,9 +2,12 @@
 
 use CarbonFramework\Request;
 
+/**
+ * @coversDefaultClass \CarbonFramework\Request
+ */
 class RequestTest extends WP_UnitTestCase {
     /**
-     * @covers \CarbonFramework\Request::fromGlobals
+     * @covers ::fromGlobals
      */
     public function testFromGlobals() {
         $expected_get = 'foo';
@@ -30,7 +33,7 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::getMethod
+     * @covers ::getMethod
      */
     public function testGetMethod() {
         $expected1 = 'POST';
@@ -43,7 +46,7 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::getUrl
+     * @covers ::getUrl
      */
     public function testGetUrl() {
         $expected = 'http://example.com/';
@@ -55,7 +58,7 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::getUrl
+     * @covers ::getUrl
      */
     public function testGetUrl_Https_Https() {
         $expected = 'https://example.com/';
@@ -68,7 +71,7 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::getUrl
+     * @covers ::getUrl
      */
     public function testGetUrl_UriWithoutSlash_AddsLeadingSlashToUri() {
         $expected = 'http://example.com/foo/bar';
@@ -80,12 +83,12 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::get
-     * @covers \CarbonFramework\Request::post
-     * @covers \CarbonFramework\Request::cookie
-     * @covers \CarbonFramework\Request::files
-     * @covers \CarbonFramework\Request::server
-     * @covers \CarbonFramework\Request::headers
+     * @covers ::get
+     * @covers ::post
+     * @covers ::cookie
+     * @covers ::files
+     * @covers ::server
+     * @covers ::headers
      */
     public function testGet_ExistingKey_ReturnValue() {
         $expected = 'foo';
@@ -97,12 +100,12 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::get
-     * @covers \CarbonFramework\Request::post
-     * @covers \CarbonFramework\Request::cookie
-     * @covers \CarbonFramework\Request::files
-     * @covers \CarbonFramework\Request::server
-     * @covers \CarbonFramework\Request::headers
+     * @covers ::get
+     * @covers ::post
+     * @covers ::cookie
+     * @covers ::files
+     * @covers ::server
+     * @covers ::headers
      */
     public function testGet_NonExistantKey_ReturnNull() {
         $expected = null;
@@ -112,12 +115,12 @@ class RequestTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers \CarbonFramework\Request::get
-     * @covers \CarbonFramework\Request::post
-     * @covers \CarbonFramework\Request::cookie
-     * @covers \CarbonFramework\Request::files
-     * @covers \CarbonFramework\Request::server
-     * @covers \CarbonFramework\Request::headers
+     * @covers ::get
+     * @covers ::post
+     * @covers ::cookie
+     * @covers ::files
+     * @covers ::server
+     * @covers ::headers
      */
     public function testGet_NonExistantKeyWithDefault_ReturnDefault() {
         $expected = 'foo';

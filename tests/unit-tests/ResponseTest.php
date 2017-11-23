@@ -3,9 +3,12 @@
 use Psr\Http\Message\ResponseInterface;
 use CarbonFramework\Response;
 
+/**
+ * @coversDefaultClass \CarbonFramework\Response
+ */
 class ResponseTest extends WP_UnitTestCase {
     /**
-     * @covers \CarbonFramework\Response::response
+     * @covers ::response
      */
     public function testFromGlobals() {
         $expected = ResponseInterface::class;

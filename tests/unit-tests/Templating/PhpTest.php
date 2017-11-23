@@ -2,9 +2,12 @@
 
 use CarbonFramework\Templating\Php as PhpEngine;
 
+/**
+ * @coversDefaultClass \CarbonFramework\Templating\Php
+ */
 class PhpTest extends WP_UnitTestCase {
 	/**
-	 * @covers \CarbonFramework\Templating\Php::render
+	 * @covers ::render
 	 */
 	public function testRender_Template_Rendered() {
 		$template = CARBON_FRAMEWORK_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
@@ -17,7 +20,7 @@ class PhpTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \CarbonFramework\Templating\Php::render
+	 * @covers ::render
 	 */
 	public function testRender_TemplateWithVariables_Rendered() {
 		$template = CARBON_FRAMEWORK_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template-with-context.php';
