@@ -136,4 +136,19 @@ class RequestTest extends WP_UnitTestCase {
         $subject = new Request( [], [], [], [], [], [] );
         $this->assertEquals( $expected, $subject->get( $key, $expected ) );
     }
+
+    /**
+     * @covers ::get
+     * @covers ::post
+     * @covers ::cookie
+     * @covers ::files
+     * @covers ::server
+     * @covers ::headers
+     * @covers ::input
+     */
+    public function testGet_NoKey_ReturnAll() {
+        $expected = ['foo' => 'bar'];
+        $subject = new Request( $expected, [], [], [], [], [] );
+        $this->assertEquals( $expected, $subject->get() );
+    }
 }
