@@ -1,7 +1,6 @@
 <?php
 
 class Obsidian_Tests_Bootstrap {
-
 	/**
 	 * The bootstrap instance.
 	 *
@@ -57,8 +56,6 @@ class Obsidian_Tests_Bootstrap {
 		if ( ! is_array( $wp->query_vars ) ) {
 			$wp->query_vars = array();
 		}
-
-		\Obsidian\Framework::boot();
 	}
 
 	/**

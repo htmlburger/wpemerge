@@ -4,23 +4,35 @@ use Pimple\Container;
 use Obsidian\Framework;
 
 /**
+ * WARNING: order of tests is important due to ::boot()
+ *
  * @coversDefaultClass \Obsidian\Framework
  */
 class FrameworkTest extends WP_UnitTestCase {
     /**
-     * @covers ::debugging
+     * @covers ::verifyBoot
+     * @expectedException \Exception
+     * @expectedExceptionMessage must be booted first
      */
-    public function testDebugging() {
-        $this->assertEquals( true, Framework::debugging() );
-        // can't test for false since WP_DEBUG constant is predefined during testing
+    public function testverifyBoot() {
+        \Obsidian\Framework::resolve( 'foobar' );
     }
 
     /**
      * @covers ::isBooted
      */
     public function testIsBooted() {
+        $this->assertEquals( false, Framework::isBooted() );
+        \Obsidian\Framework::boot();
         $this->assertEquals( true, Framework::isBooted() );
-        // can't test for false since the framework needs to be booted for tests
+    }
+
+    /**
+     * @covers ::debugging
+     */
+    public function testDebugging() {
+        $this->assertEquals( true, Framework::debugging() );
+        // can't test for false since WP_DEBUG constant is predefined during testing
     }
 
     /**
