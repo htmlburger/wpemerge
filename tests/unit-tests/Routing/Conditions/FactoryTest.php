@@ -40,9 +40,10 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      */
     public function testMake_ConditionInArray_ConditionInstance() {
-        $expected_param = '/foo/bar/';
+        $expected_param = 10;
         $expected_class = PostId::class;
 
         $condition = Factory::make( ['post_id', $expected_param] );
@@ -54,6 +55,7 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      */
     public function testMake_CustomConditionWithClosureInArray_CustonCondition() {
         $expected_param = function() {};
@@ -68,6 +70,7 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      */
     public function testMake_CustomConditionWithCallableInArray_CustomCondition() {
         $expected_param = 'phpinfo';
@@ -82,6 +85,7 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      */
     public function testMake_ClosureInArray_CustomCondition() {
         $expected_param = function() {};
@@ -96,6 +100,7 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      */
     public function testMake_CallableInArray_CustomCondition() {
         $expected_param = 'phpinfo';
@@ -128,6 +133,7 @@ class FactoryTest extends WP_UnitTestCase {
      * @covers ::make
      * @covers ::makeFromArray
      * @covers ::getConditionTypeAndArguments
+     * @covers ::conditionTypeRegistered
      * @expectedException \Exception
      * @expectedExceptionMessage Unknown condition
      */
