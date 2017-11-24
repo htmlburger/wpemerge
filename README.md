@@ -154,13 +154,13 @@ Route::get( ['query_var', 'some_query_var_name', 'some_query_var_value'], $handl
 
 The custom condition allows you to add a callable which must return a boolean (whether the route has matched the current request or not):
 
-_Note: adding `'custom'` literally is optional and all examples will not use it for simplicity._
+_Note: when using the array syntax, adding `'custom'` literally is optional and all examples will not use it for simplicity._
 
 ```php
-Route::get( [function() {
+Route::get( function() {
     $my_condition = true; // your custom code here
     return $my_condition;
-}], $handler );
+}, $handler );
 ```
 
 You can also pass parameters to use built-in callables, for example:
