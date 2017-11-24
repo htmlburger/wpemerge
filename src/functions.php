@@ -2,68 +2,68 @@
 
 use Obsidian\Response;
 
-if ( ! function_exists( 'cf_response' ) ) {
+if ( ! function_exists( 'obs_response' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::response()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_response() {
+	function obs_response() {
 		return Response::response();
 	}
 }
 
-if ( ! function_exists( 'cf_output' ) ) {
+if ( ! function_exists( 'obs_output' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::output()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_output( $output ) {
-		return Response::output( cf_response(), $output );
+	function obs_output( $output ) {
+		return Response::output( obs_response(), $output );
 	}
 }
 
-if ( ! function_exists( 'cf_template' ) ) {
+if ( ! function_exists( 'obs_template' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::template()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_template( $templates, $context = array() ) {
-		return Response::template( cf_response(), $templates, $context );
+	function obs_template( $templates, $context = array() ) {
+		return Response::template( obs_response(), $templates, $context );
 	}
 }
 
-if ( ! function_exists( 'cf_json' ) ) {
+if ( ! function_exists( 'obs_json' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::json()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_json( $data ) {
-		return Response::json( cf_response(), $data );
+	function obs_json( $data ) {
+		return Response::json( obs_response(), $data );
 	}
 }
 
-if ( ! function_exists( 'cf_redirect' ) ) {
+if ( ! function_exists( 'obs_redirect' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::redirect()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_redirect( $url, $status = 302 ) {
-		return Response::redirect( cf_response(), $url, $status );
+	function obs_redirect( $url, $status = 302 ) {
+		return Response::redirect( obs_response(), $url, $status );
 	}
 }
 
-if ( ! function_exists( 'cf_error' ) ) {
+if ( ! function_exists( 'obs_error' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::error()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function cf_error( $code ) {
-		return Response::error( cf_response(), $code );
+	function obs_error( $code ) {
+		return Response::error( obs_response(), $code );
 	}
 }

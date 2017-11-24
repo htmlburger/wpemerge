@@ -16,7 +16,7 @@ Obsidian is a micro framework for WordPress which provides tools for M*VC and ro
         \Obsidian\Framework::boot();
 
         Router::get( '/', function() {
-            return cf_output( 'Hello World!' );
+            return obs_output( 'Hello World!' );
         } );
     } );
     ```
@@ -257,7 +257,7 @@ A common example for middleware usage is protecting certain routes to be accessi
 class AuthenticationMiddleware implements \Obsidian\Middleware\MiddlewareInterface {
     public function handle( $request, Closure $next ) {
         if ( ! is_user_logged_in() ) {
-            return cf_redirect( wp_login_url() );
+            return obs_redirect( wp_login_url() );
         }
         return $next( $request );
     }
@@ -305,12 +305,12 @@ To return a suitable response object you can use one of the built-in utility fun
 ```php
 class MyController {
     public function someHandlerMethod( $request, $template ) {
-        return cf_template( 'templates/about-us.php' );
-        return cf_redirect( home_url( '/' ) );
-        return cf_error( 404 );
-        return cf_response(); // a blank response object
-        return cf_output( 'Hello World!' ); // same as returning a string
-        return cf_json( ['foo' => 'bar'] ); // same as returning an array
+        return obs_template( 'templates/about-us.php' );
+        return obs_redirect( home_url( '/' ) );
+        return obs_error( 404 );
+        return obs_response(); // a blank response object
+        return obs_output( 'Hello World!' ); // same as returning a string
+        return obs_json( ['foo' => 'bar'] ); // same as returning an array
     }
 }
 ```
@@ -320,33 +320,33 @@ Since all of the above functions return an object implementing the `ResponseInte
 ```php
 class MyController {
     public function someHandlerMethod( $request, $template ) {
-        return cf_template( 'templates/about-us.php' )->withStatus( 201 );
+        return obs_template( 'templates/about-us.php' )->withStatus( 201 );
     }
 }
 ```
 
-### cf_output( $output );
+### obs_output( $output );
 
 Returns a new response object with the supplied string as the body.
 
-### cf_template( $templates, $context = [] );
+### obs_template( $templates, $context = [] );
 
 Uses `locate_template( $templates )` to resolve a template and applies the template output as the response body.
 Optionally, a context array can be supplied to be used from inside the template.
 
-### cf_json( $data );
+### obs_json( $data );
 
 Returns a new response object json encoding the passed data as the body.
 
-### cf_redirect( $url, $status = 302 );
+### obs_redirect( $url, $status = 302 );
 
 Returns a new response object with location and status headers to redirect the user.
 
-### cf_error( $status );
+### obs_error( $status );
 
 Returns a new response object with the supplied status code. Additionally, attempts to render a suitable `{$status}.php` template file.
 
-### cf_response();
+### obs_response();
 
 Returns a blank response object.
 
@@ -404,4 +404,4 @@ Implementing your own or a third-party engine is simple and straightforward - he
     };
     ```
 
-With the above changes, templates rendered using `cf_template()` will now be processed using Twig instead of the default Php engine.
+With the above changes, templates rendered using `obs_template()` will now be processed using Twig instead of the default Php engine.

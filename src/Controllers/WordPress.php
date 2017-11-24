@@ -20,6 +20,6 @@ class WordPress {
 	 * @return ResponseInterface
 	 */
 	public function handle( Request $request, $template ) {
-		return cf_template( $template )->withStatus( http_response_code() );
+		return obs_template( $template )->withStatus( http_response_code() );
 	}
 }

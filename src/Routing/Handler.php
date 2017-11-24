@@ -109,11 +109,11 @@ class Handler {
 		$response = call_user_func_array( [$this, 'executeHandler'], func_get_args() );
 
 		if ( is_string( $response ) ) {
-			return cf_output( $response );
+			return obs_output( $response );
 		}
 
 		if ( is_array( $response ) ) {
-			return cf_json( $response );
+			return obs_json( $response );
 		}
 
 		return $response;
