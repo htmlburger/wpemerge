@@ -15,6 +15,13 @@ class Router {
 	use HasRoutesTrait;
 
 	/**
+	 * Current active route
+	 *
+	 * @var RouteInterface
+	 */
+	protected $current_route = null;
+
+	/**
 	 * Hook into WordPress actions
 	 *
 	 * @return null
@@ -53,6 +60,7 @@ class Router {
 
 		foreach ( $routes as $route ) {
 			if ( $route->satisfied( $request ) ) {
+				$this->current_route = $route;
 				return $this->handle( $request, $route, $template );
 			}
 		}
@@ -83,5 +91,14 @@ class Router {
 		} );
 
 		return OBSIDIAN_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+	}
+
+	/**
+	 * Get the current route
+	 *
+	 * @return RouteInterface
+	 */
+	public function getCurrentRoute() {
+		return $this->current_route;
 	}
 }
