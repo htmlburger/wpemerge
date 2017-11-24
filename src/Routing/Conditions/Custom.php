@@ -46,4 +46,13 @@ class Custom implements ConditionInterface {
 	public function getArguments( Request $request ) {
 		return $this->arguments;
 	}
+
+	/**
+	 * Get the assigned callable
+	 *
+	 * @return callable
+	 */
+	public function getCallable() {
+		return $this->callable;
+	}
 }

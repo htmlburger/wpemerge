@@ -42,4 +42,13 @@ class Multiple implements ConditionInterface {
 	public function getArguments( Request $request ) {
 		return [];
 	}
+
+	/**
+	 * Get all assigned conditions
+	 *
+	 * @return \Obsidian\Routing\Conditions\ConditionInterface[]
+	 */
+	public function getConditions() {
+		return $this->conditions;
+	}
 }

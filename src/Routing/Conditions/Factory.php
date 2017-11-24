@@ -52,36 +52,6 @@ class Factory {
 	}
 
 	/**
-	 * Create a new condition from a url
-	 *
-	 * @param  string             $url
-	 * @return ConditionInterface
-	 */
-	protected static function makeFromUrl( $url ) {
-		return new UrlCondition( $url );
-	}
-
-	/**
-	 * Create a new condition from a closure
-	 *
-	 * @param  Closure            $closure
-	 * @return ConditionInterface
-	 */
-	protected static function makeFromClosure( Closure $closure ) {
-		return new CustomCondition( $closure );
-	}
-
-	/**
-	 * Create a new condition from an array of conditions
-	 *
-	 * @param  array               $options
-	 * @return ConditionInterface
-	 */
-	protected static function makeFromArrayOfConditions( $options ) {
-		return new MultipleCondition( $options );
-	}
-
-	/**
 	 * Resolve the condition type and it's arguments from an options array
 	 *
 	 * @param  array $options
@@ -107,6 +77,26 @@ class Factory {
 	}
 
 	/**
+	 * Create a new condition from a url
+	 *
+	 * @param  string             $url
+	 * @return ConditionInterface
+	 */
+	protected static function makeFromUrl( $url ) {
+		return new UrlCondition( $url );
+	}
+
+	/**
+	 * Create a new condition from an array of conditions
+	 *
+	 * @param  array               $options
+	 * @return ConditionInterface
+	 */
+	protected static function makeFromArrayOfConditions( $options ) {
+		return new MultipleCondition( $options );
+	}
+
+	/**
 	 * Create a new condition from an array
 	 *
 	 * @param  array               $options
@@ -127,5 +117,15 @@ class Factory {
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );
 		return $condition;
+	}
+
+	/**
+	 * Create a new condition from a closure
+	 *
+	 * @param  Closure            $closure
+	 * @return ConditionInterface
+	 */
+	protected static function makeFromClosure( Closure $closure ) {
+		return new CustomCondition( $closure );
 	}
 }
