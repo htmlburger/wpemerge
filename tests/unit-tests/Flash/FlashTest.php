@@ -77,6 +77,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::add
      * @covers ::peek
+     * @covers ::validateStorage
      */
     public function testPeek_ExistingKey_ReturnValue() {
         $expected = ['foo'];
@@ -91,6 +92,7 @@ class FlashTest extends WP_UnitTestCase {
 
     /**
      * @covers ::peek
+     * @covers ::validateStorage
      */
     public function testPeek_NonExistantKey_ReturnEmptyArray() {
         $expected = [];
@@ -105,6 +107,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::add
      * @covers ::peek
+     * @covers ::validateStorage
      */
     public function testPeek_StringValue_ReturnValueInArray() {
         $expected_value = 'foo';
@@ -121,6 +124,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::add
      * @covers ::get
+     * @covers ::validateStorage
      */
     public function testGet_ExistingKey_ReturnValueAndClear() {
         $expected1 = ['foo'];
@@ -138,6 +142,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::add
      * @covers ::peek
+     * @covers ::validateStorage
      */
     public function testAdd_CalledMultipledTimes_ReturnArrayOfValues() {
         $expected = ['foo', 'bar', 'baz'];
@@ -155,6 +160,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::add
      * @covers ::peek
+     * @covers ::validateStorage
      */
     public function testAdd_CalledWithDifferentKeys_StoreNestedArray() {
         $expected = ['key1' => ['foo'], 'key2' => ['bar']];
@@ -172,6 +178,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::peek
      * @covers ::clear
+     * @covers ::validateStorage
      */
     public function testClear_WithKey_ClearKey() {
         $expected = ['key1' => [], 'key2'=>['bar']];
@@ -188,6 +195,7 @@ class FlashTest extends WP_UnitTestCase {
     /**
      * @covers ::peek
      * @covers ::clear
+     * @covers ::validateStorage
      */
     public function testClear_WithoutKey_ClearAll() {
         $expected = ['key1' => [], 'key2'=>[]];
