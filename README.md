@@ -1,6 +1,6 @@
 # Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master)
 
-Obsidian is a micro framework for WordPress which provides tools for M*VC and routing.
+Obsidian is a micro framework for WordPress which provides tools for *VC and routing.
 
 ## Quickstart
 
