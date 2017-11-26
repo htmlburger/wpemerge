@@ -57,6 +57,17 @@ if ( ! function_exists( 'obs_redirect' ) ) {
 	}
 }
 
+if ( ! function_exists( 'obs_reload' ) ) {
+	/**
+	 * @codeCoverageIgnore
+	 * @param  \Obsidian\Request                   $request
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	function obs_reload( $request ) {
+		return Response::redirect( obs_response(), $request->getUrl(), 302 );
+	}
+}
+
 if ( ! function_exists( 'obs_error' ) ) {
 	/**
 	 * @codeCoverageIgnore
