@@ -219,6 +219,18 @@ class Response {
 	}
 
 	/**
+	 * Return a cloned response, with location header equal to the current url and status header
+	 *
+	 * @param  ResponseInterface $response
+	 * @param  \Obsidian\Request $request
+	 * @param  integer           $status
+	 * @return ResponseInterface
+	 */
+	public static function reload( ResponseInterface $response, $request, $status = 302 ) {
+		return static::redirect( $response, $request->getUrl(), 302 );
+	}
+
+	/**
 	 * Return a cloned response, with status headers and rendering a suitable template as the body
 	 *
 	 * @param  ResponseInterface $response

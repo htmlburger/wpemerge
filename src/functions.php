@@ -60,11 +60,11 @@ if ( ! function_exists( 'obs_redirect' ) ) {
 if ( ! function_exists( 'obs_reload' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @param  \Obsidian\Request                   $request
+	 * @see Response::reload()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_reload( $request ) {
-		return Response::redirect( obs_response(), $request->getUrl(), 302 );
+	function obs_reload( $request, $status = 302 ) {
+		return Response::reload( obs_response(), $request, $status );
 	}
 }
 
