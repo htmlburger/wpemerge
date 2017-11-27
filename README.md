@@ -307,6 +307,7 @@ class MyController {
     public function someHandlerMethod( $request, $template ) {
         return obs_template( 'templates/about-us.php' );
         return obs_redirect( home_url( '/' ) );
+        return obs_reload();
         return obs_error( 404 );
         return obs_response(); // a blank response object
         return obs_output( 'Hello World!' ); // same as returning a string
@@ -341,6 +342,11 @@ Returns a new response object json encoding the passed data as the body.
 ### obs_redirect( $url, $status = 302 );
 
 Returns a new response object with location and status headers to redirect the user.
+
+### obs_reload( $request, $status = 302 );
+
+Returns a new response object with location and status headers to force the user to reload the current URL.
+Useful when responding to POST requests and when you want to force the user to request the same URL using the GET request method.
 
 ### obs_error( $status );
 
