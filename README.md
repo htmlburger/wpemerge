@@ -249,7 +249,7 @@ Refer to the Controllers section for more info on route handlers.
 
 ### Route middleware
 
-Middleware allow you to modify the request and/or response before it reaches the route handler. A middleware can be any callable or the class name of a class that implement `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`).
+Middleware allow you to modify the request and/or response before and/or after it reaches the route handler. Middleware can be any callable or the class name of a class that implement `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`).
 
 A common example for middleware usage is protecting certain routes to be accessible by logged in users only:
 
