@@ -346,7 +346,7 @@ Returns a new response object with location and status headers to redirect the u
 ### obs_reload( $request, $status = 302 );
 
 Returns a new response object with location and status headers to force the user to reload the current URL.
-Useful when responding to POST requests and when you want to force the user to request the same URL using the GET request method.
+Useful when responding to POST requests and when you want to force the user to request the same URL using the GET request method (e.g. to show the same form the user has submitted but with error messages).
 
 ### obs_error( $status );
 
