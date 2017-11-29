@@ -151,6 +151,38 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
     /**
      * @covers ::executeMiddleware
      */
+    public function testExecuteMiddleware_OneMiddlewareInterfaceClassName_CallsCallableFirstThenClosure() {
+        $mock = Mockery::mock( stdClass::class );
+        $closure = $this->getClosureMock( $mock, 'foo' );
+
+        $mock->shouldReceive( 'foo' )
+            ->with( $this->request_stub )
+            ->once()
+            ->ordered();
+
+        $this->subject->executeMiddleware( [TestMiddleware::class], $this->request_stub, $closure );
+        $this->assertTrue( true );
+    }
+
+    /**
+     * @covers ::executeMiddleware
+     */
+    public function testExecuteMiddleware_OneMiddlewareInterfaceInstance_CallsCallableFirstThenClosure() {
+        $mock = Mockery::mock( stdClass::class );
+        $closure = $this->getClosureMock( $mock, 'foo' );
+
+        $mock->shouldReceive( 'foo' )
+            ->with( $this->request_stub )
+            ->once()
+            ->ordered();
+
+        $this->subject->executeMiddleware( [new TestMiddleware()], $this->request_stub, $closure );
+        $this->assertTrue( true );
+    }
+
+    /**
+     * @covers ::executeMiddleware
+     */
     public function testExecuteMiddleware_ThreeCallables_CallsCallablesLastInFirstOutThenClosure() {
         $mock = Mockery::mock( stdClass::class );
         $callable1 = function( $request, $next ) use ( $mock ) {

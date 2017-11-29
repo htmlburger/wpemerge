@@ -100,7 +100,11 @@ trait HasMiddlewareTrait {
 			return call_user_func( $top_middleware, $request, $top_middleware_next );
 		}
 
-		$instance = new $top_middleware();
-		return $instance->handle( $request, $top_middleware_next );
+		if ( is_string( $top_middleware ) && class_exists( $top_middleware ) ) {
+			$instance = new $top_middleware();
+			return $instance->handle( $request, $top_middleware_next );
+		}
+
+		return $top_middleware->handle( $request, $top_middleware_next );
 	}
 }
