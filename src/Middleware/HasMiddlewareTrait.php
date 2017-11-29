@@ -62,11 +62,12 @@ trait HasMiddlewareTrait {
 	/**
 	 * Alias for addMiddleware
 	 *
+	 * @codeCoverageIgnore
 	 * @param  callable|\Obsidian\Middleware\middlewareInterface|array $middleware
 	 * @return object                                                  $this
 	 */
 	public function add( $middleware ) {
-		return $this->addMiddleware( $middleware );
+		return call_user_func_array( [$this, 'addMiddleware'], func_get_args() );
 	}
 
 	/**
