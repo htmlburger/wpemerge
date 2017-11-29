@@ -19,7 +19,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware );
@@ -27,7 +27,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\Obsidian\Middleware\middlewareInterface|array $middleware
+	 * @param  string|\Closure|\Obsidian\Middleware\middlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function add( $middleware );
