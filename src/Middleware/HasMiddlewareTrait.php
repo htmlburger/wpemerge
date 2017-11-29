@@ -49,7 +49,7 @@ trait HasMiddlewareTrait {
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
-		$middleware = Mixed::toArray( $middleware, true );
+		$middleware = Mixed::toArray( $middleware );
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
