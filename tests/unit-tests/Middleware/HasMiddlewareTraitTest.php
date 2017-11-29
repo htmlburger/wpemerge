@@ -26,7 +26,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
         Mockery::close();
     }
 
-    public static function callableStub() {
+    public function callableStub() {
         // do nothing
     }
 
@@ -41,10 +41,36 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::addMiddleware
      * @covers ::isMiddleware
      */
-    public function testAddMiddleware_MiddlewareInterface_Accepted() {
+    public function testAddMiddleware_MiddlewareInterfaceClassName_Accepted() {
+        $class = TestMiddleware::class;
+        $expected = [$class];
+
+        $this->subject->addMiddleware( $class );
+        $this->assertEquals( $expected, $this->subject->getMiddleware() );
+    }
+
+    /**
+     * @covers ::getMiddleware
+     * @covers ::addMiddleware
+     * @covers ::isMiddleware
+     */
+    public function testAddMiddleware_MiddlewareInterfaceInstance_Accepted() {
         $expected = [$this->middleware_stub1];
 
         $this->subject->addMiddleware( $this->middleware_stub1 );
+        $this->assertEquals( $expected, $this->subject->getMiddleware() );
+    }
+
+    /**
+     * @covers ::getMiddleware
+     * @covers ::addMiddleware
+     * @covers ::isMiddleware
+     */
+    public function testAddMiddleware_ArrayCallable_Accepted() {
+        $callable = [$this, 'callableStub'];
+        $expected = [$callable];
+
+        $this->subject->addMiddleware( $callable );
         $this->assertEquals( $expected, $this->subject->getMiddleware() );
     }
 
@@ -64,21 +90,8 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::getMiddleware
      * @covers ::addMiddleware
      * @covers ::isMiddleware
-     */
-    public function testAddMiddleware_ArrayOfCallable_Accepted() {
-        $callable = [$this, 'callableStub'];
-        $expected = [$callable];
-
-        $this->subject->addMiddleware( $expected );
-        $this->assertEquals( $expected, $this->subject->getMiddleware() );
-    }
-
-    /**
-     * @covers ::getMiddleware
-     * @covers ::addMiddleware
-     * @covers ::isMiddleware
      * @expectedException \Exception
-     * @expectedExceptionMessage must be a callable or the name of a class
+     * @expectedExceptionMessage must be a callable or the name or instance of a class
      */
     public function testAddMiddleware_InvalidMiddleware_ThrowsException() {
         $this->subject->addMiddleware( new stdClass() );
@@ -89,7 +102,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::addMiddleware
      * @covers ::isMiddleware
      */
-    public function testAddMiddleware_CalledTwiceWithMiddlewareInterface_MiddlewareMerged() {
+    public function testAddMiddleware_CalledTwiceWithMiddlewareInterfaceInstance_MiddlewareMerged() {
         $expected = [$this->middleware_stub1, $this->middleware_stub2];
 
         $this->subject->addMiddleware( $this->middleware_stub1 );
@@ -132,22 +145,6 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
             ->ordered();
 
         $this->subject->executeMiddleware( [$callable], $this->request_stub, $closure );
-        $this->assertTrue( true );
-    }
-
-    /**
-     * @covers ::executeMiddleware
-     */
-    public function testExecuteMiddleware_OneMiddlewareInterface_CallsCallableFirstThenClosure() {
-        $mock = Mockery::mock( stdClass::class );
-        $closure = $this->getClosureMock( $mock, 'bar' );
-
-        $mock->shouldReceive( 'bar' )
-            ->with( $this->request_stub )
-            ->once()
-            ->ordered();
-
-        $this->subject->executeMiddleware( [TestMiddleware::class], $this->request_stub, $closure );
         $this->assertTrue( true );
     }
 
