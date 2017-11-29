@@ -5,6 +5,7 @@ namespace Obsidian\Middleware;
 use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use Obsidian\Helpers\Arguments;
 
 /**
  * Allow objects to have middleware
@@ -48,13 +49,7 @@ trait HasMiddlewareTrait {
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
-		if ( is_callable( $middleware ) && is_array( $middleware ) ) {
-			$middleware = [$middleware];
-		}
-
-		if ( ! is_array( $middleware ) ) {
-			$middleware = [$middleware];
-		}
+		$middleware = Arguments::toArray( $middleware, true );
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
