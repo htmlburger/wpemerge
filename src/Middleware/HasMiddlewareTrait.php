@@ -42,16 +42,23 @@ trait HasMiddlewareTrait {
 
 	/**
 	 * Add middleware
+	 * Accepts: a class name, an instance of a class, a callable, an array of any of the previous
 	 *
-	 * @param  callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                  $this
+	 * @param  string|callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
-		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
+		if ( is_callable( $middleware ) && is_array( $middleware ) ) {
+			$middleware = [$middleware];
+		}
+
+		if ( ! is_array( $middleware ) ) {
+			$middleware = [$middleware];
+		}
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
-				throw new Exception( 'Passed middleware must be a callable or the name of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
+				throw new Exception( 'Passed middleware must be a callable or the name or instance of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
 			}
 		}
 
@@ -63,8 +70,8 @@ trait HasMiddlewareTrait {
 	 * Alias for addMiddleware
 	 *
 	 * @codeCoverageIgnore
-	 * @param  callable|\Obsidian\Middleware\middlewareInterface|array $middleware
-	 * @return object                                                  $this
+	 * @param  string|callable|\Obsidian\Middleware\middlewareInterface|array $middleware
+	 * @return object                                                         $this
 	 */
 	public function add( $middleware ) {
 		return call_user_func_array( [$this, 'addMiddleware'], func_get_args() );
