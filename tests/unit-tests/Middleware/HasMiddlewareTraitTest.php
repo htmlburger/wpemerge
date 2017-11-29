@@ -26,14 +26,14 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
         Mockery::close();
     }
 
-    public function callableStub() {
-        // do nothing
-    }
-
-    public static function getClosureMock( $mock, $mock_method ) {
+    public function getClosureMock( $mock, $mock_method ) {
         return function() use ( $mock, $mock_method ) {
             return call_user_func_array( [$mock, $mock_method], func_get_args() );
         };
+    }
+
+    public function callableStub() {
+        // do nothing
     }
 
     /**
@@ -66,11 +66,11 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::addMiddleware
      * @covers ::isMiddleware
      */
-    public function testAddMiddleware_ArrayCallable_Accepted() {
-        $callable = [$this, 'callableStub'];
-        $expected = [$callable];
+    public function testAddMiddleware_ArrayClosure_Accepted() {
+        $closure = function() {};
+        $expected = [$closure];
 
-        $this->subject->addMiddleware( $callable );
+        $this->subject->addMiddleware( $closure );
         $this->assertEquals( $expected, $this->subject->getMiddleware() );
     }
 
@@ -91,7 +91,19 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::addMiddleware
      * @covers ::isMiddleware
      * @expectedException \Exception
-     * @expectedExceptionMessage must be a callable or the name or instance of a class
+     * @expectedExceptionMessage must be a closure or the name or instance of a class
+     */
+    public function testAddMiddleware_Callable_ThrowsException() {
+        $this->assertTrue( is_callable( [$this, 'callableStub'] ) );
+        $this->subject->addMiddleware( [$this, 'callableStub'] );
+    }
+
+    /**
+     * @covers ::getMiddleware
+     * @covers ::addMiddleware
+     * @covers ::isMiddleware
+     * @expectedException \Exception
+     * @expectedExceptionMessage must be a closure or the name or instance of a class
      */
     public function testAddMiddleware_InvalidMiddleware_ThrowsException() {
         $this->subject->addMiddleware( new stdClass() );
@@ -127,9 +139,9 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
     /**
      * @covers ::executeMiddleware
      */
-    public function testExecuteMiddleware_OneCallable_CallsCallableFirstThenClosure() {
+    public function testExecuteMiddleware_OneClosure_CallsClosureFirstThenClosure() {
         $mock = Mockery::mock( stdClass::class );
-        $callable = function( $request, $next ) use ( $mock ) {
+        $middleware = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'foo' ) );
             return $next( $request );
         };
@@ -144,14 +156,14 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
             ->once()
             ->ordered();
 
-        $this->subject->executeMiddleware( [$callable], $this->request_stub, $closure );
+        $this->subject->executeMiddleware( [$middleware], $this->request_stub, $closure );
         $this->assertTrue( true );
     }
 
     /**
      * @covers ::executeMiddleware
      */
-    public function testExecuteMiddleware_OneMiddlewareInterfaceClassName_CallsCallableFirstThenClosure() {
+    public function testExecuteMiddleware_OneMiddlewareInterfaceClassName_CallsClassInstanceFirstThenClosure() {
         $mock = Mockery::mock( stdClass::class );
         $closure = $this->getClosureMock( $mock, 'foo' );
 
@@ -167,7 +179,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
     /**
      * @covers ::executeMiddleware
      */
-    public function testExecuteMiddleware_OneMiddlewareInterfaceInstance_CallsCallableFirstThenClosure() {
+    public function testExecuteMiddleware_OneMiddlewareInterfaceInstance_CallsInstanceFirstThenClosure() {
         $mock = Mockery::mock( stdClass::class );
         $closure = $this->getClosureMock( $mock, 'foo' );
 
@@ -183,17 +195,17 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
     /**
      * @covers ::executeMiddleware
      */
-    public function testExecuteMiddleware_ThreeCallables_CallsCallablesLastInFirstOutThenClosure() {
+    public function testExecuteMiddleware_ThreeClosures_CallsClosuresLastInFirstOutThenClosure() {
         $mock = Mockery::mock( stdClass::class );
-        $callable1 = function( $request, $next ) use ( $mock ) {
+        $middleware1 = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'foo' ) );
             return $next( $request );
         };
-        $callable2 = function( $request, $next ) use ( $mock ) {
+        $middleware2 = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'bar' ) );
             return $next( $request );
         };
-        $callable3 = function( $request, $next ) use ( $mock ) {
+        $middleware3 = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'baz' ) );
             return $next( $request );
         };
@@ -216,7 +228,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
             ->once()
             ->ordered();
 
-        $this->subject->executeMiddleware( [$callable1, $callable2, $callable3], $this->request_stub, $closure );
+        $this->subject->executeMiddleware( [$middleware1, $middleware2, $middleware3], $this->request_stub, $closure );
         $this->assertTrue( true );
     }
 }

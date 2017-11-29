@@ -25,7 +25,7 @@ trait HasMiddlewareTrait {
 	 * @return boolean
 	 */
 	protected function isMiddleware( $middleware ) {
-		if ( is_callable( $middleware ) ) {
+		if ( is_a( $middleware, Closure::class ) ) {
 			return true;
 		}
 
@@ -43,9 +43,9 @@ trait HasMiddlewareTrait {
 
 	/**
 	 * Add middleware
-	 * Accepts: a class name, an instance of a class, a callable, an array of any of the previous
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
-	 * @param  string|callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
@@ -53,7 +53,7 @@ trait HasMiddlewareTrait {
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
-				throw new Exception( 'Passed middleware must be a callable or the name or instance of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
+				throw new Exception( 'Passed middleware must be a closure or the name or instance of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
 			}
 		}
 
@@ -65,7 +65,7 @@ trait HasMiddlewareTrait {
 	 * Alias for addMiddleware
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|callable|\Obsidian\Middleware\middlewareInterface|array $middleware
+	 * @param  string|\Closure|\Obsidian\Middleware\middlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function add( $middleware ) {

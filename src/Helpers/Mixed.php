@@ -4,19 +4,12 @@ namespace Obsidian\Helpers;
 
 class Mixed {
 	/**
-	 * Converts a value to an array containing this value if needed
-	 * The $check_for_callable flag is there to prevent coincidences that
-	 * can happen with [$object, 'stringThatMatchesAMethodOf$object']
+	 * Converts a value to an array containing this value unless it's an array
 	 *
 	 * @param  mixed   $argument
-	 * @param  boolean $check_for_callable
 	 * @return array
 	 */
-	public static function toArray( $argument, $check_for_callable = false ) {
-		if ( $check_for_callable && is_array( $argument ) && is_callable( $argument ) ) {
-			$argument = [$argument];
-		}
-
+	public static function toArray( $argument ) {
 		if ( ! is_array( $argument ) ) {
 			$argument = [$argument];
 		}
