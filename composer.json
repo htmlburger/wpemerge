@@ -39,5 +39,6 @@
         "ralouphie/getallheaders": "^2.0"
     },
     "require-dev": {
+        "mockery/mockery": "^1.0"
     }
 }

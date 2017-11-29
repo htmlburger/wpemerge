@@ -43,8 +43,8 @@ trait HasMiddlewareTrait {
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @param  callable|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @return object                                                  $this
 	 */
 	public function addMiddleware( $middleware ) {
 		$middleware = is_array( $middleware ) ? $middleware : [$middleware];
@@ -62,8 +62,8 @@ trait HasMiddlewareTrait {
 	/**
 	 * Alias for addMiddleware
 	 *
-	 * @param  string|callable|\Obsidian\Middleware\middlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @param  callable|\Obsidian\Middleware\middlewareInterface|array $middleware
+	 * @return object                                                  $this
 	 */
 	public function add( $middleware ) {
 		return $this->addMiddleware( $middleware );
