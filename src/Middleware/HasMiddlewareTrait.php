@@ -5,7 +5,7 @@ namespace Obsidian\Middleware;
 use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Obsidian\Helpers\Arguments;
+use Obsidian\Helpers\Mixed;
 
 /**
  * Allow objects to have middleware
@@ -49,7 +49,7 @@ trait HasMiddlewareTrait {
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
-		$middleware = Arguments::toArray( $middleware, true );
+		$middleware = Mixed::toArray( $middleware, true );
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
@@ -91,15 +91,6 @@ trait HasMiddlewareTrait {
 			return $this->executeMiddleware( $middleware, $request, $next );
 		};
 
-		if ( is_callable( $top_middleware ) ) {
-			return call_user_func( $top_middleware, $request, $top_middleware_next );
-		}
-
-		if ( is_string( $top_middleware ) && class_exists( $top_middleware ) ) {
-			$instance = new $top_middleware();
-			return $instance->handle( $request, $top_middleware_next );
-		}
-
-		return $top_middleware->handle( $request, $top_middleware_next );
+		return Mixed::value( $top_middleware, [$request, $top_middleware_next], 'handle' );
 	}
 }
