@@ -36,7 +36,7 @@ class Mixed {
 	 * @param  string $method
 	 * @return mixed
 	 */
-	public static function value( $entity, $arguments = [], $method = null ) {
+	public static function value( $entity, $arguments = [], $method = '__invoke' ) {
 		if ( is_callable( $entity ) ) {
 			return call_user_func_array( $entity, $arguments );
 		}
