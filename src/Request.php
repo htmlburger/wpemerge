@@ -84,9 +84,9 @@ class Request {
 	 * @return string
 	 */
 	public function getMethod() {
-		$method = (string) Arr::get( $this->server, 'REQUEST_METHOD', 'GET' );
+		$method = (string) $this->server( 'REQUEST_METHOD', 'GET' );
 
-		$override = (string) Arr::get( $this->headers, 'X-HTTP-METHOD-OVERRIDE' );
+		$override = (string) $this->headers( 'X-HTTP-METHOD-OVERRIDE' );
 		if ( $method === 'POST' && $override ) {
 			$method = $override;
 		}
@@ -100,11 +100,11 @@ class Request {
 	 * @return string
 	 */
 	public function getUrl() {
-		$https = Arr::get( $this->server, 'HTTPS' );
+		$https = $this->server( 'HTTPS' );
 
 		$protocol = $https ? 'https' : 'http';
-		$host = (string) Arr::get( $this->server, 'HTTP_HOST', '' );
-		$uri = (string) Arr::get( $this->server, 'REQUEST_URI', '' );
+		$host = (string) $this->server( 'HTTP_HOST', '' );
+		$uri = (string) $this->server( 'REQUEST_URI', '' );
 		$uri = Url::addLeadingSlash( $uri );
 
 		return $protocol . '://' . $host . $uri;
