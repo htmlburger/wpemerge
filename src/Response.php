@@ -227,7 +227,7 @@ class Response {
 	 * @return ResponseInterface
 	 */
 	public static function reload( ResponseInterface $response, $request, $status = 302 ) {
-		return static::redirect( $response, $request->getUrl(), 302 );
+		return static::redirect( $response, $request->getUrl(), $status );
 	}
 
 	/**
