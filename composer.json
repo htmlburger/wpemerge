@@ -1,7 +1,7 @@
 {
     "name": "htmlburger/obsidian",
     "description": "WordPress *VC micro-framework for theme development.",
-    "keywords": ["wordpress", "framework", "controller", "view", "request", "response", "middleware", "facade", "obsidian"],
+    "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "obsidian"],
     "license": "GPL-2.0",
     "homepage": "https://github.com/htmlburger/obsidian",
     "authors": [
