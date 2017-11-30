@@ -4,9 +4,12 @@ Obsidian is a micro framework for WordPress which provides tools for *VC and rou
 
 ## Quickstart
 
-1. `composer require htmlburger/obsidian`
-1. Make sure you've included the generated `autoload.php` file
-1. Add the following to your functions.php:
+1. Run `composer require htmlburger/obsidian` in your theme directory
+1. Make sure you've included the generated `autoload.php` file inside your `functions.php` file
+    ```php
+    require_once( 'vendor/autoload.php' );
+    ```
+1. Add the following to your `functions.php`:
     ```php
     add_action( 'init', function() {
         session_start(); // required for Flash and OldInput
