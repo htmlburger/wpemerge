@@ -76,4 +76,16 @@ class MixedTest extends WP_UnitTestCase {
 
 		$this->assertSame( $expected, Mixed::value( $expected ) );
 	}
+
+	/**
+	 * @covers ::isClass
+	 */
+	public function testIsClass() {
+		$this->assertTrue( Mixed::isClass( 'stdClass' ) );
+		$this->assertTrue( Mixed::isClass( TestService::class ) );
+		$this->assertFalse( Mixed::isClass( 'NonExistantClassName' ) );
+		$this->assertFalse( Mixed::isClass( 1 ) );
+		$this->assertFalse( Mixed::isClass( new stdClass() ) );
+		$this->assertFalse( Mixed::isClass( [] ) );
+	}
 }
