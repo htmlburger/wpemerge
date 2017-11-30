@@ -110,7 +110,7 @@ class Response {
 		$content_left = $content_length ? $content_length : -1;
 		$amount_to_read = $content_left > -1 ? min( $chunk_size, $content_left ) : $chunk_size;
 
-		while ( ! $body->eof() ) {
+		while ( ! $body->eof() && $amount_to_read > 0 ) {
 			echo $body->read( $amount_to_read );
 
 			if ( $content_left > -1 ) {
