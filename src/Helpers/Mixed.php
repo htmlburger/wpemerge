@@ -19,10 +19,10 @@ class Mixed {
 
 	/**
 	 * Executes a value depending on what type it is and returns the result
-	 * Callable: call
-	 * Instance: call method
-	 * Class:    instantiate and call method
-	 * Other:    return it
+	 * Callable: call; return result
+	 * Instance: call method; return result
+	 * Class:    instantiate; call method; return result
+	 * Other:    return value without taking any action
 	 *
 	 * @param  mixed  $entity
 	 * @param  array  $arguments
@@ -34,11 +34,14 @@ class Mixed {
 			return call_user_func_array( $entity, $arguments );
 		}
 
-		if ( is_string( $entity ) && class_exists( $entity ) ) {
-			$instance = new $entity();
-			return call_user_func_array( [$instance, $method], $arguments );
+		if ( is_object( $entity ) ) {
+			return call_user_func_array( [$entity, $method], $arguments );
 		}
 
-		return call_user_func_array( [$entity, $method], $arguments );
+		if ( is_string( $entity ) && class_exists( $entity ) ) {
+			return call_user_func_array( [new $entity(), $method], $arguments );
+		}
+
+		return $entity;
 	}
 }
