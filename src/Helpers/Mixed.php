@@ -38,10 +38,20 @@ class Mixed {
 			return call_user_func_array( [$entity, $method], $arguments );
 		}
 
-		if ( is_string( $entity ) && class_exists( $entity ) ) {
+		if ( static::isClass( $entity ) ) {
 			return call_user_func_array( [new $entity(), $method], $arguments );
 		}
 
 		return $entity;
+	}
+
+	/**
+	 * Check if a value is a valid class name
+	 *
+	 * @param  mixed   $class_name
+	 * @return boolean
+	 */
+	public static function isClass( $class_name ) {
+		return ( is_string( $class_name ) && class_exists( $class_name ) );
 	}
 }
