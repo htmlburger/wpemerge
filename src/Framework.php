@@ -67,6 +67,7 @@ class Framework {
 	/**
 	 * Throw an exception if the framework has not been booted
 	 *
+	 * @codeCoverageIgnore
 	 * @throws Exception
 	 * @return null
 	 */
@@ -82,9 +83,11 @@ class Framework {
 	 * @return Container
 	 */
 	public static function getContainer() {
+		// @codeCoverageIgnoreStart
 		if ( static::$container === null ) {
 			static::$container = new Container();
 		}
+		// @codeCoverageIgnoreEnd
 		return static::$container;
 	}
 
@@ -92,6 +95,7 @@ class Framework {
 	 * Boot the framework
 	 * WordPress's 'after_setup_theme' action is a good place to call this
 	 *
+	 * @codeCoverageIgnore
 	 * @param  array     $config
 	 * @throws Exception
 	 * @return null
@@ -122,6 +126,7 @@ class Framework {
 	/**
 	 * Register and boot all service providers
 	 *
+	 * @codeCoverageIgnore
 	 * @param  Container $container
 	 * @return null
 	 */
@@ -142,6 +147,7 @@ class Framework {
 	/**
 	 * Register all service providers
 	 *
+	 * @codeCoverageIgnore
 	 * @param  Container $container
 	 * @return null
 	 */
@@ -154,6 +160,7 @@ class Framework {
 	/**
 	 * Boot all service providers
 	 *
+	 * @codeCoverageIgnore
 	 * @param  Container $container
 	 * @return null
 	 */
