@@ -21,6 +21,28 @@ Obsidian is a micro framework for WordPress which provides tools for *VC and rou
     } );
     ```
 
+## Optional: Setting up autoloading for your own classes
+
+1. Add the following to your `composer.json`:
+    ```json
+    "autoload": {
+        "psr-4": {
+            "Theme\\": "theme/"
+        }
+    }
+    ```
+    - `Theme` represents the base namespace for your classes
+    - `theme/` represents the base path for your classes
+    With this change any class in the `Theme\` namespace will be autoloaded from the `theme/` directory relative to your `composer.json`.
+1. Run `composer dumpautoload` so your changes take effect
+
+Here are a few example classes (and their filepaths) that will be autoloaded:
+- `Theme\MyClass` - `theme/MyClass.php`
+- `Theme\Foo\Bar\Baz` - `theme/Foo/Bar/Baz.php`
+- `Theme\Controllers\Home` - `theme/Controllers/Home.php`
+
+You can find more information about PSR-4 autoloading on http://www.php-fig.org/psr/psr-4/
+
 ## Routing
 
 ### Route method
