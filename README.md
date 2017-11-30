@@ -232,9 +232,9 @@ A route handler can be any callable or a reference in the `CONTROLLER_CLASS@CONT
 Router::get( '/', 'HomeController@index' );
 ```
 
-... will create a new instance of the `HomeController` class and call it's `index` method.
+... will create a new instance of the `HomeController` class and call its `index` method.
 
-If your controller class is registered in the IoC container with it's class name as the key, then the class will be resolved
+If your controller class is registered in the IoC container with its class name as the key, then the class will be resolved
 from the container instead of directly being instantiated:
 
 ```php

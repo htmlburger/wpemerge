@@ -52,7 +52,7 @@ class Factory {
 	}
 
 	/**
-	 * Resolve the condition type and it's arguments from an options array
+	 * Resolve the condition type and its arguments from an options array
 	 *
 	 * @param  array $options
 	 * @return array

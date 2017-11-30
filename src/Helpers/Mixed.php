@@ -4,7 +4,7 @@ namespace Obsidian\Helpers;
 
 class Mixed {
 	/**
-	 * Converts a value to an array containing this value unless it's an array
+	 * Converts a value to an array containing this value unless it is an array
 	 *
 	 * @param  mixed   $argument
 	 * @return array
