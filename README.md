@@ -4,7 +4,7 @@ Obsidian is a micro framework for WordPress which provides tools for *VC and rou
 
 ## Quickstart
 
-1. `composer require htmlburger/obsidian:dev-master`
+1. `composer require htmlburger/obsidian`
 1. Make sure you've included the generated `autoload.php` file
 1. Add the following to your functions.php:
     ```php
