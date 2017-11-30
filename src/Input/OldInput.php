@@ -41,9 +41,11 @@ class OldInput {
 	 * Clear previously stored input
 	 */
 	public static function clear() {
+		// @codeCoverageIgnoreStart
 		if ( ! Flash::enabled() ) {
 			return;
 		}
+		// @codeCoverageIgnoreEnd
 
 		Flash::clear( static::FLASH_KEY );
 	}
@@ -54,9 +56,11 @@ class OldInput {
 	 * @param array $input
 	 */
 	public static function store( $input ) {
+		// @codeCoverageIgnoreStart
 		if ( ! Flash::enabled() ) {
 			return;
 		}
+		// @codeCoverageIgnoreEnd
 
 		Flash::add( static::FLASH_KEY, $input );
 	}

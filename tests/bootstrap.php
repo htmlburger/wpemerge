@@ -50,7 +50,9 @@ class Obsidian_Tests_Bootstrap {
 		tests_add_filter( 'muplugins_loaded', array( $this, 'load_plugin' ) );
 
 		// load the WP testing environment
+		ob_start(); // prevent bootstrap.php from sending headers
 		require_once( $this->wp_tests_dir . '/includes/bootstrap.php' );
+		ob_clean();
 
 		// make sure query vars are prepared
 		global $wp;
