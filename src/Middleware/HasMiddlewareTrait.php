@@ -4,7 +4,6 @@ namespace Obsidian\Middleware;
 
 use Closure;
 use Exception;
-use Psr\Http\Message\ResponseInterface;
 use Obsidian\Helpers\Mixed;
 
 /**
@@ -75,10 +74,10 @@ trait HasMiddlewareTrait {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  array             $middleware
-	 * @param  \Obsidian\Request $request
-	 * @param  Closure           $next
-	 * @return ResponseInterface
+	 * @param  array                               $middleware
+	 * @param  \Obsidian\Request                   $request
+	 * @param  Closure                             $next
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next ) {
 		$top_middleware = array_pop( $middleware );
