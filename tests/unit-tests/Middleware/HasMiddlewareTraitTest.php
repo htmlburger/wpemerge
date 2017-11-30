@@ -126,7 +126,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::executeMiddleware
      */
     public function testExecuteMiddleware_EmptyList_CallsClosureOnce() {
-        $mock = Mockery::mock( stdClass::class );
+        $mock = Mockery::mock();
         $method = 'foo';
         $closure = $this->getClosureMock( $mock, $method );
 
@@ -140,7 +140,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::executeMiddleware
      */
     public function testExecuteMiddleware_OneClosure_CallsClosureFirstThenClosure() {
-        $mock = Mockery::mock( stdClass::class );
+        $mock = Mockery::mock();
         $middleware = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'foo' ) );
             return $next( $request );
@@ -164,7 +164,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::executeMiddleware
      */
     public function testExecuteMiddleware_OneMiddlewareInterfaceClassName_CallsClassInstanceFirstThenClosure() {
-        $mock = Mockery::mock( stdClass::class );
+        $mock = Mockery::mock();
         $closure = $this->getClosureMock( $mock, 'foo' );
 
         $mock->shouldReceive( 'foo' )
@@ -180,7 +180,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::executeMiddleware
      */
     public function testExecuteMiddleware_OneMiddlewareInterfaceInstance_CallsInstanceFirstThenClosure() {
-        $mock = Mockery::mock( stdClass::class );
+        $mock = Mockery::mock();
         $closure = $this->getClosureMock( $mock, 'foo' );
 
         $mock->shouldReceive( 'foo' )
@@ -196,7 +196,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
      * @covers ::executeMiddleware
      */
     public function testExecuteMiddleware_ThreeClosures_CallsClosuresLastInFirstOutThenClosure() {
-        $mock = Mockery::mock( stdClass::class );
+        $mock = Mockery::mock();
         $middleware1 = function( $request, $next ) use ( $mock ) {
             call_user_func( $this->getClosureMock( $mock, 'foo' ) );
             return $next( $request );

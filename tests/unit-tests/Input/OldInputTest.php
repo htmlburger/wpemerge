@@ -1,5 +1,6 @@
 <?php
 
+use Obsidian\Framework;
 use Obsidian\Request;
 use Obsidian\Input\OldInput;
 
@@ -10,15 +11,23 @@ class OldInputTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		session_start();
+		$this->flashMock = Mockery::mock()->shouldIgnoreMissing();
+
+		Framework::facade( 'Flash', OldInputTestFlashFacade::class );
+		$container = Framework::getContainer();
+		$container['flashMock'] = $this->flashMock;
 		$this->subject = new OldInput();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+		Mockery::close();
 
+		$container = Framework::getContainer();
+		unset( $container['flashMock'] );
+		unset( $this->flashMock );
 		unset( $this->subject );
-		session_destroy();
+		\Flash::clearResolvedInstances();
 	}
 
 	/**
@@ -28,35 +37,31 @@ class OldInputTest extends WP_UnitTestCase {
 	public function testAll() {
 		$expected = ['foo' => 'bar', 'bar'=>'baz'];
 
+		$this->flashMock->shouldReceive( 'add' )
+			->with( OldInput::FLASH_KEY, $expected )
+			->ordered();
+
+		$this->flashMock->shouldReceive( 'peek' )
+			->with( OldInput::FLASH_KEY )
+			->andReturn( $expected )
+			->ordered();
+
 		$this->subject->store( $expected );
 		$this->assertEquals( $expected, $this->subject->all() );
 	}
 
 	/**
-	 * @covers ::all
-	 * @covers ::store
-	 */
-	public function testStore_CalledTwice_MergedResults() {
-		$part1 = ['foo' => 'bar'];
-		$part2 = ['bar' => 'baz'];
-		$expected = array_merge( $part1, $part2 );
-
-		$this->subject->store( $part1 );
-		$this->subject->store( $part2 );
-		$this->assertEquals( $expected, $this->subject->all() );
-	}
-
-	/**
-	 * @covers ::all
 	 * @covers ::clear
 	 */
 	public function testClear() {
 		$data = ['foo' => 'bar', 'bar'=>'baz'];
 		$expected = [];
 
-		$this->subject->store( $data );
+		$this->flashMock->shouldReceive( 'clear' )
+			->with( OldInput::FLASH_KEY );
+
 		$this->subject->clear();
-		$this->assertEquals( $expected, $this->subject->all() );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -64,18 +69,33 @@ class OldInputTest extends WP_UnitTestCase {
 	 */
 	public function testGet_ExistingKey_ReturnValue() {
 		$data = ['foo' => 'bar', 'bar'=>'baz'];
-		$expected = 'baz';
+		$key = 'bar';
+		$expected = $data[ $key ];
 
-		$this->subject->store( $data );
-		$this->assertEquals( $expected, $this->subject->get( 'bar' ) );
+		$this->flashMock->shouldReceive( 'peek' )
+			->with( OldInput::FLASH_KEY )
+			->andReturn( $data );
+
+		$this->assertEquals( $expected, $this->subject->get( $key ) );
 	}
 
 	/**
 	 * @covers ::get
 	 */
 	public function testGet_NonexistantKey_ReturnDefault() {
+		$key = 'nonexistantKey';
 		$expected = 'foobar';
 
-		$this->assertEquals( $expected, $this->subject->get( 'nonexistantKey', $expected ) );
+		$this->flashMock->shouldReceive( 'peek' )
+			->with( OldInput::FLASH_KEY, $key, $expected )
+			->andReturn( $expected );
+
+		$this->assertEquals( $expected, $this->subject->get( $key, $expected ) );
 	}
+}
+
+class OldInputTestFlashFacade extends Obsidian\Support\Facade {
+	protected static function getFacadeAccessor() {
+        return 'flashMock';
+    }
 }

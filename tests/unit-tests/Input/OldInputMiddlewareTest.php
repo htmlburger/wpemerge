@@ -1,7 +1,7 @@
 <?php
 
+use Obsidian\Framework;
 use Obsidian\Request;
-use Obsidian\Input\OldInput;
 use Obsidian\Input\OldInputMiddleware;
 
 /**
@@ -11,17 +11,23 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		session_start();
+		$this->oldInputMock = Mockery::mock();
+
+		Framework::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
+		$container = Framework::getContainer();
+		$container['oldInputMock'] = $this->oldInputMock;
 		$this->subject = new OldInputMiddleware();
-		$this->oldInput = new OldInput();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+		Mockery::close();
 
+		$container = Framework::getContainer();
+		unset( $container['oldInputMock'] );
+		unset( $this->oldInputMock );
 		unset( $this->subject );
-		unset( $this->oldInput );
-		session_destroy();
+		\OldInput::clearResolvedInstances();
 	}
 
 	/**
@@ -32,8 +38,14 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request = new Request( [], $post, [], [], ['REQUEST_METHOD' => 'POST'], [] );
 		$expected = $post;
 
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered();
+		$this->oldInputMock->shouldReceive( 'store' )
+			->with( $post )
+			->ordered();
+
 		$this->subject->handle( $request, function() {} );
-		$this->assertEquals( $expected, $this->oldInput->all() );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -44,8 +56,14 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request = new Request( [], $post, [], [], ['REQUEST_METHOD' => 'GET'], [] );
 		$expected = [];
 
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered();
+		$this->oldInputMock->shouldReceive( 'store' )
+			->never()
+			->ordered();
+
 		$this->subject->handle( $request, function() {} );
-		$this->assertEquals( $expected, $this->oldInput->all() );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -60,11 +78,21 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request2 = new Request( [], $post2, [], [], ['REQUEST_METHOD' => 'GET'], [] );
 		$expected2 = [];
 
-		$this->subject->handle( $request1, function() {} );
-		$this->assertEquals( $expected1, $this->oldInput->all() );
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered(1);
+		$this->oldInputMock->shouldReceive( 'store' )
+			->with( $post1 )
+			->ordered(1);
 
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered(2);
+		$this->oldInputMock->shouldReceive( 'store' )
+			->never()
+			->ordered(2);
+
+		$this->subject->handle( $request1, function() {} );
 		$this->subject->handle( $request2, function() {} );
-		$this->assertEquals( $expected2, $this->oldInput->all() );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -79,10 +107,26 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request2 = new Request( [], $post2, [], [], ['REQUEST_METHOD' => 'POST'], [] );
 		$expected2 = $post2;
 
-		$this->subject->handle( $request1, function() {} );
-		$this->assertEquals( $expected1, $this->oldInput->all() );
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered(1);
+		$this->oldInputMock->shouldReceive( 'store' )
+			->with( $post1 )
+			->ordered(1);
 
+		$this->oldInputMock->shouldReceive( 'clear' )
+			->ordered(2);
+		$this->oldInputMock->shouldReceive( 'store' )
+			->with( $post2 )
+			->ordered(2);
+
+		$this->subject->handle( $request1, function() {} );
 		$this->subject->handle( $request2, function() {} );
-		$this->assertEquals( $expected2, $this->oldInput->all() );
+		$this->assertTrue( true );
 	}
+}
+
+class OldInputMiddlewareTestOldInputFacade extends Obsidian\Support\Facade {
+	protected static function getFacadeAccessor() {
+        return 'oldInputMock';
+    }
 }
