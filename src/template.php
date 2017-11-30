@@ -4,7 +4,7 @@
  */
 // @codeCoverageIgnoreStart
 use Obsidian\Framework;
-$response = apply_filters( 'obsidian_response', null );
+$response = apply_filters( 'obsidian.response', null );
 if ( $response !== null ) {
 	Framework::respond( $response );
 }

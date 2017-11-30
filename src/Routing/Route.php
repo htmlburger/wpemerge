@@ -92,7 +92,7 @@ class Route implements RouteInterface {
 		$regex = $this->target->getValidationRegex( $this->target->getUrl(), false );
 		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
 
-		add_filter( 'obsidian_routing_rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
+		add_filter( 'obsidian.routing.rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
 			$rules[ $regex ] = $rewrite_to;
 			return $rules;
 		} );

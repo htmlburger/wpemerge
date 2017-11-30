@@ -37,7 +37,7 @@ class Router {
 	 * @return null
 	 */
 	public function registerRewriteRules() {
-		$rules = apply_filters( 'obsidian_routing_rewrite_rules', [] );
+		$rules = apply_filters( 'obsidian.routing.rewrite_rules', [] );
 		foreach ( $rules as $rule => $rewrite_to ) {
 			add_rewrite_rule( $rule, $rewrite_to, 'top' );
 		}
@@ -86,7 +86,7 @@ class Router {
 			$response = FrameworkResponse::error( FrameworkResponse::response(), 500 );
 		}
 
-		add_filter( 'obsidian_response', function() use ( $response ) {
+		add_filter( 'obsidian.response', function() use ( $response ) {
 			return $response;
 		} );
 

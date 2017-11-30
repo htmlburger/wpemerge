@@ -38,7 +38,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 
 		$container['framework.routing.global_middleware'] = $container['framework.config']['global_middleware'];
 		$container['framework.routing.global_middleware'] = apply_filters(
-			'obsidian_global_middleware',
+			'obsidian.global_middleware',
 			$container['framework.routing.global_middleware']
 		);
 

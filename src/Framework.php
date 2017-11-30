@@ -127,7 +127,7 @@ class Framework {
 	 */
 	protected static function loadServiceProviders( $container ) {
 		$container['framework.service_providers'] = apply_filters(
-			'obsidian_service_providers',
+			'obsidian.service_providers',
 			$container['framework.service_providers']
 		);
 
