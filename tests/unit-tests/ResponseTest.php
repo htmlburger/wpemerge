@@ -1,12 +1,19 @@
 <?php
 
 use Psr\Http\Message\ResponseInterface;
+use Obsidian\Request;
 use Obsidian\Response;
 
 /**
  * @coversDefaultClass \Obsidian\Response
  */
 class ResponseTest extends WP_UnitTestCase {
+    public function tearDown() {
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
     protected function readStream( $stream, $chunk_size = 4096 ) {
         $output = '';
         while ( ! $stream->eof() ) {
@@ -91,6 +98,40 @@ class ResponseTest extends WP_UnitTestCase {
         $this->assertEquals( $expected1, $subject1->getStatusCode() );
 
         $subject2 = Response::redirect( Response::response(), 'foobar', $expected2 );
+        $this->assertEquals( $expected2, $subject2->getStatusCode() );
+    }
+
+    /**
+     * @covers ::reload
+     */
+    public function testReload_Location() {
+        $expected = 'http://example.com/foobar?hello=world';
+        $request_mock = Mockery::mock( Request::class );
+
+        $request_mock->shouldReceive( 'getUrl' )
+            ->once()
+            ->andReturn( $expected );
+
+        $subject = Response::reload( Response::response(), $request_mock );
+        $this->assertEquals( $expected, $subject->getHeaderLine( 'Location' ) );
+    }
+
+    /**
+     * @covers ::reload
+     */
+    public function testReload_Status() {
+        $expected1 = 301;
+        $expected2 = 302;
+        $url = 'http://example.com/foobar?hello=world';
+        $request_mock = Mockery::mock( Request::class );
+
+        $request_mock->shouldReceive( 'getUrl' )
+            ->andReturn( $url );
+
+        $subject1 = Response::reload( Response::response(), $request_mock, $expected1 );
+        $this->assertEquals( $expected1, $subject1->getStatusCode() );
+
+        $subject2 = Response::reload( Response::response(), $request_mock, $expected2 );
         $this->assertEquals( $expected2, $subject2->getStatusCode() );
     }
 
