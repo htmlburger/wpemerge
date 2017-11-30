@@ -90,7 +90,7 @@ class Framework {
 
 	/**
 	 * Boot the framework
-	 * WordPress's 'init' action is a good place to call this
+	 * WordPress's 'after_setup_theme' action is a good place to call this
 	 *
 	 * @param  array     $config
 	 * @throws Exception
