@@ -11,7 +11,7 @@ class OldInputTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->flashMock = Mockery::mock()->shouldIgnoreMissing();
+		$this->flashMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
 
 		Framework::facade( 'Flash', OldInputTestFlashFacade::class );
 		$container = Framework::getContainer();
@@ -51,17 +51,23 @@ class OldInputTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::all
 	 * @covers ::clear
 	 */
 	public function testClear() {
-		$data = ['foo' => 'bar', 'bar'=>'baz'];
 		$expected = [];
 
 		$this->flashMock->shouldReceive( 'clear' )
-			->with( OldInput::FLASH_KEY );
+			->with( OldInput::FLASH_KEY )
+			->ordered();
+
+		$this->flashMock->shouldReceive( 'peek' )
+			->with( OldInput::FLASH_KEY )
+			->andReturn( $expected )
+			->ordered();
 
 		$this->subject->clear();
-		$this->assertTrue( true );
+		$this->assertEquals( $expected, $this->subject->all() );
 	}
 
 	/**

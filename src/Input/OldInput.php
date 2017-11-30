@@ -21,7 +21,7 @@ class OldInput {
 	 *
 	 * @return array
 	 */
-	public static function all() {
+	public function all() {
 		return Flash::peek( static::FLASH_KEY );
 	}
 
@@ -30,7 +30,7 @@ class OldInput {
 	 *
 	 * @see Arr::get()
 	 */
-	public static function get() {
+	public function get() {
 		$arguments = array_merge( [
 			static::all(),
 		], func_get_args() );
@@ -40,7 +40,7 @@ class OldInput {
 	/**
 	 * Clear previously stored input
 	 */
-	public static function clear() {
+	public function clear() {
 		// @codeCoverageIgnoreStart
 		if ( ! Flash::enabled() ) {
 			return;
@@ -55,7 +55,7 @@ class OldInput {
 	 *
 	 * @param array $input
 	 */
-	public static function store( $input ) {
+	public function store( $input ) {
 		// @codeCoverageIgnoreStart
 		if ( ! Flash::enabled() ) {
 			return;
