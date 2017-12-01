@@ -198,7 +198,7 @@ Any parameters you pass will be provided to both the callable AND the $handler:
 
 ```php
 Route::get( ['is_tax', 'crb_custom_taxonomy'], function( $request, $template, $taxonomy ) {
-    // $taxonomy is passed after $request and $tempalte which are always passed to handlers
+    // $taxonomy is passed after $request and $template which are always passed to handlers
 } );
 ```
 
@@ -274,7 +274,10 @@ Refer to the Controllers section for more info on route handlers.
 
 ### Route middleware
 
-Middleware allow you to modify the request and/or response before and/or after it reaches the route handler. Middleware can be any callable or the class name of a class that implement `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`).
+Middleware allow you to modify the request and/or response before and/or after it reaches the route handler. Middleware can be any of the following:
+1. any closure (anonymous function)
+1. the class name of a class that implements `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`).
+1. an instance of a class  that implements `MiddlewareInterface`
 
 A common example for middleware usage is protecting certain routes to be accessible by logged in users only:
 
@@ -309,6 +312,8 @@ Router::any( '*' );
 ```
 
 This route defintion will match any url (i.e. any request) and not specifying a handler means that it will be handled as any normal WordPress request. Since all requests are matched this will also apply global middleware to all requests.
+
+Note that this solution has important implications such as forcing all templates to be loaded through the current Obsidian template engine which you have to consider if you are using a different template engine that the default one.
 
 ## Controllers
 
@@ -383,7 +388,41 @@ Returns a blank response object.
 
 ## Flash
 
-TODO
+Flash is a built-in global middleware which allows you to "flash" data to the session for one-time use (this will be familiar if you've used [Symfony's FlashBag](https://symfony.com/doc/current/components/http_foundation/sessions.html#flash-messages) ).
+
+Since Flash uses PHP's `$_SESSION` superglobal by default, you have to ensure it is available:
+```php
+add_action( 'init', function() {
+    session_start();
+} );
+```
+
+You can also replace the usage of `$_SESSION` with a different solution, as long as it implements `ArrayAccess`:
+```php
+$container = \Obsidian\Framework::getContainer();
+$container['framework.session'] = function() {
+    return new OtherSesssionImplementation();
+};
+```
+
+### Usage
+
+A typical use case is to flash error messages inside a controller method in response to a user submitting a form:
+```php
+// inside your controller method
+if ( $email_is_invalid ) {
+    // flash an error message
+    Flash::add( 'errors', 'Please enter a valid email address.' );
+    // reload the page
+    return obs_reload();
+}
+
+// inside your form template
+$errors = Flash::get( 'errors' ); // get AND clear the errors, if any
+foreach ( $errors as $error ) {
+    echo '<p>' . $error . '</p>';
+}
+```
 
 ## OldInput
 
