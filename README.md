@@ -305,7 +305,7 @@ You can also define global middleware which is applied to all defined routes whe
 _Note: global middleware is only applied on defined routes - normal WordPress requests that do not match any route will NOT have middleware applied. To apply global middleware to all requests add this route definition after all your route definitions:_
 
 ```php
-Router::get( '*' );
+Router::any( '*' );
 ```
 
 This route defintion will match any url (i.e. any request) and not specifying a handler means that it will be handled as any normal WordPress request. Since all requests are matched this will also apply global middleware to all requests.
