@@ -7,7 +7,7 @@ use Obsidian\Framework;
 /**
  * Include template files with different engines depending on their filename
  */
-class Filename implements \Obsidian\Templating\EngineInterface {
+class FilenameProxy implements \Obsidian\Templating\EngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *
@@ -37,9 +37,30 @@ class Filename implements \Obsidian\Templating\EngineInterface {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Get the default binding
+	 *
+	 * @return string $binding
 	 */
-	public function render( $file, $context ) {
+	public function getDefaultBinding() {
+		return $this->default;
+	}
+
+	/**
+	 * Get all bindings
+	 *
+	 * @return array  $bindings
+	 */
+	public function getBindings() {
+		return $this->bindings;
+	}
+
+	/**
+	 * Get the engine key binding for a specific file
+	 *
+	 * @param  string $file
+	 * @return string
+	 */
+	public function getBindingForFile( $file ) {
 		$engine_key = $this->default;
 
 		foreach ( $this->bindings as $suffix => $engine ) {
@@ -49,8 +70,15 @@ class Filename implements \Obsidian\Templating\EngineInterface {
 			}
 		}
 
-		$engine_instance = Framework::resolve( $engine_key );
+		return $engine_key;
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function render( $file, $context ) {
+		$engine_key = $this->getBindingForFile( $file );
+		$engine_instance = Framework::resolve( $engine_key );
 		return $engine_instance->render( $file, $context );
 	}
 }
