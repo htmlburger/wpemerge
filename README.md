@@ -453,13 +453,26 @@ function old() {
 ## Service Providers
 
 A service provider is a class that registers and bootstraps services into the Obsidian service container.
+
 Obsidian itself uses service providers to register and bootstrap most of it's functionality, for example:
 - `\Obsidian\Flash\FlashServiceProvider`
 - `\Obsidian\Routing\RoutingServiceProvider`
 
 The external Twig and Blade template implementations also use service providers to add their respective template engines:
-- https://github.com/htmlburger/obsidian-twig: `\ObsidianTwig\Templating\ServiceProvider`
-- https://github.com/htmlburger/obsidian-blade: `\ObsidianBlade\Templating\ServiceProvider`
+- https://github.com/htmlburger/obsidian-twig - `\ObsidianTwig\Templating\ServiceProvider`
+- https://github.com/htmlburger/obsidian-blade - `\ObsidianBlade\Templating\ServiceProvider`
+
+Here's how to register a service provider with Obsidian:
+```php
+\Obsidian\Framework::boot( [
+    'providers' => [
+        SomeServiceProvider::class,
+        SomeOtherServiceProvider::class,
+        // ...
+    ],
+    // ... other boot options here
+] );
+```
 
 ## Templating
 
