@@ -28,7 +28,7 @@ class PostType implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function satisfied( Request $request ) {
-		return $this->post_type === get_post_type();
+		return ( is_singular() && $this->post_type === get_post_type() );
 	}
 
 	/**

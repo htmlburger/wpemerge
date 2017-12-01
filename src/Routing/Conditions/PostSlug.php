@@ -29,7 +29,7 @@ class PostSlug implements ConditionInterface {
 	 */
 	public function satisfied( Request $request ) {
 		$post = get_post();
-		return ( $post && $this->post_slug === $post->post_name );
+		return ( is_singular() && $post && $this->post_slug === $post->post_name );
 	}
 
 	/**
