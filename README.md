@@ -259,8 +259,8 @@ Router::get( '/', 'HomeController@index' );
 
 ... will create a new instance of the `HomeController` class and call its `index` method.
 
-If your controller class is registered in the IoC container with its class name as the key, then the class will be resolved
-from the container instead of directly being instantiated:
+If your controller class is registered in the service container with its class name as the key, then the class will be resolved
+from the service container instead of directly being instantiated:
 
 ```php
 $container = \Obsidian\Framework::getContainer();
@@ -395,44 +395,52 @@ TODO
 
 ## Templating
 
-Obsidian comes with a single template engine built-in - Php.
+Obsidian comes with a default template engine built-in - `\Obsidian\Templating\Php`.
 This template engine uses `extract()` for the template context and then includes the template file.
 The resulting output is then passed as the rendered template string.
 
-Implementing your own or a third-party engine is simple and straightforward - here's an example of how to use Twig:
-
-1. `composer require twig/twig`
-1. Create a new `TwigEngine.php` file
+Implementing your own or a third-party engine is simple and straightforward - there are only a couple requirements:
+1. Your class must implement the `\Obsidian\Templating\EngineInterface` interface
     ```php
-    <?php
-
-    use Obsidian\Templating\EngineInterface;
-
-    class TwigEngine implements EngineInterface {
-        protected $twig = null;
-
-        public function __construct( $twig ) {
-            $this->twig = $twig;
-        }
-
-        public function render( $file, $context ) {
-            $template = $this->twig->load( substr( $file, strlen( ABSPATH ) ) );
-            return $template->render( $context );
-        }
+    class MyCustomTemplateEngine implements \Obsidian\Templating\EngineInterface {
+        ...
     }
     ```
-1. Replace the template engine used immediately after `\Obsidian\Framework::boot()` is called:
+1. You must replace the built-in engine in the service container:
     ```php
-    \Obsidian\Framework::boot();
-
+    // ... somewhere after \Obsidian\Framework::boot()
     $container = \Obsidian\Framework::getContainer();
     $container['framework.templating.engine'] = function() {
-        $loader = new Twig_Loader_Filesystem( ABSPATH );
-        $twig = new Twig_Environment( $loader, array(
-            'cache' => false, // you should add a cache - we're skipping it here for simplicity's sake
-        ) );
-        return new TwigEngine( $twig );
+        return new MyCustomTemplateEngine();
     };
     ```
 
-With the above changes, templates rendered using `obs_template()` will now be processed using Twig instead of the default Php engine.
+### External template engines
+
+#### ObsidianTwig
+
+Renders your templates using Twig: https://github.com/htmlburger/obsidian-twig
+
+#### ObsidianBlade
+
+Renders your templates using Blade: https://github.com/htmlburger/obsidian-blade
+
+### Other built-in template engines
+
+#### FilenameProxy
+
+Obsidian also comes with a small utility template engine which delegates template rendering to other engines depending on the template's filename suffix.
+The main use-case for it is to allow you to use multiple template engines so you can migrate to a new one on a template-by-template basis instead of forcing you to rewrite all of your templates.
+
+Replacing the default template engine:
+```php
+$container = \Obsidian\Framework::getContainer();
+$container['framework.templating.engine'] = function( $container ) {
+    return new \Obsidian\Templating\FilenameProxy( [
+        // filename suffix => service container key for alternative engine
+        '.twig.php' => 'obsidian_twig.templating.engine',
+        '.blade.php' => 'obsidian_blade.templating.engine',
+    ] );
+};
+```
+_Note: the example above assumes you have included both ObsidianTwig and ObsidianBlade. `obsidian_twig.templating.engine` and `obsidian_blade.templating.engine` are not provided by default._
