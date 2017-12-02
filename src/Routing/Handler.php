@@ -13,24 +13,24 @@ class Handler {
 	/**
 	 * Actual handler
 	 *
-	 * @var array|\Closure|null
+	 * @var array|Closure|null
 	 */
 	protected $handler = null;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string|\Closure $handler
+	 * @param string|Closure $handler
 	 */
 	public function __construct( $handler ) {
 		$this->set( $handler );
 	}
 
 	/**
-	 * Parse a handler to a \Closure or a [class, method] array
+	 * Parse a handler to a Closure or a [class, method] array
 	 *
-	 * @param  string|\Closure     $handler
-	 * @return array|\Closure|null
+	 * @param  string|Closure     $handler
+	 * @return array|Closure|null
 	 */
 	protected function parse( $handler ) {
 		if ( $handler instanceof Closure ) {
@@ -47,8 +47,8 @@ class Handler {
 	/**
 	 * Parse a string handler to a [class, method] array
 	 *
-	 * @param  string              $handler
-	 * @return array|\Closure|null
+	 * @param  string     $handler
+	 * @return array|null
 	 */
 	protected function parseFromString( $handler ) {
 		$handlerPieces = preg_split( '/@|::/', $handler, 2 );
@@ -66,7 +66,7 @@ class Handler {
 	/**
 	 * Get the handler
 	 *
-	 * @return array|\Closure|null
+	 * @return array|Closure|null
 	 */
 	public function get() {
 		return $this->handler;
@@ -75,7 +75,7 @@ class Handler {
 	/**
 	 * Set the handler
 	 *
-	 * @param  string|\Closure $new_handler
+	 * @param  string|Closure $new_handler
 	 * @return null
 	 */
 	public function set( $new_handler ) {
