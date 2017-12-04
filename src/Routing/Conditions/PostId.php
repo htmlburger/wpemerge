@@ -6,6 +6,8 @@ use Obsidian\Request;
 
 /**
  * Check against the current post's id
+ *
+ * @codeCoverageIgnore
  */
 class PostId implements ConditionInterface {
 	/**

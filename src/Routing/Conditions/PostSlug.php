@@ -6,6 +6,8 @@ use Obsidian\Request;
 
 /**
  * Check against the current post's slug
+ *
+ * @codeCoverageIgnore
  */
 class PostSlug implements ConditionInterface {
 	/**

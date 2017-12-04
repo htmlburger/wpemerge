@@ -6,6 +6,8 @@ use Obsidian\Request;
 
 /**
  * Check if a certain query var is set
+ *
+ * @codeCoverageIgnore
  */
 class HasQueryVar extends QueryVar {
 	/**

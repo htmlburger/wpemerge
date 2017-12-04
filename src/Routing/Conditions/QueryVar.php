@@ -6,6 +6,8 @@ use Obsidian\Request;
 
 /**
  * Check against a query var value
+ *
+ * @codeCoverageIgnore
  */
 class QueryVar implements ConditionInterface {
 	/**
