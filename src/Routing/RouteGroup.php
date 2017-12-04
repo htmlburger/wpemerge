@@ -46,7 +46,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface, HasMiddlewareInt
 	}
 
 	/**
-	 * Return the first child route which is satisfied
+	 * Get the first child route which is satisfied
 	 *
 	 * @return RouteInterface|null
 	 */

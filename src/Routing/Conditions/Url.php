@@ -89,7 +89,7 @@ class Url implements ConditionInterface {
 	}
 
 	/**
-	 * Return the url for this condition
+	 * Get the url for this condition
 	 *
 	 * @return string
 	 */
@@ -108,7 +108,7 @@ class Url implements ConditionInterface {
 	}
 
 	/**
-	 * Return parameter names as defined in the url
+	 * Get parameter names as defined in the url
 	 *
 	 * @param  string   $url
 	 * @return string[]
@@ -120,7 +120,7 @@ class Url implements ConditionInterface {
 	}
 
 	/**
-	 * Return regex to test whether normal urls match the parameter-based one
+	 * Get regex to test whether normal urls match the parameter-based one
 	 *
 	 * @param  string  $url
 	 * @param  boolean $wrap

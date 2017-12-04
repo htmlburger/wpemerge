@@ -10,7 +10,7 @@ use Obsidian\Middleware\HasMiddlewareInterface;
  */
 interface RouteInterface extends HasMiddlewareInterface {
 	/**
-	 * Return whether the route is satisfied
+	 * Get whether the route is satisfied
 	 *
 	 * @param  Request $request
 	 * @return boolean
@@ -18,7 +18,7 @@ interface RouteInterface extends HasMiddlewareInterface {
 	public function satisfied( Request $request );
 
 	/**
-	 * Return a response for the given request
+	 * Get a response for the given request
 	 *
 	 * @param  Request                             $request
 	 * @param  string                              $template

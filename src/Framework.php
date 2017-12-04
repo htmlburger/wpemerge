@@ -47,7 +47,7 @@ class Framework {
 	];
 
 	/**
-	 * Return whether WordPress is in debug mode
+	 * Get whether WordPress is in debug mode
 	 *
 	 * @return boolean
 	 */
@@ -56,7 +56,7 @@ class Framework {
 	}
 
 	/**
-	 * Return whether the framework has been booted
+	 * Get whether the framework has been booted
 	 *
 	 * @return boolean
 	 */
@@ -78,7 +78,7 @@ class Framework {
 	}
 
 	/**
-	 * Return the IoC container instance
+	 * Get the IoC container instance
 	 *
 	 * @return Container
 	 */
@@ -148,7 +148,8 @@ class Framework {
 	 * Register all service providers
 	 *
 	 * @codeCoverageIgnore
-	 * @param  Container $container
+	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
+	 * @param  Container                                             $container
 	 * @return void
 	 */
 	protected static function registerServiceProviders( $service_providers, $container ) {
@@ -161,7 +162,8 @@ class Framework {
 	 * Boot all service providers
 	 *
 	 * @codeCoverageIgnore
-	 * @param  Container $container
+	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
+	 * @param  Container                                             $container
 	 * @return void
 	 */
 	protected static function bootServiceProviders( $service_providers, $container ) {

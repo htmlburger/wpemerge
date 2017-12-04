@@ -60,7 +60,7 @@ class Response {
 	}
 
 	/**
-	 * Return a response's body stream so it is ready to be read
+	 * Get a response's body stream so it is ready to be read
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface                 $response
@@ -75,7 +75,7 @@ class Response {
 	}
 
 	/**
-	 * Return a response's body's content length
+	 * Get a response's body's content length
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -101,6 +101,7 @@ class Response {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
+	 * @param  integer           $chunk_size
 	 * @return void
 	 */
 	protected static function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
@@ -124,7 +125,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response with the passed string as the body
+	 * Get a cloned response with the passed string as the body
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  string            $output
@@ -169,7 +170,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, resolving and rendering a template as the body
+	 * Get a cloned response, resolving and rendering a template as the body
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  string|string[]   $templates
@@ -192,7 +193,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, json encoding the passed data as the body
+	 * Get a cloned response, json encoding the passed data as the body
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  mixed             $data
@@ -205,7 +206,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, with location and status headers
+	 * Get a cloned response, with location and status headers
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  string            $url
@@ -219,7 +220,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, with location header equal to the current url and status header
+	 * Get a cloned response, with location header equal to the current url and status header
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  \Obsidian\Request $request
@@ -231,7 +232,7 @@ class Response {
 	}
 
 	/**
-	 * Return a cloned response, with status headers and rendering a suitable template as the body
+	 * Get a cloned response, with status headers and rendering a suitable template as the body
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  integer           $status

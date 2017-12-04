@@ -9,7 +9,7 @@ use Obsidian\Request;
  */
 interface ConditionInterface {
 	/**
-	 * Return whether the condition is satisfied
+	 * Get whether the condition is satisfied
 	 *
 	 * @param  Request $request
 	 * @return boolean
@@ -17,7 +17,7 @@ interface ConditionInterface {
 	public function satisfied( Request $request );
 
 	/**
-	 * Return an array of arguments for use in request
+	 * Get an array of arguments for use in request
 	 *
 	 * @param  Request $request
 	 * @return array

@@ -14,7 +14,7 @@ use Obsidian\Routing\Conditions\Url as UrlCondition;
 /**
  * Represent a route
  */
-class Route implements RouteInterface, HasMiddlewareInterface {
+class Route implements RouteInterface {
 	use HasMiddlewareTrait;
 
 	/**

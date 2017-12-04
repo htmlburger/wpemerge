@@ -41,7 +41,7 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Add middleware
+	 * Add middleware.
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
@@ -61,10 +61,11 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Alias for addMiddleware
+	 * Alias for addMiddleware.
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|\Closure|\Obsidian\Middleware\middlewareInterface|array $middleware
+	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function add( $middleware ) {

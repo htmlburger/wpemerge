@@ -79,7 +79,7 @@ class Request {
 	}
 
 	/**
-	 * Return the request method
+	 * Get the request method
 	 *
 	 * @return string
 	 */
@@ -95,7 +95,7 @@ class Request {
 	}
 
 	/**
-	 * Return the request url
+	 * Get the request url
 	 *
 	 * @return string
 	 */
@@ -111,7 +111,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from any of the request parameters
+	 * Get a value from any of the request parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -129,7 +129,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the GET parameters
+	 * Get a value from the GET parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -139,7 +139,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the POST parameters
+	 * Get a value from the POST parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -149,7 +149,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the COOKIE parameters
+	 * Get a value from the COOKIE parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -159,7 +159,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the FILES parameters
+	 * Get a value from the FILES parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -169,7 +169,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the SERVER parameters
+	 * Get a value from the SERVER parameters
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed
@@ -179,7 +179,7 @@ class Request {
 	}
 
 	/**
-	 * Return a value from the headers
+	 * Get a value from the headers
 	 *
 	 * @see  \Obsidian\Support\Arr
 	 * @return mixed

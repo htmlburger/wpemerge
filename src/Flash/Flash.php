@@ -40,7 +40,7 @@ class Flash {
 	}
 
 	/**
-	 * Return whether a storage object is valid
+	 * Get whether a storage object is valid
 	 *
 	 * @param  mixed   $storage
 	 * @return boolean
@@ -90,7 +90,7 @@ class Flash {
 	}
 
 	/**
-	 * Return whether the flash service is enabled
+	 * Get whether the flash service is enabled
 	 *
 	 * @return boolean
 	 */

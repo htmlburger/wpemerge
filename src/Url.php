@@ -9,7 +9,7 @@ use Obsidian\Request;
  */
 class Url {
 	/**
-	 * Return the current path relative to the home url
+	 * Get the current path relative to the home url
 	 *
 	 * @return string
 	 */

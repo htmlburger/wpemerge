@@ -17,7 +17,7 @@ class OldInput {
 	const FLASH_KEY = '__obsidianOldInput';
 
 	/**
-	 * Return all previously flashed request data
+	 * Get all previously flashed request data
 	 *
 	 * @return array
 	 */
@@ -26,7 +26,7 @@ class OldInput {
 	}
 
 	/**
-	 * Return any previously flashed request data value
+	 * Get any previously flashed request data value
 	 *
 	 * @see Arr::get()
 	 */
