@@ -24,6 +24,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Hook into WordPress actions
 	 *
+	 * @codeCoverageIgnore
 	 * @return void
 	 */
 	public function boot() {
@@ -34,6 +35,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Register route rewrite rules with WordPress
 	 *
+	 * @codeCoverageIgnore
 	 * @return void
 	 */
 	public function registerRewriteRules() {
@@ -60,7 +62,7 @@ class Router implements HasRoutesInterface {
 
 		foreach ( $routes as $route ) {
 			if ( $route->satisfied( $request ) ) {
-				$this->current_route = $route;
+				$this->setCurrentRoute( $route );
 				return $this->handle( $request, $route, $template );
 			}
 		}
@@ -100,5 +102,14 @@ class Router implements HasRoutesInterface {
 	 */
 	public function getCurrentRoute() {
 		return $this->current_route;
+	}
+
+	/**
+	 * Set the current route
+	 *
+	 * @param RouteInterface
+	 */
+	public function setCurrentRoute( RouteInterface $current_route ) {
+		$this->current_route = $current_route;
 	}
 }
