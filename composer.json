@@ -1,6 +1,6 @@
 {
     "name": "htmlburger/obsidian",
-    "description": "WordPress MVC micro-framework for theme development.",
+    "description": "A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.",
     "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "obsidian"],
     "license": "GPL-2.0",
     "homepage": "https://github.com/htmlburger/obsidian",
