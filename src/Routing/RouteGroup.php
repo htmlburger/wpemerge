@@ -5,12 +5,11 @@ namespace Obsidian\Routing;
 use Closure;
 use Exception;
 use Obsidian\Middleware\HasMiddlewareTrait;
-use Obsidian\Middleware\HasMiddlewareInterface;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\Routing\Conditions\Url as UrlCondition;
 
-class RouteGroup implements RouteInterface, HasRoutesInterface, HasMiddlewareInterface {
+class RouteGroup implements RouteInterface, HasRoutesInterface {
 	use HasRoutesTrait {
 		route as traitRoute;
 	}

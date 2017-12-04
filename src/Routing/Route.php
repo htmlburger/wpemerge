@@ -4,7 +4,6 @@ namespace Obsidian\Routing;
 
 use Exception;
 use Obsidian\Middleware\HasMiddlewareTrait;
-use Obsidian\Middleware\HasMiddlewareInterface;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\Routing\Conditions\Factory;
