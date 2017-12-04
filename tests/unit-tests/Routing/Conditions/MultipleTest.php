@@ -15,12 +15,12 @@ class MultipleTest extends WP_UnitTestCase {
      */
     public function testConstruct() {
         $condition1 = new Custom( '__return_true' );
-        $condition2 = new Custom( '__return_false' );
+        $condition2 = function() { return false; };
         $request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
         $subject = new Multiple( [$condition1, $condition2] );
 
-        $this->assertEquals( [$condition1, $condition2], $subject->getConditions() );
+        $this->assertEquals( [$condition1, new Custom( $condition2 )], $subject->getConditions() );
         $this->assertEquals( [], $subject->getArguments( $request ) );
     }
 

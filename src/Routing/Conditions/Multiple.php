@@ -21,7 +21,12 @@ class Multiple implements ConditionInterface {
 	 * @param array $conditions
 	 */
 	public function __construct( $conditions ) {
-		$this->conditions = array_map( [Factory::class, 'make'], $conditions );
+		$this->conditions = array_map( function( $condition ) {
+			if ( is_a( $condition, ConditionInterface::class ) ) {
+				return $condition;
+			}
+			return Factory::make( $condition );
+		}, $conditions );
 	}
 
 	/**

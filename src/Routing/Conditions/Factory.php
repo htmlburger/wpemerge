@@ -2,12 +2,12 @@
 
 namespace Obsidian\Routing\Conditions;
 
+use Closure;
+use Exception;
 use Obsidian\Framework;
 use Obsidian\Routing\Conditions\Custom as CustomCondition;
 use Obsidian\Routing\Conditions\Multiple as MultipleCondition;
 use Obsidian\Routing\Conditions\Url as UrlCondition;
-use Closure;
-use Exception;
 use ReflectionClass;
 
 /**
@@ -31,10 +31,6 @@ class Factory {
 
 		if ( is_a( $options, Closure::class ) ) {
 			return static::makeFromClosure( $options );
-		}
-
-		if ( is_a( $options, ConditionInterface::class ) ) {
-			return $options;
 		}
 
 		throw new InvalidRouteConditionException( 'Invalid condition options supplied.' );
