@@ -69,7 +69,7 @@ class Framework {
 	 *
 	 * @codeCoverageIgnore
 	 * @throws Exception
-	 * @return null
+	 * @return void
 	 */
 	protected static function verifyBoot() {
 		if ( ! static::isBooted() ) {
@@ -98,7 +98,7 @@ class Framework {
 	 * @codeCoverageIgnore
 	 * @param  array     $config
 	 * @throws Exception
-	 * @return null
+	 * @return void
 	 */
 	public static function boot( $config = [] ) {
 		if ( static::isBooted() ) {
@@ -128,7 +128,7 @@ class Framework {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Container $container
-	 * @return null
+	 * @return void
 	 */
 	protected static function loadServiceProviders( $container ) {
 		$container['framework.service_providers'] = apply_filters(
@@ -149,7 +149,7 @@ class Framework {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Container $container
-	 * @return null
+	 * @return void
 	 */
 	protected static function registerServiceProviders( $service_providers, $container ) {
 		foreach ( $service_providers as $provider ) {
@@ -162,7 +162,7 @@ class Framework {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Container $container
-	 * @return null
+	 * @return void
 	 */
 	protected static function bootServiceProviders( $service_providers, $container ) {
 		foreach ( $service_providers as $provider ) {
@@ -175,7 +175,7 @@ class Framework {
 	 *
 	 * @param  string $alias
 	 * @param  string $facade_class
-	 * @return null
+	 * @return void
 	 */
 	public static function facade( $alias, $facade_class ) {
 		AliasLoader::getInstance()->alias( $alias, $facade_class );
@@ -220,7 +220,7 @@ class Framework {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
-	 * @return null
+	 * @return void
 	 */
 	public static function respond( ResponseInterface $response ) {
 		Response::respond( $response );

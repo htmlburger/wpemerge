@@ -53,7 +53,7 @@ class Flash {
 	 * Throw an exception if storage is not valid
 	 *
 	 * @throws Exception
-	 * @return null
+	 * @return void
 	 */
 	protected function validateStorage() {
 		if ( ! $this->isValidStorage( $this->storage ) ) {
@@ -74,7 +74,7 @@ class Flash {
 	 * Set the storage for flash messages
 	 *
 	 * @param  array|\ArrayAccess $storage
-	 * @return null
+	 * @return void
 	 */
 	public function setStorage( &$storage ) {
 		if ( ! $this->isValidStorage( $storage ) ) {
@@ -153,7 +153,7 @@ class Flash {
 	 * Clear the entire storage or the values for a key
 	 *
 	 * @param  string|null $key
-	 * @return null
+	 * @return void
 	 */
 	public function clear( $key = null ) {
 		$this->validateStorage();

@@ -26,7 +26,7 @@ class Response {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
-	 * @return null
+	 * @return void
 	 */
 	public static function respond( ResponseInterface $response ) {
 		if ( ! headers_sent() ) {
@@ -40,7 +40,7 @@ class Response {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
-	 * @return null
+	 * @return void
 	 */
 	protected static function sendHeaders( ResponseInterface $response ) {
 		// Status
@@ -101,7 +101,7 @@ class Response {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
-	 * @return null
+	 * @return void
 	 */
 	protected static function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
 		$body = static::getBody( $response );

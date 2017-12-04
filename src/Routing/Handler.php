@@ -76,7 +76,7 @@ class Handler {
 	 * Set the handler
 	 *
 	 * @param  string|Closure $new_handler
-	 * @return null
+	 * @return void
 	 */
 	public function set( $new_handler ) {
 		$handler = $this->parse( $new_handler );

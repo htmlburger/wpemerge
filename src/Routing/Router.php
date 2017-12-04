@@ -11,7 +11,7 @@ use Obsidian\Response as FrameworkResponse;
 /**
  * Provide routing
  */
-class Router {
+class Router implements HasRoutesInterface {
 	use HasRoutesTrait;
 
 	/**
@@ -24,7 +24,7 @@ class Router {
 	/**
 	 * Hook into WordPress actions
 	 *
-	 * @return null
+	 * @return void
 	 */
 	public function boot() {
 		add_action( 'init', array( $this, 'registerRewriteRules' ), 1000 );
@@ -34,7 +34,7 @@ class Router {
 	/**
 	 * Register route rewrite rules with WordPress
 	 *
-	 * @return null
+	 * @return void
 	 */
 	public function registerRewriteRules() {
 		$rules = apply_filters( 'obsidian.routing.rewrite_rules', [] );

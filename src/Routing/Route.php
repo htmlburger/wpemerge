@@ -4,6 +4,7 @@ namespace Obsidian\Routing;
 
 use Exception;
 use Obsidian\Middleware\HasMiddlewareTrait;
+use Obsidian\Middleware\HasMiddlewareInterface;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\Routing\Conditions\Factory;
@@ -13,7 +14,7 @@ use Obsidian\Routing\Conditions\Url as UrlCondition;
 /**
  * Represent a route
  */
-class Route implements RouteInterface {
+class Route implements RouteInterface, HasMiddlewareInterface {
 	use HasMiddlewareTrait;
 
 	/**
