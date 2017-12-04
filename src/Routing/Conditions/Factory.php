@@ -33,6 +33,10 @@ class Factory {
 			return static::makeFromClosure( $options );
 		}
 
+		if ( is_a( $options, ConditionInterface::class ) ) {
+			return $options;
+		}
+
 		throw new InvalidRouteConditionException( 'Invalid condition options supplied.' );
 	}
 
