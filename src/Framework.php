@@ -52,7 +52,9 @@ class Framework {
 	 * @return boolean
 	 */
 	public static function debugging() {
-		return ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+		$debugging = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+		$debugging = apply_filters( 'obsidian.debug', $debugging );
+		return $debugging;
 	}
 
 	/**

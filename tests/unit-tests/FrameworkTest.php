@@ -11,8 +11,9 @@ class FrameworkTest extends WP_UnitTestCase {
      * @covers ::debugging
      */
     public function testDebugging() {
-        $this->assertEquals( true, Framework::debugging() );
-        // can't test for false since WP_DEBUG constant is predefined during testing
+        $this->assertTrue( Framework::debugging() );
+        add_filter( 'obsidian.debug', '__return_false' );
+        $this->assertFalse( Framework::debugging() );
     }
 
     /**

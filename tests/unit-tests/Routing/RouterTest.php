@@ -112,10 +112,35 @@ class RouterTest extends WP_UnitTestCase {
     /**
      * @covers ::execute
      * @covers ::handle
+     */
+    public function testExecute_InvalidResponse_ReturnErrorResponse() {
+        $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+
+        $route->shouldReceive( 'satisfied' )
+            ->andReturn( true )
+            ->once();
+
+        $route->shouldReceive( 'handle' )
+            ->andReturn( new stdClass() )
+            ->once();
+
+        $this->subject->addRoute( $route );
+
+        add_filter( 'obsidian.debug', '__return_false' );
+
+        $this->subject->execute( '' );
+
+        $response = apply_filters( 'obsidian.response', null );
+        $this->assertEquals( 500, $response->getStatusCode() );
+    }
+
+    /**
+     * @covers ::execute
+     * @covers ::handle
      * @expectedException \Exception
      * @expectedExceptionMessage Response returned by controller is not valid
      */
-    public function testExecute_InvalidResponse_ThrowsException() {
+    public function testExecute_DebugInvalidResponse_ThrowsException() {
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
         $route->shouldReceive( 'satisfied' )
