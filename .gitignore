@@ -1,2 +1,8 @@
+# wordpress test environment
 tmp/
+
+# composer
 vendor/
+
+# sami docs
+docs/
