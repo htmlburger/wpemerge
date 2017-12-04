@@ -1,6 +1,75 @@
 # Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master)
 
-Obsidian is a micro framework for WordPress which provides tools for *VC and routing.
+Obsidian is a micro framework for WordPress themes which provides tools for MVC and routing.
+Integration is incremental - you can use it only on the pages you want or on all pages.
+
+## Features
+
+- Routes with optional rewrite rule integration
+    ```php
+    Router::get( '/', 'HomeController@index' );
+    Router::get( '/custom', 'HomeController@custom' )
+        ->rewrite( 'index.php?...' );
+    ```
+- __Real__ Controllers (not ViewModels)
+    ```php
+    class HomeController {
+        public function index( $request ) {
+            $name = $request->get( 'name' );
+            return obs_template( 'templates/home.php', [
+                'welcome' => 'Welcome, ' . $name . '!',
+            ] );
+        }
+    }
+    ```
+- [PSR-7](http://www.php-fig.org/psr/psr-7/) Responses (using [Guzzle/Psr7](https://github.com/guzzle/psr7))
+    ```php
+    class HomeController {
+        public function index( $request ) {
+            return obs_response()
+                ->withHeader( 'X-Custom-Header', 'foo' );
+        }
+    }
+    ```
+- Middleware
+    ```php
+    Router::get( '/', 'HomeController@index' )
+        ->add( function( $request, $next ) {
+            // perform action before
+            $response = $next( $request );
+            // perform action after
+            return $response;
+        } );
+    ```
+- Service container (using [Pimple](https://pimple.symfony.com/))
+    ```php
+    $container = \Obsidian\Framework::getContainer();
+    $container['my_service'] = function() {
+        return new MyService();
+    };
+    ```
+- Service providers
+    ```php
+    class MyServiceProvider implements ServiceProviderInterface {
+        public function register( $container ) {
+            $container['my_service'] = function() {
+                return new MyService();
+            };
+        }
+
+        public function boot( $container ) {
+            // bootstrap code
+            // e.g. add hooks, actions etc.
+        }
+    }
+    ```
+- Custom template engine support (Twig and Blade available as add-on packages)
+    ```php
+    $container = \Obsidian\Framework::getContainer();
+    $container['framework.templating.engine'] = function( $container ) {
+        return new MyTemplateEngine();
+    };
+    ```
 
 ## Quickstart
 
@@ -240,7 +309,7 @@ Route::get( [
 
 ### Route groups
 
-You can group URL-based routes into nested groups which will share the group url as a prefix:
+You can group URL-based routes into nested groups which will share the group url as a prefix as well as any middleware assigned to the group:
 
 ```php
 Route::group( '/foo/', function( $group ) {
@@ -285,7 +354,9 @@ A common example for middleware usage is protecting certain routes to be accessi
 class AuthenticationMiddleware implements \Obsidian\Middleware\MiddlewareInterface {
     public function handle( $request, Closure $next ) {
         if ( ! is_user_logged_in() ) {
-            return obs_redirect( wp_login_url() );
+            $return_url = $request->getUrl();
+            $login_url = wp_login_url( $return_url );
+            return obs_redirect( $login_url );
         }
         return $next( $request );
     }
