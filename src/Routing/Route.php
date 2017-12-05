@@ -62,7 +62,7 @@ class Route implements RouteInterface {
 	/**
 	 * Get allowed methods
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public function getMethods() {
 		return $this->methods;
