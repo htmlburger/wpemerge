@@ -106,7 +106,6 @@ class Framework {
 		if ( static::isBooted() ) {
 			throw new Exception( get_called_class() . ' already booted.' );
 		}
-		static::$booted = true;
 
 		$container = static::getContainer();
 
@@ -123,6 +122,8 @@ class Framework {
 		AliasLoader::getInstance()->register();
 
 		static::loadServiceProviders( $container );
+
+		static::$booted = true;
 	}
 
 	/**

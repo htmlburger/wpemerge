@@ -3,7 +3,10 @@
 namespace Obsidian\Routing;
 
 use Obsidian\Framework;
+use Obsidian\Extend;
+use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
+use Pimple\Container;
 
 /**
  * Provide routing dependencies
@@ -16,7 +19,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @var string[string]
 	 */
-	protected static $condition_classes = [
+	protected static $condition_extensions = [
 		'url' => \Obsidian\Routing\Conditions\Url::class,
 		'custom' => \Obsidian\Routing\Conditions\Custom::class,
 		'multiple' => \Obsidian\Routing\Conditions\Multiple::class,
@@ -29,6 +32,31 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	];
 
 	/**
+	 * Register framework extensions
+	 *
+	 * @param  array $condition_extensions
+	 * @return void
+	 */
+	protected function registerExtensions( $condition_extensions ) {
+		foreach ( $condition_extensions as $name => $class_name ) {
+			Extend::routeCondition( $name, $class_name );
+		}
+	}
+
+	/**
+	 * Register route conditions
+	 *
+	 * @param  Container $container
+	 * @param  array     $conditions
+	 * @return void
+	 */
+	protected function registerRouteConditions( Container $container, $conditions ) {
+		foreach ( $conditions as $name => $class_name ) {
+			$container[ 'framework.routing.conditions.' . $name ] = $class_name;
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
@@ -36,21 +64,19 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			'global_middleware' => [],
 		], $container['framework.config'] );
 
-		$container['framework.routing.global_middleware'] = $container['framework.config']['global_middleware'];
 		$container['framework.routing.global_middleware'] = apply_filters(
 			'obsidian.global_middleware',
-			$container['framework.routing.global_middleware']
+			$container['framework.config']['global_middleware']
 		);
 
-		foreach ( static::$condition_classes as $key => $class ) {
-			$container[ 'framework.routing.conditions.' . $key ] = $class;
-		}
-
 		$container['framework.routing.router'] = function() {
-			return new \Obsidian\Routing\Router();
+			return new Router();
 		};
 
-		Framework::facade( 'Router', \Obsidian\Routing\RouterFacade::class );
+		Framework::facade( 'Router', RouterFacade::class );
+
+		$this->registerExtensions( static::$condition_extensions );
+		$this->registerRouteConditions( $container, Extend::get( ConditionInterface::class ) );
 	}
 
 	/**
