@@ -5,7 +5,7 @@ namespace Obsidian\Routing\Conditions;
 use Obsidian\Request;
 
 /**
- * Check against a custom callable
+ * Check against an array of conditions in an AND logical relationship
  */
 class Multiple implements ConditionInterface {
 	/**
