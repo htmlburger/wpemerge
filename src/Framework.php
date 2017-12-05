@@ -124,6 +124,7 @@ class Framework {
 	/**
 	 * Load config into the service container
 	 *
+	 * @codeCoverageIgnore
 	 * @param  Container $container
 	 * @param  array     $config
 	 * @return void
