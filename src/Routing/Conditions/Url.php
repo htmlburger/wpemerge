@@ -57,7 +57,7 @@ class Url implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function satisfied( Request $request ) {
-		if ( $this->url === static::WILDCARD ) {
+		if ( $this->getUrl() === static::WILDCARD ) {
 			return true;
 		}
 
