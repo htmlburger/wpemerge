@@ -57,11 +57,11 @@ trait HasRoutesTrait {
 	 * Create and add a route group
 	 *
 	 * @param  string         $target
-	 * @param  Closure        $callable
+	 * @param  Closure        $closure
 	 * @return RouteInterface
 	 */
-	public function group( $target, Closure $callable ) {
-		$routeGroup = new RouteGroup( $target, $callable );
+	public function group( $target, Closure $closure ) {
+		$routeGroup = new RouteGroup( $target, $closure );
 		return $this->addRoute( $routeGroup );
 	}
 

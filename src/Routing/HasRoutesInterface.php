@@ -37,10 +37,10 @@ interface HasRoutesInterface {
 	 * Create and add a route group
 	 *
 	 * @param  string         $target
-	 * @param  Closure        $callable
+	 * @param  Closure        $closure
 	 * @return RouteInterface
 	 */
-	public function group( $target, Closure $callable );
+	public function group( $target, Closure $closure );
 
 	/**
 	 * Create and add a route for the GET and HEAD methods

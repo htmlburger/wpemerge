@@ -28,9 +28,9 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * Constructor
 	 *
 	 * @param string|ConditionInterface $target
-	 * @param Closure                   $callable
+	 * @param Closure                   $closure
 	 */
-	public function __construct( $target, Closure $callable ) {
+	public function __construct( $target, Closure $closure ) {
 		if ( is_string( $target ) ) {
 			$target = new UrlCondition( $target );
 		}
@@ -41,7 +41,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 
 		$this->target = $target;
 
-		$callable( $this );
+		$closure( $this );
 	}
 
 	/**
