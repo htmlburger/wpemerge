@@ -33,7 +33,7 @@ class Route implements RouteInterface {
 	/**
 	 * Route handler
 	 *
-	 * @var Handler|null
+	 * @var Handler
 	 */
 	protected $handler = null;
 
@@ -57,6 +57,33 @@ class Route implements RouteInterface {
 		$this->methods = $methods;
 		$this->target = $target;
 		$this->handler = new Handler( $handler );
+	}
+
+	/**
+	 * Get allowed methods
+	 *
+	 * @return array
+	 */
+	public function getMethods() {
+		return $this->methods;
+	}
+
+	/**
+	 * Get target
+	 *
+	 * @return ConditionInterface
+	 */
+	public function getTarget() {
+		return $this->target;
+	}
+
+	/**
+	 * Get handler
+	 *
+	 * @return Handler
+	 */
+	public function getHandler() {
+		return $this->handler;
 	}
 
 	/**
