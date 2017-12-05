@@ -9,7 +9,7 @@ use Obsidian\Request;
 use Obsidian\Response as FrameworkResponse;
 
 /**
- * Provide routing
+ * Provide routing for site requests (i.e. all non-api requests)
  */
 class Router implements HasRoutesInterface {
 	use HasRoutesTrait;
@@ -107,9 +107,23 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Set the current route
 	 *
-	 * @param RouteInterface
+	 * @param  RouteInterface
+	 * @return void
 	 */
 	public function setCurrentRoute( RouteInterface $current_route ) {
 		$this->current_route = $current_route;
+	}
+
+	/**
+	 * Handle ALL requests
+	 *
+	 * @param  string|Closure|null $handler
+	 * @return RouteInterface
+	 */
+	public function handleAll( $handler = null ) {
+		// match ANY request method
+		// match ANY url
+		// by default, use built-in WordPress controller
+		return $this->any( '*', $handler );
 	}
 }

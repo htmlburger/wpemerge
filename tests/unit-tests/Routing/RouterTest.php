@@ -201,4 +201,15 @@ class RouterTest extends WP_UnitTestCase {
 
         $this->assertSame( $expected, $this->subject->execute( '' ) );
     }
+
+    /**
+     * @covers ::handleAll
+     */
+    public function testHandleAll() {
+        $expected = $this->subject->any( '*' );
+
+        $result = $this->subject->handleAll();
+
+        $this->assertEquals( $expected, $result );
+    }
 }
