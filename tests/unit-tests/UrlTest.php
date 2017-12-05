@@ -7,39 +7,39 @@ use Obsidian\Url;
  */
 class UrlTest extends WP_UnitTestCase {
     /**
-     * @covers ::getCurrentPath
+     * @covers ::getPath
      */
-    public function testGetCurrentPath_Home_Slash() {
+    public function testGetPath_Home_Slash() {
         $expected = '/';
 
         $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/' );
 
-        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
     }
 
     /**
-     * @covers ::getCurrentPath
+     * @covers ::getPath
      */
-    public function testGetCurrentPath_Subpage_RelativePath() {
+    public function testGetPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
 
         $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/' );
 
-        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
     }
 
     /**
-     * @covers ::getCurrentPath
+     * @covers ::getPath
      */
-    public function testGetCurrentPath_QueryString_StripsQueryString() {
+    public function testGetPath_QueryString_StripsQueryString() {
         $expected = '/foo/bar/';
 
         $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
         $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
 
-        $this->assertEquals( $expected, Url::getCurrentPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
     }
 
     /**

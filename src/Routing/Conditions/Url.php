@@ -24,13 +24,13 @@ class Url implements ConditionInterface {
 	 * @var string
 	 */
 	protected $url_regex = '~
-		(?<=/)                    # lookbehind for a slash
+		(?:/)                     # match leading slash
 		(?:\{)                    # require opening curly brace
 			(?P<name>[a-z]\w*)    # require a string starting with a-z and followed by any number of word characters for the parameter name
 			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using literal ?
 			(?::(?P<regex>.*?))?  # optionally allow the user to supply a regex to match the argument against
 		(?:\})                    # require closing curly brace
-		(?=/)                     # lookahead for a slash
+		(?=/)                     # lookahead for a trailing slash
 	~ix';
 
 	/**
@@ -62,7 +62,7 @@ class Url implements ConditionInterface {
 		}
 
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = UrlUtility::getCurrentPath( $request );
+		$url = UrlUtility::getPath( $request );
 		return (bool) preg_match( $validation_regex, $url );
 	}
 
@@ -71,7 +71,7 @@ class Url implements ConditionInterface {
 	 */
 	public function getArguments( Request $request ) {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
-		$url = UrlUtility::getCurrentPath( $request );
+		$url = UrlUtility::getPath( $request );
 		$matches = [];
 		$success = preg_match( $validation_regex, $url, $matches );
 
@@ -134,9 +134,9 @@ class Url implements ConditionInterface {
 			$name = $matches['name'];
 			$optional = ! empty( $matches['optional'] );
 			$regex = ! empty( $matches['regex'] ) ? $matches['regex'] : $this->parameter_regex;
-			$replacement = '(?P<' . $name . '>' . $regex . ')';
+			$replacement = '/(?P<' . $name . '>' . $regex . ')';
 			if ( $optional ) {
-				$replacement .= '?';
+				$replacement = '(?:' . $replacement . ')?';
 			}
 
 			$placeholder = '___placeholder_' . sha1( count( $parameters) . '_' . $replacement . '_' . uniqid() ) . '___';

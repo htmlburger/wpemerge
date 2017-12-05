@@ -9,11 +9,11 @@ use Obsidian\Request;
  */
 class Url {
 	/**
-	 * Get the current path relative to the home url
+	 * Get the path for the request relative to the home url
 	 *
 	 * @return string
 	 */
-	public static function getCurrentPath( Request $request ) {
+	public static function getPath( Request $request ) {
 		$url = $request->getUrl();
 		$relative_url = substr( $url, strlen( home_url( '/' ) ) );
 		$relative_url = static::addLeadingSlash( $relative_url );
