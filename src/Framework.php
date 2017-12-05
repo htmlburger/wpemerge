@@ -107,6 +107,8 @@ class Framework {
 			throw new Exception( get_called_class() . ' already booted.' );
 		}
 
+		do_action( 'obsidian.booting' );
+
 		$container = static::getContainer();
 
 		$container['framework.config'] = array_merge( [
@@ -124,6 +126,8 @@ class Framework {
 		static::loadServiceProviders( $container );
 
 		static::$booted = true;
+
+		do_action( 'obsidian.booted' );
 	}
 
 	/**
