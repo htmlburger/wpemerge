@@ -32,6 +32,7 @@ class Extend {
 	/**
 	 * Set extension for type, with name and class name
 	 *
+	 * @throws Exception
 	 * @param  string $type
 	 * @param  string $name
 	 * @param  string $class_name

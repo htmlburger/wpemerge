@@ -73,6 +73,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Execute a route
 	 *
+	 * @throws Exception
 	 * @param  Request        $request
 	 * @param  RouteInterface $route
 	 * @param  string         $template

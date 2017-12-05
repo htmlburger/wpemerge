@@ -27,8 +27,9 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * Constructor
 	 *
-	 * @param string|ConditionInterface $target
-	 * @param Closure                   $closure
+	 * @throws Exception
+	 * @param  string|ConditionInterface $target
+	 * @param  Closure                   $closure
 	 */
 	public function __construct( $target, Closure $closure ) {
 		if ( is_string( $target ) ) {

@@ -17,7 +17,8 @@ class Factory {
 	/**
 	 * Create a new condition
 	 *
-	 * @param  string|array|Closure $options
+	 * @throws InvalidRouteConditionException
+	 * @param  string|array|Closure           $options
 	 * @return ConditionInterface
 	 */
 	public static function make( $options ) {
@@ -54,6 +55,7 @@ class Factory {
 	/**
 	 * Resolve the condition type and its arguments from an options array
 	 *
+	 * @throws Exception
 	 * @param  array $options
 	 * @return array
 	 */
@@ -99,6 +101,7 @@ class Factory {
 	/**
 	 * Create a new condition from an array
 	 *
+	 * @throws Exception
 	 * @param  array               $options
 	 * @return ConditionInterface
 	 */

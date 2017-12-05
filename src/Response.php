@@ -172,6 +172,7 @@ class Response {
 	/**
 	 * Get a cloned response, resolving and rendering a template as the body
 	 *
+	 * @throws Exception
 	 * @param  ResponseInterface $response
 	 * @param  string|string[]   $templates
 	 * @param  array             $context

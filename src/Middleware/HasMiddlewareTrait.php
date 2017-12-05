@@ -44,6 +44,7 @@ trait HasMiddlewareTrait {
 	 * Add middleware.
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
+	 * @throws Exception
 	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */

@@ -40,9 +40,10 @@ class Route implements RouteInterface {
 	/**
 	 * Constructor
 	 *
-	 * @param string[]        $methods
-	 * @param mixed           $target
-	 * @param string|\Closure $handler
+	 * @throws Exception
+	 * @param  string[]        $methods
+	 * @param  mixed           $target
+	 * @param  string|\Closure $handler
 	 */
 	public function __construct( $methods, $target, $handler ) {
 		if ( ! is_a( $target, ConditionInterface::class ) ) {
@@ -81,8 +82,9 @@ class Route implements RouteInterface {
 	/**
 	 * Add a rewrite rule to WordPress for url-based routes
 	 *
-	 * @param  string $rewrite_to
-	 * @return static $this
+	 * @throws Exception
+	 * @param  string    $rewrite_to
+	 * @return static    $this
 	 */
 	public function rewrite( $rewrite_to ) {
 		if ( ! is_a( $this->target, UrlCondition::class ) ) {

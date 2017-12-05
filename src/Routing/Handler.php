@@ -75,6 +75,7 @@ class Handler {
 	/**
 	 * Set the handler
 	 *
+	 * @throws Exception
 	 * @param  string|Closure $new_handler
 	 * @return void
 	 */
