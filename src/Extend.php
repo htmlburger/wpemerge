@@ -8,6 +8,8 @@ use Obsidian\Routing\Conditions\ConditionInterface;
 
 /**
  * Extend built-in functionality
+ *
+ * @codeCoverageIgnore
  */
 class Extend {
 	/**
