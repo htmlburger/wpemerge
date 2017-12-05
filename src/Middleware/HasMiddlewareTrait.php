@@ -45,7 +45,7 @@ trait HasMiddlewareTrait {
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @return static                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
 		$middleware = Mixed::toArray( $middleware );
@@ -66,7 +66,7 @@ trait HasMiddlewareTrait {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @return static                                                         $this
 	 */
 	public function add( $middleware ) {
 		return call_user_func_array( [$this, 'addMiddleware'], func_get_args() );

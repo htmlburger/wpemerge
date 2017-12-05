@@ -82,7 +82,7 @@ class Route implements RouteInterface {
 	 * Add a rewrite rule to WordPress for url-based routes
 	 *
 	 * @param  string $rewrite_to
-	 * @return RouteInterface
+	 * @return static $this
 	 */
 	public function rewrite( $rewrite_to ) {
 		if ( ! is_a( $this->target, UrlCondition::class ) ) {
