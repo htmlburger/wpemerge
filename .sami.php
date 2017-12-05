@@ -11,7 +11,7 @@ $dir = __DIR__ . DS . $relative_dir;
 $documentation_dir = __DIR__ . DS . 'docs';
 
 $versions = GitVersionCollection::create($dir)
-    ->addFromTags('0.2.*')
+    // ->addFromTags('1.0.*')
     ->add('master', 'master branch');
 
 return new \Sami\Sami( $dir, [
