@@ -110,24 +110,29 @@ class Framework {
 		do_action( 'obsidian.booting' );
 
 		$container = static::getContainer();
-
-		$container['framework.config'] = array_merge( [
-			'providers' => [],
-		], $config );
-
-		$container['framework.service_providers'] = array_merge(
-			static::$service_proviers,
-			$container['framework.config']['providers']
-		);
-
 		Facade::setFacadeApplication( $container );
 		AliasLoader::getInstance()->register();
 
+		static::loadConfig( $container, $config );
 		static::loadServiceProviders( $container );
 
 		static::$booted = true;
 
 		do_action( 'obsidian.booted' );
+	}
+
+	/**
+	 * Load config into the service container
+	 *
+	 * @param  Container $container
+	 * @param  array     $config
+	 * @return void
+	 */
+	protected static function loadConfig( Container $container, $config ) {
+		$container = static::getContainer();
+		$container['framework.config'] = array_merge( [
+			'providers' => [],
+		], $config );
 	}
 
 	/**
@@ -137,7 +142,12 @@ class Framework {
 	 * @param  Container $container
 	 * @return void
 	 */
-	protected static function loadServiceProviders( $container ) {
+	protected static function loadServiceProviders( Container $container ) {
+		$container['framework.service_providers'] = array_merge(
+			static::$service_proviers,
+			$container['framework.config']['providers']
+		);
+
 		$container['framework.service_providers'] = apply_filters(
 			'obsidian.service_providers',
 			$container['framework.service_providers']
@@ -159,7 +169,7 @@ class Framework {
 	 * @param  Container                                             $container
 	 * @return void
 	 */
-	protected static function registerServiceProviders( $service_providers, $container ) {
+	protected static function registerServiceProviders( $service_providers, Container $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->register( $container );
 		}
@@ -173,7 +183,7 @@ class Framework {
 	 * @param  Container                                             $container
 	 * @return void
 	 */
-	protected static function bootServiceProviders( $service_providers, $container ) {
+	protected static function bootServiceProviders( $service_providers, Container $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->boot( $container );
 		}
