@@ -2,8 +2,8 @@
 
 namespace Obsidian\Routing;
 
-use Obsidian\Framework;
 use Obsidian\Extend;
+use Obsidian\Framework;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
