@@ -7,7 +7,7 @@ use Obsidian\Routing\RouteInterface;
 use Obsidian\Controllers\WordPress;
 
 /**
- * @coversDefaultClass \Obsidian\Middleware\HasRoutesTrait
+ * @coversDefaultClass \Obsidian\Routing\HasRoutesTrait
  */
 class HasRoutesTraitTest extends WP_UnitTestCase {
     public function setUp() {
