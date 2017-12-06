@@ -1,4 +1,4 @@
-# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/?branch=master)
+# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master)
 
 A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
 
@@ -8,7 +8,7 @@ If you've used Laravel, Slim or Symfony and miss the control over the request&re
 
 ## Documentation
 
-https://htmlburger.gitbooks.io/wp-emerge/content/
+https://htmlburger.gitbooks.io/wpemerge/content/
 
 ## Features
 
@@ -80,7 +80,7 @@ https://htmlburger.gitbooks.io/wp-emerge/content/
 
 ## Quickstart
 
-1. Run `composer require htmlburger/wp-emerge` in your theme directory
+1. Run `composer require htmlburger/wpemerge` in your theme directory
 1. Make sure you've included the generated `autoload.php` file inside your `functions.php` file
     ```php
     require_once( 'vendor/autoload.php' );

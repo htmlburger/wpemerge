@@ -1,9 +1,9 @@
 {
-    "name": "htmlburger/wp-emerge",
+    "name": "htmlburger/wpemerge",
     "description": "A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.",
-    "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "wp-emerge"],
+    "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "wpemerge"],
     "license": "GPL-2.0",
-    "homepage": "https://github.com/htmlburger/wp-emerge",
+    "homepage": "https://github.com/htmlburger/wpemerge",
     "authors": [
         {
             "name": "htmlBurger",
@@ -18,8 +18,8 @@
         }
     ],
     "support": {
-        "source": "https://github.com/htmlburger/wp-emerge",
-        "issues": "https://github.com/htmlburger/wp-emerge/issues",
+        "source": "https://github.com/htmlburger/wpemerge",
+        "issues": "https://github.com/htmlburger/wpemerge/issues",
         "email": "wordpress@htmlburger.com"
     },
     "autoload": {
