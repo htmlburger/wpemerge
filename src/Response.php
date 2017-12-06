@@ -186,7 +186,7 @@ class Response {
 			throw new Exception( 'Could not resolve template.' );
 		}
 
-		$engine = WPEmerge::resolve( WP_EMERGE_TEMPLATING_ENGINE_KEY );
+		$engine = WPEmerge::resolve( WPEMERGE_TEMPLATING_ENGINE_KEY );
 		$html = $engine->render( $template, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );

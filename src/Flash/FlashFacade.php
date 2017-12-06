@@ -11,6 +11,6 @@ use WPEmerge\Support\Facade;
  */
 class FlashFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return WP_EMERGE_FLASH_KEY;
+        return WPEMERGE_FLASH_KEY;
     }
 }

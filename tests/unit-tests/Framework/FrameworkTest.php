@@ -45,7 +45,7 @@ class FrameworkTest extends WP_UnitTestCase {
      */
     public function testDebugging() {
         $this->assertTrue( $this->subject->debugging() );
-        add_filter( 'wp_emerge.debug', '__return_false' );
+        add_filter( 'wpemerge.debug', '__return_false' );
         $this->assertFalse( $this->subject->debugging() );
     }
 

@@ -15,10 +15,10 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WP_EMERGE_FLASH_KEY ] = function( $c ) {
+		$container[ WPEMERGE_FLASH_KEY ] = function( $c ) {
 			$session = null;
-			if ( isset( $c[ WP_EMERGE_SESSION_KEY ] ) ) {
-				$session = $c[ WP_EMERGE_SESSION_KEY ];
+			if ( isset( $c[ WPEMERGE_SESSION_KEY ] ) ) {
+				$session = $c[ WPEMERGE_SESSION_KEY ];
 			} else if ( isset( $_SESSION ) ) {
 				$session = &$_SESSION;
 			}

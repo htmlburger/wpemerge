@@ -73,7 +73,7 @@ https://htmlburger.gitbooks.io/wpemerge/content/
 - Custom template engine support (Twig and Blade available as add-on packages)
     ```php
     $container = WPEmerge::getContainer();
-    $container[ WP_EMERGE_TEMPLATING_ENGINE_KEY ] = function( $container ) {
+    $container[ WPEMERGE_TEMPLATING_ENGINE_KEY ] = function( $container ) {
         return new MyTemplateEngine();
     };
     ```

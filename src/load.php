@@ -8,7 +8,7 @@ use Pimple\Container;
 
 // @codeCoverageIgnoreStart
 $container = new Container();
-$container[ WP_EMERGE_FRAMEWORK_KEY ] = function( $container ) {
+$container[ WPEMERGE_FRAMEWORK_KEY ] = function( $container ) {
 	return new Framework( $container );
 };
 

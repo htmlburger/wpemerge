@@ -41,7 +41,7 @@ class WPEmerge_Tests_Bootstrap {
 		$this->library_directory = dirname( $this->tests_dir );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->library_directory . '/tmp/wordpress-tests-lib';
 
-		define( 'WP_EMERGE_TEST_DIR', $this->tests_dir );
+		define( 'WPEMERGE_TEST_DIR', $this->tests_dir );
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );

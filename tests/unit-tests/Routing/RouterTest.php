@@ -47,7 +47,7 @@ class RouterTest extends WP_UnitTestCase {
         $middleware = Mockery::mock( MiddlewareInterface::class );
         $middleware_array = [$middleware];
 
-        $container_key = WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY;
+        $container_key = WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY;
         $container = WPEmerge::getContainer();
 
         $route->shouldReceive( 'addMiddleware' )
@@ -131,11 +131,11 @@ class RouterTest extends WP_UnitTestCase {
 
         $this->subject->addRoute( $route );
 
-        add_filter( 'wp_emerge.debug', '__return_false' );
+        add_filter( 'wpemerge.debug', '__return_false' );
 
         $this->subject->execute( '' );
 
-        $response = apply_filters( 'wp_emerge.response', null );
+        $response = apply_filters( 'wpemerge.response', null );
         $this->assertEquals( 500, $response->getStatusCode() );
     }
 
@@ -181,7 +181,7 @@ class RouterTest extends WP_UnitTestCase {
 
         $this->subject->execute( '' );
 
-        $filter_response = apply_filters( 'wp_emerge.response', null );
+        $filter_response = apply_filters( 'wpemerge.response', null );
         $this->assertSame( $response, $filter_response );
     }
 
@@ -190,7 +190,7 @@ class RouterTest extends WP_UnitTestCase {
      * @covers ::handle
      */
     public function testExecute_Response_ReturnsBuiltInTemplate() {
-        $expected = WP_EMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+        $expected = WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 

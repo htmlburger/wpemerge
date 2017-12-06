@@ -52,7 +52,7 @@ class ResponseTest extends WP_UnitTestCase {
      * @covers ::resolveTemplateFromFilesystem
      */
     public function testTemplate() {
-        $template = WP_EMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
+        $template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
         $expected = file_get_contents( $template );
 
         $subject = Response::template( Response::response(), $template );

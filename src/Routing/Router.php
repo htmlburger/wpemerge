@@ -39,7 +39,7 @@ class Router implements HasRoutesInterface {
 	 * @return void
 	 */
 	public function registerRewriteRules() {
-		$rules = apply_filters( 'wp_emerge.routing.rewrite_rules', [] );
+		$rules = apply_filters( 'wpemerge.routing.rewrite_rules', [] );
 		foreach ( $rules as $rule => $rewrite_to ) {
 			add_rewrite_rule( $rule, $rewrite_to, 'top' );
 		}
@@ -53,7 +53,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
-		$global_middleware = WPEmerge::resolve( WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
+		$global_middleware = WPEmerge::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
@@ -89,11 +89,11 @@ class Router implements HasRoutesInterface {
 			$response = Response::error( Response::response(), 500 );
 		}
 
-		add_filter( 'wp_emerge.response', function() use ( $response ) {
+		add_filter( 'wpemerge.response', function() use ( $response ) {
 			return $response;
 		} );
 
-		return WP_EMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
 	}
 
 	/**

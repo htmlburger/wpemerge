@@ -11,6 +11,6 @@ use WPEmerge\Support\Facade;
  */
 class RouterFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return WP_EMERGE_ROUTING_ROUTER_KEY;
+        return WPEMERGE_ROUTING_ROUTER_KEY;
     }
 }

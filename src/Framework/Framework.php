@@ -63,7 +63,7 @@ class Framework {
 	 */
 	public function debugging() {
 		$debugging = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-		$debugging = apply_filters( 'wp_emerge.debug', $debugging );
+		$debugging = apply_filters( 'wpemerge.debug', $debugging );
 		return $debugging;
 	}
 
@@ -110,14 +110,14 @@ class Framework {
 			throw new Exception( static::class . ' already booted.' );
 		}
 
-		do_action( 'wp_emerge.booting' );
+		do_action( 'wpemerge.booting' );
 
 		$container = $this->getContainer();
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 		$this->booted = true;
 
-		do_action( 'wp_emerge.booted' );
+		do_action( 'wpemerge.booted' );
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Framework {
 	 */
 	protected function loadConfig( Container $container, $config ) {
 		$container = $this->getContainer();
-		$container[ WP_EMERGE_CONFIG_KEY ] = array_merge( [
+		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
 			'providers' => [],
 		], $config );
 	}
@@ -143,19 +143,19 @@ class Framework {
 	 * @return void
 	 */
 	protected function loadServiceProviders( Container $container ) {
-		$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
+		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
 			$this->service_proviers,
-			$container[ WP_EMERGE_CONFIG_KEY ]['providers']
+			$container[ WPEMERGE_CONFIG_KEY ]['providers']
 		);
 
-		$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] = apply_filters(
-			'wp_emerge.service_providers',
-			$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ]
+		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = apply_filters(
+			'wpemerge.service_providers',
+			$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ]
 		);
 
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
-		}, $container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] );
+		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
 
 		$this->registerServiceProviders( $service_providers, $container );
 		$this->bootServiceProviders( $service_providers, $container );

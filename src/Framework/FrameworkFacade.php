@@ -11,6 +11,6 @@ use WPEmerge\Support\Facade;
  */
 class FrameworkFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return WP_EMERGE_FRAMEWORK_KEY;
+        return WPEMERGE_FRAMEWORK_KEY;
     }
 }

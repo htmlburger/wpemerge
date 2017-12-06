@@ -15,10 +15,10 @@ class TemplatingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WP_EMERGE_TEMPLATING_ENGINE_PHP_KEY ] = function() {
+		$container[ WPEMERGE_TEMPLATING_ENGINE_PHP_KEY ] = function() {
 			return new \WPEmerge\Templating\Php();
 		};
-		$container[ WP_EMERGE_TEMPLATING_ENGINE_KEY ] = $container->raw( WP_EMERGE_TEMPLATING_ENGINE_PHP_KEY );
+		$container[ WPEMERGE_TEMPLATING_ENGINE_KEY ] = $container->raw( WPEMERGE_TEMPLATING_ENGINE_PHP_KEY );
 	}
 
 	/**

@@ -34,21 +34,21 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WP_EMERGE_CONFIG_KEY ] = array_merge( [
+		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
 			'global_middleware' => [],
-		], $container[ WP_EMERGE_CONFIG_KEY ] );
+		], $container[ WPEMERGE_CONFIG_KEY ] );
 
-		$container[ WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = apply_filters(
-			'WP_EMERGE.global_middleware',
-			$container[ WP_EMERGE_CONFIG_KEY ]['global_middleware']
+		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = apply_filters(
+			'wpemerge.global_middleware',
+			$container[ WPEMERGE_CONFIG_KEY ]['global_middleware']
 		);
 
-		$container[ WP_EMERGE_ROUTING_ROUTER_KEY ] = function() {
+		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function() {
 			return new Router();
 		};
 
 		foreach ( static::$condition_extensions as $name => $class_name ) {
-			$container[ WP_EMERGE_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
+			$container[ WPEMERGE_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
 		}
 
 		WPEmerge::facade( 'Router', RouterFacade::class );

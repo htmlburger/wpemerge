@@ -48,7 +48,7 @@ class Factory {
 			return false;
 		}
 
-		$condition_class = WPEmerge::resolve( WP_EMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
+		$condition_class = WPEmerge::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
 		return ( $condition_class !== null );
 	}
 
@@ -115,7 +115,7 @@ class Factory {
 		}
 
 		$condition_options = static::getConditionTypeAndArguments( $options );
-		$condition_class = WPEmerge::resolve( WP_EMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
+		$condition_class = WPEmerge::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );

@@ -11,6 +11,6 @@ use WPEmerge\Support\Facade;
  */
 class OldInputFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return WP_EMERGE_OLD_INPUT_KEY;
+        return WPEMERGE_OLD_INPUT_KEY;
     }
 }
