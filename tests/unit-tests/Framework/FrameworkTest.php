@@ -2,7 +2,9 @@
 
 namespace ObsidianTests\Framework;
 
+use Mockery;
 use Obsidian\Framework\Framework;
+use Obsidian\ServiceProviders\ServiceProviderInterface;
 use Obsidian\Support\Facade;
 use Pimple\Container;
 use WP_UnitTestCase;
@@ -22,10 +24,20 @@ class FrameworkTest extends WP_UnitTestCase {
 
     public function tearDown() {
         parent::tearDown();
+        Mockery::close();
 
         Facade::setFacadeApplication( $this->facade_application );
         unset( $this->subject );
         unset($this->facade_application);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testConstruct() {
+        $container = new Container();
+        $subject = new Framework( $container );
+        $this->assertSame( $container, $subject->getContainer() );
     }
 
     /**
@@ -39,6 +51,7 @@ class FrameworkTest extends WP_UnitTestCase {
 
     /**
      * @covers ::isBooted
+     * @covers ::boot
      */
     public function testIsBooted() {
         $this->assertEquals( false, $this->subject->isBooted() );
@@ -49,9 +62,18 @@ class FrameworkTest extends WP_UnitTestCase {
     /**
      * @covers ::getContainer
      */
-    public function testGetContainer_ReturnsContainer() {
+    public function testGetContainer_ReturnContainer() {
         $container = $this->subject->getContainer();
         $this->assertInstanceOf( Container::class, $container );
+    }
+
+    /**
+     * @covers ::verifyBoot
+     * @expectedException \Exception
+     * @expectedExceptionMessage must be booted first
+     */
+    public function testVerifyBoot() {
+        $this->subject->resolve( 'foobar' );
     }
 
     /**
@@ -59,9 +81,25 @@ class FrameworkTest extends WP_UnitTestCase {
      * @expectedException \Exception
      * @expectedExceptionMessage already booted
      */
-    public function testBoot_CalledMultipleTimes_ThrowsException() {
+    public function testBoot_CalledMultipleTimes_ThrowException() {
         $this->subject->boot();
         $this->subject->boot();
+    }
+
+    /**
+     * @covers ::boot
+     * @covers ::registerServiceProviders
+     * @covers ::bootServiceProviders
+     */
+    public function testBoot_RegisterServiceProviders() {
+        $container = $this->subject->getContainer();
+
+        $this->subject->boot( [
+            'providers' => [
+                FrameworkTestServiceProviderMock::class,
+            ]
+        ] );
+        $this->assertTrue( true );
     }
 
     /**
@@ -82,8 +120,9 @@ class FrameworkTest extends WP_UnitTestCase {
 
     /**
      * @covers ::resolve
+     * @covers ::verifyBoot
      */
-    public function testResolve_NonexistantKey_ReturnsNull() {
+    public function testResolve_NonexistantKey_ReturnNull() {
         $expected = null;
         $container_key = 'nonexistantcontainerkey';
 
@@ -93,6 +132,7 @@ class FrameworkTest extends WP_UnitTestCase {
 
     /**
      * @covers ::resolve
+     * @covers ::verifyBoot
      */
     public function testResolve_ExistingKey_IsResolved() {
         $expected = 'foobar';
@@ -108,8 +148,9 @@ class FrameworkTest extends WP_UnitTestCase {
 
     /**
      * @covers ::instantiate
+     * @covers ::verifyBoot
      */
-    public function testInstantiate_UnknownClass_CreatesFreshInstance() {
+    public function testInstantiate_UnknownClass_CreateFreshInstance() {
         $class = \ObsidianTestTools\TestService::class;
 
         $this->subject->boot();
@@ -123,8 +164,9 @@ class FrameworkTest extends WP_UnitTestCase {
 
     /**
      * @covers ::instantiate
+     * @covers ::verifyBoot
      */
-    public function testInstantiate_KnownClass_ResolvesInstanceFromContainer() {
+    public function testInstantiate_KnownClass_ResolveInstanceFromContainer() {
         $expected = rand(1, 999999);
         $class = \ObsidianTestTools\TestService::class;
 
@@ -139,5 +181,23 @@ class FrameworkTest extends WP_UnitTestCase {
         $instance = $this->subject->instantiate( $class );
 
         $this->assertEquals( $expected, $instance->getTest() );
+    }
+}
+
+class FrameworkTestServiceProviderMock implements ServiceProviderInterface {
+    public function __construct() {
+        $this->mock = Mockery::mock( ServiceProviderInterface::class );
+        $this->mock->shouldReceive( 'register' )
+            ->once();
+        $this->mock->shouldReceive( 'boot' )
+            ->once();
+    }
+
+    public function register( $container ) {
+        call_user_func_array( [$this->mock, 'register'], func_get_args() );
+    }
+
+    public function boot( $container ) {
+        call_user_func_array( [$this->mock, 'boot'], func_get_args() );
     }
 }

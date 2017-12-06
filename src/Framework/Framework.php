@@ -79,7 +79,6 @@ class Framework {
 	/**
 	 * Throw an exception if the framework has not been booted
 	 *
-	 * @codeCoverageIgnore
 	 * @throws Exception
 	 * @return void
 	 */
@@ -102,7 +101,6 @@ class Framework {
 	 * Boot the framework
 	 * WordPress's 'after_setup_theme' action is a good place to call this
 	 *
-	 * @codeCoverageIgnore
 	 * @param  array     $config
 	 * @throws Exception
 	 * @return void
@@ -166,7 +164,6 @@ class Framework {
 	/**
 	 * Register all service providers
 	 *
-	 * @codeCoverageIgnore
 	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
 	 * @return void
@@ -180,7 +177,6 @@ class Framework {
 	/**
 	 * Boot all service providers
 	 *
-	 * @codeCoverageIgnore
 	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
 	 * @return void
