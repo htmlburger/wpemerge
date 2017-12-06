@@ -1,15 +1,15 @@
 <?php
 
-namespace ObsidianTests\Input;
+namespace WPEmergeTests\Input;
 
 use Mockery;
-use Obsidian;
-use Obsidian\Request;
-use Obsidian\Input\OldInput;
+use WPEmerge;
+use WPEmerge\Request;
+use WPEmerge\Input\OldInput;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Input\OldInput
+ * @coversDefaultClass \WPEmerge\Input\OldInput
  */
 class OldInputTest extends WP_UnitTestCase {
 	public function setUp() {
@@ -17,8 +17,8 @@ class OldInputTest extends WP_UnitTestCase {
 
 		$this->flashMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
 
-		Obsidian::facade( 'Flash', OldInputTestFlashFacade::class );
-		$container = Obsidian::getContainer();
+		WPEmerge::facade( 'Flash', OldInputTestFlashFacade::class );
+		$container = WPEmerge::getContainer();
 		$container['flashMock'] = $this->flashMock;
 		$this->subject = new OldInput();
 	}
@@ -27,7 +27,7 @@ class OldInputTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = Obsidian::getContainer();
+		$container = WPEmerge::getContainer();
 		unset( $container['flashMock'] );
 		unset( $this->flashMock );
 		unset( $this->subject );
@@ -104,7 +104,7 @@ class OldInputTest extends WP_UnitTestCase {
 	}
 }
 
-class OldInputTestFlashFacade extends Obsidian\Support\Facade {
+class OldInputTestFlashFacade extends WPEmerge\Support\Facade {
 	protected static function getFacadeAccessor() {
         return 'flashMock';
     }

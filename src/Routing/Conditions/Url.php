@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Routing\Conditions;
+namespace WPEmerge\Routing\Conditions;
 
-use Obsidian\Url as UrlUtility;
-use Obsidian\Request;
+use WPEmerge\Url as UrlUtility;
+use WPEmerge\Request;
 
 /**
  * Check against the current url

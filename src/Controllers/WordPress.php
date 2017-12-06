@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Controllers;
+namespace WPEmerge\Controllers;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -20,6 +20,6 @@ class WordPress {
 	 * @return ResponseInterface
 	 */
 	public function handle( Request $request, $template ) {
-		return obs_template( $template )->withStatus( http_response_code() );
+		return wpm_template( $template )->withStatus( http_response_code() );
 	}
 }

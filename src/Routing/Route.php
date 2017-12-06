@@ -1,14 +1,14 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
 use Exception;
-use Obsidian\Middleware\HasMiddlewareTrait;
-use Obsidian\Request;
-use Obsidian\Routing\Conditions\ConditionInterface;
-use Obsidian\Routing\Conditions\Factory;
-use Obsidian\Routing\Conditions\InvalidRouteConditionException;
-use Obsidian\Routing\Conditions\Url as UrlCondition;
+use WPEmerge\Middleware\HasMiddlewareTrait;
+use WPEmerge\Request;
+use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\Factory;
+use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
+use WPEmerge\Routing\Conditions\Url as UrlCondition;
 
 /**
  * Represent a route
@@ -121,7 +121,7 @@ class Route implements RouteInterface {
 		$regex = $this->target->getValidationRegex( $this->target->getUrl(), false );
 		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
 
-		add_filter( 'obsidian.routing.rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
+		add_filter( 'wp_emerge.routing.rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
 			$rules[ $regex ] = $rewrite_to;
 			return $rules;
 		} );

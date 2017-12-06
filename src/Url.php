@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian;
+namespace WPEmerge;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 
 /**
  * A collection of tools dealing with urls

@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Flash;
+namespace WPEmerge\Flash;
 
-use Obsidian;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
+use WPEmerge;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide flash dependencies
@@ -15,17 +15,17 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ OBSIDIAN_FLASH_KEY ] = function( $c ) {
+		$container[ WP_EMERGE_FLASH_KEY ] = function( $c ) {
 			$session = null;
-			if ( isset( $c[ OBSIDIAN_SESSION_KEY ] ) ) {
-				$session = $c[ OBSIDIAN_SESSION_KEY ];
+			if ( isset( $c[ WP_EMERGE_SESSION_KEY ] ) ) {
+				$session = $c[ WP_EMERGE_SESSION_KEY ];
 			} else if ( isset( $_SESSION ) ) {
 				$session = &$_SESSION;
 			}
-			return new \Obsidian\Flash\Flash( $session );
+			return new \WPEmerge\Flash\Flash( $session );
 		};
 
-		Obsidian::facade( 'Flash', \Obsidian\Flash\FlashFacade::class );
+		WPEmerge::facade( 'Flash', \WPEmerge\Flash\FlashFacade::class );
 	}
 
 	/**

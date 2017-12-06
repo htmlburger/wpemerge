@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Input;
+namespace WPEmerge\Input;
 
-use Obsidian\Middleware\MiddlewareInterface;
+use WPEmerge\Middleware\MiddlewareInterface;
 use Closure;
 use OldInput as OldInputService;
 

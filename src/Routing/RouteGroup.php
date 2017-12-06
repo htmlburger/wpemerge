@@ -1,13 +1,13 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
 use Closure;
 use Exception;
-use Obsidian\Middleware\HasMiddlewareTrait;
-use Obsidian\Request;
-use Obsidian\Routing\Conditions\ConditionInterface;
-use Obsidian\Routing\Conditions\Url as UrlCondition;
+use WPEmerge\Middleware\HasMiddlewareTrait;
+use WPEmerge\Request;
+use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\Url as UrlCondition;
 
 class RouteGroup implements RouteInterface, HasRoutesInterface {
 	use HasRoutesTrait {

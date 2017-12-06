@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Templating;
+namespace WPEmerge\Templating;
 
 /**
  * Interface that template engines must implement

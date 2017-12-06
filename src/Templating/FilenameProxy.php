@@ -1,19 +1,19 @@
 <?php
 
-namespace Obsidian\Templating;
+namespace WPEmerge\Templating;
 
-use Obsidian;
+use WPEmerge;
 
 /**
  * Include template files with different engines depending on their filename
  */
-class FilenameProxy implements \Obsidian\Templating\EngineInterface {
+class FilenameProxy implements \WPEmerge\Templating\EngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *
 	 * @var string
 	 */
-	protected $default = OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY;
+	protected $default = WP_EMERGE_TEMPLATING_ENGINE_PHP_KEY;
 
 	/**
 	 * Array of filename_suffix=>engine_container_key bindings
@@ -78,7 +78,7 @@ class FilenameProxy implements \Obsidian\Templating\EngineInterface {
 	 */
 	public function render( $file, $context ) {
 		$engine_key = $this->getBindingForFile( $file );
-		$engine_instance = Obsidian::resolve( $engine_key );
+		$engine_instance = WPEmerge::resolve( $engine_key );
 		return $engine_instance->render( $file, $context );
 	}
 }

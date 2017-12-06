@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Support;
+namespace WPEmerge\Support;
 
 /**
  * Register class aliases for facades
@@ -27,7 +27,7 @@ class AliasLoader
     /**
      * The singleton instance of the loader.
      *
-     * @var \Obsidian\Support\AliasLoader
+     * @var \WPEmerge\Support\AliasLoader
      */
     protected static $instance;
 
@@ -45,7 +45,7 @@ class AliasLoader
      * Get or create the singleton alias loader instance.
      *
      * @param  array                         $aliases
-     * @return \Obsidian\Support\AliasLoader
+     * @return \WPEmerge\Support\AliasLoader
      */
     public static function getInstance(array $aliases = [])
     {
@@ -154,7 +154,7 @@ class AliasLoader
     /**
      * Set the value of the singleton alias loader.
      *
-     * @param  \Obsidian\Support\AliasLoader $loader
+     * @param  \WPEmerge\Support\AliasLoader $loader
      * @return void
      */
     public static function setInstance($loader)

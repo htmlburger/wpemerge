@@ -1,10 +1,10 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
 use Closure;
 use Exception;
-use Obsidian;
+use WPEmerge;
 
 /**
  * Represent a Closure or a controller method to be executed in response to a request
@@ -103,7 +103,7 @@ class Handler {
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
-		$controller = Obsidian::instantiate( $class );
+		$controller = WPEmerge::instantiate( $class );
 		return call_user_func_array( [$controller, $method], $arguments );
 	}
 
@@ -116,11 +116,11 @@ class Handler {
 		$response = call_user_func_array( [$this, 'executeHandler'], func_get_args() );
 
 		if ( is_string( $response ) ) {
-			return obs_output( $response );
+			return wpm_output( $response );
 		}
 
 		if ( is_array( $response ) ) {
-			return obs_json( $response );
+			return wpm_json( $response );
 		}
 
 		return $response;

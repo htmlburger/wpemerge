@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Helpers;
+namespace WPEmerge\Helpers;
 
 class Mixed {
 	/**

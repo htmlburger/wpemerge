@@ -1,14 +1,14 @@
 <?php
 
-namespace ObsidianTests\Helpers;
+namespace WPEmergeTests\Helpers;
 
-use Obsidian\Helpers\Mixed;
-use ObsidianTestTools\TestService;
+use WPEmerge\Helpers\Mixed;
+use WPEmergeTestTools\TestService;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Helpers\Mixed
+ * @coversDefaultClass \WPEmerge\Helpers\Mixed
  */
 class MixedTest extends WP_UnitTestCase {
 	public function callableStub( $message = 'foobar' ) {

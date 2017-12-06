@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Support;
+namespace WPEmerge\Support;
 
 use ArrayAccess;
 

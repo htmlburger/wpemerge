@@ -1,80 +1,80 @@
 <?php
 
-use Obsidian\Response;
+use WPEmerge\Response;
 
-if ( ! function_exists( 'obs_response' ) ) {
+if ( ! function_exists( 'wpm_response' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::response()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_response() {
+	function wpm_response() {
 		return Response::response();
 	}
 }
 
-if ( ! function_exists( 'obs_output' ) ) {
+if ( ! function_exists( 'wpm_output' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::output()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_output( $output ) {
-		return Response::output( obs_response(), $output );
+	function wpm_output( $output ) {
+		return Response::output( wpm_response(), $output );
 	}
 }
 
-if ( ! function_exists( 'obs_template' ) ) {
+if ( ! function_exists( 'wpm_template' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::template()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_template( $templates, $context = array() ) {
-		return Response::template( obs_response(), $templates, $context );
+	function wpm_template( $templates, $context = array() ) {
+		return Response::template( wpm_response(), $templates, $context );
 	}
 }
 
-if ( ! function_exists( 'obs_json' ) ) {
+if ( ! function_exists( 'wpm_json' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::json()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_json( $data ) {
-		return Response::json( obs_response(), $data );
+	function wpm_json( $data ) {
+		return Response::json( wpm_response(), $data );
 	}
 }
 
-if ( ! function_exists( 'obs_redirect' ) ) {
+if ( ! function_exists( 'wpm_redirect' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::redirect()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_redirect( $url, $status = 302 ) {
-		return Response::redirect( obs_response(), $url, $status );
+	function wpm_redirect( $url, $status = 302 ) {
+		return Response::redirect( wpm_response(), $url, $status );
 	}
 }
 
-if ( ! function_exists( 'obs_reload' ) ) {
+if ( ! function_exists( 'wpm_reload' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::reload()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_reload( $request, $status = 302 ) {
-		return Response::reload( obs_response(), $request, $status );
+	function wpm_reload( $request, $status = 302 ) {
+		return Response::reload( wpm_response(), $request, $status );
 	}
 }
 
-if ( ! function_exists( 'obs_error' ) ) {
+if ( ! function_exists( 'wpm_error' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see Response::error()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function obs_error( $code ) {
-		return Response::error( obs_response(), $code );
+	function wpm_error( $code ) {
+		return Response::error( wpm_response(), $code );
 	}
 }

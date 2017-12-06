@@ -1,14 +1,14 @@
-# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/obsidian/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/obsidian/?branch=master)
+# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wp-emerge/?branch=master)
 
 A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
 
 Integration is incremental - you can use it only on the pages you want or on all pages.
 
-If you've used Laravel, Slim or Symfony and miss the control over the request&response flow in WordPress - Obsidian is definitely for you.
+If you've used Laravel, Slim or Symfony and miss the control over the request&response flow in WordPress - WP Emerge is definitely for you.
 
 ## Documentation
 
-https://htmlburger.gitbooks.io/obsidian/content/
+https://htmlburger.gitbooks.io/wp-emerge/content/
 
 ## Features
 
@@ -23,7 +23,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     class HomeController {
         public function index( $request ) {
             $name = $request->get( 'name' );
-            return obs_template( 'templates/home.php', [
+            return wpm_template( 'templates/home.php', [
                 'welcome' => 'Welcome, ' . $name . '!',
             ] );
         }
@@ -33,7 +33,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     ```php
     class HomeController {
         public function index( $request ) {
-            return obs_response()
+            return wpm_response()
                 ->withHeader( 'X-Custom-Header', 'foo' );
         }
     }
@@ -50,7 +50,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     ```
 - Service container (using [Pimple](https://pimple.symfony.com/))
     ```php
-    $container = Obsidian::getContainer();
+    $container = WPEmerge::getContainer();
     $container['my_service'] = function() {
         return new MyService();
     };
@@ -72,15 +72,15 @@ https://htmlburger.gitbooks.io/obsidian/content/
     ```
 - Custom template engine support (Twig and Blade available as add-on packages)
     ```php
-    $container = Obsidian::getContainer();
-    $container[ OBSIDIAN_TEMPLATING_ENGINE_KEY ] = function( $container ) {
+    $container = WPEmerge::getContainer();
+    $container[ WP_EMERGE_TEMPLATING_ENGINE_KEY ] = function( $container ) {
         return new MyTemplateEngine();
     };
     ```
 
 ## Quickstart
 
-1. Run `composer require htmlburger/obsidian` in your theme directory
+1. Run `composer require htmlburger/wp-emerge` in your theme directory
 1. Make sure you've included the generated `autoload.php` file inside your `functions.php` file
     ```php
     require_once( 'vendor/autoload.php' );
@@ -92,10 +92,10 @@ https://htmlburger.gitbooks.io/obsidian/content/
     } );
 
     add_action( 'after_setup_theme', function() {
-        Obsidian::boot();
+        WPEmerge::boot();
 
         Router::get( '/', function() {
-            return obs_output( 'Hello World!' );
+            return wpm_output( 'Hello World!' );
         } );
     } );
     ```

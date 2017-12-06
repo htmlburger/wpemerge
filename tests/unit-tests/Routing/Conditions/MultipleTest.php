@@ -1,15 +1,15 @@
 <?php
 
-namespace ObsidianTests\Routing\Conditions;
+namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use Obsidian\Routing\Conditions\Custom;
-use Obsidian\Routing\Conditions\Multiple;
-use Obsidian\Request;
+use WPEmerge\Routing\Conditions\Custom;
+use WPEmerge\Routing\Conditions\Multiple;
+use WPEmerge\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Conditions\Multiple
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\Multiple
  */
 class MultipleTest extends WP_UnitTestCase {
     /**

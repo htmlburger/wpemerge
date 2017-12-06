@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Templating;
+namespace WPEmerge\Templating;
 
 /**
  * Include template files with php

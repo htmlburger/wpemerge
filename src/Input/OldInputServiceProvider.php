@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Input;
+namespace WPEmerge\Input;
 
-use Obsidian;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
+use WPEmerge;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide old input dependencies
@@ -15,18 +15,18 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = array_merge(
-			$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
+		$container[ WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = array_merge(
+			$container[ WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
 			[
-				\Obsidian\Input\OldInputMiddleware::class,
+				\WPEmerge\Input\OldInputMiddleware::class,
 			]
 		);
 
-		$container[ OBSIDIAN_OLD_INPUT_KEY ] = function() {
-			return new \Obsidian\Input\OldInput();
+		$container[ WP_EMERGE_OLD_INPUT_KEY ] = function() {
+			return new \WPEmerge\Input\OldInput();
 		};
 
-		Obsidian::facade( 'OldInput', \Obsidian\Input\OldInputFacade::class );
+		WPEmerge::facade( 'OldInput', \WPEmerge\Input\OldInputFacade::class );
 	}
 
 	/**

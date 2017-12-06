@@ -1,15 +1,15 @@
 <?php
 
-namespace ObsidianTests\Input;
+namespace WPEmergeTests\Input;
 
 use Mockery;
-use Obsidian;
-use Obsidian\Request;
-use Obsidian\Input\OldInputMiddleware;
+use WPEmerge;
+use WPEmerge\Request;
+use WPEmerge\Input\OldInputMiddleware;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Input\OldInputMiddleware
+ * @coversDefaultClass \WPEmerge\Input\OldInputMiddleware
  */
 class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
@@ -17,8 +17,8 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 
 		$this->oldInputMock = Mockery::mock();
 
-		Obsidian::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
-		$container = Obsidian::getContainer();
+		WPEmerge::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
+		$container = WPEmerge::getContainer();
 		$container['oldInputMock'] = $this->oldInputMock;
 		$this->subject = new OldInputMiddleware();
 	}
@@ -27,7 +27,7 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = Obsidian::getContainer();
+		$container = WPEmerge::getContainer();
 		unset( $container['oldInputMock'] );
 		unset( $this->oldInputMock );
 		unset( $this->subject );
@@ -129,7 +129,7 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	}
 }
 
-class OldInputMiddlewareTestOldInputFacade extends Obsidian\Support\Facade {
+class OldInputMiddlewareTestOldInputFacade extends WPEmerge\Support\Facade {
 	protected static function getFacadeAccessor() {
         return 'oldInputMock';
     }

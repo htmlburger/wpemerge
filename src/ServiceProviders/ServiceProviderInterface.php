@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\ServiceProviders;
+namespace WPEmerge\ServiceProviders;
 
 /**
  * Interface that service providers must implement

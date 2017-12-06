@@ -1,18 +1,18 @@
 <?php
 
-use Obsidian\Framework\Framework;
-use Obsidian\Framework\FrameworkFacade;
-use Obsidian\Support\Facade;
-use Obsidian\Support\AliasLoader;
+use WPEmerge\Framework\Framework;
+use WPEmerge\Framework\FrameworkFacade;
+use WPEmerge\Support\Facade;
+use WPEmerge\Support\AliasLoader;
 use Pimple\Container;
 
 // @codeCoverageIgnoreStart
 $container = new Container();
-$container[ OBSIDIAN_FRAMEWORK_KEY ] = function( $container ) {
+$container[ WP_EMERGE_FRAMEWORK_KEY ] = function( $container ) {
 	return new Framework( $container );
 };
 
 Facade::setFacadeApplication( $container );
 AliasLoader::getInstance()->register();
-AliasLoader::getInstance()->alias( 'Obsidian', FrameworkFacade::class );
+AliasLoader::getInstance()->alias( 'WPEmerge', FrameworkFacade::class );
 // @codeCoverageIgnoreEnd

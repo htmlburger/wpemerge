@@ -1,10 +1,10 @@
 <?php
 
-namespace Obsidian\Middleware;
+namespace WPEmerge\Middleware;
 
 use Closure;
 use Exception;
-use Obsidian\Helpers\Mixed;
+use WPEmerge\Helpers\Mixed;
 
 /**
  * Allow objects to have middleware
@@ -45,7 +45,7 @@ trait HasMiddlewareTrait {
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @throws Exception
-	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
@@ -66,7 +66,7 @@ trait HasMiddlewareTrait {
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */
 	public function add( $middleware ) {
@@ -77,7 +77,7 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array                               $middleware
-	 * @param  \Obsidian\Request                   $request
+	 * @param  \WPEmerge\Request                   $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

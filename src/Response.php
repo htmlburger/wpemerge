@@ -1,11 +1,11 @@
 <?php
 
-namespace Obsidian;
+namespace WPEmerge;
 
 use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use Obsidian;
+use WPEmerge;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -186,7 +186,7 @@ class Response {
 			throw new Exception( 'Could not resolve template.' );
 		}
 
-		$engine = Obsidian::resolve( OBSIDIAN_TEMPLATING_ENGINE_KEY );
+		$engine = WPEmerge::resolve( WP_EMERGE_TEMPLATING_ENGINE_KEY );
 		$html = $engine->render( $template, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );
@@ -225,7 +225,7 @@ class Response {
 	 * Get a cloned response, with location header equal to the current url and status header
 	 *
 	 * @param  ResponseInterface $response
-	 * @param  \Obsidian\Request $request
+	 * @param  \WPEmerge\Request $request
 	 * @param  integer           $status
 	 * @return ResponseInterface
 	 */

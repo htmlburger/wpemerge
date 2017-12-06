@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Input;
+namespace WPEmerge\Input;
 
 use Flash;
-use Obsidian\Support\Arr;
+use WPEmerge\Support\Arr;
 
 /**
  * Provide a way to get values from the previous request
@@ -14,7 +14,7 @@ class OldInput {
 	 *
 	 * @var string
 	 */
-	const FLASH_KEY = '__obsidianOldInput';
+	const FLASH_KEY = '__wpEmergeOldInput';
 
 	/**
 	 * Get all previously flashed request data

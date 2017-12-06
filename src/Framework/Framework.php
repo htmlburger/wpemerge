@@ -1,20 +1,20 @@
 <?php
 
-namespace Obsidian\Framework;
+namespace WPEmerge\Framework;
 
 use ReflectionException;
 use ReflectionMethod;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use Obsidian\Response;
-use Obsidian\Support\Facade;
-use Obsidian\Support\AliasLoader;
-use Obsidian\Routing\RoutingServiceProvider;
-use Obsidian\Flash\FlashServiceProvider;
-use Obsidian\Input\OldInputServiceProvider;
-use Obsidian\Templating\TemplatingServiceProvider;
-use Obsidian\Controllers\ControllersServiceProvider;
+use WPEmerge\Response;
+use WPEmerge\Support\Facade;
+use WPEmerge\Support\AliasLoader;
+use WPEmerge\Routing\RoutingServiceProvider;
+use WPEmerge\Flash\FlashServiceProvider;
+use WPEmerge\Input\OldInputServiceProvider;
+use WPEmerge\Templating\TemplatingServiceProvider;
+use WPEmerge\Controllers\ControllersServiceProvider;
 
 /**
  * Main communication channel with the framework
@@ -63,7 +63,7 @@ class Framework {
 	 */
 	public function debugging() {
 		$debugging = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-		$debugging = apply_filters( 'obsidian.debug', $debugging );
+		$debugging = apply_filters( 'wp_emerge.debug', $debugging );
 		return $debugging;
 	}
 
@@ -110,14 +110,14 @@ class Framework {
 			throw new Exception( static::class . ' already booted.' );
 		}
 
-		do_action( 'obsidian.booting' );
+		do_action( 'wp_emerge.booting' );
 
 		$container = $this->getContainer();
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 		$this->booted = true;
 
-		do_action( 'obsidian.booted' );
+		do_action( 'wp_emerge.booted' );
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Framework {
 	 */
 	protected function loadConfig( Container $container, $config ) {
 		$container = $this->getContainer();
-		$container[ OBSIDIAN_CONFIG_KEY ] = array_merge( [
+		$container[ WP_EMERGE_CONFIG_KEY ] = array_merge( [
 			'providers' => [],
 		], $config );
 	}
@@ -143,19 +143,19 @@ class Framework {
 	 * @return void
 	 */
 	protected function loadServiceProviders( Container $container ) {
-		$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] = array_merge(
+		$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
 			$this->service_proviers,
-			$container[ OBSIDIAN_CONFIG_KEY ]['providers']
+			$container[ WP_EMERGE_CONFIG_KEY ]['providers']
 		);
 
-		$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] = apply_filters(
-			'obsidian.service_providers',
-			$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ]
+		$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] = apply_filters(
+			'wp_emerge.service_providers',
+			$container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ]
 		);
 
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
-		}, $container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] );
+		}, $container[ WP_EMERGE_SERVICE_PROVIDERS_KEY ] );
 
 		$this->registerServiceProviders( $service_providers, $container );
 		$this->bootServiceProviders( $service_providers, $container );
@@ -164,7 +164,7 @@ class Framework {
 	/**
 	 * Register all service providers
 	 *
-	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
+	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
 	 * @return void
 	 */
@@ -177,7 +177,7 @@ class Framework {
 	/**
 	 * Boot all service providers
 	 *
-	 * @param  \Obsidian\ServiceProviders\ServiceProviderInterface[] $service_providers
+	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
 	 * @return void
 	 */

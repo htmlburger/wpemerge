@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Templating;
+namespace WPEmerge\Templating;
 
-use Obsidian;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
+use WPEmerge;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide templating dependencies
@@ -15,10 +15,10 @@ class TemplatingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY ] = function() {
-			return new \Obsidian\Templating\Php();
+		$container[ WP_EMERGE_TEMPLATING_ENGINE_PHP_KEY ] = function() {
+			return new \WPEmerge\Templating\Php();
 		};
-		$container[ OBSIDIAN_TEMPLATING_ENGINE_KEY ] = $container->raw( OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY );
+		$container[ WP_EMERGE_TEMPLATING_ENGINE_KEY ] = $container->raw( WP_EMERGE_TEMPLATING_ENGINE_PHP_KEY );
 	}
 
 	/**

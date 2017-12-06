@@ -1,18 +1,18 @@
 <?php
 
-namespace ObsidianTests\Routing\Conditions;
+namespace WPEmergeTests\Routing\Conditions;
 
-use Obsidian\Request;
-use Obsidian\Routing\Conditions\Custom;
-use Obsidian\Routing\Conditions\Factory;
-use Obsidian\Routing\Conditions\Multiple;
-use Obsidian\Routing\Conditions\PostId;
-use Obsidian\Routing\Conditions\Url;
+use WPEmerge\Request;
+use WPEmerge\Routing\Conditions\Custom;
+use WPEmerge\Routing\Conditions\Factory;
+use WPEmerge\Routing\Conditions\Multiple;
+use WPEmerge\Routing\Conditions\PostId;
+use WPEmerge\Routing\Conditions\Url;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Conditions\Factory
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\Factory
  */
 class FactoryTest extends WP_UnitTestCase {
     public function setUp() {
@@ -184,7 +184,7 @@ class FactoryTest extends WP_UnitTestCase {
 
     /**
      * @covers ::make
-     * @expectedException \Obsidian\Routing\Conditions\InvalidRouteConditionException
+     * @expectedException \WPEmerge\Routing\Conditions\InvalidRouteConditionException
      * @expectedExceptionMessage Invalid condition options
      */
     public function testMake_Object_Exception() {

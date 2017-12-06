@@ -1,16 +1,16 @@
 <?php
 
-namespace ObsidianTests\Framework;
+namespace WPEmergeTests\Framework;
 
 use Mockery;
-use Obsidian\Framework\Framework;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
-use Obsidian\Support\Facade;
+use WPEmerge\Framework\Framework;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
+use WPEmerge\Support\Facade;
 use Pimple\Container;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Framework\Framework
+ * @coversDefaultClass \WPEmerge\Framework\Framework
  */
 class FrameworkTest extends WP_UnitTestCase {
     public function setUp() {
@@ -45,7 +45,7 @@ class FrameworkTest extends WP_UnitTestCase {
      */
     public function testDebugging() {
         $this->assertTrue( $this->subject->debugging() );
-        add_filter( 'obsidian.debug', '__return_false' );
+        add_filter( 'wp_emerge.debug', '__return_false' );
         $this->assertFalse( $this->subject->debugging() );
     }
 
@@ -110,11 +110,11 @@ class FrameworkTest extends WP_UnitTestCase {
 
         $container = $this->subject->getContainer();
         $container['test_service'] = function() {
-            return new \ObsidianTestTools\TestService();
+            return new \WPEmergeTestTools\TestService();
         };
         $alias = 'TestServiceAlias';
 
-        $this->subject->facade( $alias, \ObsidianTestTools\TestServiceFacade::class );
+        $this->subject->facade( $alias, \WPEmergeTestTools\TestServiceFacade::class );
         $this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
     }
 
@@ -151,7 +151,7 @@ class FrameworkTest extends WP_UnitTestCase {
      * @covers ::verifyBoot
      */
     public function testInstantiate_UnknownClass_CreateFreshInstance() {
-        $class = \ObsidianTestTools\TestService::class;
+        $class = \WPEmergeTestTools\TestService::class;
 
         $this->subject->boot();
         $instance1 = $this->subject->instantiate( $class );
@@ -168,7 +168,7 @@ class FrameworkTest extends WP_UnitTestCase {
      */
     public function testInstantiate_KnownClass_ResolveInstanceFromContainer() {
         $expected = rand(1, 999999);
-        $class = \ObsidianTestTools\TestService::class;
+        $class = \WPEmergeTestTools\TestService::class;
 
         $container = $this->subject->getContainer();
         $container[ $class ] = function() use ( $expected, $class ) {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
-use Obsidian\Request;
-use Obsidian\Middleware\HasMiddlewareInterface;
+use WPEmerge\Request;
+use WPEmerge\Middleware\HasMiddlewareInterface;
 
 /**
  * Interface that routes must implement

@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Routing\Conditions;
+namespace WPEmerge\Routing\Conditions;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 
 /**
  * Interface that condition types must implement

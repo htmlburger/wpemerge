@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
 use Closure;
-use Obsidian\Controllers\WordPress;
+use WPEmerge\Controllers\WordPress;
 
 /**
  * Allow objects to have routes

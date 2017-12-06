@@ -1,17 +1,17 @@
 <?php
 
-namespace ObsidianTests\Middleware;
+namespace WPEmergeTests\Middleware;
 
 use Mockery;
-use Obsidian\Request;
-use Obsidian\Middleware\HasMiddlewareTrait;
-use Obsidian\Middleware\MiddlewareInterface;
-use ObsidianTestTools\TestMiddleware;
+use WPEmerge\Request;
+use WPEmerge\Middleware\HasMiddlewareTrait;
+use WPEmerge\Middleware\MiddlewareInterface;
+use WPEmergeTestTools\TestMiddleware;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Middleware\HasMiddlewareTrait
+ * @coversDefaultClass \WPEmerge\Middleware\HasMiddlewareTrait
  */
 class HasMiddlewareTraitTest extends WP_UnitTestCase {
     public function setUp() {

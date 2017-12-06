@@ -1,18 +1,18 @@
 <?php
 
-namespace ObsidianTests\Routing;
+namespace WPEmergeTests\Routing;
 
 use Mockery;
-use Obsidian;
-use Obsidian\Routing\Router;
-use Obsidian\Routing\RouteInterface;
-use Obsidian\Middleware\MiddlewareInterface;
+use WPEmerge;
+use WPEmerge\Routing\Router;
+use WPEmerge\Routing\RouteInterface;
+use WPEmerge\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Router
+ * @coversDefaultClass \WPEmerge\Routing\Router
  */
 class RouterTest extends WP_UnitTestCase {
     public function setUp() {
@@ -47,8 +47,8 @@ class RouterTest extends WP_UnitTestCase {
         $middleware = Mockery::mock( MiddlewareInterface::class );
         $middleware_array = [$middleware];
 
-        $container_key = OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY;
-        $container = Obsidian::getContainer();
+        $container_key = WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY;
+        $container = WPEmerge::getContainer();
 
         $route->shouldReceive( 'addMiddleware' )
             ->with( $middleware_array )
@@ -131,11 +131,11 @@ class RouterTest extends WP_UnitTestCase {
 
         $this->subject->addRoute( $route );
 
-        add_filter( 'obsidian.debug', '__return_false' );
+        add_filter( 'wp_emerge.debug', '__return_false' );
 
         $this->subject->execute( '' );
 
-        $response = apply_filters( 'obsidian.response', null );
+        $response = apply_filters( 'wp_emerge.response', null );
         $this->assertEquals( 500, $response->getStatusCode() );
     }
 
@@ -181,7 +181,7 @@ class RouterTest extends WP_UnitTestCase {
 
         $this->subject->execute( '' );
 
-        $filter_response = apply_filters( 'obsidian.response', null );
+        $filter_response = apply_filters( 'wp_emerge.response', null );
         $this->assertSame( $response, $filter_response );
     }
 
@@ -190,7 +190,7 @@ class RouterTest extends WP_UnitTestCase {
      * @covers ::handle
      */
     public function testExecute_Response_ReturnsBuiltInTemplate() {
-        $expected = OBSIDIAN_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+        $expected = WP_EMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 

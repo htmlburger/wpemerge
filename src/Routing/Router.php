@@ -1,12 +1,12 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Obsidian;
-use Obsidian\Request;
-use Obsidian\Response;
+use WPEmerge;
+use WPEmerge\Request;
+use WPEmerge\Response;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
@@ -39,7 +39,7 @@ class Router implements HasRoutesInterface {
 	 * @return void
 	 */
 	public function registerRewriteRules() {
-		$rules = apply_filters( 'obsidian.routing.rewrite_rules', [] );
+		$rules = apply_filters( 'wp_emerge.routing.rewrite_rules', [] );
 		foreach ( $rules as $rule => $rewrite_to ) {
 			add_rewrite_rule( $rule, $rewrite_to, 'top' );
 		}
@@ -53,7 +53,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
-		$global_middleware = Obsidian::resolve( OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY );
+		$global_middleware = WPEmerge::resolve( WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
@@ -83,17 +83,17 @@ class Router implements HasRoutesInterface {
 		$response = $route->handle( $request, $template );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
-			if ( Obsidian::debugging() ) {
+			if ( WPEmerge::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = Response::error( Response::response(), 500 );
 		}
 
-		add_filter( 'obsidian.response', function() use ( $response ) {
+		add_filter( 'wp_emerge.response', function() use ( $response ) {
 			return $response;
 		} );
 
-		return OBSIDIAN_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+		return WP_EMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
 	}
 
 	/**

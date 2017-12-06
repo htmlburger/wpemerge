@@ -1,19 +1,19 @@
 <?php
 
-namespace ObsidianTests\Templating;
+namespace WPEmergeTests\Templating;
 
-use Obsidian\Templating\Php as PhpEngine;
+use WPEmerge\Templating\Php as PhpEngine;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Templating\Php
+ * @coversDefaultClass \WPEmerge\Templating\Php
  */
 class PhpTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::render
 	 */
 	public function testRender_Template_Rendered() {
-		$template = OBSIDIAN_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
+		$template = WP_EMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
 		$expected = file_get_contents( $template );
 
 		$subject = new PhpEngine();
@@ -26,7 +26,7 @@ class PhpTest extends WP_UnitTestCase {
 	 * @covers ::render
 	 */
 	public function testRender_TemplateWithVariables_Rendered() {
-		$template = OBSIDIAN_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template-with-context.php';
+		$template = WP_EMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template-with-context.php';
 		$expected = 'Hello World!';
 
 		$subject = new PhpEngine();

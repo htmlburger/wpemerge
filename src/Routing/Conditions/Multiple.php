@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Routing\Conditions;
+namespace WPEmerge\Routing\Conditions;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 
 /**
  * Check against an array of conditions in an AND logical relationship
@@ -51,7 +51,7 @@ class Multiple implements ConditionInterface {
 	/**
 	 * Get all assigned conditions
 	 *
-	 * @return \Obsidian\Routing\Conditions\ConditionInterface[]
+	 * @return \WPEmerge\Routing\Conditions\ConditionInterface[]
 	 */
 	public function getConditions() {
 		return $this->conditions;

@@ -1,14 +1,14 @@
 <?php
 
-namespace ObsidianTests\Routing\Conditions;
+namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use Obsidian\Routing\Conditions\Custom;
-use Obsidian\Request;
+use WPEmerge\Routing\Conditions\Custom;
+use WPEmerge\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Conditions\Custom
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\Custom
  */
 class CustomTest extends WP_UnitTestCase {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
-use Obsidian\Support\Facade;
+use WPEmerge\Support\Facade;
 
 /**
  * Provide access to router service
@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class RouterFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return OBSIDIAN_ROUTING_ROUTER_KEY;
+        return WP_EMERGE_ROUTING_ROUTER_KEY;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace ObsidianTestTools;
+namespace WPEmergeTestTools;
 
-class TestServiceFacade extends \Obsidian\Support\Facade {
+class TestServiceFacade extends \WPEmerge\Support\Facade {
     protected static function getFacadeAccessor() {
         return 'test_service';
     }

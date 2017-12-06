@@ -1,13 +1,13 @@
 <?php
 
-namespace Obsidian\Routing\Conditions;
+namespace WPEmerge\Routing\Conditions;
 
 use Closure;
 use Exception;
-use Obsidian;
-use Obsidian\Routing\Conditions\Custom as CustomCondition;
-use Obsidian\Routing\Conditions\Multiple as MultipleCondition;
-use Obsidian\Routing\Conditions\Url as UrlCondition;
+use WPEmerge;
+use WPEmerge\Routing\Conditions\Custom as CustomCondition;
+use WPEmerge\Routing\Conditions\Multiple as MultipleCondition;
+use WPEmerge\Routing\Conditions\Url as UrlCondition;
 use ReflectionClass;
 
 /**
@@ -48,7 +48,7 @@ class Factory {
 			return false;
 		}
 
-		$condition_class = Obsidian::resolve( OBSIDIAN_ROUTING_CONDITIONS_KEY . $condition_type );
+		$condition_class = WPEmerge::resolve( WP_EMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
 		return ( $condition_class !== null );
 	}
 
@@ -115,7 +115,7 @@ class Factory {
 		}
 
 		$condition_options = static::getConditionTypeAndArguments( $options );
-		$condition_class = Obsidian::resolve( OBSIDIAN_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
+		$condition_class = WPEmerge::resolve( WP_EMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );

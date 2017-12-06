@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Routing\Conditions;
+namespace WPEmerge\Routing\Conditions;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 
 /**
  * Check against the current post's slug

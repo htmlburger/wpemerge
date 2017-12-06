@@ -99,7 +99,7 @@ install_test_suite() {
 	sed $ioption "s/yourusernamehere/$DB_USER/" wp-tests-config.php 2> /dev/null
 	sed $ioption "s/yourpasswordhere/$DB_PASS/" wp-tests-config.php 2> /dev/null
 	sed $ioption "s|localhost|${DB_HOST}|" wp-tests-config.php 2> /dev/null
-	sed $ioption "s/Test Blog/Obsidian Unit Tests/" wp-tests-config.php 2> /dev/null
+	sed $ioption "s/Test Blog/WP Emerge Unit Tests/" wp-tests-config.php 2> /dev/null
 }
 
 install_autoloader

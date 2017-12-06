@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Framework;
+namespace WPEmerge\Framework;
 
-use Obsidian\Support\Facade;
+use WPEmerge\Support\Facade;
 
 /**
  * Provide access to the framework instance
@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class FrameworkFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return OBSIDIAN_FRAMEWORK_KEY;
+        return WP_EMERGE_FRAMEWORK_KEY;
     }
 }

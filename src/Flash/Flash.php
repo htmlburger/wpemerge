@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Flash;
+namespace WPEmerge\Flash;
 
 use ArrayAccess;
 use Exception;
@@ -28,7 +28,7 @@ class Flash {
 	 *
 	 * @var string
 	 */
-	protected $storage_key = '__obsidianFlash';
+	protected $storage_key = '__wpEmergeFlash';
 
 	/**
 	 * Constructor

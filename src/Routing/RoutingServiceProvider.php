@@ -1,10 +1,10 @@
 <?php
 
-namespace Obsidian\Routing;
+namespace WPEmerge\Routing;
 
-use Obsidian;
-use Obsidian\Routing\Conditions\ConditionInterface;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
+use WPEmerge;
+use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
 
 /**
@@ -19,39 +19,39 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @var string[string]
 	 */
 	protected static $condition_extensions = [
-		'url' => \Obsidian\Routing\Conditions\Url::class,
-		'custom' => \Obsidian\Routing\Conditions\Custom::class,
-		'multiple' => \Obsidian\Routing\Conditions\Multiple::class,
-		'post_id' => \Obsidian\Routing\Conditions\PostId::class,
-		'post_slug' => \Obsidian\Routing\Conditions\PostSlug::class,
-		'post_template' => \Obsidian\Routing\Conditions\PostTemplate::class,
-		'post_type' => \Obsidian\Routing\Conditions\PostType::class,
-		'query_var' => \Obsidian\Routing\Conditions\QueryVar::class,
-		'has_query_var' => \Obsidian\Routing\Conditions\HasQueryVar::class,
+		'url' => \WPEmerge\Routing\Conditions\Url::class,
+		'custom' => \WPEmerge\Routing\Conditions\Custom::class,
+		'multiple' => \WPEmerge\Routing\Conditions\Multiple::class,
+		'post_id' => \WPEmerge\Routing\Conditions\PostId::class,
+		'post_slug' => \WPEmerge\Routing\Conditions\PostSlug::class,
+		'post_template' => \WPEmerge\Routing\Conditions\PostTemplate::class,
+		'post_type' => \WPEmerge\Routing\Conditions\PostType::class,
+		'query_var' => \WPEmerge\Routing\Conditions\QueryVar::class,
+		'has_query_var' => \WPEmerge\Routing\Conditions\HasQueryVar::class,
 	];
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ OBSIDIAN_CONFIG_KEY ] = array_merge( [
+		$container[ WP_EMERGE_CONFIG_KEY ] = array_merge( [
 			'global_middleware' => [],
-		], $container[ OBSIDIAN_CONFIG_KEY ] );
+		], $container[ WP_EMERGE_CONFIG_KEY ] );
 
-		$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = apply_filters(
-			'obsidian.global_middleware',
-			$container[ OBSIDIAN_CONFIG_KEY ]['global_middleware']
+		$container[ WP_EMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = apply_filters(
+			'WP_EMERGE.global_middleware',
+			$container[ WP_EMERGE_CONFIG_KEY ]['global_middleware']
 		);
 
-		$container[ OBSIDIAN_ROUTING_ROUTER_KEY ] = function() {
+		$container[ WP_EMERGE_ROUTING_ROUTER_KEY ] = function() {
 			return new Router();
 		};
 
 		foreach ( static::$condition_extensions as $name => $class_name ) {
-			$container[ OBSIDIAN_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
+			$container[ WP_EMERGE_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
 		}
 
-		Obsidian::facade( 'Router', RouterFacade::class );
+		WPEmerge::facade( 'Router', RouterFacade::class );
 	}
 
 	/**

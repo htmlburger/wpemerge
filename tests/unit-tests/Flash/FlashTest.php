@@ -1,13 +1,13 @@
 <?php
 
-namespace ObsidianTests\Flash;
+namespace WPEmergeTests\Flash;
 
-use Obsidian\Flash\Flash;
+use WPEmerge\Flash\Flash;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Flash\Flash
+ * @coversDefaultClass \WPEmerge\Flash\Flash
  */
 class FlashTest extends WP_UnitTestCase {
     /**

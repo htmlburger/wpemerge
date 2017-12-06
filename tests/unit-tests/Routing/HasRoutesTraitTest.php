@@ -1,17 +1,17 @@
 <?php
 
-namespace ObsidianTests\Routing;
+namespace WPEmergeTests\Routing;
 
 use Mockery;
-use Obsidian\Request;
-use Obsidian\Routing\Conditions\Url;
-use Obsidian\Routing\HasRoutesTrait;
-use Obsidian\Routing\RouteInterface;
-use Obsidian\Controllers\WordPress;
+use WPEmerge\Request;
+use WPEmerge\Routing\Conditions\Url;
+use WPEmerge\Routing\HasRoutesTrait;
+use WPEmerge\Routing\RouteInterface;
+use WPEmerge\Controllers\WordPress;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\HasRoutesTrait
+ * @coversDefaultClass \WPEmerge\Routing\HasRoutesTrait
  */
 class HasRoutesTraitTest extends WP_UnitTestCase {
     public function setUp() {

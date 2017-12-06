@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian;
+namespace WPEmerge;
 
-use Obsidian\Support\Arr;
+use WPEmerge\Support\Arr;
 
 /**
  * A server request representation
@@ -113,7 +113,7 @@ class Request {
 	/**
 	 * Get a value from any of the request parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	protected function input() {
@@ -131,7 +131,7 @@ class Request {
 	/**
 	 * Get a value from the GET parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function get() {
@@ -141,7 +141,7 @@ class Request {
 	/**
 	 * Get a value from the POST parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function post() {
@@ -151,7 +151,7 @@ class Request {
 	/**
 	 * Get a value from the COOKIE parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function cookie() {
@@ -161,7 +161,7 @@ class Request {
 	/**
 	 * Get a value from the FILES parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function files() {
@@ -171,7 +171,7 @@ class Request {
 	/**
 	 * Get a value from the SERVER parameters
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function server() {
@@ -181,7 +181,7 @@ class Request {
 	/**
 	 * Get a value from the headers
 	 *
-	 * @see  \Obsidian\Support\Arr
+	 * @see  \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function headers() {

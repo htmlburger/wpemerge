@@ -1,9 +1,9 @@
 <?php
 
-namespace ObsidianTestTools;
+namespace WPEmergeTestTools;
 
 use Closure;
-use Obsidian\Middleware\MiddlewareInterface;
+use WPEmerge\Middleware\MiddlewareInterface;
 
 class TestMiddleware implements MiddlewareInterface {
 	public function handle( $request, Closure $next ) {

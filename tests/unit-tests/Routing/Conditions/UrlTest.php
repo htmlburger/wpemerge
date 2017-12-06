@@ -1,14 +1,14 @@
 <?php
 
-namespace ObsidianTests\Routing\Conditions;
+namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use Obsidian\Request;
-use Obsidian\Routing\Conditions\Url;
+use WPEmerge\Request;
+use WPEmerge\Routing\Conditions\Url;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Conditions\Url
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\Url
  */
 class UrlTest extends WP_UnitTestCase {
     /**

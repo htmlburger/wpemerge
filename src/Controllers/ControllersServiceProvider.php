@@ -1,9 +1,9 @@
 <?php
 
-namespace Obsidian\Controllers;
+namespace WPEmerge\Controllers;
 
-use Obsidian;
-use Obsidian\ServiceProviders\ServiceProviderInterface;
+use WPEmerge;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide controller dependencies

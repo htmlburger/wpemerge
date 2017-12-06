@@ -5,7 +5,7 @@ use Sami\Parser\Filter\PublicFilter;
 
 define( 'DS', DIRECTORY_SEPARATOR );
 
-$repository = 'htmlburger/obsidian';
+$repository = 'htmlburger/wp-emerge';
 $relative_dir = 'src';
 $dir = __DIR__ . DS . $relative_dir;
 $documentation_dir = __DIR__ . DS . 'docs';
@@ -15,7 +15,7 @@ $versions = GitVersionCollection::create($dir)
     ->add('master', 'master branch');
 
 return new \Sami\Sami( $dir, [
-	'title' => 'Obsidian',
+	'title' => 'WP Emerge',
 	'versions' => $versions,
 	'remote_repository' => new GitHubRemoteRepository( $repository, dirname( $dir ) ),
     'build_dir' => $documentation_dir . DS . 'build' . DS . '%version%',

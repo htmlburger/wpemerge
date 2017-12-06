@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Middleware;
+namespace WPEmerge\Middleware;
 
 use Closure;
 
@@ -11,7 +11,7 @@ interface MiddlewareInterface {
 	/**
 	 * Execute middleware
 	 *
-	 * @param  \Obsidian\Request                   $request
+	 * @param  \WPEmerge\Request                   $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

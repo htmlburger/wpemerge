@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Flash;
+namespace WPEmerge\Flash;
 
-use Obsidian\Support\Facade;
+use WPEmerge\Support\Facade;
 
 /**
  * Provide access to session flashing service
@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class FlashFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return OBSIDIAN_FLASH_KEY;
+        return WP_EMERGE_FLASH_KEY;
     }
 }

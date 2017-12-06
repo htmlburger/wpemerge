@@ -1,15 +1,15 @@
 <?php
 
-namespace ObsidianTests\Routing;
+namespace WPEmergeTests\Routing;
 
 use Mockery;
-use Obsidian\Routing\Handler;
+use WPEmerge\Routing\Handler;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Routing\Handler
+ * @coversDefaultClass \WPEmerge\Routing\Handler
  */
 class HandlerTest extends WP_UnitTestCase {
     public function setUp() {
@@ -56,11 +56,11 @@ class HandlerTest extends WP_UnitTestCase {
      */
     public function testSet_ClassAtMethod_Array() {
         $expected = [
-            'class' => '\ObsidianTestTools\TestService',
+            'class' => '\WPEmergeTestTools\TestService',
             'method' => 'getTest',
         ];
 
-        $this->subject->set( '\ObsidianTestTools\TestService@getTest' );
+        $this->subject->set( '\WPEmergeTestTools\TestService@getTest' );
         $this->assertEquals( $expected, $this->subject->get() );
     }
 
@@ -71,11 +71,11 @@ class HandlerTest extends WP_UnitTestCase {
      */
     public function testSet_ClassColonsMethod_Array() {
         $expected = [
-            'class' => '\ObsidianTestTools\TestService',
+            'class' => '\WPEmergeTestTools\TestService',
             'method' => 'getTest',
         ];
 
-        $this->subject->set( '\ObsidianTestTools\TestService::getTest' );
+        $this->subject->set( '\WPEmergeTestTools\TestService::getTest' );
         $this->assertEquals( $expected, $this->subject->get() );
     }
 
@@ -87,7 +87,7 @@ class HandlerTest extends WP_UnitTestCase {
      * @expectedExceptionMessage No or invalid handler
      */
     public function testSet_InvalidString_ThrowException() {
-        $this->subject->set( '\ObsidianTestTools\TestService' );
+        $this->subject->set( '\WPEmergeTestTools\TestService' );
     }
 
     /**

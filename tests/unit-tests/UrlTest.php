@@ -1,14 +1,14 @@
 <?php
 
-namespace ObsidianTests;
+namespace WPEmergeTests;
 
 use Mockery;
-use Obsidian\Url;
-use Obsidian\Request;
+use WPEmerge\Url;
+use WPEmerge\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Url
+ * @coversDefaultClass \WPEmerge\Url
  */
 class UrlTest extends WP_UnitTestCase {
     /**

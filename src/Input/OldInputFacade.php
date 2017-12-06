@@ -1,8 +1,8 @@
 <?php
 
-namespace Obsidian\Input;
+namespace WPEmerge\Input;
 
-use Obsidian\Support\Facade;
+use WPEmerge\Support\Facade;
 
 /**
  * Provide access to old input service
@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class OldInputFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return OBSIDIAN_OLD_INPUT_KEY;
+        return WP_EMERGE_OLD_INPUT_KEY;
     }
 }

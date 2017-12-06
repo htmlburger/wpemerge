@@ -1,6 +1,6 @@
 <?php
 
-namespace Obsidian\Middleware;
+namespace WPEmerge\Middleware;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
@@ -19,7 +19,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Add middleware
 	 *
-	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function addMiddleware( $middleware );
@@ -28,7 +28,7 @@ interface HasMiddlewareInterface {
 	 * Alias for addMiddleware.
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
-	 * @param  string|\Closure|\Obsidian\Middleware\MiddlewareInterface|array $middleware
+	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function add( $middleware );
@@ -37,7 +37,7 @@ interface HasMiddlewareInterface {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array             $middleware
-	 * @param  \Obsidian\Request $request
+	 * @param  \WPEmerge\Request $request
 	 * @param  Closure           $next
 	 * @return ResponseInterface
 	 */

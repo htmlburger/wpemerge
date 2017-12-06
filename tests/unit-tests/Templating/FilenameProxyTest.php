@@ -1,20 +1,20 @@
 <?php
 
-namespace ObsidianTests\Templating;
+namespace WPEmergeTests\Templating;
 
 use Mockery;
-use Obsidian;
-use Obsidian\Templating\FilenameProxy;
+use WPEmerge;
+use WPEmerge\Templating\FilenameProxy;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Templating\FilenameProxy
+ * @coversDefaultClass \WPEmerge\Templating\FilenameProxy
  */
 class FilenameProxyTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->container = Obsidian::getContainer();
+		$this->container = WPEmerge::getContainer();
 	}
 
 	/**

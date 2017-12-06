@@ -1,12 +1,12 @@
 <?php
 
-namespace ObsidianTests;
+namespace WPEmergeTests;
 
-use Obsidian\Request;
+use WPEmerge\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Request
+ * @coversDefaultClass \WPEmerge\Request
  */
 class RequestTest extends WP_UnitTestCase {
     /**

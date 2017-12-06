@@ -1,11 +1,11 @@
 <?php
 
-class Obsidian_Tests_Bootstrap {
+class WPEmerge_Tests_Bootstrap {
 
 	/**
 	 * The bootstrap instance.
 	 *
-	 * @var Obsidian_Tests_Bootstrap
+	 * @var WPEmerge_Tests_Bootstrap
 	 */
 	protected static $instance = null;
 
@@ -41,7 +41,7 @@ class Obsidian_Tests_Bootstrap {
 		$this->library_directory = dirname( $this->tests_dir );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->library_directory . '/tmp/wordpress-tests-lib';
 
-		define( 'OBSIDIAN_TEST_DIR', $this->tests_dir );
+		define( 'WP_EMERGE_TEST_DIR', $this->tests_dir );
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );
@@ -58,7 +58,7 @@ class Obsidian_Tests_Bootstrap {
 			$wp->query_vars = array();
 		}
 
-		Obsidian::boot();
+		WPEmerge::boot();
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Obsidian_Tests_Bootstrap {
 	/**
 	 * Get the single tests boostrap instance
 	 *
-	 * @return Obsidian_Tests_Bootstrap
+	 * @return WPEmerge_Tests_Bootstrap
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
@@ -83,4 +83,4 @@ class Obsidian_Tests_Bootstrap {
 
 }
 
-Obsidian_Tests_Bootstrap::instance();
+WPEmerge_Tests_Bootstrap::instance();
