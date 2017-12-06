@@ -4,7 +4,7 @@ namespace Obsidian\Routing;
 
 use Closure;
 use Exception;
-use Obsidian\Framework;
+use Obsidian;
 
 /**
  * Represent a Closure or a controller method to be executed in response to a request
@@ -103,7 +103,7 @@ class Handler {
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
-		$controller = Framework::instantiate( $class );
+		$controller = Obsidian::instantiate( $class );
 		return call_user_func_array( [$controller, $method], $arguments );
 	}
 

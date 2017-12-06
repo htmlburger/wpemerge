@@ -9,10 +9,8 @@ use Obsidian\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class RouterFacade extends Facade
-{
-    protected static function getFacadeAccessor()
-    {
+class RouterFacade extends Facade {
+    protected static function getFacadeAccessor() {
         return 'framework.routing.router';
     }
 }

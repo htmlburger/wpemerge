@@ -1,6 +1,9 @@
 <?php
 
+namespace ObsidianTests;
+
 use Obsidian\Request;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Request

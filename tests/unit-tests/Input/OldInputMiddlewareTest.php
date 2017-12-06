@@ -1,8 +1,12 @@
 <?php
 
-use Obsidian\Framework;
+namespace ObsidianTests\Input;
+
+use Mockery;
+use Obsidian;
 use Obsidian\Request;
 use Obsidian\Input\OldInputMiddleware;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Input\OldInputMiddleware
@@ -13,8 +17,8 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 
 		$this->oldInputMock = Mockery::mock();
 
-		Framework::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
-		$container = Framework::getContainer();
+		Obsidian::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
+		$container = Obsidian::getContainer();
 		$container['oldInputMock'] = $this->oldInputMock;
 		$this->subject = new OldInputMiddleware();
 	}
@@ -23,7 +27,7 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = Framework::getContainer();
+		$container = Obsidian::getContainer();
 		unset( $container['oldInputMock'] );
 		unset( $this->oldInputMock );
 		unset( $this->subject );

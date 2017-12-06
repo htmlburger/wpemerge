@@ -9,10 +9,8 @@ use Obsidian\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class OldInputFacade extends Facade
-{
-    protected static function getFacadeAccessor()
-    {
+class OldInputFacade extends Facade {
+    protected static function getFacadeAccessor() {
         return 'framework.old_input.old_input';
     }
 }

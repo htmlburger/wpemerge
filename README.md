@@ -50,7 +50,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     ```
 - Service container (using [Pimple](https://pimple.symfony.com/))
     ```php
-    $container = \Obsidian\Framework::getContainer();
+    $container = Obsidian::getContainer();
     $container['my_service'] = function() {
         return new MyService();
     };
@@ -72,7 +72,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     ```
 - Custom template engine support (Twig and Blade available as add-on packages)
     ```php
-    $container = \Obsidian\Framework::getContainer();
+    $container = Obsidian::getContainer();
     $container['framework.templating.engine'] = function( $container ) {
         return new MyTemplateEngine();
     };
@@ -92,7 +92,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
     } );
 
     add_action( 'after_setup_theme', function() {
-        \Obsidian\Framework::boot();
+        Obsidian::boot();
 
         Router::get( '/', function() {
             return obs_output( 'Hello World!' );

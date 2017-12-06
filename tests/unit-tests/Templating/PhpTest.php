@@ -1,6 +1,9 @@
 <?php
 
+namespace ObsidianTests\Templating;
+
 use Obsidian\Templating\Php as PhpEngine;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Templating\Php

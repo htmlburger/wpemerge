@@ -1,7 +1,11 @@
 <?php
 
+namespace ObsidianTests\Routing\Conditions;
+
+use Mockery;
 use Obsidian\Routing\Conditions\Custom;
 use Obsidian\Request;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\Conditions\Custom

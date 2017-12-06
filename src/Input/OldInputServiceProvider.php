@@ -2,7 +2,7 @@
 
 namespace Obsidian\Input;
 
-use Obsidian\Framework;
+use Obsidian;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -23,7 +23,7 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 			return new \Obsidian\Input\OldInput();
 		};
 
-		Framework::facade( 'OldInput', \Obsidian\Input\OldInputFacade::class );
+		Obsidian::facade( 'OldInput', \Obsidian\Input\OldInputFacade::class );
 	}
 
 	/**

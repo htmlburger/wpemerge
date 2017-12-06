@@ -1,8 +1,12 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface;
+namespace ObsidianTests;
+
+use Mockery;
 use Obsidian\Request;
 use Obsidian\Response;
+use Psr\Http\Message\ResponseInterface;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Response

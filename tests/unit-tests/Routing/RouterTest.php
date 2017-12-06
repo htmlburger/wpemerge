@@ -1,10 +1,15 @@
 <?php
 
-use Obsidian\Framework;
+namespace ObsidianTests\Routing;
+
+use Mockery;
+use Obsidian;
 use Obsidian\Routing\Router;
 use Obsidian\Routing\RouteInterface;
 use Obsidian\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\Router
@@ -43,7 +48,7 @@ class RouterTest extends WP_UnitTestCase {
         $middleware_array = [$middleware];
 
         $container_key = 'framework.routing.global_middleware';
-        $container = Framework::getContainer();
+        $container = Obsidian::getContainer();
 
         $route->shouldReceive( 'addMiddleware' )
             ->with( $middleware_array )

@@ -1,9 +1,14 @@
 <?php
 
+namespace ObsidianTests\Middleware;
+
+use Mockery;
 use Obsidian\Request;
 use Obsidian\Middleware\HasMiddlewareTrait;
 use Obsidian\Middleware\MiddlewareInterface;
 use ObsidianTestTools\TestMiddleware;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Middleware\HasMiddlewareTrait
@@ -13,10 +18,8 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
         parent::setUp();
 
         $this->subject = $this->getMockForTrait( HasMiddlewareTrait::class );
-        $this->middleware_stub1 = $this->getMockBuilder( MiddlewareInterface::class )
-            ->getMock();
-        $this->middleware_stub2 = $this->getMockBuilder( MiddlewareInterface::class )
-            ->getMock();
+        $this->middleware_stub1 = Mockery::mock( MiddlewareInterface::class )->shouldIgnoreMissing();
+        $this->middleware_stub2 = Mockery::mock( MiddlewareInterface::class )->shouldIgnoreMissing();
         $this->request_stub = new Request( [], [], [], [], [], [] );
     }
 

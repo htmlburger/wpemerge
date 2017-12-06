@@ -2,7 +2,7 @@
 
 namespace Obsidian\Templating;
 
-use Obsidian\Framework;
+use Obsidian;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**

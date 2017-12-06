@@ -1,8 +1,12 @@
 <?php
 
+namespace ObsidianTests\Routing\Conditions;
+
+use Mockery;
 use Obsidian\Routing\Conditions\Custom;
 use Obsidian\Routing\Conditions\Multiple;
 use Obsidian\Request;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\Conditions\Multiple

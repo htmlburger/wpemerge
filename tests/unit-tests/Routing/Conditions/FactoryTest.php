@@ -1,11 +1,15 @@
 <?php
 
+namespace ObsidianTests\Routing\Conditions;
+
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\Custom;
 use Obsidian\Routing\Conditions\Factory;
 use Obsidian\Routing\Conditions\Multiple;
 use Obsidian\Routing\Conditions\PostId;
 use Obsidian\Routing\Conditions\Url;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\Conditions\Factory

@@ -2,8 +2,7 @@
 
 namespace Obsidian\Routing;
 
-use Obsidian\Extend;
-use Obsidian\Framework;
+use Obsidian;
 use Obsidian\Routing\Conditions\ConditionInterface;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
@@ -52,7 +51,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			$container[ 'framework.routing.conditions.' . $name ] = $class_name;
 		}
 
-		Framework::facade( 'Router', RouterFacade::class );
+		Obsidian::facade( 'Router', RouterFacade::class );
 	}
 
 	/**

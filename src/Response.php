@@ -5,6 +5,7 @@ namespace Obsidian;
 use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
+use Obsidian;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -185,7 +186,7 @@ class Response {
 			throw new Exception( 'Could not resolve template.' );
 		}
 
-		$engine = Framework::resolve( 'framework.templating.engine' );
+		$engine = Obsidian::resolve( 'framework.templating.engine' );
 		$html = $engine->render( $template, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );

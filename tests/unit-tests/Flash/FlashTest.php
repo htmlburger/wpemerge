@@ -1,6 +1,10 @@
 <?php
 
+namespace ObsidianTests\Flash;
+
 use Obsidian\Flash\Flash;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Flash\Flash

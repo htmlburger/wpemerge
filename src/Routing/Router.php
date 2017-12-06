@@ -4,7 +4,7 @@ namespace Obsidian\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Obsidian\Framework;
+use Obsidian;
 use Obsidian\Request;
 use Obsidian\Response as FrameworkResponse;
 
@@ -53,7 +53,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
-		$global_middleware = Framework::resolve( 'framework.routing.global_middleware' );
+		$global_middleware = Obsidian::resolve( 'framework.routing.global_middleware' );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
@@ -83,7 +83,7 @@ class Router implements HasRoutesInterface {
 		$response = $route->handle( $request, $template );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
-			if ( Framework::debugging() ) {
+			if ( Obsidian::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = FrameworkResponse::error( FrameworkResponse::response(), 500 );

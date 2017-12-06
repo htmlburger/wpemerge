@@ -2,7 +2,7 @@
 
 namespace Obsidian\Flash;
 
-use Obsidian\Framework;
+use Obsidian;
 use Obsidian\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -25,7 +25,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			return new \Obsidian\Flash\Flash( $session );
 		};
 
-		Framework::facade( 'Flash', \Obsidian\Flash\FlashFacade::class );
+		Obsidian::facade( 'Flash', \Obsidian\Flash\FlashFacade::class );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace Obsidian\Templating;
 
-use Obsidian\Framework;
+use Obsidian;
 
 /**
  * Include template files with different engines depending on their filename
@@ -78,7 +78,7 @@ class FilenameProxy implements \Obsidian\Templating\EngineInterface {
 	 */
 	public function render( $file, $context ) {
 		$engine_key = $this->getBindingForFile( $file );
-		$engine_instance = Framework::resolve( $engine_key );
+		$engine_instance = Obsidian::resolve( $engine_key );
 		return $engine_instance->render( $file, $context );
 	}
 }

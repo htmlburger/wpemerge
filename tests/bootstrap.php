@@ -58,7 +58,7 @@ class Obsidian_Tests_Bootstrap {
 			$wp->query_vars = array();
 		}
 
-		\Obsidian\Framework::boot();
+		Obsidian::boot();
 	}
 
 	/**

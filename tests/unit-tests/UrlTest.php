@@ -1,6 +1,11 @@
 <?php
 
+namespace ObsidianTests;
+
+use Mockery;
 use Obsidian\Url;
+use Obsidian\Request;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Url
@@ -12,10 +17,11 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetPath_Home_Slash() {
         $expected = '/';
 
-        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
-        $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/' );
+        $mock = Mockery::mock( Request::class );
+        $mock->shouldReceive( 'getUrl' )
+            ->andReturn( 'http://example.org/' );
 
-        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock ) );
     }
 
     /**
@@ -24,10 +30,11 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetPath_Subpage_RelativePath() {
         $expected = '/foo/bar/';
 
-        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
-        $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/' );
+        $mock = Mockery::mock( Request::class );
+        $mock->shouldReceive( 'getUrl' )
+            ->andReturn( 'http://example.org/foo/bar/' );
 
-        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock ) );
     }
 
     /**
@@ -36,10 +43,11 @@ class UrlTest extends WP_UnitTestCase {
     public function testGetPath_QueryString_StripsQueryString() {
         $expected = '/foo/bar/';
 
-        $mock_request = $this->getMockBuilder( Obsidian\Request::class )->disableOriginalConstructor()->getMock();
-        $mock_request->method( 'getUrl' )->willReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
+        $mock = Mockery::mock( Request::class );
+        $mock->shouldReceive( 'getUrl' )
+            ->andReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
 
-        $this->assertEquals( $expected, Url::getPath( $mock_request ) );
+        $this->assertEquals( $expected, Url::getPath( $mock ) );
     }
 
     /**

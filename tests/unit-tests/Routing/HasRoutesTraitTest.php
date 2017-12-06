@@ -1,10 +1,14 @@
 <?php
 
+namespace ObsidianTests\Routing;
+
+use Mockery;
 use Obsidian\Request;
 use Obsidian\Routing\Conditions\Url;
 use Obsidian\Routing\HasRoutesTrait;
 use Obsidian\Routing\RouteInterface;
 use Obsidian\Controllers\WordPress;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\HasRoutesTrait

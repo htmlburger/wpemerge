@@ -1,7 +1,11 @@
 <?php
 
-use Obsidian\Framework;
+namespace ObsidianTests\Templating;
+
+use Mockery;
+use Obsidian;
 use Obsidian\Templating\FilenameProxy;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Templating\FilenameProxy
@@ -10,7 +14,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->container = Framework::getContainer();
+		$this->container = Obsidian::getContainer();
 	}
 
 	/**

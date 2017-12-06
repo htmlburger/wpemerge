@@ -29,7 +29,8 @@
         },
         "files": [
             "config.php",
-            "src/functions.php"
+            "src/functions.php",
+            "src/load.php"
         ]
     },
     "require": {

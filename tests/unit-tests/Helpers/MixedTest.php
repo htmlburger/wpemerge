@@ -1,7 +1,11 @@
 <?php
 
+namespace ObsidianTests\Helpers;
+
 use Obsidian\Helpers\Mixed;
 use ObsidianTestTools\TestService;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Helpers\Mixed

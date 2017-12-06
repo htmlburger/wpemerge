@@ -1,8 +1,12 @@
 <?php
 
-use Obsidian\Framework;
+namespace ObsidianTests\Input;
+
+use Mockery;
+use Obsidian;
 use Obsidian\Request;
 use Obsidian\Input\OldInput;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Input\OldInput
@@ -13,8 +17,8 @@ class OldInputTest extends WP_UnitTestCase {
 
 		$this->flashMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
 
-		Framework::facade( 'Flash', OldInputTestFlashFacade::class );
-		$container = Framework::getContainer();
+		Obsidian::facade( 'Flash', OldInputTestFlashFacade::class );
+		$container = Obsidian::getContainer();
 		$container['flashMock'] = $this->flashMock;
 		$this->subject = new OldInput();
 	}
@@ -23,7 +27,7 @@ class OldInputTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = Framework::getContainer();
+		$container = Obsidian::getContainer();
 		unset( $container['flashMock'] );
 		unset( $this->flashMock );
 		unset( $this->subject );

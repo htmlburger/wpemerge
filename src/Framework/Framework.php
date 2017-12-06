@@ -1,12 +1,13 @@
 <?php
 
-namespace Obsidian;
+namespace Obsidian\Framework;
 
 use ReflectionException;
 use ReflectionMethod;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
+use Obsidian\Response;
 use Obsidian\Support\Facade;
 use Obsidian\Support\AliasLoader;
 use Obsidian\Routing\RoutingServiceProvider;
@@ -24,21 +25,21 @@ class Framework {
 	 *
 	 * @var boolean
 	 */
-	protected static $booted = false;
+	protected $booted = false;
 
 	/**
 	 * IoC container
 	 *
 	 * @var Container
 	 */
-	protected static $container = null;
+	protected $container = null;
 
 	/**
 	 * Array of framework service providers
 	 *
 	 * @var string[]
 	 */
-	protected static $service_proviers = [
+	protected $service_proviers = [
 		RoutingServiceProvider::class,
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,
@@ -47,11 +48,20 @@ class Framework {
 	];
 
 	/**
+	 * Constructor
+	 *
+	 * @param Container $container
+	 */
+	public function __construct( Container $container ) {
+		$this->container = $container;
+	}
+
+	/**
 	 * Get whether WordPress is in debug mode
 	 *
 	 * @return boolean
 	 */
-	public static function debugging() {
+	public function debugging() {
 		$debugging = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
 		$debugging = apply_filters( 'obsidian.debug', $debugging );
 		return $debugging;
@@ -62,8 +72,8 @@ class Framework {
 	 *
 	 * @return boolean
 	 */
-	public static function isBooted() {
-		return static::$booted;
+	public function isBooted() {
+		return $this->booted;
 	}
 
 	/**
@@ -73,9 +83,9 @@ class Framework {
 	 * @throws Exception
 	 * @return void
 	 */
-	protected static function verifyBoot() {
-		if ( ! static::isBooted() ) {
-			throw new Exception( get_called_class() . ' must be booted first.' );
+	protected function verifyBoot() {
+		if ( ! $this->isBooted() ) {
+			throw new Exception( static::class . ' must be booted first.' );
 		}
 	}
 
@@ -84,13 +94,8 @@ class Framework {
 	 *
 	 * @return Container
 	 */
-	public static function getContainer() {
-		// @codeCoverageIgnoreStart
-		if ( static::$container === null ) {
-			static::$container = new Container();
-		}
-		// @codeCoverageIgnoreEnd
-		return static::$container;
+	public function getContainer() {
+		return $this->container;
 	}
 
 	/**
@@ -102,21 +107,17 @@ class Framework {
 	 * @throws Exception
 	 * @return void
 	 */
-	public static function boot( $config = [] ) {
-		if ( static::isBooted() ) {
-			throw new Exception( get_called_class() . ' already booted.' );
+	public function boot( $config = [] ) {
+		if ( $this->isBooted() ) {
+			throw new Exception( static::class . ' already booted.' );
 		}
 
 		do_action( 'obsidian.booting' );
 
-		$container = static::getContainer();
-		Facade::setFacadeApplication( $container );
-		AliasLoader::getInstance()->register();
-
-		static::loadConfig( $container, $config );
-		static::loadServiceProviders( $container );
-
-		static::$booted = true;
+		$container = $this->getContainer();
+		$this->loadConfig( $container, $config );
+		$this->loadServiceProviders( $container );
+		$this->booted = true;
 
 		do_action( 'obsidian.booted' );
 	}
@@ -129,8 +130,8 @@ class Framework {
 	 * @param  array     $config
 	 * @return void
 	 */
-	protected static function loadConfig( Container $container, $config ) {
-		$container = static::getContainer();
+	protected function loadConfig( Container $container, $config ) {
+		$container = $this->getContainer();
 		$container['framework.config'] = array_merge( [
 			'providers' => [],
 		], $config );
@@ -143,9 +144,9 @@ class Framework {
 	 * @param  Container $container
 	 * @return void
 	 */
-	protected static function loadServiceProviders( Container $container ) {
+	protected function loadServiceProviders( Container $container ) {
 		$container['framework.service_providers'] = array_merge(
-			static::$service_proviers,
+			$this->service_proviers,
 			$container['framework.config']['providers']
 		);
 
@@ -158,8 +159,8 @@ class Framework {
 			return new $service_provider();
 		}, $container['framework.service_providers'] );
 
-		static::registerServiceProviders( $service_providers, $container );
-		static::bootServiceProviders( $service_providers, $container );
+		$this->registerServiceProviders( $service_providers, $container );
+		$this->bootServiceProviders( $service_providers, $container );
 	}
 
 	/**
@@ -170,7 +171,7 @@ class Framework {
 	 * @param  Container                                             $container
 	 * @return void
 	 */
-	protected static function registerServiceProviders( $service_providers, Container $container ) {
+	protected function registerServiceProviders( $service_providers, Container $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->register( $container );
 		}
@@ -184,7 +185,7 @@ class Framework {
 	 * @param  Container                                             $container
 	 * @return void
 	 */
-	protected static function bootServiceProviders( $service_providers, Container $container ) {
+	protected function bootServiceProviders( $service_providers, Container $container ) {
 		foreach ( $service_providers as $provider ) {
 			$provider->boot( $container );
 		}
@@ -197,7 +198,7 @@ class Framework {
 	 * @param  string $facade_class
 	 * @return void
 	 */
-	public static function facade( $alias, $facade_class ) {
+	public function facade( $alias, $facade_class ) {
 		AliasLoader::getInstance()->alias( $alias, $facade_class );
 	}
 
@@ -207,14 +208,14 @@ class Framework {
 	 * @param  string   $key
 	 * @return mixed|null
 	 */
-	public static function resolve( $key ) {
-		static::verifyBoot();
+	public function resolve( $key ) {
+		$this->verifyBoot();
 
-		if ( ! isset( static::getContainer()[ $key ] ) ) {
+		if ( ! isset( $this->getContainer()[ $key ] ) ) {
 			return null;
 		}
 
-		return static::getContainer()[ $key ];
+		return $this->getContainer()[ $key ];
 	}
 
 	/**
@@ -223,10 +224,10 @@ class Framework {
 	 * @param  string $class
 	 * @return object
 	 */
-	public static function instantiate( $class ) {
-		static::verifyBoot();
+	public function instantiate( $class ) {
+		$this->verifyBoot();
 
-		$instance = static::resolve( $class );
+		$instance = $this->resolve( $class );
 
 		if ( $instance === null ) {
 			$instance = new $class();
@@ -242,7 +243,7 @@ class Framework {
 	 * @param  ResponseInterface $response
 	 * @return void
 	 */
-	public static function respond( ResponseInterface $response ) {
+	public function respond( ResponseInterface $response ) {
 		Response::respond( $response );
 	}
 }

@@ -1,7 +1,12 @@
 <?php
 
+namespace ObsidianTests\Routing;
+
+use Mockery;
 use Obsidian\Routing\Handler;
 use Psr\Http\Message\ResponseInterface;
+use stdClass;
+use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \Obsidian\Routing\Handler
@@ -124,7 +129,7 @@ class HandlerTest extends WP_UnitTestCase {
         $bar = 'bar';
         $expected = (object) ['value' => $foo . $bar];
 
-        $this->subject->set( 'HandlerTestControllerMock@foobar' );
+        $this->subject->set( HandlerTestControllerMock::class . '@foobar' );
         $this->assertEquals( $expected, $this->subject->execute( 'foo', 'bar' ) );
     }
 

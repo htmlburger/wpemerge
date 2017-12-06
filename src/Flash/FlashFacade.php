@@ -9,10 +9,8 @@ use Obsidian\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class FlashFacade extends Facade
-{
-    protected static function getFacadeAccessor()
-    {
+class FlashFacade extends Facade {
+    protected static function getFacadeAccessor() {
         return 'framework.flash.flash';
     }
 }

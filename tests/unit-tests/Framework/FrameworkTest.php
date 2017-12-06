@@ -1,44 +1,57 @@
 <?php
 
+namespace ObsidianTests\Framework;
+
+use Obsidian\Framework\Framework;
+use Obsidian\Support\Facade;
 use Pimple\Container;
-use Obsidian\Framework;
+use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \Obsidian\Framework
+ * @coversDefaultClass \Obsidian\Framework\Framework
  */
 class FrameworkTest extends WP_UnitTestCase {
+    public function setUp() {
+        parent::setUp();
+
+        $this->container = new Container();
+        $this->subject = new Framework( $this->container );
+        $this->facade_application = Facade::getFacadeApplication();
+        Facade::setFacadeApplication( $this->container );
+    }
+
+    public function tearDown() {
+        parent::tearDown();
+
+        Facade::setFacadeApplication( $this->facade_application );
+        unset( $this->subject );
+        unset($this->facade_application);
+    }
+
     /**
      * @covers ::debugging
      */
     public function testDebugging() {
-        $this->assertTrue( Framework::debugging() );
+        $this->assertTrue( $this->subject->debugging() );
         add_filter( 'obsidian.debug', '__return_false' );
-        $this->assertFalse( Framework::debugging() );
+        $this->assertFalse( $this->subject->debugging() );
     }
 
     /**
      * @covers ::isBooted
      */
     public function testIsBooted() {
-        $this->assertEquals( true, Framework::isBooted() );
-        // can't test for false since the framework needs to be booted for tests
+        $this->assertEquals( false, $this->subject->isBooted() );
+        $this->subject->boot();
+        $this->assertEquals( true, $this->subject->isBooted() );
     }
 
     /**
      * @covers ::getContainer
      */
     public function testGetContainer_ReturnsContainer() {
-        $container = Framework::getContainer();
+        $container = $this->subject->getContainer();
         $this->assertInstanceOf( Container::class, $container );
-    }
-
-    /**
-     * @covers ::getContainer
-     */
-    public function testGetContainer_CalledMultipleTimes_ReturnsSameContainer() {
-        $container1 = Framework::getContainer();
-        $container2 = Framework::getContainer();
-        $this->assertSame( $container1, $container2 );
     }
 
     /**
@@ -47,7 +60,8 @@ class FrameworkTest extends WP_UnitTestCase {
      * @expectedExceptionMessage already booted
      */
     public function testBoot_CalledMultipleTimes_ThrowsException() {
-        Framework::boot();
+        $this->subject->boot();
+        $this->subject->boot();
     }
 
     /**
@@ -56,13 +70,13 @@ class FrameworkTest extends WP_UnitTestCase {
     public function testFacade() {
         $expected = 'foobar';
 
-        $container = Framework::getContainer();
+        $container = $this->subject->getContainer();
         $container['test_service'] = function() {
             return new \ObsidianTestTools\TestService();
         };
         $alias = 'TestServiceAlias';
 
-        Framework::facade( $alias, \ObsidianTestTools\TestServiceFacade::class );
+        $this->subject->facade( $alias, \ObsidianTestTools\TestServiceFacade::class );
         $this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
     }
 
@@ -73,7 +87,8 @@ class FrameworkTest extends WP_UnitTestCase {
         $expected = null;
         $container_key = 'nonexistantcontainerkey';
 
-        $this->assertSame( $expected, Framework::resolve( $container_key ) );
+        $this->subject->boot();
+        $this->assertSame( $expected, $this->subject->resolve( $container_key ) );
     }
 
     /**
@@ -84,10 +99,11 @@ class FrameworkTest extends WP_UnitTestCase {
         $container_key = 'test';
         $container_key_nonexistant = 'nonexistantcontainerkey';
 
-        $container = Framework::getContainer();
+        $container = $this->subject->getContainer();
         $container[ $container_key ] = $expected;
 
-        $this->assertSame( $expected, Framework::resolve( $container_key ) );
+        $this->subject->boot();
+        $this->assertSame( $expected, $this->subject->resolve( $container_key ) );
     }
 
     /**
@@ -95,8 +111,10 @@ class FrameworkTest extends WP_UnitTestCase {
      */
     public function testInstantiate_UnknownClass_CreatesFreshInstance() {
         $class = \ObsidianTestTools\TestService::class;
-        $instance1 = Framework::instantiate( $class );
-        $instance2 = Framework::instantiate( $class );
+
+        $this->subject->boot();
+        $instance1 = $this->subject->instantiate( $class );
+        $instance2 = $this->subject->instantiate( $class );
 
         $this->assertInstanceOf( $class, $instance1 );
         $this->assertInstanceOf( $class, $instance2 );
@@ -110,13 +128,15 @@ class FrameworkTest extends WP_UnitTestCase {
         $expected = rand(1, 999999);
         $class = \ObsidianTestTools\TestService::class;
 
-        $container = Framework::getContainer();
+        $container = $this->subject->getContainer();
         $container[ $class ] = function() use ( $expected, $class ) {
             $instance = new $class();
             $instance->setTest( $expected );
             return $instance;
         };
-        $instance = Framework::instantiate( $class );
+
+        $this->subject->boot();
+        $instance = $this->subject->instantiate( $class );
 
         $this->assertEquals( $expected, $instance->getTest() );
     }
