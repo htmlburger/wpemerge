@@ -29,7 +29,7 @@ class PostId implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		return ( is_singular() && intval( $this->post_id ) === intval( get_the_ID() ) );
 	}
 

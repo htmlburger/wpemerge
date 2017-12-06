@@ -15,7 +15,7 @@ interface RouteInterface extends HasMiddlewareInterface {
 	 * @param  Request $request
 	 * @return boolean
 	 */
-	public function satisfied( Request $request );
+	public function isSatisfied( Request $request );
 
 	/**
 	 * Get a response for the given request

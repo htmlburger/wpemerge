@@ -32,9 +32,9 @@ class Multiple implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		foreach ( $this->conditions as $condition ) {
-			if ( ! $condition->satisfied( $request ) ) {
+			if ( ! $condition->isSatisfied( $request ) ) {
 				return false;
 			}
 		}

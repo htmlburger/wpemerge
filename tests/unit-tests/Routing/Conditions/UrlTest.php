@@ -34,44 +34,44 @@ class UrlTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers ::satisfied
+     * @covers ::isSatisfied
      */
-    public function testSatisfied_Wildcard_True() {
+    public function testIsSatisfied_Wildcard_True() {
         $request = Mockery::mock( Request::class );
         $subject = new Url( Url::WILDCARD );
 
-        $this->assertTrue( $subject->satisfied( $request ) );
+        $this->assertTrue( $subject->isSatisfied( $request ) );
     }
 
     /**
-     * @covers ::satisfied
+     * @covers ::isSatisfied
      */
-    public function testSatisfied_Url() {
+    public function testIsSatisfied_Url() {
         $request = Mockery::mock( Request::class );
 
         $request->shouldReceive( 'getUrl' )
             ->andReturn( 'http://example.org/foo/bar/' );
 
         $subject1 = new Url( '/foo/bar' );
-        $this->assertTrue( $subject1->satisfied( $request ) );
+        $this->assertTrue( $subject1->isSatisfied( $request ) );
 
         $subject2 = new Url( '/foo/bar/' );
-        $this->assertTrue( $subject2->satisfied( $request ) );
+        $this->assertTrue( $subject2->isSatisfied( $request ) );
 
         $subject3 = new Url( '/foo/{param1}/' );
-        $this->assertTrue( $subject3->satisfied( $request ) );
+        $this->assertTrue( $subject3->isSatisfied( $request ) );
 
         $subject4 = new Url( '/foo/bar/{param1?}/' );
-        $this->assertTrue( $subject4->satisfied( $request ) );
+        $this->assertTrue( $subject4->isSatisfied( $request ) );
 
         $subject6 = new Url( '/foo/' );
-        $this->assertFalse( $subject6->satisfied( $request ) );
+        $this->assertFalse( $subject6->isSatisfied( $request ) );
 
         $subject7 = new Url( '/foo/bar/baz/' );
-        $this->assertFalse( $subject7->satisfied( $request ) );
+        $this->assertFalse( $subject7->isSatisfied( $request ) );
 
         $subject5 = new Url( '/foo/{param1:\d+}/' );
-        $this->assertFalse( $subject5->satisfied( $request ) );
+        $this->assertFalse( $subject5->isSatisfied( $request ) );
     }
 
     /**

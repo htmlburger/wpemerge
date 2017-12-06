@@ -89,11 +89,11 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		if ( ! in_array( $request->getMethod(), $this->methods) ) {
 			return false;
 		}
-		return $this->target->satisfied( $request );
+		return $this->target->isSatisfied( $request );
 	}
 
 	/**

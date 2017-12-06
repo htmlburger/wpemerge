@@ -71,11 +71,11 @@ class RouterTest extends WP_UnitTestCase {
         $route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
-        $route1->shouldReceive( 'satisfied' )
+        $route1->shouldReceive( 'isSatisfied' )
             ->andReturn( false )
             ->once();
 
-        $route2->shouldReceive( 'satisfied' )
+        $route2->shouldReceive( 'isSatisfied' )
             ->andReturn( false )
             ->once();
 
@@ -95,7 +95,7 @@ class RouterTest extends WP_UnitTestCase {
         $route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
-        $route1->shouldReceive( 'satisfied' )
+        $route1->shouldReceive( 'isSatisfied' )
             ->andReturn( true )
             ->once();
 
@@ -103,7 +103,7 @@ class RouterTest extends WP_UnitTestCase {
             ->andReturn( $response )
             ->once();
 
-        $route2->shouldReceive( 'satisfied' )
+        $route2->shouldReceive( 'isSatisfied' )
             ->never();
 
         $this->subject->addRoute( $route1 );
@@ -121,7 +121,7 @@ class RouterTest extends WP_UnitTestCase {
     public function testExecute_InvalidResponse_ReturnErrorResponse() {
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
-        $route->shouldReceive( 'satisfied' )
+        $route->shouldReceive( 'isSatisfied' )
             ->andReturn( true )
             ->once();
 
@@ -148,7 +148,7 @@ class RouterTest extends WP_UnitTestCase {
     public function testExecute_DebugInvalidResponse_ThrowsException() {
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
-        $route->shouldReceive( 'satisfied' )
+        $route->shouldReceive( 'isSatisfied' )
             ->andReturn( true )
             ->once();
 
@@ -169,7 +169,7 @@ class RouterTest extends WP_UnitTestCase {
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
-        $route->shouldReceive( 'satisfied' )
+        $route->shouldReceive( 'isSatisfied' )
             ->andReturn( true )
             ->once();
 
@@ -194,7 +194,7 @@ class RouterTest extends WP_UnitTestCase {
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
-        $route->shouldReceive( 'satisfied' )
+        $route->shouldReceive( 'isSatisfied' )
             ->andReturn( true )
             ->once();
 

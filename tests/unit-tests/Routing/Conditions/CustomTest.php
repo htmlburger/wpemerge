@@ -28,15 +28,15 @@ class CustomTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers ::satisfied
+     * @covers ::isSatisfied
      */
-    public function testSatisfied() {
+    public function testIsSatisfied() {
         $request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
         $subject1 = new Custom( '__return_true' );
-        $this->assertTrue( $subject1->satisfied( $request ) );
+        $this->assertTrue( $subject1->isSatisfied( $request ) );
 
         $subject2 = new Custom( '__return_false' );
-        $this->assertFalse( $subject2->satisfied( $request ) );
+        $this->assertFalse( $subject2->isSatisfied( $request ) );
     }
 }

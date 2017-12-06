@@ -13,7 +13,7 @@ class HasQueryVar extends QueryVar {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		return get_query_var( $this->query_var, null ) !== null;
 	}
 }

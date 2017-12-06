@@ -53,7 +53,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	protected function getSatisfiedRoute( Request $request ) {
 		$routes = $this->getRoutes();
 		foreach ( $routes as $route ) {
-			if ( $route->satisfied( $request ) ) {
+			if ( $route->isSatisfied( $request ) ) {
 				return $route;
 			}
 		}
@@ -63,7 +63,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		$route = $this->getSatisfiedRoute( $request );
 		return $route !== null;
 	}

@@ -61,7 +61,7 @@ class Router implements HasRoutesInterface {
 		}
 
 		foreach ( $routes as $route ) {
-			if ( $route->satisfied( $request ) ) {
+			if ( $route->isSatisfied( $request ) ) {
 				$this->setCurrentRoute( $route );
 				return $this->handle( $request, $route, $template );
 			}

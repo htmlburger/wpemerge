@@ -29,20 +29,20 @@ class MultipleTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers ::satisfied
+     * @covers ::isSatisfied
      */
-    public function testSatisfied() {
+    public function testIsSatisfied() {
         $condition1 = new Custom( '__return_true' );
         $condition2 = new Custom( '__return_false' );
         $request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
         $subject1 = new Multiple( [$condition1] );
-        $this->assertTrue( $subject1->satisfied( $request ) );
+        $this->assertTrue( $subject1->isSatisfied( $request ) );
 
         $subject2 = new Multiple( [$condition2] );
-        $this->assertFalse( $subject2->satisfied( $request ) );
+        $this->assertFalse( $subject2->isSatisfied( $request ) );
 
         $subject3 = new Multiple( [$condition1, $condition2] );
-        $this->assertFalse( $subject3->satisfied( $request ) );
+        $this->assertFalse( $subject3->isSatisfied( $request ) );
     }
 }

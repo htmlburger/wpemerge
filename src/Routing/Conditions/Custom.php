@@ -36,7 +36,7 @@ class Custom implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		return call_user_func_array( $this->callable, $this->arguments );
 	}
 

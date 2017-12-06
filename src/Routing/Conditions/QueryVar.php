@@ -38,7 +38,7 @@ class QueryVar implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function satisfied( Request $request ) {
+	public function isSatisfied( Request $request ) {
 		return $this->value === get_query_var( $this->query_var, '' );
 	}
 
