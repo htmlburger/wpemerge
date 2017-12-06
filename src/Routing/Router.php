@@ -6,7 +6,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Obsidian;
 use Obsidian\Request;
-use Obsidian\Response as FrameworkResponse;
+use Obsidian\Response;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
@@ -86,7 +86,7 @@ class Router implements HasRoutesInterface {
 			if ( Obsidian::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
-			$response = FrameworkResponse::error( FrameworkResponse::response(), 500 );
+			$response = Response::error( Response::response(), 500 );
 		}
 
 		add_filter( 'obsidian.response', function() use ( $response ) {
