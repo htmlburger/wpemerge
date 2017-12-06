@@ -32,31 +32,6 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	];
 
 	/**
-	 * Register framework extensions
-	 *
-	 * @param  array $condition_extensions
-	 * @return void
-	 */
-	protected function registerExtensions( $condition_extensions ) {
-		foreach ( $condition_extensions as $name => $class_name ) {
-			Extend::routeCondition( $name, $class_name );
-		}
-	}
-
-	/**
-	 * Register route conditions
-	 *
-	 * @param  Container $container
-	 * @param  array     $conditions
-	 * @return void
-	 */
-	protected function registerRouteConditions( Container $container, $conditions ) {
-		foreach ( $conditions as $name => $class_name ) {
-			$container[ 'framework.routing.conditions.' . $name ] = $class_name;
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
@@ -73,10 +48,11 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			return new Router();
 		};
 
-		Framework::facade( 'Router', RouterFacade::class );
+		foreach ( static::$condition_extensions as $name => $class_name ) {
+			$container[ 'framework.routing.conditions.' . $name ] = $class_name;
+		}
 
-		$this->registerExtensions( static::$condition_extensions );
-		$this->registerRouteConditions( $container, Extend::get( ConditionInterface::class ) );
+		Framework::facade( 'Router', RouterFacade::class );
 	}
 
 	/**
