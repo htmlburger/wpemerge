@@ -15,11 +15,14 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.routing.global_middleware'] = array_merge( $container['framework.routing.global_middleware'], [
-			\Obsidian\Input\OldInputMiddleware::class,
-		] );
+		$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = array_merge(
+			$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
+			[
+				\Obsidian\Input\OldInputMiddleware::class,
+			]
+		);
 
-		$container['framework.old_input.old_input'] = function() {
+		$container[ OBSIDIAN_OLD_INPUT_KEY ] = function() {
 			return new \Obsidian\Input\OldInput();
 		};
 

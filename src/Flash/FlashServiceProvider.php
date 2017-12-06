@@ -15,10 +15,10 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.flash.flash'] = function( $c ) {
+		$container[ OBSIDIAN_FLASH_KEY ] = function( $c ) {
 			$session = null;
-			if ( isset( $c['framework.session'] ) ) {
-				$session = $c['framework.session'];
+			if ( isset( $c[ OBSIDIAN_SESSION_KEY ] ) ) {
+				$session = $c[ OBSIDIAN_SESSION_KEY ];
 			} else if ( isset( $_SESSION ) ) {
 				$session = &$_SESSION;
 			}

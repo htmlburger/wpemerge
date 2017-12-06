@@ -13,7 +13,7 @@ class FilenameProxy implements \Obsidian\Templating\EngineInterface {
 	 *
 	 * @var string
 	 */
-	protected $default = 'framework.templating.engine.php';
+	protected $default = OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY;
 
 	/**
 	 * Array of filename_suffix=>engine_container_key bindings

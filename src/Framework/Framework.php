@@ -130,7 +130,7 @@ class Framework {
 	 */
 	protected function loadConfig( Container $container, $config ) {
 		$container = $this->getContainer();
-		$container['framework.config'] = array_merge( [
+		$container[ OBSIDIAN_CONFIG_KEY ] = array_merge( [
 			'providers' => [],
 		], $config );
 	}
@@ -143,19 +143,19 @@ class Framework {
 	 * @return void
 	 */
 	protected function loadServiceProviders( Container $container ) {
-		$container['framework.service_providers'] = array_merge(
+		$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] = array_merge(
 			$this->service_proviers,
-			$container['framework.config']['providers']
+			$container[ OBSIDIAN_CONFIG_KEY ]['providers']
 		);
 
-		$container['framework.service_providers'] = apply_filters(
+		$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] = apply_filters(
 			'obsidian.service_providers',
-			$container['framework.service_providers']
+			$container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ]
 		);
 
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
-		}, $container['framework.service_providers'] );
+		}, $container[ OBSIDIAN_SERVICE_PROVIDERS_KEY ] );
 
 		$this->registerServiceProviders( $service_providers, $container );
 		$this->bootServiceProviders( $service_providers, $container );

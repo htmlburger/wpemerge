@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class RouterFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return 'framework.routing.router';
+        return OBSIDIAN_ROUTING_ROUTER_KEY;
     }
 }

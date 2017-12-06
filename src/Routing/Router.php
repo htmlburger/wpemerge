@@ -53,7 +53,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $template ) {
 		$routes = $this->getRoutes();
-		$global_middleware = Obsidian::resolve( 'framework.routing.global_middleware' );
+		$global_middleware = Obsidian::resolve( OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {

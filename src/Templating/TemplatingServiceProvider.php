@@ -15,10 +15,10 @@ class TemplatingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.templating.engine.php'] = function() {
+		$container[ OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY ] = function() {
 			return new \Obsidian\Templating\Php();
 		};
-		$container['framework.templating.engine'] = $container->raw( 'framework.templating.engine.php' );
+		$container[ OBSIDIAN_TEMPLATING_ENGINE_KEY ] = $container->raw( OBSIDIAN_TEMPLATING_ENGINE_PHP_KEY );
 	}
 
 	/**

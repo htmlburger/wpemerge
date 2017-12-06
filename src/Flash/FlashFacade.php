@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class FlashFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return 'framework.flash.flash';
+        return OBSIDIAN_FLASH_KEY;
     }
 }

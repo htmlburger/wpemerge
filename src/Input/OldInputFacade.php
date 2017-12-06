@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class OldInputFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return 'framework.old_input.old_input';
+        return OBSIDIAN_OLD_INPUT_KEY;
     }
 }

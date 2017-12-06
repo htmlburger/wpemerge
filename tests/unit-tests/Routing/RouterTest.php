@@ -47,7 +47,7 @@ class RouterTest extends WP_UnitTestCase {
         $middleware = Mockery::mock( MiddlewareInterface::class );
         $middleware_array = [$middleware];
 
-        $container_key = 'framework.routing.global_middleware';
+        $container_key = OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY;
         $container = Obsidian::getContainer();
 
         $route->shouldReceive( 'addMiddleware' )

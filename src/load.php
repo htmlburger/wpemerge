@@ -8,7 +8,7 @@ use Pimple\Container;
 
 // @codeCoverageIgnoreStart
 $container = new Container();
-$container['framework'] = function( $container ) {
+$container[ OBSIDIAN_FRAMEWORK_KEY ] = function( $container ) {
 	return new Framework( $container );
 };
 

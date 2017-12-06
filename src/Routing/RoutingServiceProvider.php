@@ -34,21 +34,21 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container['framework.config'] = array_merge( [
+		$container[ OBSIDIAN_CONFIG_KEY ] = array_merge( [
 			'global_middleware' => [],
-		], $container['framework.config'] );
+		], $container[ OBSIDIAN_CONFIG_KEY ] );
 
-		$container['framework.routing.global_middleware'] = apply_filters(
+		$container[ OBSIDIAN_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = apply_filters(
 			'obsidian.global_middleware',
-			$container['framework.config']['global_middleware']
+			$container[ OBSIDIAN_CONFIG_KEY ]['global_middleware']
 		);
 
-		$container['framework.routing.router'] = function() {
+		$container[ OBSIDIAN_ROUTING_ROUTER_KEY ] = function() {
 			return new Router();
 		};
 
 		foreach ( static::$condition_extensions as $name => $class_name ) {
-			$container[ 'framework.routing.conditions.' . $name ] = $class_name;
+			$container[ OBSIDIAN_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
 		}
 
 		Obsidian::facade( 'Router', RouterFacade::class );

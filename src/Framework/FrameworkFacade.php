@@ -11,6 +11,6 @@ use Obsidian\Support\Facade;
  */
 class FrameworkFacade extends Facade {
     protected static function getFacadeAccessor() {
-        return 'framework';
+        return OBSIDIAN_FRAMEWORK_KEY;
     }
 }

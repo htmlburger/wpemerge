@@ -73,7 +73,7 @@ https://htmlburger.gitbooks.io/obsidian/content/
 - Custom template engine support (Twig and Blade available as add-on packages)
     ```php
     $container = Obsidian::getContainer();
-    $container['framework.templating.engine'] = function( $container ) {
+    $container[ OBSIDIAN_TEMPLATING_ENGINE_KEY ] = function( $container ) {
         return new MyTemplateEngine();
     };
     ```

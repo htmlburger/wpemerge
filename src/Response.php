@@ -186,7 +186,7 @@ class Response {
 			throw new Exception( 'Could not resolve template.' );
 		}
 
-		$engine = Obsidian::resolve( 'framework.templating.engine' );
+		$engine = Obsidian::resolve( OBSIDIAN_TEMPLATING_ENGINE_KEY );
 		$html = $engine->render( $template, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );
