@@ -6,8 +6,8 @@ use Obsidian\Support\Facade;
 use Obsidian\Support\AliasLoader;
 use Pimple\Container;
 
+// @codeCoverageIgnoreStart
 $container = new Container();
-
 $container['framework'] = function( $container ) {
 	return new Framework( $container );
 };
@@ -15,3 +15,4 @@ $container['framework'] = function( $container ) {
 Facade::setFacadeApplication( $container );
 AliasLoader::getInstance()->register();
 AliasLoader::getInstance()->alias( 'Obsidian', FrameworkFacade::class );
+// @codeCoverageIgnoreEnd
