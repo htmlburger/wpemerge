@@ -8,112 +8,24 @@ If you've used Laravel, Slim or Symfony and miss the control over the request&re
 
 ## Documentation
 
-https://htmlburger.gitbooks.io/wpemerge/content/
+https://docs.wpemerge.com/
 
-## Comparison Table ¹ ²
+## API Reference
 
-|                   | WPEmerge    | Sage  | Timber |
-|-------------------|-------------|-------|--------|
-| Template Engine   | Blade, Twig | Blade | Twig   |
-| Routing           | ✔           | ✖     | ✖      |
-| MVC               | ✖✔✔         | ✖✔✖³  | ✖✔✖    |
-| Middleware        | ✔           | ✖     | ✖      |
-| Service Container | ✔           | ✖     | ✖      |
+https://api.wpemerge.com/
 
-_¹ We are comparing a framework to themes - style, build tools etc. are not mentioned_
+## Development Team
 
-_² WP Emerge is theme agnostic - you can use it even inside the mentioned themes_
+Brought to you by the lovely folks at [htmlBurger](http://htmlburger.com)
 
-_³ Sage's Controller is not a Controller but a View Model_
+## Contributing
 
-## Features
+WP Emerge is completely open source and we encourage everybody to participate by:
 
-- Routes with optional rewrite rule integration
-    ```php
-    Router::get( '/', 'HomeController@index' );
-    Router::get( '/custom', 'HomeController@custom' )
-        ->rewrite( 'index.php?...' );
-    ```
-- Controllers
-    ```php
-    class HomeController {
-        public function index( $request ) {
-            $name = $request->get( 'name' );
-            return wpm_template( 'templates/home.php', [
-                'welcome' => 'Welcome, ' . $name . '!',
-            ] );
-        }
-    }
-    ```
-- [PSR-7](http://www.php-fig.org/psr/psr-7/) Responses (using [Guzzle/Psr7](https://github.com/guzzle/psr7))
-    ```php
-    class HomeController {
-        public function index( $request ) {
-            return wpm_response()
-                ->withHeader( 'X-Custom-Header', 'foo' );
-        }
-    }
-    ```
-- Middleware
-    ```php
-    Router::get( '/', 'HomeController@index' )
-        ->add( function( $request, $next ) {
-            // perform action before
-            $response = $next( $request );
-            // perform action after
-            return $response;
-        } );
-    ```
-- Service container (using [Pimple](https://pimple.symfony.com/))
-    ```php
-    $container = WPEmerge::getContainer();
-    $container['my_service'] = function() {
-        return new MyService();
-    };
-    ```
-- Service providers
-    ```php
-    class MyServiceProvider implements ServiceProviderInterface {
-        public function register( $container ) {
-            $container['my_service'] = function() {
-                return new MyService();
-            };
-        }
-
-        public function boot( $container ) {
-            // bootstrap code
-            // e.g. add hooks, actions etc.
-        }
-    }
-    ```
-- Custom template engine support (Twig and Blade available as add-on packages)
-    ```php
-    $container = WPEmerge::getContainer();
-    $container[ WPEMERGE_TEMPLATING_ENGINE_KEY ] = function( $container ) {
-        return new MyTemplateEngine();
-    };
-    ```
-
-## Quickstart
-
-1. Run `composer require htmlburger/wpemerge` in your theme directory
-1. Make sure you've included the generated `autoload.php` file inside your `functions.php` file
-    ```php
-    require_once( 'vendor/autoload.php' );
-    ```
-1. Add the following to your `functions.php`:
-    ```php
-    add_action( 'init', function() {
-        // only required if you use Flash or OldInput
-        // refer to the documentation on Flash
-        session_start();
-    } );
-
-    add_action( 'after_setup_theme', function() {
-        WPEmerge::boot();
-
-        Router::get( '/', function() {
-            return wpm_output( 'Hello World!' );
-        } );
-    } );
-    ```
+- `Star`-ing the project on GitHub (https://github.com/htmlburger/wpemerge)
+- Posting bug reports (https://github.com/htmlburger/wpemerge/issues)
+- (Emailing security issues to [info@htmlburger.com](mailto:info@htmlburger.com) instead)
+- Posting feature suggestions (https://github.com/htmlburger/wpemerge/issues)
+- Posting and/or answering questions (https://github.com/htmlburger/wpemerge/issues)
+- Submitting pull requests (https://github.com/htmlburger/wpemerge/pulls)
+- Sharing your excitement about WP Emerge with your community
