@@ -11,7 +11,7 @@
 	backupGlobals="false"
 	>
 	<testsuites>
-		<testsuite name="Оbsidian Test Suite">
+		<testsuite name="WPEmerge Test Suite">
 			<directory suffix=".php">./tests/unit-tests/</directory>
 		</testsuite>
 	</testsuites>

@@ -1,4 +1,4 @@
-# Оbsidian [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master)
+# WPEmerge [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master)
 
 A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
 
