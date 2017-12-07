@@ -10,6 +10,20 @@ If you've used Laravel, Slim or Symfony and miss the control over the request&re
 
 https://htmlburger.gitbooks.io/wpemerge/content/
 
+## Comparison Table ¹ ²
+
+|                   | WPEmerge    | Sage  | Timber |
+|-------------------|-------------|-------|--------|
+| Template Engine   | Blade, Twig | Blade | Twig   |
+| Routing           | ✔           | ✖     | ✖      |
+| MVC               | ✖✔✔         | ✖✔✖³  | ✖✔✖    |
+| Middleware        | ✔           | ✖     | ✖      |
+| Service Container | ✔           | ✖     | ✖      |
+
+_¹ We are comparing a framework to themes - style, build tools etc. are not mentioned_
+_² WP Emerge is theme agnostic - you can use it even inside the mentioned themes_
+_³ Sage's Controller is not a Controller but a View Model_
+
 ## Features
 
 - Routes with optional rewrite rule integration
@@ -18,7 +32,7 @@ https://htmlburger.gitbooks.io/wpemerge/content/
     Router::get( '/custom', 'HomeController@custom' )
         ->rewrite( 'index.php?...' );
     ```
-- __Real__ Controllers (not ViewModels)
+- Controllers
     ```php
     class HomeController {
         public function index( $request ) {
@@ -88,7 +102,9 @@ https://htmlburger.gitbooks.io/wpemerge/content/
 1. Add the following to your `functions.php`:
     ```php
     add_action( 'init', function() {
-        session_start(); // required for Flash and OldInput
+        // only required if you use Flash or OldInput
+        // refer to the documentation on Flash
+        session_start();
     } );
 
     add_action( 'after_setup_theme', function() {
