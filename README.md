@@ -21,7 +21,9 @@ https://htmlburger.gitbooks.io/wpemerge/content/
 | Service Container | ✔           | ✖     | ✖      |
 
 _¹ We are comparing a framework to themes - style, build tools etc. are not mentioned_
+
 _² WP Emerge is theme agnostic - you can use it even inside the mentioned themes_
+
 _³ Sage's Controller is not a Controller but a View Model_
 
 ## Features
