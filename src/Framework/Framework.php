@@ -148,11 +148,6 @@ class Framework {
 			$container[ WPEMERGE_CONFIG_KEY ]['providers']
 		);
 
-		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = apply_filters(
-			'wpemerge.service_providers',
-			$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ]
-		);
-
 		$service_providers = array_map( function( $service_provider ) {
 			return new $service_provider();
 		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
