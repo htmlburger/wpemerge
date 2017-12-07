@@ -15,9 +15,14 @@ class TemplatingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_TEMPLATING_ENGINE_PHP_KEY ] = function() {
-			return new \WPEmerge\Templating\Php();
+		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
+			'global_template_context' => [],
+		], $container[ WPEMERGE_CONFIG_KEY ] );
+
+		$container[ WPEMERGE_TEMPLATING_ENGINE_PHP_KEY ] = function( $c ) {
+			return new \WPEmerge\Templating\Php( $c[ WPEMERGE_CONFIG_KEY ]['global_template_context'] );
 		};
+
 		$container[ WPEMERGE_TEMPLATING_ENGINE_KEY ] = $container->raw( WPEMERGE_TEMPLATING_ENGINE_PHP_KEY );
 	}
 

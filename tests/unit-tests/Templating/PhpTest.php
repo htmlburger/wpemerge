@@ -16,7 +16,7 @@ class PhpTest extends WP_UnitTestCase {
 		$template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
 		$expected = file_get_contents( $template );
 
-		$subject = new PhpEngine();
+		$subject = new PhpEngine( [] );
 		$result = $subject->render( $template, [] );
 
 		$this->assertEquals( trim( $expected ), trim( $result ) );
@@ -29,7 +29,20 @@ class PhpTest extends WP_UnitTestCase {
 		$template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template-with-context.php';
 		$expected = 'Hello World!';
 
-		$subject = new PhpEngine();
+		$subject = new PhpEngine( [] );
+		$result = $subject->render( $template, ['world' => 'World'] );
+
+		$this->assertEquals( trim( $expected ), trim( $result ) );
+	}
+	/**
+	 * @covers ::render
+	 * @covers ::__construct
+	 */
+	public function testRender_GlobalContext_Rendered() {
+		$template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template-with-global-context.php';
+		$expected = "Hello World!\nHello Global World!";
+
+		$subject = new PhpEngine( ['world' => 'Global World'] );
 		$result = $subject->render( $template, ['world' => 'World'] );
 
 		$this->assertEquals( trim( $expected ), trim( $result ) );
