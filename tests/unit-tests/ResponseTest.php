@@ -48,8 +48,8 @@ class ResponseTest extends WP_UnitTestCase {
 
     /**
      * @covers ::view
-     * @covers ::resolveTiew
-     * @covers ::resolveTiewFromFilesystem
+     * @covers ::resolveView
+     * @covers ::resolveViewFromFilesystem
      */
     public function testView() {
         $view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
