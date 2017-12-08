@@ -47,27 +47,27 @@ class ResponseTest extends WP_UnitTestCase {
     }
 
     /**
-     * @covers ::template
-     * @covers ::resolveTemplate
-     * @covers ::resolveTemplateFromFilesystem
+     * @covers ::view
+     * @covers ::resolveTiew
+     * @covers ::resolveTiewFromFilesystem
      */
-    public function testTemplate() {
-        $template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'template.php';
-        $expected = file_get_contents( $template );
+    public function testView() {
+        $view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+        $expected = file_get_contents( $view );
 
-        $subject = Response::template( Response::response(), $template );
+        $subject = Response::view( Response::response(), $view );
         $this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
     }
 
     /**
-     * @covers ::template
-     * @covers ::resolveTemplate
-     * @covers ::resolveTemplateFromFilesystem
+     * @covers ::view
+     * @covers ::resolveView
+     * @covers ::resolveViewFromFilesystem
      * @expectedException \Exception
-     * @expectedExceptionMessage Could not resolve template
+     * @expectedExceptionMessage Could not resolve view
      */
-    public function testTemplate_NoTemplate() {
-        $subject = Response::template( Response::response(), '' );
+    public function testView_NoView() {
+        $subject = Response::view( Response::response(), '' );
     }
 
     /**

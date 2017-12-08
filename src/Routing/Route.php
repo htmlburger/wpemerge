@@ -99,8 +99,8 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request, $template ) {
-		$arguments = array_merge( [$request, $template], $this->target->getArguments( $request ) );
+	public function handle( Request $request, $view ) {
+		$arguments = array_merge( [$request, $view], $this->target->getArguments( $request ) );
 		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );
 		} );

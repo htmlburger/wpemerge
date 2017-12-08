@@ -1,6 +1,6 @@
 <?php
 /**
- * Template used to override the loaded template file by WordPress when a route is handled
+ * View used to override the loaded view file by WordPress when a route is handled
  */
 // @codeCoverageIgnoreStart
 $response = apply_filters( 'wpemerge.response', null );

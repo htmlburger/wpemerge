@@ -33,12 +33,12 @@ if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'framework.routing.global_middleware' );
 }
 
-if ( ! defined( 'WPEMERGE_TEMPLATING_ENGINE_KEY' ) ) {
-	define( 'WPEMERGE_TEMPLATING_ENGINE_KEY', 'framework.templating.engine' );
+if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
+	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'framework.view.engine' );
 }
 
-if ( ! defined( 'WPEMERGE_TEMPLATING_ENGINE_PHP_KEY' ) ) {
-	define( 'WPEMERGE_TEMPLATING_ENGINE_PHP_KEY', 'framework.templating.engine.php' );
+if ( ! defined( 'WPEMERGE_VIEW_ENGINE_PHP_KEY' ) ) {
+	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'framework.view.engine.php' );
 }
 
 if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {

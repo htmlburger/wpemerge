@@ -189,8 +189,8 @@ class RouterTest extends WP_UnitTestCase {
      * @covers ::execute
      * @covers ::handle
      */
-    public function testExecute_Response_ReturnsBuiltInTemplate() {
-        $expected = WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+    public function testExecute_Response_ReturnsBuiltInView() {
+        $expected = WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
         $route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
         $response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 

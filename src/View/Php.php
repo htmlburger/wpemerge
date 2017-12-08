@@ -1,9 +1,9 @@
 <?php
 
-namespace WPEmerge\Templating;
+namespace WPEmerge\View;
 
 /**
- * Include template files with php
+ * Render view files with php
  */
 class Php implements EngineInterface {
 	/**
@@ -26,15 +26,15 @@ class Php implements EngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function render( $file, $context ) {
-		$__template = $file;
+		$__view = $file;
 		$__context = array_merge(
 			['global' => $this->global_context],
 			$context
 		);
-		$renderer = function() use ( $__template, $__context ) {
+		$renderer = function() use ( $__view, $__context ) {
 			ob_start();
 			extract( $__context );
-			include( $__template );
+			include( $__view );
 			return ob_get_clean();
 		};
 		return $renderer();

@@ -71,9 +71,9 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request, $template ) {
+	public function handle( Request $request, $view ) {
 		$route = $this->getSatisfiedRoute( $request );
-		return $route ? $route->handle( $request, $template ) : null;
+		return $route ? $route->handle( $request, $view ) : null;
 	}
 
 	/**

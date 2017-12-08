@@ -16,10 +16,10 @@ class WordPress {
 	 * Default WordPress handler
 	 *
 	 * @param  Request           $request
-	 * @param  string            $template
+	 * @param  string            $view
 	 * @return ResponseInterface
 	 */
-	public function handle( Request $request, $template ) {
-		return wpm_template( $template )->withStatus( http_response_code() );
+	public function handle( Request $request, $view ) {
+		return wpm_view( $view )->withStatus( http_response_code() );
 	}
 }

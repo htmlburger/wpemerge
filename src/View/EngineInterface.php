@@ -1,13 +1,13 @@
 <?php
 
-namespace WPEmerge\Templating;
+namespace WPEmerge\View;
 
 /**
- * Interface that template engines must implement
+ * Interface that view engines must implement
  */
 interface EngineInterface {
 	/**
-	 * Render a template to a string
+	 * Render a view to a string
 	 *
 	 * @param  string $file
 	 * @param  array  $context

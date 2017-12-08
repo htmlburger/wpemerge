@@ -138,56 +138,56 @@ class Response {
 	}
 
 	/**
-	 * Resolve a template or a template array to an absolute filepath
+	 * Resolve a view or a view array to an absolute filepath
 	 *
-	 * @param  string|string[] $templates
+	 * @param  string|string[] $views
 	 * @return string
 	 */
-	protected static function resolveTemplate( $templates ) {
-		$templates = is_array( $templates ) ? $templates : [$templates];
-		$template = locate_template( $templates, false );
+	protected static function resolveView( $views ) {
+		$views = is_array( $views ) ? $views : [$views];
+		$view = locate_template( $views, false );
 
-		// locate_template failed to find the template - test if a valid absolute path was passed
-		if ( ! $template ) {
-			$template = static::resolveTemplateFromFilesystem( $templates );
+		// locate_template failed to find the view - test if a valid absolute path was passed
+		if ( ! $view ) {
+			$view = static::resolveViewFromFilesystem( $views );
 		}
 
-		return $template;
+		return $view;
 	}
 
 	/**
-	 * Resolve the first existing absolute template filepath from an array of template filepaths
+	 * Resolve the first existing absolute view filepath from an array of view filepaths
 	 *
-	 * @param  string[] $templates
+	 * @param  string[] $views
 	 * @return string
 	 */
-	protected static function resolveTemplateFromFilesystem( $templates ) {
-		foreach ( $templates as $template ) {
-			if ( file_exists( $template ) ) {
-				return $template;
+	protected static function resolveViewFromFilesystem( $views ) {
+		foreach ( $views as $view ) {
+			if ( file_exists( $view ) ) {
+				return $view;
 			}
 		}
 		return '';
 	}
 
 	/**
-	 * Get a cloned response, resolving and rendering a template as the body
+	 * Get a cloned response, resolving and rendering a view as the body
 	 *
 	 * @throws Exception
 	 * @param  ResponseInterface $response
-	 * @param  string|string[]   $templates
+	 * @param  string|string[]   $views
 	 * @param  array             $context
 	 * @return ResponseInterface
 	 */
-	public static function template( ResponseInterface $response, $templates, $context = array() ) {
-		$template = static::resolveTemplate( $templates );
+	public static function view( ResponseInterface $response, $views, $context = array() ) {
+		$view = static::resolveView( $views );
 
-		if ( ! $template ) {
-			throw new Exception( 'Could not resolve template.' );
+		if ( ! $view ) {
+			throw new Exception( 'Could not resolve view.' );
 		}
 
-		$engine = WPEmerge::resolve( WPEMERGE_TEMPLATING_ENGINE_KEY );
-		$html = $engine->render( $template, $context );
+		$engine = WPEmerge::resolve( WPEMERGE_VIEW_ENGINE_KEY );
+		$html = $engine->render( $view, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );
 		$response = $response->withBody( Psr7\stream_for( $html ) );
@@ -234,7 +234,7 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, with status headers and rendering a suitable template as the body
+	 * Get a cloned response, with status headers and rendering a suitable view as the body
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  integer           $status
@@ -247,6 +247,6 @@ class Response {
 		}
 
 		$response = $response->withStatus( $status );
-		return static::template( $response, array( $status . '.php', 'index.php' ) );
+		return static::view( $response, array( $status . '.php', 'index.php' ) );
 	}
 }

@@ -48,10 +48,10 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Add global middlewares and execute the first satisfied route (if any)
 	 *
-	 * @param  string $template
+	 * @param  string $view
 	 * @return string
 	 */
-	public function execute( $template ) {
+	public function execute( $view ) {
 		$routes = $this->getRoutes();
 		$global_middleware = WPEmerge::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
 		$request = Request::fromGlobals();
@@ -63,11 +63,11 @@ class Router implements HasRoutesInterface {
 		foreach ( $routes as $route ) {
 			if ( $route->isSatisfied( $request ) ) {
 				$this->setCurrentRoute( $route );
-				return $this->handle( $request, $route, $template );
+				return $this->handle( $request, $route, $view );
 			}
 		}
 
-		return $template;
+		return $view;
 	}
 
 	/**
@@ -76,11 +76,11 @@ class Router implements HasRoutesInterface {
 	 * @throws Exception
 	 * @param  Request        $request
 	 * @param  RouteInterface $route
-	 * @param  string         $template
+	 * @param  string         $view
 	 * @return string
 	 */
-	protected function handle( Request $request, RouteInterface $route, $template ) {
-		$response = $route->handle( $request, $template );
+	protected function handle( Request $request, RouteInterface $route, $view ) {
+		$response = $route->handle( $request, $view );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
 			if ( WPEmerge::debugging() ) {
@@ -93,7 +93,7 @@ class Router implements HasRoutesInterface {
 			return $response;
 		} );
 
-		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'template.php';
+		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 	}
 
 	/**

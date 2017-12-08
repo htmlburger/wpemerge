@@ -1,19 +1,19 @@
 <?php
 
-namespace WPEmerge\Templating;
+namespace WPEmerge\View;
 
 use WPEmerge;
 
 /**
- * Include template files with different engines depending on their filename
+ * Render view files with different engines depending on their filename
  */
-class FilenameProxy implements \WPEmerge\Templating\EngineInterface {
+class FilenameProxy implements \WPEmerge\View\EngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *
 	 * @var string
 	 */
-	protected $default = WPEMERGE_TEMPLATING_ENGINE_PHP_KEY;
+	protected $default = WPEMERGE_VIEW_ENGINE_PHP_KEY;
 
 	/**
 	 * Array of filename_suffix=>engine_container_key bindings

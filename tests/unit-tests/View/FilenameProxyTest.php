@@ -1,14 +1,14 @@
 <?php
 
-namespace WPEmergeTests\Templating;
+namespace WPEmergeTests\View;
 
 use Mockery;
 use WPEmerge;
-use WPEmerge\Templating\FilenameProxy;
+use WPEmerge\View\FilenameProxy;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Templating\FilenameProxy
+ * @coversDefaultClass \WPEmerge\View\FilenameProxy
  */
 class FilenameProxyTest extends WP_UnitTestCase {
 	public function setUp() {

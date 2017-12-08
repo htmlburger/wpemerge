@@ -24,14 +24,14 @@ if ( ! function_exists( 'wpm_output' ) ) {
 	}
 }
 
-if ( ! function_exists( 'wpm_template' ) ) {
+if ( ! function_exists( 'wpm_view' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::template()
+	 * @see Response::view()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function wpm_template( $templates, $context = array() ) {
-		return Response::template( wpm_response(), $templates, $context );
+	function wpm_view( $views, $context = array() ) {
+		return Response::view( wpm_response(), $views, $context );
 	}
 }
 

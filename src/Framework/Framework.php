@@ -13,7 +13,7 @@ use WPEmerge\Support\AliasLoader;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
-use WPEmerge\Templating\TemplatingServiceProvider;
+use WPEmerge\View\ViewServiceProvider;
 use WPEmerge\Controllers\ControllersServiceProvider;
 
 /**
@@ -43,7 +43,7 @@ class Framework {
 		RoutingServiceProvider::class,
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,
-		TemplatingServiceProvider::class,
+		ViewServiceProvider::class,
 		ControllersServiceProvider::class,
 	];
 
