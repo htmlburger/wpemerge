@@ -54,6 +54,12 @@ class Framework {
 	 */
 	public function __construct( Container $container ) {
 		$this->container = $container;
+
+		$config = isset( $container[ WPEMERGE_CONFIG_KEY ] ) ? $container[ WPEMERGE_CONFIG_KEY ] : [];
+		$config = array_merge( [
+			'providers' => [],
+		], $config );
+		$container[ WPEMERGE_CONFIG_KEY ] = $config;
 	}
 
 	/**
@@ -130,9 +136,10 @@ class Framework {
 	 */
 	protected function loadConfig( Container $container, $config ) {
 		$container = $this->getContainer();
-		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
-			'providers' => [],
-		], $config );
+		$container[ WPEMERGE_CONFIG_KEY ] = array_merge(
+			$container[ WPEMERGE_CONFIG_KEY ],
+			$config
+		);
 	}
 
 	/**
