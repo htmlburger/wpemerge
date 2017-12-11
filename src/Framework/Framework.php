@@ -39,7 +39,7 @@ class Framework {
 	 *
 	 * @var string[]
 	 */
-	protected $service_proviers = [
+	protected $service_providers = [
 		RoutingServiceProvider::class,
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,
@@ -151,7 +151,7 @@ class Framework {
 	 */
 	protected function loadServiceProviders( Container $container ) {
 		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
-			$this->service_proviers,
+			$this->service_providers,
 			$container[ WPEMERGE_CONFIG_KEY ]['providers']
 		);
 
