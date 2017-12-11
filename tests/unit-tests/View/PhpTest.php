@@ -34,17 +34,18 @@ class PhpTest extends WP_UnitTestCase {
 
 		$this->assertEquals( trim( $expected ), trim( $result ) );
 	}
+
 	/**
 	 * @covers ::render
 	 * @covers ::__construct
 	 */
 	public function testRender_GlobalContext_Rendered() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
-		$expected = "Hello World!\nHello Global World!";
+		$expected = "Hello World!%wHello Global World!";
 
 		$subject = new PhpEngine( ['world' => 'Global World'] );
 		$result = $subject->render( $view, ['world' => 'World'] );
 
-		$this->assertEquals( trim( $expected ), trim( $result ) );
+		$this->assertStringMatchesFormat( $expected, trim( $result ) );
 	}
 }
