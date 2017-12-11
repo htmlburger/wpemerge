@@ -5,7 +5,7 @@ namespace WPEmerge\Routing;
 use WPEmerge\Support\Facade;
 
 /**
- * Provide access to router service
+ * Provide access to the router service
  *
  * @codeCoverageIgnore
  */
