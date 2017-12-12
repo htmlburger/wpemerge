@@ -2,11 +2,12 @@
 
 namespace WPEmerge\Framework;
 
-use ReflectionException;
-use ReflectionMethod;
+use Closure;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use ReflectionMethod;
 use WPEmerge\Response;
 use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;

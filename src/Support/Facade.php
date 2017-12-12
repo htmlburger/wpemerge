@@ -120,7 +120,8 @@ abstract class Facade
         static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
 
         if (isset(static::$app)) {
-            static::$app->instance(static::getFacadeAccessor(), $instance);
+            // Disabled as Pimple does not support this
+            // static::$app->instance(static::getFacadeAccessor(), $instance);
         }
     }
 

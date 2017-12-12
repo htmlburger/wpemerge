@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Helpers\Handler as GenericHandler;
 use WPEmerge\Routing\Handler;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
@@ -14,123 +15,24 @@ use WP_UnitTestCase;
 class HandlerTest extends WP_UnitTestCase {
     public function setUp() {
         parent::setUp();
-
-        $this->subject = new Handler( function() {} );
     }
 
     public function tearDown() {
         parent::tearDown();
         Mockery::close();
-
-        unset( $this->subject );
     }
 
     /**
      * @covers ::__construct
-     * @covers ::set
      * @covers ::get
      */
     public function testConstruct() {
-        $expected = function() {};
+        $closure = function() {};
+        $expected = new GenericHandler( $closure );
 
-        $subject = new Handler( $expected );
+        $subject = new Handler( $closure );
 
-        $this->assertSame( $expected, $subject->get() );
-    }
-
-    /**
-     * @covers ::set
-     * @covers ::parse
-     */
-    public function testSet_Closure_SameClosure() {
-        $expected = function() {};
-
-        $this->subject->set( $expected );
-        $this->assertSame( $expected, $this->subject->get() );
-    }
-
-    /**
-     * @covers ::set
-     * @covers ::parse
-     * @covers ::parseFromString
-     */
-    public function testSet_ClassAtMethod_Array() {
-        $expected = [
-            'class' => '\WPEmergeTestTools\TestService',
-            'method' => 'getTest',
-        ];
-
-        $this->subject->set( '\WPEmergeTestTools\TestService@getTest' );
-        $this->assertEquals( $expected, $this->subject->get() );
-    }
-
-    /**
-     * @covers ::set
-     * @covers ::parse
-     * @covers ::parseFromString
-     */
-    public function testSet_ClassColonsMethod_Array() {
-        $expected = [
-            'class' => '\WPEmergeTestTools\TestService',
-            'method' => 'getTest',
-        ];
-
-        $this->subject->set( '\WPEmergeTestTools\TestService::getTest' );
-        $this->assertEquals( $expected, $this->subject->get() );
-    }
-
-    /**
-     * @covers ::set
-     * @covers ::parse
-     * @covers ::parseFromString
-     * @expectedException \Exception
-     * @expectedExceptionMessage No or invalid handler
-     */
-    public function testSet_InvalidString_ThrowException() {
-        $this->subject->set( '\WPEmergeTestTools\TestService' );
-    }
-
-    /**
-     * @covers ::set
-     * @covers ::parse
-     * @expectedException \Exception
-     * @expectedExceptionMessage No or invalid handler
-     */
-    public function testSet_Object_ThrowException() {
-        $this->subject->set( new stdClass() );
-    }
-
-    /**
-     * @covers ::execute
-     * @covers ::executeHandler
-     */
-    public function testExecute_Closure_CalledWithArguments() {
-        $stub = new stdClass();
-        $mock = Mockery::mock();
-        $mock->shouldReceive( 'execute' )
-           ->once()
-           ->with( $mock, $stub );
-
-        $closure = function( $mock, $stub ) {
-            $mock->execute( $mock, $stub );
-        };
-
-        $this->subject->set( $closure );
-        $this->subject->execute( $mock, $stub );
-        $this->assertTrue( true );
-    }
-
-    /**
-     * @covers ::execute
-     * @covers ::executeHandler
-     */
-    public function testExecute_ClassAtMethod_CalledWithArguments() {
-        $foo = 'foo';
-        $bar = 'bar';
-        $expected = (object) ['value' => $foo . $bar];
-
-        $this->subject->set( HandlerTestControllerMock::class . '@foobar' );
-        $this->assertEquals( $expected, $this->subject->execute( 'foo', 'bar' ) );
+        $this->assertEquals( $expected, $subject->get() );
     }
 
     /**
@@ -142,8 +44,8 @@ class HandlerTest extends WP_UnitTestCase {
             return $value;
         };
 
-        $this->subject->set( $closure );
-        $response = $this->subject->execute( $expected );
+        $subject = new Handler( $closure );
+        $response = $subject->execute( $expected );
         $this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
     }
 
@@ -157,8 +59,8 @@ class HandlerTest extends WP_UnitTestCase {
             return $value;
         };
 
-        $this->subject->set( $closure );
-        $response = $this->subject->execute( $value );
+        $subject = new Handler( $closure );
+        $response = $subject->execute( $value );
         $this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
     }
 
@@ -171,8 +73,8 @@ class HandlerTest extends WP_UnitTestCase {
             return $expected;
         };
 
-        $this->subject->set( $closure );
-        $this->assertSame( $expected, $this->subject->execute() );
+        $subject = new Handler( $closure );
+        $this->assertSame( $expected, $subject->execute() );
     }
 }
 

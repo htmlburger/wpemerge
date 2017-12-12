@@ -2,33 +2,19 @@
 
 namespace WPEmerge\View;
 
+use View;
+
 /**
  * Render view files with php
  */
 class Php implements EngineInterface {
-	/**
-	 * Global context
-	 *
-	 * @var array
-	 */
-	protected $global_context = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param array $global_context
-	 */
-	public function __construct( $global_context ) {
-		$this->global_context = $global_context;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	public function render( $file, $context ) {
 		$__view = $file;
 		$__context = array_merge(
-			['global' => $this->global_context],
+			['global' => View::getGlobalContext()],
 			$context
 		);
 		$renderer = function() use ( $__view, $__context ) {

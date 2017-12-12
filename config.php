@@ -33,6 +33,10 @@ if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'framework.routing.global_middleware' );
 }
 
+if ( ! defined( 'WPEMERGE_VIEW_KEY' ) ) {
+	define( 'WPEMERGE_VIEW_KEY', 'framework.view.view' );
+}
+
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
 	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'framework.view.engine' );
 }
