@@ -2,7 +2,7 @@
 
 namespace WPEmerge\View;
 
-use View;
+use View as ViewService;
 
 /**
  * Render view files with php
@@ -15,8 +15,8 @@ class Php implements EngineInterface {
 		$__view = $file;
 
 		$__context = array_merge(
-			['global' => View::getGlobals()],
-			View::compose( $file ),
+			['global' => ViewService::getGlobals()],
+			ViewService::compose( $file ),
 			$context
 		);
 
