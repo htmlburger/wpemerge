@@ -36,6 +36,28 @@ class HandlerTest extends WP_UnitTestCase {
     /**
      * @covers ::__construct
      * @covers ::parse
+     */
+    public function testSet_Closure_Closure() {
+        $expected = function() {};
+
+        $subject = new Handler( $expected );
+
+        $this->assertEquals( $expected, $subject->get() );
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::parse
+     * @expectedException \Exception
+     * @expectedExceptionMessage No or invalid handler
+     */
+    public function testSet_Invalid_ThrowException() {
+        $subject = new Handler( new stdClass() );
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::parse
      * @covers ::parseFromString
      */
     public function testSet_ClassAtMethod_Array() {
