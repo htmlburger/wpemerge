@@ -9,7 +9,7 @@ use WPEmerge\Helpers\Path;
 use WPEmerge\Support\Arr;
 
 /**
- * Render view files with php
+ * Provide general view-related functionality
  */
 class View {
 	/**

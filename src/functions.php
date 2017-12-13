@@ -1,6 +1,7 @@
 <?php
 
 use WPEmerge\Response;
+use WPEmerge\Helpers\Mixed;
 
 if ( ! function_exists( 'wpm_response' ) ) {
 	/**
@@ -76,5 +77,18 @@ if ( ! function_exists( 'wpm_error' ) ) {
 	 */
 	function wpm_error( $code ) {
 		return Response::error( wpm_response(), $code );
+	}
+}
+
+if ( ! function_exists( 'wpm_partial' ) ) {
+	/**
+	 * @codeCoverageIgnore
+	 * @see WPEmerge\View\Php::render()
+	 * @return string
+	 */
+	function wpm_partial( $views, $context = [] ) {
+		$views = Mixed::toArray( $views );
+		$engine = WPEmerge::resolve( WPEMERGE_VIEW_ENGINE_PHP_KEY );
+		echo $engine->render( $views, $context );
 	}
 }
