@@ -2,8 +2,8 @@
 
 namespace WPEmergeTests\Flash;
 
-use WPEmerge\Flash\Flash;
 use stdClass;
+use WPEmerge\Flash\Flash;
 use WP_UnitTestCase;
 
 /**

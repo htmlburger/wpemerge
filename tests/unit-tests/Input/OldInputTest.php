@@ -4,7 +4,6 @@ namespace WPEmergeTests\Input;
 
 use Flash;
 use Mockery;
-use WPEmerge;
 use WPEmerge\Input\OldInput;
 use WP_UnitTestCase;
 
