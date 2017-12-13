@@ -17,7 +17,7 @@ interface EngineInterface {
 	/**
 	 * Render the first view that exists to a string
 	 *
-	 * @param  string[] $view
+	 * @param  string[] $views
 	 * @param  array    $context
 	 * @return string
 	 */

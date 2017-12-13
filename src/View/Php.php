@@ -74,8 +74,8 @@ class Php implements EngineInterface {
 	/**
 	 * Resolve an array of views to the first existing view and it's filepath
 	 *
-	 * @param  string[]   $views
-	 * @return array|null
+	 * @param  string[]                  $views
+	 * @return null|array<string,string>
 	 */
 	protected function resolveViewAndFile( $views ) {
 		$view = '';
