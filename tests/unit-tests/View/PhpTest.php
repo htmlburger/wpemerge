@@ -48,6 +48,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 * @covers ::resolveViewAndFile
 	 */
 	public function testRender() {
@@ -68,6 +69,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 * @covers ::resolveViewAndFile
 	 */
 	public function testRender_NoView_EmptyString() {
@@ -76,6 +78,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 */
 	public function testRender_View_Rendered() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
@@ -97,6 +100,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 */
 	public function testRender_ViewWithVariables_Rendered() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
@@ -118,6 +122,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 */
 	public function testRender_GlobalContext_Rendered() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
@@ -139,6 +144,7 @@ class PhpTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::render
+	 * @covers ::renderView
 	 */
 	public function testRender_WithViewComposer_Rendered() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';

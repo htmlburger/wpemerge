@@ -20,24 +20,37 @@ class Php implements EngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function render( $views, $context ) {
-		$view_file = $this->resolveViewAndFile( $views );
-
-		if ( $view_file === null ) {
-			return '';
+		foreach ( $views as $view ) {
+			if ( $this->exists( $view ) ) {
+				$file = $this->resolveFile( $view );
+				return $this->renderView( $view, $file, $context );
+			}
 		}
 
-		$__view = $view_file['file'];
+		return '';
+	}
+
+	/**
+	 * Render a single view to string
+	 *
+	 * @param  string $view
+	 * @param  string $file
+	 * @param  array  $context
+	 * @return string
+	 */
+	protected function renderView( $view, $file, $context ) {
+		$__file = $file;
 
 		$__context = array_merge(
 			['global' => ViewService::getGlobals()],
-			ViewService::compose( $view_file['view'] ),
+			ViewService::compose( $view ),
 			$context
 		);
 
-		$renderer = function() use ( $__view, $__context ) {
+		$renderer = function() use ( $__file, $__context ) {
 			ob_start();
 			extract( $__context );
-			include( $__view );
+			include( $__file );
 			return ob_get_clean();
 		};
 
@@ -69,33 +82,5 @@ class Php implements EngineInterface {
 	 */
 	protected function resolveFileFromFilesystem( $view ) {
 		return file_exists( $view ) ? $view : '';
-	}
-
-	/**
-	 * Resolve an array of views to the first existing view and it's filepath
-	 *
-	 * @param  string[]                  $views
-	 * @return null|array<string,string>
-	 */
-	protected function resolveViewAndFile( $views ) {
-		$view = '';
-		$file = '';
-
-		foreach ( $views as $current_view ) {
-			if ( $this->exists( $current_view ) ) {
-				$view = $current_view;
-				$file = $this->resolveFile( $view );
-				break;
-			}
-		}
-
-		if ( ! $file ) {
-			return null;
-		}
-
-		return [
-			'view' => $view,
-			'file' => $file,
-		];
 	}
 }
