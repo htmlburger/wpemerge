@@ -84,7 +84,7 @@ if ( ! function_exists( 'wpm_partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see WPEmerge\View\Php::render()
-	 * @return string
+	 * @return void
 	 */
 	function wpm_partial( $views, $context = [] ) {
 		$views = Mixed::toArray( $views );
