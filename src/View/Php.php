@@ -67,6 +67,11 @@ class Php implements EngineInterface {
 		$file = locate_template( $view, false );
 
 		if ( ! $file ) {
+			// locate_template failed to find the view - try adding a .php extension
+			$file = locate_template( $view . '.php', false );
+		}
+
+		if ( ! $file ) {
 			// locate_template failed to find the view - test if a valid absolute path was passed
 			$file = $this->resolveFileFromFilesystem( $view );
 		}
