@@ -49,7 +49,6 @@ class PhpTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::render
 	 * @covers ::renderView
-	 * @covers ::resolveViewAndFile
 	 */
 	public function testRender() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
@@ -70,7 +69,6 @@ class PhpTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::render
 	 * @covers ::renderView
-	 * @covers ::resolveViewAndFile
 	 */
 	public function testRender_NoView_EmptyString() {
 		$this->assertEquals( '', $this->subject->render( [''], [] ) );
