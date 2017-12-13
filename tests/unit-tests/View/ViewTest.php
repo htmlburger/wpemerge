@@ -48,16 +48,16 @@ class ViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::setComposer
-	 * @covers ::getComposer
+	 * @covers ::addComposer
+	 * @covers ::getComposers
 	 */
-	public function testSetComposer() {
+	public function testAddComposer() {
 		$expected = function () { return []; };
 		$view = 'foo';
 
-		$this->subject->setComposer( $view, $expected );
+		$this->subject->addComposer( $view, $expected );
 
-		$this->assertSame( $expected, $this->subject->getComposer( $view )->get() );
+		$this->assertSame( $expected, $this->subject->getComposersForView( $view )[0]->get() );
 	}
 
 	/**
@@ -70,7 +70,7 @@ class ViewTest extends WP_UnitTestCase {
 			return $expected;
 		};
 
-		$this->subject->setComposer( $view, $composer );
+		$this->subject->addComposer( $view, $composer );
 
 		$this->assertSame( $expected, $this->subject->compose( $view ) );
 	}

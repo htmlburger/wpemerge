@@ -10,49 +10,49 @@ if ( ! defined( 'WPEMERGE_DIR' ) ) {
  * Service container keys and key prefixes
  */
 if ( ! defined( 'WPEMERGE_FRAMEWORK_KEY' ) ) {
-	define( 'WPEMERGE_FRAMEWORK_KEY', 'framework.framework.framework' );
+	define( 'WPEMERGE_FRAMEWORK_KEY', 'wpemerge.framework.framework' );
 }
 
 if ( ! defined( 'WPEMERGE_CONFIG_KEY' ) ) {
-	define( 'WPEMERGE_CONFIG_KEY', 'framework.config' );
+	define( 'WPEMERGE_CONFIG_KEY', 'wpemerge.config' );
 }
 
 if ( ! defined( 'WPEMERGE_SESSION_KEY' ) ) {
-	define( 'WPEMERGE_SESSION_KEY', 'framework.session' );
+	define( 'WPEMERGE_SESSION_KEY', 'wpemerge.session' );
 }
 
 if ( ! defined( 'WPEMERGE_ROUTING_ROUTER_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'framework.routing.router' );
+	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'wpemerge.routing.router' );
 }
 
 if ( ! defined( 'WPEMERGE_ROUTING_CONDITIONS_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_CONDITIONS_KEY', 'framework.routing.conditions.' );
+	define( 'WPEMERGE_ROUTING_CONDITIONS_KEY', 'wpemerge.routing.conditions.' );
 }
 
 if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'framework.routing.global_middleware' );
+	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'wpemerge.routing.global_middleware' );
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_KEY', 'framework.view.view' );
+	define( 'WPEMERGE_VIEW_KEY', 'wpemerge.view.view' );
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'framework.view.engine' );
+	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'wpemerge.view.engine' );
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_PHP_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'framework.view.engine.php' );
+	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'wpemerge.view.engine.php' );
 }
 
 if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {
-	define( 'WPEMERGE_FLASH_KEY', 'framework.flash.flash' );
+	define( 'WPEMERGE_FLASH_KEY', 'wpemerge.flash.flash' );
 }
 
 if ( ! defined( 'WPEMERGE_OLD_INPUT_KEY' ) ) {
-	define( 'WPEMERGE_OLD_INPUT_KEY', 'framework.old_input.old_input' );
+	define( 'WPEMERGE_OLD_INPUT_KEY', 'wpemerge.old_input.old_input' );
 }
 
 if ( ! defined( 'WPEMERGE_SERVICE_PROVIDERS_KEY' ) ) {
-	define( 'WPEMERGE_SERVICE_PROVIDERS_KEY', 'framework.service_providers' );
+	define( 'WPEMERGE_SERVICE_PROVIDERS_KEY', 'wpemerge.service_providers' );
 }

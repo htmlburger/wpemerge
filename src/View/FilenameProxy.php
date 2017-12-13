@@ -37,6 +37,30 @@ class FilenameProxy implements \WPEmerge\View\EngineInterface {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function exists( $view ) {
+		$engine_key = $this->getBindingForFile( $view );
+		$engine_instance = WPEmerge::resolve( $engine_key );
+		return $engine_instance->exists( $view );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function render( $views, $context ) {
+		foreach ( $views as $view ) {
+			if ( $this->exists( $view ) ) {
+				$engine_key = $this->getBindingForFile( $view );
+				$engine_instance = WPEmerge::resolve( $engine_key );
+				return $engine_instance->render( [$view], $context );
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Get the default binding
 	 *
 	 * @return string $binding
@@ -71,14 +95,5 @@ class FilenameProxy implements \WPEmerge\View\EngineInterface {
 		}
 
 		return $engine_key;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function render( $file, $context ) {
-		$engine_key = $this->getBindingForFile( $file );
-		$engine_instance = WPEmerge::resolve( $engine_key );
-		return $engine_instance->render( $file, $context );
 	}
 }

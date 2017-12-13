@@ -42,10 +42,10 @@ class Framework {
 	 */
 	protected $service_providers = [
 		RoutingServiceProvider::class,
-		FlashServiceProvider::class,
-		OldInputServiceProvider::class,
 		ViewServiceProvider::class,
 		ControllersServiceProvider::class,
+		FlashServiceProvider::class,
+		OldInputServiceProvider::class,
 	];
 
 	/**

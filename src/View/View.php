@@ -4,6 +4,8 @@ namespace WPEmerge\View;
 
 use Closure;
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\Mixed;
+use WPEmerge\Helpers\Path;
 use WPEmerge\Support\Arr;
 
 /**
@@ -59,23 +61,45 @@ class View {
 	/**
 	 * Get view composer
 	 *
-	 * @param  string       $view
-	 * @return Handler|null
+	 * @return array
 	 */
-	public function getComposer( $view ) {
-		return Arr::get( $this->composers, $view, null );
+	public function getComposers() {
+		return $this->composers;
 	}
 
 	/**
-	 * Set view composer
+	 * Get view composer
 	 *
-	 * @param  string         $view
-	 * @param  string|Closure $composer
+	 * @param  string|null $view
+	 * @return Handler[]
+	 */
+	public function getComposersForView( $view = null ) {
+		$composers = [];
+
+		foreach ( $this->composers as $composer ) {
+			if ( in_array( $view, $composer['views'] ) ) {
+				$composers[] = $composer['composer'];
+			}
+		}
+
+		return $composers;
+	}
+
+	/**
+	 * Add view composer
+	 *
+	 * @param string|string[] $views
+	 * @param string|Closure  $composer
 	 * @return void
 	 */
-	public function setComposer( $view, $composer ) {
+	public function addComposer( $views, $composer ) {
+		$views = Mixed::toArray( $views );
 		$handler = new Handler( $composer );
-		$this->composers[ $view ] = $handler;
+
+		$this->composers[] = [
+			'views' => $views,
+			'composer' => $handler,
+		];
 	}
 
 	/**
@@ -83,14 +107,19 @@ class View {
 	 * Passes all arguments to the composer.
 	 *
 	 * @param  string $view
-	 * @param  mixed  $arguments,...
 	 * @return array
 	 */
 	public function compose( $view ) {
-		$composer = $this->getComposer( $view );
-		if ( $composer === null ) {
-			return [];
+		$context = [];
+		$composers = $this->getComposersForView( $view );
+
+		foreach ( $composers as $composer ) {
+			$context = array_merge(
+				$context,
+				call_user_func_array( [$composer, 'execute'], [$view] )
+			);
 		}
-		return call_user_func_array( [$composer, 'execute'], func_get_args() );
+
+		return $context;
 	}
 }

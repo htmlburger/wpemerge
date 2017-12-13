@@ -17,6 +17,12 @@ class FilenameProxyTest extends WP_UnitTestCase {
 		$this->container = WPEmerge::getContainer();
 	}
 
+	public function tearDown() {
+		parent::setUp();
+
+		unset( $this->container );
+	}
+
 	/**
 	 * @covers ::__construct
 	 * @covers ::getBindings
@@ -66,23 +72,52 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::render
+	 * @covers ::exists
 	 */
-	public function testRender() {
-		$file = 'file.php';
-		$context = ['foo' => 'bar'];
-		$result = 'foobar';
-
-		$this->container['engine_mockup'] = function() use ( $file, $context, $result ) {
+	public function testExists() {
+		$view = 'foo';
+		$this->container['engine_mockup'] = function() use ( $view ) {
 			$mock = Mockery::mock();
-			$mock->shouldReceive( 'render' )
-				->with( $file, $context )
-				->andReturn( $result );
+
+			$mock->shouldReceive( 'exists' )
+				->with( $view )
+				->andReturn( true )
+				->ordered();
+
 			return $mock;
 		};
 
 		$subject = new FilenameProxy( [], 'engine_mockup' );
 
-		$this->assertEquals( $result, $subject->render( $file, $context ) );
+		$this->assertTrue( $subject->exists( $view ) );
+		unset( $this->container['engine_mockup'] );
+	}
+
+	/**
+	 * @covers ::render
+	 */
+	public function testRender() {
+		$view = 'file.php';
+		$context = ['foo' => 'bar'];
+		$result = 'foobar';
+
+		$this->container['engine_mockup'] = function() use ( $view, $context, $result ) {
+			$mock = Mockery::mock();
+
+			$mock->shouldReceive( 'exists' )
+				->with( $view )
+				->andReturn( true );
+
+			$mock->shouldReceive( 'render' )
+				->with( [$view], $context )
+				->andReturn( $result );
+
+			return $mock;
+		};
+
+		$subject = new FilenameProxy( [], 'engine_mockup' );
+
+		$this->assertEquals( $result, $subject->render( [$view], $context ) );
+		unset( $this->container['engine_mockup'] );
 	}
 }

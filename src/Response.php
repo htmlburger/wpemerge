@@ -2,10 +2,10 @@
 
 namespace WPEmerge;
 
-use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge;
+use WPEmerge\Helpers\Mixed;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -138,56 +138,17 @@ class Response {
 	}
 
 	/**
-	 * Resolve a view or a view array to an absolute filepath
-	 *
-	 * @param  string|string[] $views
-	 * @return string
-	 */
-	protected static function resolveView( $views ) {
-		$views = is_array( $views ) ? $views : [$views];
-		$view = locate_template( $views, false );
-
-		// locate_template failed to find the view - test if a valid absolute path was passed
-		if ( ! $view ) {
-			$view = static::resolveViewFromFilesystem( $views );
-		}
-
-		return $view;
-	}
-
-	/**
-	 * Resolve the first existing absolute view filepath from an array of view filepaths
-	 *
-	 * @param  string[] $views
-	 * @return string
-	 */
-	protected static function resolveViewFromFilesystem( $views ) {
-		foreach ( $views as $view ) {
-			if ( file_exists( $view ) ) {
-				return $view;
-			}
-		}
-		return '';
-	}
-
-	/**
 	 * Get a cloned response, resolving and rendering a view as the body
 	 *
-	 * @throws Exception
 	 * @param  ResponseInterface $response
 	 * @param  string|string[]   $views
 	 * @param  array             $context
 	 * @return ResponseInterface
 	 */
 	public static function view( ResponseInterface $response, $views, $context = array() ) {
-		$view = static::resolveView( $views );
-
-		if ( ! $view ) {
-			throw new Exception( 'Could not resolve view.' );
-		}
-
+		$views = Mixed::toArray( $views );
 		$engine = WPEmerge::resolve( WPEMERGE_VIEW_ENGINE_KEY );
-		$html = $engine->render( $view, $context );
+		$html = $engine->render( $views, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );
 		$response = $response->withBody( Psr7\stream_for( $html ) );
@@ -247,6 +208,6 @@ class Response {
 		}
 
 		$response = $response->withStatus( $status );
-		return static::view( $response, array( $status . '.php', 'index.php' ) );
+		return static::view( $response, [$status . '.php', 'index.php'] );
 	}
 }
