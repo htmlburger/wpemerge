@@ -120,4 +120,26 @@ class FilenameProxyTest extends WP_UnitTestCase {
 		$this->assertEquals( $result, $subject->render( [$view], $context ) );
 		unset( $this->container['engine_mockup'] );
 	}
+
+	/**
+	 * @covers ::render
+	 */
+	public function testRender_NoView_EmptyString() {
+		$view = '';
+
+		$this->container['engine_mockup'] = function() use ( $view ) {
+			$mock = Mockery::mock();
+
+			$mock->shouldReceive( 'exists' )
+				->with( $view )
+				->andReturn( false );
+
+			return $mock;
+		};
+
+		$subject = new FilenameProxy( [], 'engine_mockup' );
+
+		$this->assertEquals( '', $subject->render( [$view], [] ) );
+		unset( $this->container['engine_mockup'] );
+	}
 }

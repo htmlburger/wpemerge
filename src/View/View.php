@@ -61,19 +61,10 @@ class View {
 	/**
 	 * Get view composer
 	 *
-	 * @return array
-	 */
-	public function getComposers() {
-		return $this->composers;
-	}
-
-	/**
-	 * Get view composer
-	 *
-	 * @param  string|null $view
+	 * @param  string    $view
 	 * @return Handler[]
 	 */
-	public function getComposersForView( $view = null ) {
+	public function getComposersForView( $view ) {
 		$composers = [];
 
 		foreach ( $this->composers as $composer ) {

@@ -49,7 +49,7 @@ class ViewTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::addComposer
-	 * @covers ::getComposers
+	 * @covers ::getComposersForView
 	 */
 	public function testAddComposer() {
 		$expected = function () { return []; };
