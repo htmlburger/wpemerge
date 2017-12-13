@@ -53,7 +53,7 @@ class ResponseTest extends WP_UnitTestCase {
         $view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
         $expected = file_get_contents( $view );
 
-        // Relies on the Php template engine - it should be mocked instead
+        // Relies on the Php view engine - it should be mocked instead
         $subject = Response::view( Response::response(), $view );
         $this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
     }

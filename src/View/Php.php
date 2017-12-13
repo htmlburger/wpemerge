@@ -2,9 +2,7 @@
 
 namespace WPEmerge\View;
 
-use Exception;
 use View as ViewService;
-use WPEmerge\Helpers\Path;
 
 /**
  * Render view files with php
