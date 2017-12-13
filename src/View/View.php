@@ -40,7 +40,7 @@ class View {
 	 * @param  mixed  $value
 	 * @return void
 	 */
-	public function setGlobal( $key, $value ) {
+	public function addGlobal( $key, $value ) {
 		$this->globals[ $key ] = $value;
 	}
 
@@ -50,9 +50,9 @@ class View {
 	 * @param  array $globals
 	 * @return void
 	 */
-	public function setGlobals( $globals ) {
+	public function addGlobals( $globals ) {
 		foreach ( $globals as $key => $value ) {
-			$this->setGlobal( $key, $value );
+			$this->addGlobal( $key, $value );
 		}
 	}
 

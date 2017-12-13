@@ -24,25 +24,25 @@ class ViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::setGlobal
+	 * @covers ::addGlobal
 	 * @covers ::getGlobals
 	 */
-	public function testSetGlobal() {
+	public function testaddGlobal() {
 		$expected = ['foo' => 'bar'];
 
-		$this->subject->setGlobal( 'foo', 'bar' );
+		$this->subject->addGlobal( 'foo', 'bar' );
 
 		$this->assertEquals( $expected, $this->subject->getGlobals() );
 	}
 
 	/**
-	 * @covers ::setGlobals
+	 * @covers ::addGlobals
 	 * @covers ::getGlobals
 	 */
-	public function testSetGlobals() {
+	public function testaddGlobals() {
 		$expected = ['foo' => 'bar'];
 
-		$this->subject->setGlobals( $expected );
+		$this->subject->addGlobals( $expected );
 
 		$this->assertEquals( $expected, $this->subject->getGlobals() );
 	}
