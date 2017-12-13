@@ -78,7 +78,6 @@ class HandlerTest extends WP_UnitTestCase {
 
     /**
      * @covers ::execute
-     * @covers ::executeHandler
      */
     public function testExecute_Closure_CalledWithArguments() {
         $stub = new stdClass();
@@ -98,7 +97,6 @@ class HandlerTest extends WP_UnitTestCase {
 
     /**
      * @covers ::execute
-     * @covers ::executeHandler
      */
     public function testExecute_ClassAtMethod_CalledWithArguments() {
         $foo = 'foo';

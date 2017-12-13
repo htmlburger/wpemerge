@@ -102,7 +102,7 @@ class OldInputTest extends WP_UnitTestCase {
 	}
 }
 
-class OldInputTestFlashFacade extends WPEmerge\Support\Facade {
+class OldInputTestFlashFacade extends \WPEmerge\Support\Facade {
 	protected static function getFacadeAccessor() {
         return 'flashMock';
     }

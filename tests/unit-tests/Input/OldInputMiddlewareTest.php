@@ -128,7 +128,7 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	}
 }
 
-class OldInputMiddlewareTestOldInputFacade extends WPEmerge\Support\Facade {
+class OldInputMiddlewareTestOldInputFacade extends \WPEmerge\Support\Facade {
 	protected static function getFacadeAccessor() {
         return 'oldInputMock';
     }
