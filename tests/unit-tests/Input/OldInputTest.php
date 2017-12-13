@@ -2,6 +2,7 @@
 
 namespace WPEmergeTests\Input;
 
+use Flash;
 use Mockery;
 use WPEmerge;
 use WPEmerge\Input\OldInput;
@@ -14,11 +15,10 @@ class OldInputTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		$this->flash = Flash::getFacadeRoot();
 		$this->flashMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
+		Flash::swap( $this->flashMock );
 
-		WPEmerge::facade( 'Flash', OldInputTestFlashFacade::class );
-		$container = WPEmerge::getContainer();
-		$container['flashMock'] = $this->flashMock;
 		$this->subject = new OldInput();
 	}
 
@@ -26,11 +26,11 @@ class OldInputTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = WPEmerge::getContainer();
-		unset( $container['flashMock'] );
+		Flash::swap( $this->flash );
+		unset( $this->flash );
 		unset( $this->flashMock );
+
 		unset( $this->subject );
-		\Flash::clearResolvedInstances();
 	}
 
 	/**

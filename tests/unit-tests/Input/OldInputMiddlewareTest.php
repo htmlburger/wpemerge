@@ -2,6 +2,7 @@
 
 namespace WPEmergeTests\Input;
 
+use OldInput;
 use Mockery;
 use WPEmerge;
 use WPEmerge\Request;
@@ -15,11 +16,10 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->oldInputMock = Mockery::mock();
+		$this->oldInput = OldInput::getFacadeRoot();
+		$this->oldInputMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
+		OldInput::swap( $this->oldInputMock );
 
-		WPEmerge::facade( 'OldInput', OldInputMiddlewareTestOldInputFacade::class );
-		$container = WPEmerge::getContainer();
-		$container['oldInputMock'] = $this->oldInputMock;
 		$this->subject = new OldInputMiddleware();
 	}
 
@@ -27,11 +27,11 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$container = WPEmerge::getContainer();
-		unset( $container['oldInputMock'] );
+		OldInput::swap( $this->oldInput );
+		unset( $this->oldInput );
 		unset( $this->oldInputMock );
+
 		unset( $this->subject );
-		\OldInput::clearResolvedInstances();
 	}
 
 	/**
