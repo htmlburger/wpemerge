@@ -4,13 +4,13 @@ namespace WPEmergeTests\View;
 
 use Mockery;
 use WPEmerge;
-use WPEmerge\View\FilenameProxy;
+use WPEmerge\View\NameProxy;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\View\FilenameProxy
+ * @coversDefaultClass \WPEmerge\View\NameProxy
  */
-class FilenameProxyTest extends WP_UnitTestCase {
+class NameProxyTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
@@ -30,7 +30,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	public function testConstruct_Bindings_Accepted() {
 		$expected = ['.foo' => 'foo', '.bar' => 'bar'];
 
-		$subject = new FilenameProxy( $expected );
+		$subject = new NameProxy( $expected );
 
 		$this->assertEquals( $expected, $subject->getBindings() );
 	}
@@ -42,7 +42,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	public function testConstruct_Default_Accepted() {
 		$expected = 'foo';
 
-		$subject = new FilenameProxy( [], $expected );
+		$subject = new NameProxy( [], $expected );
 
 		$this->assertEquals( $expected, $subject->getDefaultBinding() );
 	}
@@ -52,7 +52,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	 * @covers ::getDefaultBinding
 	 */
 	public function testConstruct_EmptyDefault_Ignored() {
-		$subject = new FilenameProxy( [], '' );
+		$subject = new NameProxy( [], '' );
 
 		$this->assertNotEquals( '', $subject->getDefaultBinding() );
 	}
@@ -61,7 +61,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 	 * @covers ::getBindingForFile
 	 */
 	public function testGetBindingForFile() {
-		$subject = new FilenameProxy( [
+		$subject = new NameProxy( [
 			'.blade.php' => 'blade',
 			'.twig.php' => 'twig',
 		], 'default' );
@@ -87,7 +87,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new FilenameProxy( [], 'engine_mockup' );
+		$subject = new NameProxy( [], 'engine_mockup' );
 
 		$this->assertTrue( $subject->exists( $view ) );
 		unset( $this->container['engine_mockup'] );
@@ -115,7 +115,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new FilenameProxy( [], 'engine_mockup' );
+		$subject = new NameProxy( [], 'engine_mockup' );
 
 		$this->assertEquals( $result, $subject->render( [$view], $context ) );
 		unset( $this->container['engine_mockup'] );
@@ -137,7 +137,7 @@ class FilenameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new FilenameProxy( [], 'engine_mockup' );
+		$subject = new NameProxy( [], 'engine_mockup' );
 
 		$this->assertEquals( '', $subject->render( [$view], [] ) );
 		unset( $this->container['engine_mockup'] );

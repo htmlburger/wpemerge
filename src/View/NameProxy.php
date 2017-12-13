@@ -7,7 +7,7 @@ use WPEmerge;
 /**
  * Render view files with different engines depending on their filename
  */
-class FilenameProxy implements \WPEmerge\View\EngineInterface {
+class NameProxy implements \WPEmerge\View\EngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *
