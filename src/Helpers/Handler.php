@@ -36,7 +36,7 @@ class Handler {
 	/**
 	 * Parse a raw handler to a Closure or a [class, method] array
 	 *
-	 * @param  string|Closure     $handler
+	 * @param  string|Closure     $raw_handler
 	 * @return array|Closure|null
 	 */
 	protected function parse( $raw_handler ) {
@@ -54,7 +54,7 @@ class Handler {
 	/**
 	 * Parse a raw string handler to a [class, method] array
 	 *
-	 * @param  string     $handler
+	 * @param  string     $raw_handler
 	 * @return array|null
 	 */
 	protected function parseFromString( $raw_handler ) {
