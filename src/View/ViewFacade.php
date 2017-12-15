@@ -10,7 +10,7 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  */
 class ViewFacade extends Facade {
-    protected static function getFacadeAccessor() {
-        return WPEMERGE_VIEW_KEY;
-    }
+	protected static function getFacadeAccessor() {
+		return WPEMERGE_VIEW_KEY;
+	}
 }

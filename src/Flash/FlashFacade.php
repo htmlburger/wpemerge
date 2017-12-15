@@ -10,7 +10,7 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  */
 class FlashFacade extends Facade {
-    protected static function getFacadeAccessor() {
-        return WPEMERGE_FLASH_KEY;
-    }
+	protected static function getFacadeAccessor() {
+		return WPEMERGE_FLASH_KEY;
+	}
 }

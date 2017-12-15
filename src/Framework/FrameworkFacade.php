@@ -10,7 +10,7 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  */
 class FrameworkFacade extends Facade {
-    protected static function getFacadeAccessor() {
-        return WPEMERGE_FRAMEWORK_KEY;
-    }
+	protected static function getFacadeAccessor() {
+		return WPEMERGE_FRAMEWORK_KEY;
+	}
 }

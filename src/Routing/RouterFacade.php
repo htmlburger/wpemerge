@@ -10,7 +10,7 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  */
 class RouterFacade extends Facade {
-    protected static function getFacadeAccessor() {
-        return WPEMERGE_ROUTING_ROUTER_KEY;
-    }
+	protected static function getFacadeAccessor() {
+		return WPEMERGE_ROUTING_ROUTER_KEY;
+	}
 }

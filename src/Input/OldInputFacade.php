@@ -10,7 +10,7 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  */
 class OldInputFacade extends Facade {
-    protected static function getFacadeAccessor() {
-        return WPEMERGE_OLD_INPUT_KEY;
-    }
+	protected static function getFacadeAccessor() {
+		return WPEMERGE_OLD_INPUT_KEY;
+	}
 }
