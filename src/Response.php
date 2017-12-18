@@ -208,6 +208,6 @@ class Response {
 		}
 
 		$response = $response->withStatus( $status );
-		return static::view( $response, [$status . '.php', 'index.php'] );
+		return static::view( $response, [$status, 'error', 'index'] );
 	}
 }
