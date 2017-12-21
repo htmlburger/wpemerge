@@ -10,9 +10,6 @@ build:
       tests:
         override:
           - 'true'
-      environment:
-        node:
-          version: 6.0.0
 
 filter:
   excluded_paths:
