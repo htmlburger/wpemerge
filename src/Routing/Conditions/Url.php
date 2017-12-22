@@ -120,6 +120,30 @@ class Url implements ConditionInterface {
 	}
 
 	/**
+	 * Validation regex replace callback
+	 *
+	 * @param  array  $matches
+	 * @param  array  $parameters
+	 * @return string
+	 */
+	protected function replaceRegexParameterWithPlaceholder( $matches, &$parameters ) {
+		$name = $matches['name'];
+		$optional = ! empty( $matches['optional'] );
+		$regex = ! empty( $matches['regex'] ) ? $matches['regex'] : $this->parameter_regex;
+
+		$replacement = '/(?P<' . $name . '>' . $regex . ')';
+
+		if ( $optional ) {
+			$replacement = '(?:' . $replacement . ')?';
+		}
+
+		$placeholder = '___placeholder_' . sha1( count( $parameters) . '_' . $replacement . '_' . uniqid() ) . '___';
+		$parameters[ $placeholder ] = $replacement;
+
+		return $placeholder;
+	}
+
+	/**
 	 * Get regex to test whether normal urls match the parameter-based one
 	 *
 	 * @param  string  $url
@@ -131,17 +155,7 @@ class Url implements ConditionInterface {
 
 		// Replace all parameters with placeholders
 		$validation_regex = preg_replace_callback( $this->url_regex, function( $matches ) use ( &$parameters ) {
-			$name = $matches['name'];
-			$optional = ! empty( $matches['optional'] );
-			$regex = ! empty( $matches['regex'] ) ? $matches['regex'] : $this->parameter_regex;
-			$replacement = '/(?P<' . $name . '>' . $regex . ')';
-			if ( $optional ) {
-				$replacement = '(?:' . $replacement . ')?';
-			}
-
-			$placeholder = '___placeholder_' . sha1( count( $parameters) . '_' . $replacement . '_' . uniqid() ) . '___';
-			$parameters[ $placeholder ] = $replacement;
-			return $placeholder;
+			return $this->replaceRegexParameterWithPlaceholder( $matches, $parameters );
 		}, $url );
 
 		// quote the remaining string so that it does not get evaluated as regex

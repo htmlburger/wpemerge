@@ -120,6 +120,7 @@ class UrlTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getValidationRegex
+	 * @covers ::replaceRegexParameterWithPlaceholder
 	 */
 	public function testGetValidationRegex() {
 		$subject1 = new Url( '/foo/bar/baz/1/2/3/' );
