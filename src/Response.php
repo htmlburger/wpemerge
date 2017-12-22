@@ -147,7 +147,7 @@ class Response {
 	protected static function sendBodyWithLength( StreamInterface $body, $length, $chunk_size ) {
 		$content_left = $length;
 
-		while ( ! $body->eof() && $content_left > 0 ) {
+		while ( $content_left > 0 ) {
 			$read = min( $chunk_size, $content_left );
 
 			if ( $read <= 0 ) {
