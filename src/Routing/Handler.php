@@ -2,6 +2,7 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge;
 use WPEmerge\Helpers\Handler as GenericHandler;
 
 /**
@@ -44,11 +45,11 @@ class Handler {
 		$response = call_user_func_array( [$this->handler, 'execute'], $arguments );
 
 		if ( is_string( $response ) ) {
-			return wpm_output( $response );
+			return WPEmerge\output( $response );
 		}
 
 		if ( is_array( $response ) ) {
-			return wpm_json( $response );
+			return WPEmerge\json( $response );
 		}
 
 		return $response;

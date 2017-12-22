@@ -30,6 +30,7 @@
         "files": [
             "config.php",
             "src/functions.php",
+            "src/functions-aliases.php",
             "src/load.php"
         ]
     },
