@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge;
 use WPEmerge\Helpers\Mixed;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * A collection of tools for the creation of responses
@@ -23,7 +24,7 @@ class Response {
 
 	/**
 	 * Send output based on a response object
-	 * @credit modified version of slimphp/slim - Slim/App.php
+	 * @credit heavily modified version of slimphp/slim - Slim/App.php
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -64,8 +65,8 @@ class Response {
 	 * Get a response's body stream so it is ready to be read
 	 *
 	 * @codeCoverageIgnore
-	 * @param  ResponseInterface                 $response
-	 * @return \Psr\Http\Message\StreamInterface
+	 * @param  ResponseInterface $response
+	 * @return StreamInterface
 	 */
 	protected static function getBody( ResponseInterface $response ) {
 		$body = $response->getBody();
@@ -109,15 +110,53 @@ class Response {
 		$body = static::getBody( $response );
 		$content_length = static::getBodyContentLength( $response );
 
-		$content_left = $content_length ? $content_length : -1;
-		$amount_to_read = $content_left > -1 ? min( $chunk_size, $content_left ) : $chunk_size;
+		if ( $content_length > 0 ) {
+			static::sendBodyWithLength( $body, $content_length, $chunk_size );
+		} else {
+			static::sendBodyWithoutLength( $body, $chunk_size );
+		}
+	}
 
-		while ( ! $body->eof() && $amount_to_read > 0 ) {
-			echo $body->read( $amount_to_read );
+	/**
+	 * Send a body with an unknown length to the client
+	 *
+	 * @codeCoverageIgnore
+	 * @param  StreamInterface $body
+	 * @param  integer         $chunk_size
+	 * @return void
+	 */
+	protected static function sendBodyWithoutLength( StreamInterface $body, $chunk_size ) {
+		while ( ! $body->eof() ) {
+			echo $body->read( $chunk_size );
 
-			if ( $content_left > -1 ) {
-				$content_left -= $amount_to_read;
+			if ( connection_status() != CONNECTION_NORMAL ) {
+				break;
 			}
+		}
+	}
+
+	/**
+	 * Send a body with a known length to the client
+	 *
+	 * @codeCoverageIgnore
+	 * @param  StreamInterface $body
+	 * @param  integer         $length
+	 * @param  integer         $chunk_size
+	 * @return void
+	 */
+	protected static function sendBodyWithLength( StreamInterface $body, $length, $chunk_size ) {
+		$content_left = $length;
+
+		while ( ! $body->eof() && $content_left > 0 ) {
+			$read = min( $chunk_size, $content_left );
+
+			if ( $read <= 0 ) {
+				break;
+			}
+
+			echo $body->read( $read );
+
+			$content_left -= $read;
 
 			if ( connection_status() != CONNECTION_NORMAL ) {
 				break;
