@@ -164,11 +164,8 @@ class Url implements ConditionInterface {
 		// replace the placeholders with the real parameter regexes
 		$validation_regex = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_regex );
 
-		// add a question mark to the end to make the trailing slash optional
-		$validation_regex = $validation_regex . '?';
-
-		// make sure the regex matches the entire url
-		$validation_regex = '^' . $validation_regex . '$';
+		// match the entire url; make trailing slash optional
+		$validation_regex = '^' . $validation_regex . '?$';
 
 		if ( $wrap ) {
 			$validation_regex = '~' . $validation_regex . '~';
