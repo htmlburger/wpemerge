@@ -47,6 +47,17 @@ class PhpTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::canonical
+	 */
+	public function testCanonical() {
+		$expected = realpath( locate_template( 'index.php' ) );
+
+		$this->assertEquals( $expected, $this->subject->canonical( 'index' ) );
+		$this->assertEquals( $expected, $this->subject->canonical( 'index.php' ) );
+		$this->assertEquals( '', $this->subject->canonical( '' ) );
+	}
+
+	/**
 	 * @covers ::render
 	 * @covers ::renderView
 	 */

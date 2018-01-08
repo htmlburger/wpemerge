@@ -15,6 +15,14 @@ interface EngineInterface {
 	public function exists( $view );
 
 	/**
+	 * Return a canonical string representation of the view name
+	 *
+	 * @param  string  $view
+	 * @return string
+	 */
+	public function canonical( $view );
+
+	/**
 	 * Render the first view that exists to a string
 	 *
 	 * @param  string[] $views

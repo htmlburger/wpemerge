@@ -94,6 +94,30 @@ class NameProxyTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::canonical
+	 */
+	public function testCanonical() {
+		$view = 'foo';
+		$expected = 'foo.php';
+
+		$this->container['engine_mockup'] = function() use ( $view, $expected ) {
+			$mock = Mockery::mock();
+
+			$mock->shouldReceive( 'canonical' )
+				->with( $view )
+				->andReturn( $expected )
+				->ordered();
+
+			return $mock;
+		};
+
+		$subject = new NameProxy( [], 'engine_mockup' );
+
+		$this->assertEquals( $expected, $subject->canonical( $view ) );
+		unset( $this->container['engine_mockup'] );
+	}
+
+	/**
 	 * @covers ::render
 	 */
 	public function testRender() {

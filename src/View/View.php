@@ -3,6 +3,7 @@
 namespace WPEmerge\View;
 
 use Closure;
+use ViewEngine;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\Mixed;
 use WPEmerge\Helpers\Path;
@@ -65,6 +66,8 @@ class View {
 	 * @return Handler[]
 	 */
 	public function getComposersForView( $view ) {
+		$view = ViewEngine::canonical( $view );
+
 		$composers = [];
 
 		foreach ( $this->composers as $composer ) {
@@ -84,7 +87,9 @@ class View {
 	 * @return void
 	 */
 	public function addComposer( $views, $composer ) {
-		$views = Mixed::toArray( $views );
+		$views = array_map( function( $view ) {
+			return ViewEngine::canonical( $view );
+		}, Mixed::toArray( $views ) );
 		$handler = new Handler( $composer, 'compose' );
 
 		$this->composers[] = [

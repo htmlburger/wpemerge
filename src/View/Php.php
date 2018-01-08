@@ -19,6 +19,14 @@ class Php implements EngineInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function canonical( $view ) {
+		$file = $this->resolveFile( $view );
+		return $file;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function render( $views, $context ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
@@ -74,6 +82,10 @@ class Php implements EngineInterface {
 		if ( ! $file ) {
 			// locate_template failed to find the view - test if a valid absolute path was passed
 			$file = $this->resolveFileFromFilesystem( $view );
+		}
+
+		if ( $file ) {
+			$file = realpath( $file );
 		}
 
 		return $file;

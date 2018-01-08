@@ -48,6 +48,15 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function canonical( $view ) {
+		$engine_key = $this->getBindingForFile( $view );
+		$engine_instance = WPEmerge::resolve( $engine_key );
+		return $engine_instance->canonical( $view );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function render( $views, $context ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
