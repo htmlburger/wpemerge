@@ -60,6 +60,33 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::parse
 	 * @covers ::parseFromString
 	 */
+	public function testSet_ClassWithoutMethodWithDefault_Array() {
+		$expected = [
+			'class' => '\WPEmergeTestTools\TestService',
+			'method' => 'defaultMethod',
+		];
+
+		$subject = new Handler( '\WPEmergeTestTools\TestService', 'defaultMethod' );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromString
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage No or invalid handler
+	 */
+	public function testSet_ClassWithoutMethodWithoutDefault_Exception() {
+		$subject = new Handler( '\WPEmergeTestTools\TestService' );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromString
+	 */
 	public function testSet_ClassAtMethod_Array() {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',

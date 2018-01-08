@@ -85,7 +85,7 @@ class View {
 	 */
 	public function addComposer( $views, $composer ) {
 		$views = Mixed::toArray( $views );
-		$handler = new Handler( $composer );
+		$handler = new Handler( $composer, 'compose' );
 
 		$this->composers[] = [
 			'views' => $views,

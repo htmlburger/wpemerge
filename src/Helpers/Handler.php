@@ -21,10 +21,11 @@ class Handler {
 	 * Constructor
 	 *
 	 * @throws Exception
-	 * @param  string|Closure $raw_handler
+	 * @param string|Closure $raw_handler
+	 * @param string|null    $default_method
 	 */
-	public function __construct( $raw_handler ) {
-		$handler = $this->parse( $raw_handler );
+	public function __construct( $raw_handler, $default_method = null ) {
+		$handler = $this->parse( $raw_handler, $default_method );
 
 		if ( $handler === null ) {
 			throw new Exception( 'No or invalid handler provided.' );
@@ -37,15 +38,16 @@ class Handler {
 	 * Parse a raw handler to a Closure or a [class, method] array
 	 *
 	 * @param  string|Closure     $raw_handler
+	 * @param  string|null        $default_method
 	 * @return array|Closure|null
 	 */
-	protected function parse( $raw_handler ) {
+	protected function parse( $raw_handler, $default_method = null ) {
 		if ( $raw_handler instanceof Closure ) {
 			return $raw_handler;
 		}
 
 		if ( is_string( $raw_handler ) )  {
-			return $this->parseFromString( $raw_handler );
+			return $this->parseFromString( $raw_handler, $default_method );
 		}
 
 		return null;
@@ -54,11 +56,19 @@ class Handler {
 	/**
 	 * Parse a raw string handler to a [class, method] array
 	 *
-	 * @param  string     $raw_handler
+	 * @param  string      $raw_handler
+	 * @param  string|null $default_method
 	 * @return array|null
 	 */
-	protected function parseFromString( $raw_handler ) {
-		$handlerPieces = preg_split( '/@|::/', $raw_handler, 2 );
+	protected function parseFromString( $raw_handler, $default_method = null ) {
+		$handlerPieces = array_filter( preg_split( '/@|::/', $raw_handler, 2 ) );
+
+		if ( count( $handlerPieces ) === 1 && $default_method !== null ) {
+			return array(
+				'class' => $handlerPieces[0],
+				'method' => $default_method,
+			);
+		}
 
 		if ( count( $handlerPieces ) === 2 ) {
 			return array(
