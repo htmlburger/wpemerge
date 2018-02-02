@@ -6,8 +6,6 @@ use Closure;
 use ViewEngine;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\Mixed;
-use WPEmerge\Helpers\Path;
-use WPEmerge\Support\Arr;
 
 /**
  * Provide general view-related functionality

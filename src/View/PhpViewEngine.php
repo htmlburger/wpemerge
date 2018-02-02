@@ -3,7 +3,6 @@
 namespace WPEmerge\View;
 
 use Exception;
-use View as ViewService;
 
 /**
  * Render view files with php.
@@ -42,10 +41,10 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * Create a view instance.
 	 *
-	 * @param  string $name
-	 * @param  string $filepath
-	 * @param  array  $context
-	 * @return string
+	 * @param  string        $name
+	 * @param  string        $filepath
+	 * @param  array         $context
+	 * @return ViewInterface
 	 */
 	protected function makeView( $name, $filepath, $context = [] ) {
 		return (new PhpView())
