@@ -104,7 +104,6 @@ class ViewService {
 	 * @return void
 	 */
 	public function compose( ViewInterface $view ) {
-		$context = [];
 		$composers = $this->getComposersForView( $view->getName() );
 
 		foreach ( $composers as $composer ) {
