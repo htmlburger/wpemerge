@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Flash;
 
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -25,7 +25,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			return new \WPEmerge\Flash\Flash( $session );
 		};
 
-		WPEmerge::facade( 'Flash', \WPEmerge\Flash\FlashFacade::class );
+		Framework::facade( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
 
 	/**

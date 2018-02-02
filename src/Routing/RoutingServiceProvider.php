@@ -2,7 +2,8 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge;
+use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Router as RouterFacade;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
@@ -48,13 +49,13 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			$container[ WPEMERGE_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
 		}
 
-		WPEmerge::facade( 'Router', RouterFacade::class );
+		Framework::facade( 'Router', RouterFacade::class );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function boot( $container ) {
-		\Router::boot(); // facade
+		RouterFacade::boot();
 	}
 }

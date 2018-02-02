@@ -4,7 +4,7 @@ namespace WPEmerge\Routing\Conditions;
 
 use Closure;
 use Exception;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Routing\Conditions\Custom as CustomCondition;
 use WPEmerge\Routing\Conditions\Multiple as MultipleCondition;
 use WPEmerge\Routing\Conditions\Url as UrlCondition;
@@ -48,7 +48,7 @@ class Factory {
 			return false;
 		}
 
-		$condition_class = WPEmerge::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
+		$condition_class = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
 		return ( $condition_class !== null );
 	}
 
@@ -115,7 +115,7 @@ class Factory {
 		}
 
 		$condition_options = static::getConditionTypeAndArguments( $options );
-		$condition_class = WPEmerge::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
+		$condition_class = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );

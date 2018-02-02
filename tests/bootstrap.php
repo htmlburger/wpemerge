@@ -58,7 +58,7 @@ class WPEmerge_Tests_Bootstrap {
 			$wp->query_vars = array();
 		}
 
-		WPEmerge::boot();
+		WPEmerge\Facades\Framework::boot();
 	}
 
 	/**

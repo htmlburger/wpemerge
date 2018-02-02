@@ -5,6 +5,6 @@
 // @codeCoverageIgnoreStart
 $response = apply_filters( 'wpemerge.response', null );
 if ( $response !== null ) {
-	WPEmerge::respond( $response );
+	\WPEmerge\Facades\Framework::respond( $response );
 }
 // @codeCoverageIgnoreEnd

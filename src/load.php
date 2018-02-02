@@ -1,7 +1,7 @@
 <?php
 
 use WPEmerge\Framework\Framework;
-use WPEmerge\Framework\FrameworkFacade;
+use WPEmerge\Facades\Framework as FrameworkFacade;
 use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
 use Pimple\Container;

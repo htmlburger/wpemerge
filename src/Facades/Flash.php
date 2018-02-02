@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge\Flash;
+namespace WPEmerge\Facades;
 
 use WPEmerge\Support\Facade;
 
@@ -9,7 +9,7 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class FlashFacade extends Facade {
+class Flash extends Facade {
 	protected static function getFacadeAccessor() {
 		return WPEMERGE_FLASH_KEY;
 	}

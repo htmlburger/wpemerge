@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge\Input;
+namespace WPEmerge\Facades;
 
 use WPEmerge\Support\Facade;
 
@@ -9,7 +9,7 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class OldInputFacade extends Facade {
+class OldInput extends Facade {
 	protected static function getFacadeAccessor() {
 		return WPEMERGE_OLD_INPUT_KEY;
 	}

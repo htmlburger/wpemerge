@@ -4,7 +4,7 @@ namespace WPEmerge\Helpers;
 
 use Closure;
 use Exception;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 
 /**
  * Represent a generic handler - a Closure or a class method to be resolved from the service container
@@ -104,7 +104,7 @@ class Handler {
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
-		$instance = WPEmerge::instantiate( $class );
+		$instance = Framework::instantiate( $class );
 		return call_user_func_array( [$instance, $method], $arguments );
 	}
 }

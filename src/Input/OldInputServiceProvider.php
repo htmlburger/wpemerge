@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Input;
 
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -26,7 +26,7 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 			return new \WPEmerge\Input\OldInput();
 		};
 
-		WPEmerge::facade( 'OldInput', \WPEmerge\Input\OldInputFacade::class );
+		Framework::facade( 'OldInput', \WPEmerge\Facades\OldInput::class );
 	}
 
 	/**

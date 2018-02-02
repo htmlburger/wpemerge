@@ -2,7 +2,7 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 
 /**
  * Render view files with different engines depending on their filename
@@ -41,7 +41,7 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 	 */
 	public function exists( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine_instance = WPEmerge::resolve( $engine_key );
+		$engine_instance = Framework::resolve( $engine_key );
 		return $engine_instance->exists( $view );
 	}
 
@@ -50,7 +50,7 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 	 */
 	public function canonical( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine_instance = WPEmerge::resolve( $engine_key );
+		$engine_instance = Framework::resolve( $engine_key );
 		return $engine_instance->canonical( $view );
 	}
 
@@ -61,7 +61,7 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
 				$engine_key = $this->getBindingForFile( $view );
-				$engine_instance = WPEmerge::resolve( $engine_key );
+				$engine_instance = Framework::resolve( $engine_key );
 				return $engine_instance->render( [$view], $context );
 			}
 		}

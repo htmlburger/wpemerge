@@ -2,7 +2,7 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -25,8 +25,8 @@ class ViewServiceProvider implements ServiceProviderInterface {
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_ENGINE_PHP_KEY );
 
-		WPEmerge::facade( 'View', \WPEmerge\View\ViewFacade::class );
-		WPEmerge::facade( 'ViewEngine', \WPEmerge\View\ViewEngineFacade::class );
+		Framework::facade( 'View', \WPEmerge\Facades\View::class );
+		Framework::facade( 'ViewEngine', \WPEmerge\Facades\ViewEngine::class );
 	}
 
 	/**

@@ -4,7 +4,7 @@ namespace WPEmerge;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Helpers\Mixed;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -186,7 +186,7 @@ class Response {
 	 */
 	public static function view( ResponseInterface $response, $views, $context = array() ) {
 		$views = Mixed::toArray( $views );
-		$engine = WPEmerge::resolve( WPEMERGE_VIEW_ENGINE_KEY );
+		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_KEY );
 		$html = $engine->render( $views, $context );
 
 		$response = $response->withHeader( 'Content-Type', 'text/html' );

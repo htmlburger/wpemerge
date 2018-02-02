@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Middleware\MiddlewareInterface;
@@ -48,7 +48,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware_array = [$middleware];
 
 		$container_key = WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY;
-		$container = WPEmerge::getContainer();
+		$container = Framework::getContainer();
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )

@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge\Routing;
+namespace WPEmerge\Facades;
 
 use WPEmerge\Support\Facade;
 
@@ -9,7 +9,7 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class RouterFacade extends Facade {
+class Router extends Facade {
 	protected static function getFacadeAccessor() {
 		return WPEMERGE_ROUTING_ROUTER_KEY;
 	}

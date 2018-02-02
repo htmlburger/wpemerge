@@ -2,6 +2,7 @@
 
 namespace WPEmerge;
 
+use WPEmerge\Facades\Framework;
 use WPEmerge\Response;
 use WPEmerge\Helpers\Mixed;
 
@@ -90,7 +91,7 @@ if ( ! function_exists( 'partial' ) ) {
 	 */
 	function partial( $views, $context = [] ) {
 		$views = Mixed::toArray( $views );
-		$engine = \WPEmerge::resolve( WPEMERGE_VIEW_ENGINE_PHP_KEY );
+		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_PHP_KEY );
 		echo $engine->render( $views, $context );
 	}
 }

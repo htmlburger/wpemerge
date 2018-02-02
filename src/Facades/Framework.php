@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge\Framework;
+namespace WPEmerge\Facades;
 
 use WPEmerge\Support\Facade;
 
@@ -9,7 +9,7 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class FrameworkFacade extends Facade {
+class Framework extends Facade {
 	protected static function getFacadeAccessor() {
 		return WPEMERGE_FRAMEWORK_KEY;
 	}

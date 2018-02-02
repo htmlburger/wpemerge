@@ -4,7 +4,7 @@ namespace WPEmerge\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Request;
 use WPEmerge\Response;
 
@@ -53,7 +53,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $view ) {
 		$routes = $this->getRoutes();
-		$global_middleware = WPEmerge::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
+		$global_middleware = Framework::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
 		$request = Request::fromGlobals();
 
 		foreach ( $routes as $route ) {
@@ -83,7 +83,7 @@ class Router implements HasRoutesInterface {
 		$response = $route->handle( $request, $view );
 
 		if ( ! is_a( $response, ResponseInterface::class ) ) {
-			if ( WPEmerge::debugging() ) {
+			if ( Framework::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = Response::error( Response::response(), 500 );

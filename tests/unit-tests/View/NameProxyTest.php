@@ -3,7 +3,7 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
-use WPEmerge;
+use WPEmerge\Facades\Framework;
 use WPEmerge\View\NameProxy;
 use WP_UnitTestCase;
 
@@ -14,7 +14,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->container = WPEmerge::getContainer();
+		$this->container = Framework::getContainer();
 	}
 
 	public function tearDown() {

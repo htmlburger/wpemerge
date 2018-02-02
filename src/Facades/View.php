@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge\View;
+namespace WPEmerge\Facades;
 
 use WPEmerge\Support\Facade;
 
@@ -9,7 +9,7 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  */
-class ViewFacade extends Facade {
+class View extends Facade {
 	protected static function getFacadeAccessor() {
 		return WPEMERGE_VIEW_KEY;
 	}
