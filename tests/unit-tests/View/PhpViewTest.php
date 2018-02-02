@@ -34,8 +34,8 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getName
-	 * @covers ::setName
+	 * @covers ::getFilepath
+	 * @covers ::setFilepath
 	 */
 	public function testGetFilepath() {
 		$expected = 'foo';
@@ -60,5 +60,20 @@ class PhpViewTest extends WP_UnitTestCase {
 	public function testToString_WithoutFilepath() {
 		$this->subject->setName( 'foo' );
 		$this->subject->toString();
+	}
+
+	/**
+	 * @covers ::toResponse
+	 */
+	public function testToResponse() {
+		$expected = 'foobar';
+
+		$mock = Mockery::mock( PhpView::class )->makePartial();
+		$mock->shouldReceive( 'toString' )
+			->andReturn( $expected );
+
+		$result = $mock->toResponse();
+		$this->assertEquals( 'text/html', $result->getHeaderLine( 'Content-Type' ) );
+		$this->assertEquals( $expected, $result->getBody()->read( strlen( $expected ) ) );
 	}
 }
