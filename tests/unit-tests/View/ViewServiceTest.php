@@ -3,17 +3,18 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
-use WPEmerge\View\View;
+use WPEmerge\View\ViewService;
+use WPEmerge\View\ViewInterface;
 use WP_UnitTestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\View
  */
-class ViewTest extends WP_UnitTestCase {
+class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new View();
+		$this->subject = new ViewService();
 	}
 
 	public function tearDown() {
@@ -64,24 +65,24 @@ class ViewTest extends WP_UnitTestCase {
 	 * @covers ::compose
 	 */
 	public function testCompose() {
-		$expected = ['foo' => 'bar'];
-		$view = 'foo';
-		$composer = function() use ( $expected ) {
-			return $expected;
+		$view_name = 'foo';
+
+		$view = Mockery::mock( ViewInterface::class );
+		$view->shouldReceive( 'getName' )
+			->andReturn( $view_name );
+
+		$mock = Mockery::mock();
+		$mock->shouldReceive( 'foobar' )
+			->with( $view );
+
+		$composer = function( $view ) use ( $mock ) {
+			$mock->foobar( $view );
 		};
 
-		$this->subject->addComposer( $view, $composer );
+		$this->subject->addComposer( $view_name, $composer );
 
-		$this->assertSame( $expected, $this->subject->compose( $view ) );
-	}
+		$this->subject->compose( $view );
 
-	/**
-	 * @covers ::compose
-	 */
-	public function testCompose_NonExistantComposer_ReturnEmptyArray() {
-		$expected = [];
-		$view = 'foo';
-
-		$this->assertSame( $expected, $this->subject->compose( $view ) );
+		$this->assertTrue( true );
 	}
 }

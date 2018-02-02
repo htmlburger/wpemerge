@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Helpers\Mixed;
+use WPEmerge\View\ViewInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -14,16 +15,7 @@ use Psr\Http\Message\StreamInterface;
  */
 class Response {
 	/**
-	 * Create a new response object
-	 *
-	 * @return ResponseInterface
-	 */
-	public static function response() {
-		return new Psr7Response();
-	}
-
-	/**
-	 * Send output based on a response object
+	 * Send output based on a response object.
 	 * @credit heavily modified version of slimphp/slim - Slim/App.php
 	 *
 	 * @codeCoverageIgnore
@@ -38,7 +30,7 @@ class Response {
 	}
 
 	/**
-	 * Send a request's headers to the client
+	 * Send a request's headers to the client.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -62,7 +54,7 @@ class Response {
 	}
 
 	/**
-	 * Get a response's body stream so it is ready to be read
+	 * Get a response's body stream so it is ready to be read.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -77,7 +69,7 @@ class Response {
 	}
 
 	/**
-	 * Get a response's body's content length
+	 * Get a response's body's content length.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -99,7 +91,7 @@ class Response {
 	}
 
 	/**
-	 * Send a request's body to the client
+	 * Send a request's body to the client.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
@@ -118,7 +110,7 @@ class Response {
 	}
 
 	/**
-	 * Send a body with an unknown length to the client
+	 * Send a body with an unknown length to the client.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  StreamInterface $body
@@ -136,7 +128,7 @@ class Response {
 	}
 
 	/**
-	 * Send a body with a known length to the client
+	 * Send a body with a known length to the client.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  StreamInterface $body
@@ -165,7 +157,16 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response with the passed string as the body
+	 * Create a new response object.
+	 *
+	 * @return ResponseInterface
+	 */
+	public static function response() {
+		return new Psr7Response();
+	}
+
+	/**
+	 * Get a cloned response with the passed string as the body.
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  string            $output
@@ -177,25 +178,20 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, resolving and rendering a view as the body
+	 * Get a view convertible to a response.
 	 *
-	 * @param  ResponseInterface $response
 	 * @param  string|string[]   $views
 	 * @param  array             $context
-	 * @return ResponseInterface
+	 * @return ViewInterface
 	 */
-	public static function view( ResponseInterface $response, $views, $context = array() ) {
+	public static function view( $views, $context = [] ) {
 		$views = Mixed::toArray( $views );
 		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_KEY );
-		$html = $engine->render( $views, $context );
-
-		$response = $response->withHeader( 'Content-Type', 'text/html' );
-		$response = $response->withBody( Psr7\stream_for( $html ) );
-		return $response;
+		return $engine->make( $views, $context );
 	}
 
 	/**
-	 * Get a cloned response, json encoding the passed data as the body
+	 * Get a cloned response, json encoding the passed data as the body.
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  mixed             $data
@@ -208,7 +204,7 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, with location and status headers
+	 * Get a cloned response, with location and status headers.
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  string            $url
@@ -222,7 +218,7 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, with location header equal to the current url and status header
+	 * Get a cloned response, with location header equal to the current url and status header.
 	 *
 	 * @param  ResponseInterface $response
 	 * @param  \WPEmerge\Request $request
@@ -234,19 +230,19 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, with status headers and rendering a suitable view as the body
+	 * Get an error response, with status headers and rendering a suitable view as the body.
 	 *
-	 * @param  ResponseInterface $response
 	 * @param  integer           $status
 	 * @return ResponseInterface
 	 */
-	public static function error( ResponseInterface $response, $status ) {
+	public static function error( $status ) {
 		global $wp_query;
 		if ( $status === 404 ) {
 			$wp_query->set_404();
 		}
 
-		$response = $response->withStatus( $status );
-		return static::view( $response, [$status, 'error', 'index'] );
+		return static::view( [$status, 'error', 'index'] )
+			->toResponse()
+			->withStatus( $status );
 	}
 }

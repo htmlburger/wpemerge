@@ -4,6 +4,7 @@ namespace WPEmerge\Routing;
 
 use WPEmerge;
 use WPEmerge\Helpers\Handler as GenericHandler;
+use WPEmerge\Responses\ConvertibleToResponseInterface;
 
 /**
  * Represent a Closure or a controller method to be executed in response to a request
@@ -50,6 +51,10 @@ class Handler {
 
 		if ( is_array( $response ) ) {
 			return WPEmerge\json( $response );
+		}
+
+		if ( $response instanceof ConvertibleToResponseInterface ) {
+			return $response->toResponse();
 		}
 
 		return $response;

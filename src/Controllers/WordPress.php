@@ -21,6 +21,8 @@ class WordPress {
 	 * @return ResponseInterface
 	 */
 	public function handle( Request $request, $view ) {
-		return WPEmerge\view( $view )->withStatus( http_response_code() );
+		return WPEmerge\view( $view )
+			->toResponse()
+			->withStatus( http_response_code() );
 	}
 }

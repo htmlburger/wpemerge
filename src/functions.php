@@ -34,8 +34,8 @@ if ( ! function_exists( 'view' ) ) {
 	 * @see Response::view()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function view( $views, $context = array() ) {
-		return Response::view( response(), $views, $context );
+	function view( $views, $context = [] ) {
+		return Response::view( $views, $context );
 	}
 }
 
@@ -79,19 +79,20 @@ if ( ! function_exists( 'error' ) ) {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function error( $code ) {
-		return Response::error( response(), $code );
+		return Response::error( $code );
 	}
 }
 
 if ( ! function_exists( 'partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see WPEmerge\View\Php::render()
+	 * @see WPEmerge\View\PhpViewEngine::make()
+	 * @see WPEmerge\View\PhpView::toString()
 	 * @return void
 	 */
 	function partial( $views, $context = [] ) {
 		$views = Mixed::toArray( $views );
 		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_PHP_KEY );
-		echo $engine->render( $views, $context );
+		echo $engine->make( $views, $context )->toString();
 	}
 }

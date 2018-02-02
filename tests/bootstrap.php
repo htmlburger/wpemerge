@@ -55,7 +55,7 @@ class WPEmerge_Tests_Bootstrap {
 		// make sure query vars are prepared
 		global $wp;
 		if ( ! is_array( $wp->query_vars ) ) {
-			$wp->query_vars = array();
+			$wp->query_vars = [];
 		}
 
 		WPEmerge\Facades\Framework::boot();

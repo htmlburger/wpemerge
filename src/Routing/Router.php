@@ -86,7 +86,7 @@ class Router implements HasRoutesInterface {
 			if ( Framework::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
-			$response = Response::error( Response::response(), 500 );
+			$response = Response::error( 500 );
 		}
 
 		add_filter( 'wpemerge.response', function() use ( $response ) {

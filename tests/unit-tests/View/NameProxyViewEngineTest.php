@@ -4,13 +4,13 @@ namespace WPEmergeTests\View;
 
 use Mockery;
 use WPEmerge\Facades\Framework;
-use WPEmerge\View\NameProxy;
+use WPEmerge\View\NameProxyViewEngine;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\View\NameProxy
+ * @coversDefaultClass \WPEmerge\View\NameProxyViewEngine
  */
-class NameProxyTest extends WP_UnitTestCase {
+class NameProxyViewEngineTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
@@ -20,6 +20,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::setUp();
 
+		unset( $this->container['engine_mockup'] );
 		unset( $this->container );
 	}
 
@@ -30,7 +31,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	public function testConstruct_Bindings_Accepted() {
 		$expected = ['.foo' => 'foo', '.bar' => 'bar'];
 
-		$subject = new NameProxy( $expected );
+		$subject = new NameProxyViewEngine( $expected );
 
 		$this->assertEquals( $expected, $subject->getBindings() );
 	}
@@ -42,7 +43,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	public function testConstruct_Default_Accepted() {
 		$expected = 'foo';
 
-		$subject = new NameProxy( [], $expected );
+		$subject = new NameProxyViewEngine( [], $expected );
 
 		$this->assertEquals( $expected, $subject->getDefaultBinding() );
 	}
@@ -52,7 +53,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	 * @covers ::getDefaultBinding
 	 */
 	public function testConstruct_EmptyDefault_Ignored() {
-		$subject = new NameProxy( [], '' );
+		$subject = new NameProxyViewEngine( [], '' );
 
 		$this->assertNotEquals( '', $subject->getDefaultBinding() );
 	}
@@ -61,7 +62,7 @@ class NameProxyTest extends WP_UnitTestCase {
 	 * @covers ::getBindingForFile
 	 */
 	public function testGetBindingForFile() {
-		$subject = new NameProxy( [
+		$subject = new NameProxyViewEngine( [
 			'.blade.php' => 'blade',
 			'.twig.php' => 'twig',
 		], 'default' );
@@ -87,10 +88,9 @@ class NameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxy( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
 		$this->assertTrue( $subject->exists( $view ) );
-		unset( $this->container['engine_mockup'] );
 	}
 
 	/**
@@ -111,16 +111,15 @@ class NameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxy( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
 		$this->assertEquals( $expected, $subject->canonical( $view ) );
-		unset( $this->container['engine_mockup'] );
 	}
 
 	/**
-	 * @covers ::render
+	 * @covers ::make
 	 */
-	public function testRender() {
+	public function testMake() {
 		$view = 'file.php';
 		$context = ['foo' => 'bar'];
 		$result = 'foobar';
@@ -132,23 +131,24 @@ class NameProxyTest extends WP_UnitTestCase {
 				->with( $view )
 				->andReturn( true );
 
-			$mock->shouldReceive( 'render' )
+			$mock->shouldReceive( 'make' )
 				->with( [$view], $context )
 				->andReturn( $result );
 
 			return $mock;
 		};
 
-		$subject = new NameProxy( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
-		$this->assertEquals( $result, $subject->render( [$view], $context ) );
-		unset( $this->container['engine_mockup'] );
+		$this->assertEquals( $result, $subject->make( [$view], $context ) );
 	}
 
 	/**
-	 * @covers ::render
+	 * @covers ::make
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage View not found
 	 */
-	public function testRender_NoView_EmptyString() {
+	public function testMake_NoView_EmptyString() {
 		$view = '';
 
 		$this->container['engine_mockup'] = function() use ( $view ) {
@@ -161,9 +161,8 @@ class NameProxyTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxy( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
-		$this->assertEquals( '', $subject->render( [$view], [] ) );
-		unset( $this->container['engine_mockup'] );
+		$subject->make( [$view], [] );
 	}
 }

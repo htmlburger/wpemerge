@@ -53,8 +53,8 @@ class ResponseTest extends WP_UnitTestCase {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
 		$expected = file_get_contents( $view );
 
-		// Relies on the Php view engine - it should be mocked instead
-		$subject = Response::view( Response::response(), $view );
+		// Relies on PhpView - it should be mocked instead
+		$subject = Response::view( $view )->toResponse();
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -134,10 +134,10 @@ class ResponseTest extends WP_UnitTestCase {
 		$expected1 = 404;
 		$expected2 = 500;
 
-		$subject1 = Response::error( Response::response(), $expected1 );
+		$subject1 = Response::error( $expected1 );
 		$this->assertEquals( $expected1, $subject1->getStatusCode() );
 
-		$subject2 = Response::error( Response::response(), $expected2 );
+		$subject2 = Response::error( $expected2 );
 		$this->assertEquals( $expected2, $subject2->getStatusCode() );
 	}
 }

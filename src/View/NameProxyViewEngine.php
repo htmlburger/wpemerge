@@ -2,12 +2,13 @@
 
 namespace WPEmerge\View;
 
+use Exception;
 use WPEmerge\Facades\Framework;
 
 /**
  * Render view files with different engines depending on their filename
  */
-class NameProxy implements \WPEmerge\View\EngineInterface {
+class NameProxyViewEngine implements \WPEmerge\View\ViewEngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *
@@ -41,8 +42,8 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 	 */
 	public function exists( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine_instance = Framework::resolve( $engine_key );
-		return $engine_instance->exists( $view );
+		$engine = Framework::resolve( $engine_key );
+		return $engine->exists( $view );
 	}
 
 	/**
@@ -50,23 +51,23 @@ class NameProxy implements \WPEmerge\View\EngineInterface {
 	 */
 	public function canonical( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine_instance = Framework::resolve( $engine_key );
-		return $engine_instance->canonical( $view );
+		$engine = Framework::resolve( $engine_key );
+		return $engine->canonical( $view );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function render( $views, $context ) {
+	public function make( $views, $context = [] ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
 				$engine_key = $this->getBindingForFile( $view );
-				$engine_instance = Framework::resolve( $engine_key );
-				return $engine_instance->render( [$view], $context );
+				$engine = Framework::resolve( $engine_key );
+				return $engine->make( [$view], $context );
 			}
 		}
 
-		return '';
+		throw new Exception( 'View not found for "' . implode( ', ', $views ) . '"' );
 	}
 
 	/**

@@ -2,17 +2,18 @@
 
 namespace WPEmerge\View;
 
+use Exception;
 use View as ViewService;
 
 /**
- * Render view files with php
+ * Render view files with php.
  */
-class Php implements EngineInterface {
+class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * {@inheritDoc}
 	 */
 	public function exists( $view ) {
-		$file = $this->resolveFile( $view );
+		$file = $this->resolveFilepath( $view );
 		return strlen( $file ) > 0;
 	}
 
@@ -20,49 +21,37 @@ class Php implements EngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		$file = $this->resolveFile( $view );
+		$file = $this->resolveFilepath( $view );
 		return $file;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function render( $views, $context ) {
+	public function make( $views, $context = [] ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
-				$file = $this->resolveFile( $view );
-				return $this->renderView( $view, $file, $context );
+				$filepath = $this->resolveFilepath( $view );
+				return $this->makeView( $view, $filepath, $context );
 			}
 		}
 
-		return '';
+		throw new Exception( 'View not found for "' . implode( ', ', $views ) . '"' );
 	}
 
 	/**
-	 * Render a single view to string
+	 * Create a view instance.
 	 *
-	 * @param  string $view
-	 * @param  string $file
+	 * @param  string $name
+	 * @param  string $filepath
 	 * @param  array  $context
 	 * @return string
 	 */
-	protected function renderView( $view, $file, $context ) {
-		$__file = $file;
-
-		$__context = array_merge(
-			['global' => ViewService::getGlobals()],
-			ViewService::compose( $view ),
-			$context
-		);
-
-		$renderer = function() use ( $__file, $__context ) {
-			ob_start();
-			extract( $__context );
-			include( $__file );
-			return ob_get_clean();
-		};
-
-		return $renderer();
+	protected function makeView( $name, $filepath, $context = [] ) {
+		return (new PhpView())
+			->setName( $name )
+			->setFilepath( $filepath )
+			->with( $context );
 	}
 
 	/**
@@ -71,7 +60,7 @@ class Php implements EngineInterface {
 	 * @param  string $view
 	 * @return string
 	 */
-	protected function resolveFile( $view ) {
+	protected function resolveFilepath( $view ) {
 		$file = locate_template( $view, false );
 
 		if ( ! $file ) {
@@ -81,7 +70,7 @@ class Php implements EngineInterface {
 
 		if ( ! $file ) {
 			// locate_template failed to find the view - test if a valid absolute path was passed
-			$file = $this->resolveFileFromFilesystem( $view );
+			$file = $this->resolveFilepathFromFilesystem( $view );
 		}
 
 		if ( $file ) {
@@ -97,7 +86,7 @@ class Php implements EngineInterface {
 	 * @param  string $view
 	 * @return string
 	 */
-	protected function resolveFileFromFilesystem( $view ) {
+	protected function resolveFilepathFromFilesystem( $view ) {
 		return file_exists( $view ) ? $view : '';
 	}
 }

@@ -12,7 +12,7 @@ use WPEmerge\Support\Arr;
 /**
  * Provide general view-related functionality
  */
-class View {
+class ViewService {
 	/**
 	 * Global variables
 	 *
@@ -102,20 +102,15 @@ class View {
 	 * Get the composed context for a view.
 	 * Passes all arguments to the composer.
 	 *
-	 * @param  string $view
-	 * @return array
+	 * @param  ViewInterface $view
+	 * @return void
 	 */
-	public function compose( $view ) {
+	public function compose( ViewInterface $view ) {
 		$context = [];
-		$composers = $this->getComposersForView( $view );
+		$composers = $this->getComposersForView( $view->getName() );
 
 		foreach ( $composers as $composer ) {
-			$context = array_merge(
-				$context,
-				call_user_func_array( [$composer, 'execute'], [$view] )
-			);
+			$composer->execute( $view );
 		}
-
-		return $context;
 	}
 }

@@ -15,7 +15,7 @@ class FlashTest extends WP_UnitTestCase {
 	 * @covers ::getStorage
 	 */
 	public function testConstruct() {
-		$expected = array();
+		$expected = [];
 		$subject = new Flash( $expected );
 		$this->assertSame( $expected, $subject->getStorage() );
 	}
@@ -26,8 +26,8 @@ class FlashTest extends WP_UnitTestCase {
 	 * @covers ::isValidStorage
 	 */
 	public function testSetStorage_ValidStorage_Assigned() {
-		$expected = array();
-		$initial_storage = array();
+		$expected = [];
+		$initial_storage = [];
 
 		$subject = new Flash( $initial_storage );
 		$subject->setStorage( $expected );
@@ -41,7 +41,7 @@ class FlashTest extends WP_UnitTestCase {
 	 * @covers ::isValidStorage
 	 */
 	public function testSetStorage_InvalidStorage_Ignored() {
-		$expected = array();
+		$expected = [];
 		$invalid_storage = new stdClass();
 
 		$subject = new Flash( $expected );

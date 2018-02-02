@@ -15,12 +15,12 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_VIEW_KEY ] = function( $c ) {
-			return new \WPEmerge\View\View();
+		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function( $c ) {
+			return new \WPEmerge\View\ViewService();
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_PHP_KEY ] = function( $c ) {
-			return new \WPEmerge\View\Php();
+			return new \WPEmerge\View\PhpViewEngine();
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_ENGINE_PHP_KEY );

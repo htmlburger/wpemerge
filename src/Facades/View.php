@@ -11,6 +11,6 @@ use WPEmerge\Support\Facade;
  */
 class View extends Facade {
 	protected static function getFacadeAccessor() {
-		return WPEMERGE_VIEW_KEY;
+		return WPEMERGE_VIEW_SERVICE_KEY;
 	}
 }
