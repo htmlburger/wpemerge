@@ -75,7 +75,6 @@ class PhpView implements ViewInterface {
 		}
 
 		$context = $this->getContext();
-
 		$this->with( ['global' => View::getGlobals()] );
 		View::compose( $this );
 		$this->with( $context );
