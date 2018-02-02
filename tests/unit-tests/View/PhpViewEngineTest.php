@@ -34,8 +34,8 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::exists
-	 * @covers ::resolveFile
-	 * @covers ::resolveFileFromFilesystem
+	 * @covers ::resolveFilepath
+	 * @covers ::resolveFilepathFromFilesystem
 	 */
 	public function testExists() {
 		$index = 'index.php';
