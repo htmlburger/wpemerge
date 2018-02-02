@@ -22,7 +22,10 @@ class HasContextTraitTest extends WP_UnitTestCase {
 			'bar' => 'barbar',
 			'baz' => 'bazbar',
 		] );
-		$this->assertSame( [
+
+		$this->assertEquals( 'foobar', $subject->getContext( 'foo' ) );
+
+		$this->assertEquals( [
 			'foo' => 'foobar',
 			'bar' => 'barbar',
 			'baz' => 'bazbar',
