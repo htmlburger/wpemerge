@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge\Helpers\Handler as GenericHandler;
+use WPEmerge\Responses\ConvertibleToResponseInterface;
 use WPEmerge\Routing\Handler;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
@@ -62,6 +63,23 @@ class HandlerTest extends WP_UnitTestCase {
 		$subject = new Handler( $closure );
 		$response = $subject->execute( $value );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testExecute_ConvertibleToResponseInterface_Psr7Response() {
+		$input = Mockery::mock( ConvertibleToResponseInterface::class );
+		$expected = ResponseInterface::class;
+		$closure = function() use ( $input ) {
+			return $input;
+		};
+
+		$input->shouldReceive( 'toResponse' )
+			->andReturn( Mockery::mock( ResponseInterface::class ) );
+
+		$subject = new Handler( $closure );
+		$this->assertInstanceOf( $expected, $subject->execute() );
 	}
 
 	/**
