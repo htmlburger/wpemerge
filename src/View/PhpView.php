@@ -5,7 +5,7 @@ namespace WPEmerge\View;
 use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
-use View as ViewService;
+use WPEmerge\Facades\View;
 
 /**
  * Render a view file with php.
@@ -74,16 +74,17 @@ class PhpView implements ViewInterface {
 			throw new Exception( 'View must have a filepath.' );
 		}
 
-		$global_context = ['global' => ViewService::getGlobals()];
+		$global_context = ['global' => View::getGlobals()];
 		$local_context = $this->getContext();
 
 		$this->with( $global_context );
-		ViewService::compose( $this );
+		View::compose( $this );
 		$this->with( $local_context );
 
 		$renderer = function() {
 			ob_start();
-			extract( $this->getContext() );
+			$__context = $this->getContext();
+			extract( $__context );
 			include( $this->getFilepath() );
 			return ob_get_clean();
 		};
