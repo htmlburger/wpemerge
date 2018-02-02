@@ -13,7 +13,10 @@ trait HasContextTrait {
 	protected $context = [];
 
 	/**
-	 * {@inheritDoc}
+	 * Get context values.
+	 *
+	 * @param  string|null $key
+	 * @return mixed
 	 */
 	public function getContext( $key = null ) {
 		if ( $key === null ) {
@@ -24,7 +27,11 @@ trait HasContextTrait {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Add context values.
+	 *
+	 * @param  string|array $key
+	 * @param  mixed        $value
+	 * @return self         $this
 	 */
 	public function with( $key, $value = null ) {
 		if ( is_array( $key ) ) {
