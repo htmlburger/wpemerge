@@ -74,12 +74,11 @@ class PhpView implements ViewInterface {
 			throw new Exception( 'View must have a filepath.' );
 		}
 
-		$global_context = ['global' => View::getGlobals()];
-		$local_context = $this->getContext();
+		$context = $this->getContext();
 
-		$this->with( $global_context );
+		$this->with( ['global' => View::getGlobals()] );
 		View::compose( $this );
-		$this->with( $local_context );
+		$this->with( $context );
 
 		$renderer = function() {
 			ob_start();
