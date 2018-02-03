@@ -8,7 +8,7 @@ use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Url
+ * @coversDefaultClass \WPEmerge\Helpers\Url
  */
 class UrlTest extends WP_UnitTestCase {
 	/**
