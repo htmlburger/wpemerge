@@ -201,17 +201,6 @@ class Response {
 	}
 
 	/**
-	 * Get a cloned response, with location header equal to the current url and status header.
-	 *
-	 * @param  \WPEmerge\Requests\Request $request
-	 * @param  integer                    $status
-	 * @return ResponseInterface
-	 */
-	public static function reload( $request, $status = 302 ) {
-		return static::redirect( $request->getUrl(), $status );
-	}
-
-	/**
 	 * Get a view convertible to a response.
 	 *
 	 * @param  string|string[]   $views
