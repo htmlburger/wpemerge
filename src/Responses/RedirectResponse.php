@@ -21,6 +21,7 @@ class RedirectResponse extends Response {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param Request $request
 	 */
 	public function __construct( Request $request ) {
