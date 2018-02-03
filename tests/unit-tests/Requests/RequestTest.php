@@ -1,12 +1,12 @@
 <?php
 
-namespace WPEmergeTests;
+namespace WPEmergeTests\Requests;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Request
+ * @coversDefaultClass \WPEmerge\Requests\Request
  */
 class RequestTest extends WP_UnitTestCase {
 	/**

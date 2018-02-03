@@ -1,7 +1,8 @@
 <?php
 
-namespace WPEmerge;
+namespace WPEmerge\Requests;
 
+use WPEmerge\Helpers\Url;
 use WPEmerge\Support\Arr;
 
 /**

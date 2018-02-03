@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Middleware\HasMiddlewareInterface;
 
 /**

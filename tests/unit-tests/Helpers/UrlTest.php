@@ -1,10 +1,10 @@
 <?php
 
-namespace WPEmergeTests;
+namespace WPEmergeTests\Helpers;
 
 use Mockery;
-use WPEmerge\Url;
-use WPEmerge\Request;
+use WPEmerge\Helpers\Url;
+use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**

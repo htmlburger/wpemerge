@@ -3,7 +3,7 @@
 namespace WPEmerge\Controllers;
 
 use WPEmerge\Responses\Response;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**

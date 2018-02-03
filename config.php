@@ -21,6 +21,10 @@ if ( ! defined( 'WPEMERGE_SESSION_KEY' ) ) {
 	define( 'WPEMERGE_SESSION_KEY', 'wpemerge.session' );
 }
 
+if ( ! defined( 'WPEMERGE_REQUEST_KEY' ) ) {
+	define( 'WPEMERGE_REQUEST_KEY', 'wpemerge.request' );
+}
+
 if ( ! defined( 'WPEMERGE_ROUTING_ROUTER_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'wpemerge.routing.router' );
 }

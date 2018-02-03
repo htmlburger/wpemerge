@@ -4,7 +4,7 @@ namespace WPEmergeTests\Input;
 
 use OldInput;
 use Mockery;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Input\OldInputMiddleware;
 use WP_UnitTestCase;
 

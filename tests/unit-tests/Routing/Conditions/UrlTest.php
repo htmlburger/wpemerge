@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\Url;
 use WP_UnitTestCase;
 

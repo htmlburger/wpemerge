@@ -11,6 +11,7 @@ use ReflectionMethod;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
+use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\Response;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\Support\Facade;
@@ -41,6 +42,7 @@ class Framework {
 	 * @var string[]
 	 */
 	protected $service_providers = [
+		RequestsServiceProvider::class,
 		RoutingServiceProvider::class,
 		ViewServiceProvider::class,
 		ControllersServiceProvider::class,

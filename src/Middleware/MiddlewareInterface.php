@@ -11,7 +11,7 @@ interface MiddlewareInterface {
 	/**
 	 * Execute middleware
 	 *
-	 * @param  \WPEmerge\Request                   $request
+	 * @param  \WPEmerge\Requests\Request          $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

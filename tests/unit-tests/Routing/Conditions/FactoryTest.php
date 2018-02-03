@@ -2,7 +2,7 @@
 
 namespace WPEmergeTests\Routing\Conditions;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\Custom;
 use WPEmerge\Routing\Conditions\Factory;
 use WPEmerge\Routing\Conditions\Multiple;

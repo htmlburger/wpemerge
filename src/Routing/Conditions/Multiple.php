@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 
 /**
  * Check against an array of conditions in an AND logical relationship

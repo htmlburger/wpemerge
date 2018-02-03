@@ -5,7 +5,7 @@ namespace WPEmerge\Routing;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Facades\Framework;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Responses\Response;
 
 /**
@@ -54,7 +54,7 @@ class Router implements HasRoutesInterface {
 	public function execute( $view ) {
 		$routes = $this->getRoutes();
 		$global_middleware = Framework::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
-		$request = Request::fromGlobals();
+		$request = Framework::resolve( WPEMERGE_REQUEST_KEY );
 
 		foreach ( $routes as $route ) {
 			$route->addMiddleware( $global_middleware );

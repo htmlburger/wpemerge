@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 
 /**
  * Check against the current post's type

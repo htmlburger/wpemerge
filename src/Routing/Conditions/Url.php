@@ -2,8 +2,8 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Url as UrlUtility;
-use WPEmerge\Request;
+use WPEmerge\Helpers\Url as UrlUtility;
+use WPEmerge\Requests\Request;
 
 /**
  * Check against the current url

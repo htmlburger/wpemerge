@@ -5,7 +5,7 @@ namespace WPEmerge\Routing;
 use Closure;
 use Exception;
 use WPEmerge\Middleware\HasMiddlewareTrait;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\Url as UrlCondition;
 

@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
 use WPEmerge\Routing\Conditions\Custom;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**

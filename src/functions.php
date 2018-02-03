@@ -43,19 +43,8 @@ if ( ! function_exists( 'app_redirect' ) ) {
 	 * @see Response::redirect()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function app_redirect( $url, $status = 302 ) {
+	function app_redirect() {
 		return call_user_func_array( [Response::class, 'redirect'], func_get_args() );
-	}
-}
-
-if ( ! function_exists( 'app_reload' ) ) {
-	/**
-	 * @codeCoverageIgnore
-	 * @see Response::reload()
-	 * @return \Psr\Http\Message\ResponseInterface
-	 */
-	function app_reload( $request, $status = 302 ) {
-		return call_user_func_array( [Response::class, 'reload'], func_get_args() );
 	}
 }
 

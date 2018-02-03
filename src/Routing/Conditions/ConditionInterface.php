@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 
 /**
  * Interface that condition types must implement

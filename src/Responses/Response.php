@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Helpers\Mixed;
+use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\View\ViewInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -193,22 +194,17 @@ class Response {
 	/**
 	 * Get a cloned response, with location and status headers.
 	 *
-	 * @param  string            $url
-	 * @param  integer           $status
-	 * @return ResponseInterface
+	 * @return RedirectResponse
 	 */
-	public static function redirect( $url, $status = 302 ) {
-		$response = static::response();
-		$response = $response->withStatus( $status );
-		$response = $response->withHeader( 'Location', $url );
-		return $response;
+	public static function redirect() {
+		return new RedirectResponse( Framework::resolve( WPEMERGE_REQUEST_KEY ) );
 	}
 
 	/**
 	 * Get a cloned response, with location header equal to the current url and status header.
 	 *
-	 * @param  \WPEmerge\Request $request
-	 * @param  integer           $status
+	 * @param  \WPEmerge\Requests\Request $request
+	 * @param  integer                    $status
 	 * @return ResponseInterface
 	 */
 	public static function reload( $request, $status = 302 ) {

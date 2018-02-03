@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Middleware;
 
 use Mockery;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmergeTestTools\TestMiddleware;

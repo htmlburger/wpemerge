@@ -77,7 +77,7 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array                               $middleware
-	 * @param  \WPEmerge\Request                   $request
+	 * @param  \WPEmerge\Requests\Request          $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */

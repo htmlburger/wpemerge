@@ -3,7 +3,8 @@
 namespace WPEmergeTests\Responses;
 
 use Mockery;
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
+use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\Response;
 use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
@@ -30,10 +31,7 @@ class ResponseTest extends WP_UnitTestCase {
 	 * @covers ::response
 	 */
 	public function testResponse() {
-		$expected = ResponseInterface::class;
-
-		$subject = Response::response();
-		$this->assertInstanceOf( $expected, $subject );
+		$this->assertInstanceOf( ResponseInterface::class, Response::response() );
 	}
 
 	/**
@@ -60,59 +58,8 @@ class ResponseTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::redirect
 	 */
-	public function testRedirect_Location() {
-		$expected = '/foobar';
-
-		$subject = Response::redirect( $expected );
-		$this->assertEquals( $expected, $subject->getHeaderLine( 'Location' ) );
-	}
-
-	/**
-	 * @covers ::redirect
-	 */
-	public function testRedirect_Status() {
-		$expected1 = 301;
-		$expected2 = 302;
-
-		$subject1 = Response::redirect( 'foobar', $expected1 );
-		$this->assertEquals( $expected1, $subject1->getStatusCode() );
-
-		$subject2 = Response::redirect( 'foobar', $expected2 );
-		$this->assertEquals( $expected2, $subject2->getStatusCode() );
-	}
-
-	/**
-	 * @covers ::reload
-	 */
-	public function testReload_Location() {
-		$expected = 'http://example.com/foobar?hello=world';
-		$request_mock = Mockery::mock( Request::class );
-
-		$request_mock->shouldReceive( 'getUrl' )
-			->once()
-			->andReturn( $expected );
-
-		$subject = Response::reload( $request_mock );
-		$this->assertEquals( $expected, $subject->getHeaderLine( 'Location' ) );
-	}
-
-	/**
-	 * @covers ::reload
-	 */
-	public function testReload_Status() {
-		$expected1 = 301;
-		$expected2 = 302;
-		$url = 'http://example.com/foobar?hello=world';
-		$request_mock = Mockery::mock( Request::class );
-
-		$request_mock->shouldReceive( 'getUrl' )
-			->andReturn( $url );
-
-		$subject1 = Response::reload( $request_mock, $expected1 );
-		$this->assertEquals( $expected1, $subject1->getStatusCode() );
-
-		$subject2 = Response::reload( $request_mock, $expected2 );
-		$this->assertEquals( $expected2, $subject2->getStatusCode() );
+	public function testRedirect() {
+		$this->assertInstanceOf( RedirectResponse::class, Response::redirect() );
 	}
 
 	/**

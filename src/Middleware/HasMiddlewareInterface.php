@@ -36,9 +36,9 @@ interface HasMiddlewareInterface {
 	/**
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
-	 * @param  array             $middleware
-	 * @param  \WPEmerge\Request $request
-	 * @param  Closure           $next
+	 * @param  array                      $middleware
+	 * @param  \WPEmerge\Requests\Request $request
+	 * @param  Closure                    $next
 	 * @return ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next );

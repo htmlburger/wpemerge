@@ -1,8 +1,8 @@
 <?php
 
-namespace WPEmerge;
+namespace WPEmerge\Helpers;
 
-use WPEmerge\Request;
+use WPEmerge\Requests\Request;
 
 /**
  * A collection of tools dealing with urls
