@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Controllers;
 
-use WPEmerge;
+use WPEmerge\Response;
 use WPEmerge\Request;
 use Psr\Http\Message\ResponseInterface;
 
@@ -21,7 +21,7 @@ class WordPress {
 	 * @return ResponseInterface
 	 */
 	public function handle( Request $request, $view ) {
-		return WPEmerge\view( $view )
+		return Response::view( $view )
 			->toResponse()
 			->withStatus( http_response_code() );
 	}

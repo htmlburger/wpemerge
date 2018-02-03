@@ -168,13 +168,51 @@ class Response {
 	/**
 	 * Get a cloned response with the passed string as the body.
 	 *
-	 * @param  ResponseInterface $response
 	 * @param  string            $output
 	 * @return ResponseInterface
 	 */
-	public static function output( ResponseInterface $response, $output ) {
+	public static function output( $output ) {
+		$response = static::response();
 		$response = $response->withBody( Psr7\stream_for( $output ) );
 		return $response;
+	}
+
+	/**
+	 * Get a cloned response, json encoding the passed data as the body.
+	 *
+	 * @param  mixed             $data
+	 * @return ResponseInterface
+	 */
+	public static function json( $data ) {
+		$response = static::response();
+		$response = $response->withHeader( 'Content-Type', 'application/json' );
+		$response = $response->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
+		return $response;
+	}
+
+	/**
+	 * Get a cloned response, with location and status headers.
+	 *
+	 * @param  string            $url
+	 * @param  integer           $status
+	 * @return ResponseInterface
+	 */
+	public static function redirect( $url, $status = 302 ) {
+		$response = static::response();
+		$response = $response->withStatus( $status );
+		$response = $response->withHeader( 'Location', $url );
+		return $response;
+	}
+
+	/**
+	 * Get a cloned response, with location header equal to the current url and status header.
+	 *
+	 * @param  \WPEmerge\Request $request
+	 * @param  integer           $status
+	 * @return ResponseInterface
+	 */
+	public static function reload( $request, $status = 302 ) {
+		return static::redirect( $request->getUrl(), $status );
 	}
 
 	/**
@@ -188,45 +226,6 @@ class Response {
 		$views = Mixed::toArray( $views );
 		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_KEY );
 		return $engine->make( $views, $context );
-	}
-
-	/**
-	 * Get a cloned response, json encoding the passed data as the body.
-	 *
-	 * @param  ResponseInterface $response
-	 * @param  mixed             $data
-	 * @return ResponseInterface
-	 */
-	public static function json( ResponseInterface $response, $data ) {
-		$response = $response->withHeader( 'Content-Type', 'application/json' );
-		$response = $response->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
-		return $response;
-	}
-
-	/**
-	 * Get a cloned response, with location and status headers.
-	 *
-	 * @param  ResponseInterface $response
-	 * @param  string            $url
-	 * @param  integer           $status
-	 * @return ResponseInterface
-	 */
-	public static function redirect( ResponseInterface $response, $url, $status = 302 ) {
-		$response = $response->withStatus( $status );
-		$response = $response->withHeader( 'Location', $url );
-		return $response;
-	}
-
-	/**
-	 * Get a cloned response, with location header equal to the current url and status header.
-	 *
-	 * @param  ResponseInterface $response
-	 * @param  \WPEmerge\Request $request
-	 * @param  integer           $status
-	 * @return ResponseInterface
-	 */
-	public static function reload( ResponseInterface $response, $request, $status = 302 ) {
-		return static::redirect( $response, $request->getUrl(), $status );
 	}
 
 	/**

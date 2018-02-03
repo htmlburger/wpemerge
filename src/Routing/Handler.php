@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge;
+use WPEmerge\Response;
 use WPEmerge\Helpers\Handler as GenericHandler;
 use WPEmerge\Responses\ConvertibleToResponseInterface;
 
@@ -46,11 +46,11 @@ class Handler {
 		$response = call_user_func_array( [$this->handler, 'execute'], $arguments );
 
 		if ( is_string( $response ) ) {
-			return WPEmerge\output( $response );
+			return Response::output( $response );
 		}
 
 		if ( is_array( $response ) ) {
-			return WPEmerge\json( $response );
+			return Response::json( $response );
 		}
 
 		if ( $response instanceof ConvertibleToResponseInterface ) {

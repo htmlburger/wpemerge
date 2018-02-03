@@ -42,19 +42,7 @@ class ResponseTest extends WP_UnitTestCase {
 	public function testOutut() {
 		$expected = 'foobar';
 
-		$subject = Response::output( Response::response(), $expected );
-		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
-	}
-
-	/**
-	 * @covers ::view
-	 */
-	public function testView() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
-		$expected = file_get_contents( $view );
-
-		// Relies on PhpView - it should be mocked instead
-		$subject = Response::view( $view )->toResponse();
+		$subject = Response::output( $expected );
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -65,7 +53,7 @@ class ResponseTest extends WP_UnitTestCase {
 		$input = array( 'foo' => 'bar' );
 		$expected = json_encode( $input );
 
-		$subject = Response::json( Response::response(), $input );
+		$subject = Response::json( $input );
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -75,7 +63,7 @@ class ResponseTest extends WP_UnitTestCase {
 	public function testRedirect_Location() {
 		$expected = '/foobar';
 
-		$subject = Response::redirect( Response::response(), $expected );
+		$subject = Response::redirect( $expected );
 		$this->assertEquals( $expected, $subject->getHeaderLine( 'Location' ) );
 	}
 
@@ -86,10 +74,10 @@ class ResponseTest extends WP_UnitTestCase {
 		$expected1 = 301;
 		$expected2 = 302;
 
-		$subject1 = Response::redirect( Response::response(), 'foobar', $expected1 );
+		$subject1 = Response::redirect( 'foobar', $expected1 );
 		$this->assertEquals( $expected1, $subject1->getStatusCode() );
 
-		$subject2 = Response::redirect( Response::response(), 'foobar', $expected2 );
+		$subject2 = Response::redirect( 'foobar', $expected2 );
 		$this->assertEquals( $expected2, $subject2->getStatusCode() );
 	}
 
@@ -104,7 +92,7 @@ class ResponseTest extends WP_UnitTestCase {
 			->once()
 			->andReturn( $expected );
 
-		$subject = Response::reload( Response::response(), $request_mock );
+		$subject = Response::reload( $request_mock );
 		$this->assertEquals( $expected, $subject->getHeaderLine( 'Location' ) );
 	}
 
@@ -120,11 +108,23 @@ class ResponseTest extends WP_UnitTestCase {
 		$request_mock->shouldReceive( 'getUrl' )
 			->andReturn( $url );
 
-		$subject1 = Response::reload( Response::response(), $request_mock, $expected1 );
+		$subject1 = Response::reload( $request_mock, $expected1 );
 		$this->assertEquals( $expected1, $subject1->getStatusCode() );
 
-		$subject2 = Response::reload( Response::response(), $request_mock, $expected2 );
+		$subject2 = Response::reload( $request_mock, $expected2 );
 		$this->assertEquals( $expected2, $subject2->getStatusCode() );
+	}
+
+	/**
+	 * @covers ::view
+	 */
+	public function testView() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$expected = file_get_contents( $view );
+
+		// Relies on PhpView - it should be mocked instead
+		$subject = Response::view( $view )->toResponse();
+		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
 	/**
