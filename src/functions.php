@@ -1,7 +1,7 @@
 <?php
 
 use WPEmerge\Facades\Framework;
-use WPEmerge\Response;
+use WPEmerge\Responses\Response;
 use WPEmerge\Helpers\Mixed;
 
 if ( ! function_exists( 'app_response' ) ) {

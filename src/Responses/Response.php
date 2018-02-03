@@ -1,6 +1,6 @@
 <?php
 
-namespace WPEmerge;
+namespace WPEmerge\Responses;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;

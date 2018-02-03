@@ -8,14 +8,14 @@ use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use ReflectionMethod;
-use WPEmerge\Response;
-use WPEmerge\Support\Facade;
-use WPEmerge\Support\AliasLoader;
-use WPEmerge\Routing\RoutingServiceProvider;
+use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
+use WPEmerge\Responses\Response;
+use WPEmerge\Routing\RoutingServiceProvider;
+use WPEmerge\Support\Facade;
+use WPEmerge\Support\AliasLoader;
 use WPEmerge\View\ViewServiceProvider;
-use WPEmerge\Controllers\ControllersServiceProvider;
 
 /**
  * Main communication channel with the framework

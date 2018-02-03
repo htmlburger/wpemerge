@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Controllers;
 
-use WPEmerge\Response;
+use WPEmerge\Responses\Response;
 use WPEmerge\Request;
 use Psr\Http\Message\ResponseInterface;
 

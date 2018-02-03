@@ -1,15 +1,15 @@
 <?php
 
-namespace WPEmergeTests;
+namespace WPEmergeTests\Responses;
 
 use Mockery;
 use WPEmerge\Request;
-use WPEmerge\Response;
+use WPEmerge\Responses\Response;
 use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Response
+ * @coversDefaultClass \WPEmerge\Responses\Response
  */
 class ResponseTest extends WP_UnitTestCase {
 	public function tearDown() {

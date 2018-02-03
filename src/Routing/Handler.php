@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Response;
+use WPEmerge\Responses\Response;
 use WPEmerge\Helpers\Handler as GenericHandler;
 use WPEmerge\Responses\ConvertibleToResponseInterface;
 
