@@ -8,7 +8,7 @@ use WPEmerge\View\ViewInterface;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\View\View
+ * @coversDefaultClass \WPEmerge\View\ViewService
  */
 class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
