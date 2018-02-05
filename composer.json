@@ -2,7 +2,7 @@
     "name": "htmlburger/wpemerge",
     "description": "A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.",
     "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "wpemerge"],
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "homepage": "https://wpemerge.com/",
     "authors": [
         {
