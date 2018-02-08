@@ -11,14 +11,7 @@ use WPEmerge\Facades\View;
  * Render a view file with php.
  */
 class PhpView implements ViewInterface {
-	use HasContextTrait;
-
-	/**
-	 * View name.
-	 *
-	 * @var string
-	 */
-	protected $name = '';
+	use HasNameTrait, HasContextTrait;
 
 	/**
 	 * Filepath to view.
@@ -26,21 +19,6 @@ class PhpView implements ViewInterface {
 	 * @var string
 	 */
 	protected $filepath = '';
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getName() {
-		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setName( $name ) {
-		$this->name = $name;
-		return $this;
-	}
 
 	/**
 	 * Get filepath.
