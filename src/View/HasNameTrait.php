@@ -4,21 +4,26 @@ namespace WPEmerge\View;
 
 trait HasNameTrait {
 	/**
-	 * View name.
+	 * Name.
 	 *
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
-	 * {@inheritDoc}
+	 * Get name.
+	 *
+	 * @return string
 	 */
 	public function getName() {
 		return $this->name;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Set name.
+	 *
+	 * @param  string $name
+	 * @return self   $this
 	 */
 	public function setName( $name ) {
 		$this->name = $name;
