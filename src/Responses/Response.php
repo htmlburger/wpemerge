@@ -5,6 +5,7 @@ namespace WPEmerge\Responses;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\View;
 use WPEmerge\Helpers\Mixed;
 use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\View\ViewInterface;
@@ -208,9 +209,7 @@ class Response {
 	 * @return ViewInterface
 	 */
 	public static function view( $views, $context = [] ) {
-		$views = Mixed::toArray( $views );
-		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_KEY );
-		return $engine->make( $views, $context );
+		return View::make( $views, $context );
 	}
 
 	/**

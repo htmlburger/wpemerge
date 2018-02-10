@@ -88,6 +88,26 @@ class ViewServiceTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::make
+	 */
+	public function testMake() {
+		$view_engine = Mockery::mock( ViewEngineInterface::class );
+		$view = Mockery::mock( ViewInterface::class );
+		$subject = new ViewService( $view_engine );
+
+		$view_engine->shouldReceive( 'make' )
+			->with( ['foo'], ['foo'] )
+			->andReturn( $view );
+
+		$view_engine->shouldReceive( 'make' )
+			->with( ['foo', 'bar'], ['foobar'] )
+			->andReturn( $view );
+
+		$this->assertSame( $view, $subject->make( 'foo', ['foo'] ) );
+		$this->assertSame( $view, $subject->make( ['foo', 'bar'], ['foobar'] ) );
+	}
+
+	/**
 	 * @covers ::toString
 	 */
 	public function testToString() {

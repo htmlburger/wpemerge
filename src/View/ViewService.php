@@ -128,6 +128,18 @@ class ViewService {
 	}
 
 	/**
+	 * Create a view instance.
+	 *
+	 * @param  string|string[] $views
+	 * @param  array           $context
+	 * @return ViewInterface
+	 */
+	public function make( $views, $context = [] ) {
+		$views = Mixed::toArray( $views );
+		return $this->view_engine->make( $views, $context );
+	}
+
+	/**
 	 * Render the given view to string.
 	 *
 	 * @param  string|string[] $views
@@ -135,7 +147,6 @@ class ViewService {
 	 * @return string
 	 */
 	public function toString( $views, $context = [] ) {
-		$views = Mixed::toArray( $views );
-		return $this->view_engine->make( $views, $context )->toString();
+		return $this->make( $views, $context )->toString();
 	}
 }

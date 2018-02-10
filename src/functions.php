@@ -1,6 +1,5 @@
 <?php
 
-use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\View;
 use WPEmerge\Responses\Response;
 
