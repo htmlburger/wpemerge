@@ -7,7 +7,7 @@ use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\Url;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
-use WPEmerge\Controllers\WordPress;
+use WPEmerge\Controllers\WordPressController;
 use WP_UnitTestCase;
 
 /**
@@ -63,7 +63,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 
 		$route = $this->subject->route( $methods, $target );
 
-		$this->assertEquals( WordPress::class, $route->getHandler()->get()->get()['class'] );
+		$this->assertEquals( WordPressController::class, $route->getHandler()->get()->get()['class'] );
 	}
 
 	/**

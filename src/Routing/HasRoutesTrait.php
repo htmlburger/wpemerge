@@ -3,7 +3,7 @@
 namespace WPEmerge\Routing;
 
 use Closure;
-use WPEmerge\Controllers\WordPress;
+use WPEmerge\Controllers\WordPressController;
 
 /**
  * Allow objects to have routes
@@ -46,7 +46,7 @@ trait HasRoutesTrait {
 	 */
 	public function route( $methods, $target, $handler = null ) {
 		if ( $handler === null ) {
-			$handler = WordPress::class . '@handle';
+			$handler = WordPressController::class . '@handle';
 		}
 
 		$route = new Route( $methods, $target, $handler );

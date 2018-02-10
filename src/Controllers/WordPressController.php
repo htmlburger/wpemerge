@@ -11,9 +11,9 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class WordPress {
+class WordPressController {
 	/**
-	 * Default WordPress handler
+	 * Default WordPress handler.
 	 *
 	 * @param  Request                             $request
 	 * @param  string                              $view

@@ -15,8 +15,8 @@ class ControllersServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WordPress::class ] = function() {
-			return new WordPress();
+		$container[ WordPressController::class ] = function() {
+			return new WordPressController();
 		};
 	}
 
