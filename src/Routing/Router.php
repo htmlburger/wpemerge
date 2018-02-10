@@ -15,11 +15,37 @@ class Router implements HasRoutesInterface {
 	use HasRoutesTrait;
 
 	/**
+	 * Current request.
+	 *
+	 * @var Request
+	 */
+	protected $request = null;
+
+	/**
+	 * Global middleware.
+	 *
+	 * @var array
+	 */
+	protected $global_middleware = [];
+
+	/**
 	 * Current active route
 	 *
 	 * @var RouteInterface
 	 */
 	protected $current_route = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param Request $request
+	 * @param array   $global_middleware
+	 */
+	public function __construct( Request $request, $global_middleware ) {
+		$this->request = $request;
+		$this->global_middleware = $global_middleware;
+	}
 
 	/**
 	 * Hook into WordPress actions
@@ -53,17 +79,15 @@ class Router implements HasRoutesInterface {
 	 */
 	public function execute( $view ) {
 		$routes = $this->getRoutes();
-		$global_middleware = Framework::resolve( WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY );
-		$request = Framework::resolve( WPEMERGE_REQUEST_KEY );
 
 		foreach ( $routes as $route ) {
-			$route->addMiddleware( $global_middleware );
+			$route->addMiddleware( $this->global_middleware );
 		}
 
 		foreach ( $routes as $route ) {
-			if ( $route->isSatisfied( $request ) ) {
+			if ( $route->isSatisfied( $this->request ) ) {
 				$this->setCurrentRoute( $route );
-				return $this->handle( $request, $route, $view );
+				return $this->handle( $this->request, $route, $view );
 			}
 		}
 

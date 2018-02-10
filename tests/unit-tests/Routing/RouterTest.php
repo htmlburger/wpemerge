@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge\Facades\Framework;
+use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Middleware\MiddlewareInterface;
@@ -18,7 +19,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new Router();
+		$this->subject = new Router( Mockery::mock( Request::class ), [] );
 	}
 
 	public function tearDown() {
@@ -47,19 +48,15 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware = Mockery::mock( MiddlewareInterface::class );
 		$middleware_array = [$middleware];
 
-		$container_key = WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY;
-		$container = Framework::getContainer();
+		$subject = new Router( Mockery::mock( Request::class ), $middleware_array );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )
 			->once();
 
-		$this->subject->addRoute( $route );
+		$subject->addRoute( $route );
 
-		$backup = $container[ $container_key ];
-		$container[ $container_key ] = $middleware_array;
-		$this->subject->execute( '' );
-		$container[ $container_key ] = $backup;
+		$subject->execute( '' );
 
 		$this->assertTrue( true );
 	}

@@ -41,8 +41,8 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 
 		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = $container[ WPEMERGE_CONFIG_KEY ]['global_middleware'];
 
-		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function() {
-			return new Router();
+		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function( $c ) {
+			return new Router( $c[ WPEMERGE_REQUEST_KEY ], $c[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] );
 		};
 
 		foreach ( static::$condition_extensions as $name => $class_name ) {
