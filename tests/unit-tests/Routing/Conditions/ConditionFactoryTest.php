@@ -6,6 +6,7 @@ use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\MultipleCondition;
+use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use stdClass;
@@ -131,6 +132,20 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		$condition_conditions = $condition->getConditions();
 		$this->assertSame( $expected_param1, $condition_conditions[0]->getCallable() );
 		$this->assertSame( $expected_param2, $condition_conditions[1]->getCallable() );
+	}
+
+	/**
+	 * @covers ::make
+	 * @covers ::makeFromArray
+	 * @covers ::getConditionTypeAndArguments
+	 */
+	public function testMake_ExclamatedConditionName_NegateCondition() {
+		$expected_class = NegateCondition::class;
+
+		$condition = ConditionFactory::make( ['!query_var', 'foo', 'bar'] );
+		$this->assertInstanceOf( $expected_class, $condition );
+
+		$this->assertEquals( ['foo', 'bar'], $condition->getArguments( $this->request ) );
 	}
 
 	/**

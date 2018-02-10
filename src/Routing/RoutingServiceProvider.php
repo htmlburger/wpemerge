@@ -23,6 +23,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
 		'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
 		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
+		'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
 		'post_id' => \WPEmerge\Routing\Conditions\PostIdCondition::class,
 		'post_slug' => \WPEmerge\Routing\Conditions\PostSlugCondition::class,
 		'post_status' => \WPEmerge\Routing\Conditions\PostStatusCondition::class,

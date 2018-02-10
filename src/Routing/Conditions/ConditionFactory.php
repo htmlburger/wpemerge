@@ -15,7 +15,7 @@ use ReflectionClass;
  */
 class ConditionFactory {
 	/**
-	 * Create a new condition
+	 * Create a new condition.
 	 *
 	 * @throws InvalidRouteConditionException
 	 * @param  string|array|Closure           $options
@@ -38,7 +38,7 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Check if the passed argument is a registered condition type
+	 * Check if the passed argument is a registered condition type.
 	 *
 	 * @param  mixed   $condition_type
 	 * @return boolean
@@ -53,7 +53,7 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Resolve the condition type and its arguments from an options array
+	 * Resolve the condition type and its arguments from an options array.
 	 *
 	 * @throws Exception
 	 * @param  array $options
@@ -61,7 +61,12 @@ class ConditionFactory {
 	 */
 	protected static function getConditionTypeAndArguments( $options ) {
 		$type = $options[0];
-		$arguments = array_slice( $options, 1 );
+		$arguments = array_values( array_slice( $options, 1 ) );
+
+		if ( is_string( $type ) && substr( $type, 0, 1 ) === '!' ) {
+			$arguments = array_merge( [ substr( $type, 1 ) ], $arguments );
+			$type = 'negate';
+		}
 
 		if ( ! static::conditionTypeRegistered( $type ) ) {
 			if ( is_callable( $type ) ) {
@@ -79,7 +84,7 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Create a new condition from a url
+	 * Create a new condition from a url.
 	 *
 	 * @param  string             $url
 	 * @return ConditionInterface
@@ -89,17 +94,7 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Create a new condition from an array of conditions
-	 *
-	 * @param  array               $options
-	 * @return ConditionInterface
-	 */
-	protected static function makeFromArrayOfConditions( $options ) {
-		return new MultipleCondition( $options );
-	}
-
-	/**
-	 * Create a new condition from an array
+	 * Create a new condition from an array.
 	 *
 	 * @throws Exception
 	 * @param  array               $options
@@ -123,7 +118,17 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Create a new condition from a closure
+	 * Create a new condition from an array of conditions.
+	 *
+	 * @param  array               $options
+	 * @return ConditionInterface
+	 */
+	protected static function makeFromArrayOfConditions( $options ) {
+		return new MultipleCondition( $options );
+	}
+
+	/**
+	 * Create a new condition from a closure.
 	 *
 	 * @param  Closure            $closure
 	 * @return ConditionInterface
