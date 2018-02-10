@@ -45,7 +45,11 @@ class Multiple implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( Request $request ) {
-		return [];
+		$arguments = [];
+		foreach ( $this->conditions as $condition ) {
+			$arguments = array_merge( $arguments, $condition->getArguments( $request ) );
+		}
+		return $arguments;
 	}
 
 	/**

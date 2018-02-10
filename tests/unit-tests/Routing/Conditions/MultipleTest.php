@@ -15,7 +15,6 @@ class MultipleTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * @covers ::getConditions
-	 * @covers ::getArguments
 	 */
 	public function testConstruct() {
 		$condition1 = new Custom( '__return_true' );
@@ -25,7 +24,6 @@ class MultipleTest extends WP_UnitTestCase {
 		$subject = new Multiple( [$condition1, $condition2] );
 
 		$this->assertEquals( [$condition1, new Custom( $condition2 )], $subject->getConditions() );
-		$this->assertEquals( [], $subject->getArguments( $request ) );
 	}
 
 	/**
@@ -44,5 +42,18 @@ class MultipleTest extends WP_UnitTestCase {
 
 		$subject3 = new Multiple( [$condition1, $condition2] );
 		$this->assertFalse( $subject3->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::getArguments
+	 */
+	public function testGetArguments() {
+		$condition1 = new Custom( '__return_true', 'custom_arg_1', 'custom_arg_2' );
+		$condition2 = [function() { return false; }, 'custom_arg_3'];
+		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+
+		$subject = new Multiple( [$condition1, $condition2] );
+
+		$this->assertEquals( ['custom_arg_1', 'custom_arg_2', 'custom_arg_3'], $subject->getArguments( $request ) );
 	}
 }
