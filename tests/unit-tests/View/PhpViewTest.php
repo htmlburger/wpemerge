@@ -33,16 +33,6 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getName
-	 * @covers ::setName
-	 */
-	public function testGetName() {
-		$expected = 'foo';
-		$this->subject->setName( $expected );
-		$this->assertEquals( $expected, $this->subject->getName() );
-	}
-
-	/**
 	 * @covers ::getFilepath
 	 * @covers ::setFilepath
 	 */
