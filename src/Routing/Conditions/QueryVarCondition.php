@@ -27,8 +27,8 @@ class QueryVarCondition implements ConditionInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $query_var
-	 * @param string $value
+	 * @param string      $query_var
+	 * @param string|null $value
 	 */
 	public function __construct( $query_var, $value = null ) {
 		$this->query_var = $query_var;
