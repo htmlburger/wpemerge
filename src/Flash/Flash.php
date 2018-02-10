@@ -46,7 +46,7 @@ class Flash {
 	 * @return boolean
 	 */
 	protected function isValidStorage( $storage ) {
-		return ( is_array( $storage ) || is_a( $storage, ArrayAccess::class ) );
+		return ( is_array( $storage ) || $storage instanceof ArrayAccess );
 	}
 
 	/**

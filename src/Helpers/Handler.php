@@ -97,7 +97,7 @@ class Handler {
 	 */
 	public function execute() {
 		$arguments = func_get_args();
-		if ( is_a( $this->handler, Closure::class ) ) {
+		if ( $this->handler instanceof Closure ) {
 			return call_user_func_array( $this->handler, $arguments );
 		}
 

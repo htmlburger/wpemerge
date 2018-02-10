@@ -36,7 +36,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 			$target = new UrlCondition( $target );
 		}
 
-		if ( ! is_a( $target, UrlCondition::class ) ) {
+		if ( ! $target instanceof UrlCondition ) {
 			throw new Exception( 'Route groups can only use route strings.' );
 		}
 
@@ -84,7 +84,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 			$target = new UrlCondition( $target );
 		}
 
-		if ( ! is_a( $target, UrlCondition::class ) ) {
+		if ( ! $target instanceof UrlCondition ) {
 			throw new Exception( 'Routes inside route groups can only use route strings.' );
 		}
 

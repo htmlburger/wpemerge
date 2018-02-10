@@ -24,11 +24,11 @@ trait HasMiddlewareTrait {
 	 * @return boolean
 	 */
 	protected function isMiddleware( $middleware ) {
-		if ( is_a( $middleware, Closure::class ) ) {
-			return true;
-		}
-
-		return is_a( $middleware, MiddlewareInterface::class, true );
+		return (
+			$middleware instanceof Closure
+			||
+			is_a( $middleware, MiddlewareInterface::class, true )
+		);
 	}
 
 	/**

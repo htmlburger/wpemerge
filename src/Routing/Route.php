@@ -46,7 +46,7 @@ class Route implements RouteInterface {
 	 * @param  string|\Closure $handler
 	 */
 	public function __construct( $methods, $target, $handler ) {
-		if ( ! is_a( $target, ConditionInterface::class ) ) {
+		if ( ! $target instanceof ConditionInterface ) {
 			try {
 				$target = ConditionFactory::make( $target );
 			} catch ( InvalidRouteConditionException $e ) {
@@ -114,7 +114,7 @@ class Route implements RouteInterface {
 	 * @return static    $this
 	 */
 	public function rewrite( $rewrite_to ) {
-		if ( ! is_a( $this->target, UrlCondition::class ) ) {
+		if ( ! $this->target instanceof UrlCondition ) {
 			throw new Exception( 'Only routes with url targets can add rewrite rules.' );
 		}
 

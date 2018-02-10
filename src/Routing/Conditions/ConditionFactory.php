@@ -32,7 +32,7 @@ class ConditionFactory {
 			return static::makeFromArray( $options );
 		}
 
-		if ( is_a( $options, Closure::class ) ) {
+		if ( $options instanceof Closure ) {
 			return static::makeFromClosure( $options );
 		}
 

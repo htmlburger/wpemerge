@@ -22,7 +22,7 @@ class MultipleCondition implements ConditionInterface {
 	 */
 	public function __construct( $conditions ) {
 		$this->conditions = array_map( function( $condition ) {
-			if ( is_a( $condition, ConditionInterface::class ) ) {
+			if ( $condition instanceof ConditionInterface ) {
 				return $condition;
 			}
 			return ConditionFactory::make( $condition );

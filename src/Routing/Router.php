@@ -106,7 +106,7 @@ class Router implements HasRoutesInterface {
 	protected function handle( Request $request, RouteInterface $route, $view ) {
 		$response = $route->handle( $request, $view );
 
-		if ( ! is_a( $response, ResponseInterface::class ) ) {
+		if ( ! $response instanceof ResponseInterface ) {
 			if ( Framework::debugging() ) {
 				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}

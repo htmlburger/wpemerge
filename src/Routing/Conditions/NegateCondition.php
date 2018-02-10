@@ -23,7 +23,7 @@ class NegateCondition implements ConditionInterface {
 	 * @param mixed $condition
 	 */
 	public function __construct( $condition ) {
-		if ( is_a( $condition, ConditionInterface::class ) ) {
+		if ( $condition instanceof ConditionInterface ) {
 			$this->condition = $condition;
 		} else {
 			$this->condition = call_user_func( [ConditionFactory::class, 'make'], func_get_args() );
