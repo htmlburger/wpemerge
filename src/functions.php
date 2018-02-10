@@ -1,7 +1,7 @@
 <?php
 
-use WPEmerge\Facades\View;
 use WPEmerge\Facades\Response;
+use WPEmerge\Facades\View;
 
 if ( ! function_exists( 'app_response' ) ) {
 	/**

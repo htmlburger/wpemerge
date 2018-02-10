@@ -5,8 +5,8 @@ namespace WPEmerge\Routing;
 use Exception;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
-use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
 use WPEmerge\Routing\Conditions\UrlCondition;
 
