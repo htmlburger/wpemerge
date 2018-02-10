@@ -73,9 +73,9 @@ if ( ! function_exists( 'app_partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see \WPEmerge\View\ViewService::toString()
-	 * @return string
+	 * @return void
 	 */
 	function app_partial( $views, $context = [] ) {
-		return call_user_func_array( [View::class, 'toString'], func_get_args() );
+		echo call_user_func_array( [View::class, 'toString'], func_get_args() );
 	}
 }
