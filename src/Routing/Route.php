@@ -56,7 +56,7 @@ class Route implements RouteInterface {
 
 		$this->methods = $methods;
 		$this->target = $target;
-		$this->handler = new Handler( $handler );
+		$this->handler = new RouteHandler( $handler );
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Route implements RouteInterface {
 	/**
 	 * Get handler
 	 *
-	 * @return Handler
+	 * @return RouteHandler
 	 */
 	public function getHandler() {
 		return $this->handler;

@@ -3,17 +3,17 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Facades\Response;
-use WPEmerge\Helpers\Handler as GenericHandler;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ConvertibleToResponseInterface;
 
 /**
  * Represent a Closure or a controller method to be executed in response to a request
  */
-class Handler {
+class RouteHandler {
 	/**
 	 * Actual handler
 	 *
-	 * @var GenericHandler
+	 * @var Handler
 	 */
 	protected $handler = null;
 
@@ -23,13 +23,13 @@ class Handler {
 	 * @param string|\Closure $handler
 	 */
 	public function __construct( $handler ) {
-		$this->handler = new GenericHandler( $handler );
+		$this->handler = new Handler( $handler );
 	}
 
 	/**
 	 * Get the handler
 	 *
-	 * @return GenericHandler
+	 * @return Handler
 	 */
 	public function get() {
 		return $this->handler;

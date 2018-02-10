@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge;
 use WPEmerge\Requests\Request;
-use WPEmerge\Routing\Handler;
+use WPEmerge\Routing\RouteHandler;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\Custom;
@@ -39,7 +39,7 @@ class RouteTest extends WP_UnitTestCase {
 		$expected_methods = ['FOO'];
 		$expected_target = Mockery::mock( ConditionInterface::class );
 		$handler = function() {};
-		$expected_handler = new Handler( $handler );
+		$expected_handler = new RouteHandler( $handler );
 
 		$subject = new Route( $expected_methods, $expected_target, $handler );
 		$this->assertEquals( $expected_methods, $subject->getMethods() );

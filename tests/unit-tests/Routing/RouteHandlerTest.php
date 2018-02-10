@@ -3,17 +3,17 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge\Helpers\Handler as GenericHandler;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ConvertibleToResponseInterface;
-use WPEmerge\Routing\Handler;
+use WPEmerge\Routing\RouteHandler;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\Handler
+ * @coversDefaultClass \WPEmerge\Routing\RouteHandler
  */
-class HandlerTest extends WP_UnitTestCase {
+class RouteHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 	}
@@ -29,9 +29,9 @@ class HandlerTest extends WP_UnitTestCase {
 	 */
 	public function testConstruct() {
 		$closure = function() {};
-		$expected = new GenericHandler( $closure );
+		$expected = new Handler( $closure );
 
-		$subject = new Handler( $closure );
+		$subject = new RouteHandler( $closure );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -45,7 +45,7 @@ class HandlerTest extends WP_UnitTestCase {
 			return $value;
 		};
 
-		$subject = new Handler( $closure );
+		$subject = new RouteHandler( $closure );
 		$response = $subject->execute( $expected );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
 	}
@@ -60,7 +60,7 @@ class HandlerTest extends WP_UnitTestCase {
 			return $value;
 		};
 
-		$subject = new Handler( $closure );
+		$subject = new RouteHandler( $closure );
 		$response = $subject->execute( $value );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
 	}
@@ -78,7 +78,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$input->shouldReceive( 'toResponse' )
 			->andReturn( Mockery::mock( ResponseInterface::class ) );
 
-		$subject = new Handler( $closure );
+		$subject = new RouteHandler( $closure );
 		$this->assertInstanceOf( $expected, $subject->execute() );
 	}
 
@@ -91,13 +91,7 @@ class HandlerTest extends WP_UnitTestCase {
 			return $expected;
 		};
 
-		$subject = new Handler( $closure );
+		$subject = new RouteHandler( $closure );
 		$this->assertSame( $expected, $subject->execute() );
-	}
-}
-
-class HandlerTestControllerMock {
-	public function foobar( $foo, $bar ) {
-		return (object) ['value' => $foo . $bar];
 	}
 }
