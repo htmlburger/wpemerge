@@ -30,7 +30,7 @@ class CustomCondition implements ConditionInterface {
 	 */
 	public function __construct( $callable ) {
 		$this->callable = $callable;
-		$this->arguments = array_slice( func_get_args(), 1 );
+		$this->arguments = array_values( array_slice( func_get_args(), 1 ) );
 	}
 
 	/**
