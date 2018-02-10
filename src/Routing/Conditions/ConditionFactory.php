@@ -69,6 +69,21 @@ class ConditionFactory {
 	}
 
 	/**
+	 * Parse a negated condition and its arguments.
+	 *
+	 * @param  string $type
+	 * @param  array  $arguments
+	 * @return array
+	 */
+	protected static function parseNegatedCondition( $type, $arguments ) {
+		$negated_type = substr( $type, strlen( static::NEGATE_CONDITION_PREFIX ) );
+		$arguments = array_merge( [ $negated_type ], $arguments );
+		$type = 'negate';
+
+		return ['type' => $type, 'arguments' => $arguments];
+	}
+
+	/**
 	 * Parse the condition type and its arguments from an options array.
 	 *
 	 * @throws Exception
@@ -80,24 +95,18 @@ class ConditionFactory {
 		$arguments = array_values( array_slice( $options, 1 ) );
 
 		if ( static::isNegatedCondition( $type ) ) {
-			$negated_condition = substr( $type, strlen( static::NEGATE_CONDITION_PREFIX ) );
-			$arguments = array_merge( [ $negated_condition ], $arguments );
-			$type = 'negate';
+			return static::parseNegatedCondition( $type, $arguments );
 		}
 
 		if ( ! static::conditionTypeRegistered( $type ) ) {
 			if ( is_callable( $type ) ) {
-				$type = 'custom';
-				$arguments = $options;
-			} else {
-				throw new Exception( 'Unknown condition type specified: ' . $type );
+				return ['type' => 'custom', 'arguments' => $options];
 			}
+
+			throw new Exception( 'Unknown condition type specified: ' . $type );
 		}
 
-		return [
-			'type' => $type,
-			'arguments' => $arguments,
-		];
+		return ['type' => $type, 'arguments' => $arguments ];
 	}
 
 	/**

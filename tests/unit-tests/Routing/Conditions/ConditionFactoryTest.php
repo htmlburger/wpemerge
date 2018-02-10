@@ -139,6 +139,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @covers ::makeFromArray
 	 * @covers ::parseConditionOptions
 	 * @covers ::isNegatedCondition
+	 * @covers ::parseNegatedCondition
 	 */
 	public function testMake_ExclamatedConditionName_NegateCondition() {
 		$expected_class = NegateCondition::class;
