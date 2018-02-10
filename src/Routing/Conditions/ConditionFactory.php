@@ -40,6 +40,22 @@ class ConditionFactory {
 	}
 
 	/**
+	 * Get condition class for condition type.
+	 *
+	 * @param  string      $condition_type
+	 * @return string|null
+	 */
+	protected static function getConditionTypeClass( $condition_type ) {
+		$condition_types = Framework::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY );
+
+		if ( ! isset( $condition_types[ $condition_type ] ) ) {
+			return null;
+		}
+
+		return $condition_types[ $condition_type ];
+	}
+
+	/**
 	 * Check if the passed argument is a registered condition type.
 	 *
 	 * @param  mixed   $condition_type
@@ -50,8 +66,7 @@ class ConditionFactory {
 			return false;
 		}
 
-		$condition_class = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_type );
-		return ( $condition_class !== null );
+		return static::getConditionTypeClass( $condition_type );
 	}
 
 	/**
@@ -136,7 +151,7 @@ class ConditionFactory {
 		}
 
 		$condition_options = static::parseConditionOptions( $options );
-		$condition_class = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
+		$condition_class = static::getConditionTypeClass( $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );

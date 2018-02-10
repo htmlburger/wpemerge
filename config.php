@@ -33,8 +33,12 @@ if ( ! defined( 'WPEMERGE_ROUTING_ROUTER_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'wpemerge.routing.router' );
 }
 
-if ( ! defined( 'WPEMERGE_ROUTING_CONDITIONS_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_CONDITIONS_KEY', 'wpemerge.routing.conditions.' );
+if ( ! defined( 'WPEMERGE_ROUTING_CONDITION_TYPES_KEY' ) ) {
+	define( 'WPEMERGE_ROUTING_CONDITION_FACTORY_KEY', 'wpemerge.routing.conditions.condition_factory' );
+}
+
+if ( ! defined( 'WPEMERGE_ROUTING_CONDITION_TYPES_KEY' ) ) {
+	define( 'WPEMERGE_ROUTING_CONDITION_TYPES_KEY', 'wpemerge.routing.conditions.condition_types' );
 }
 
 if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
@@ -46,11 +50,11 @@ if ( ! defined( 'WPEMERGE_VIEW_SERVICE_KEY' ) ) {
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'wpemerge.view.engine' );
+	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'wpemerge.view.view_engine' );
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_PHP_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'wpemerge.view.engine.php' );
+	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'wpemerge.view.view_engine.php' );
 }
 
 if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {

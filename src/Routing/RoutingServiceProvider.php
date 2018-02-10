@@ -19,7 +19,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @var string[string]
 	 */
-	protected static $condition_extensions = [
+	protected static $condition_types = [
 		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
 		'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
 		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
@@ -46,9 +46,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			return new Router( $c[ WPEMERGE_REQUEST_KEY ], $c[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] );
 		};
 
-		foreach ( static::$condition_extensions as $name => $class_name ) {
-			$container[ WPEMERGE_ROUTING_CONDITIONS_KEY . $name ] = $class_name;
-		}
+		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
 
 		Framework::facade( 'Router', RouterFacade::class );
 	}
