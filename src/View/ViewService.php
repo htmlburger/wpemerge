@@ -8,25 +8,41 @@ use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\Mixed;
 
 /**
- * Provide general view-related functionality
+ * Provide general view-related functionality.
  */
 class ViewService {
 	/**
-	 * Global variables
+	 * View engine.
+	 *
+	 * @var ViewEngineInterface
+	 */
+	protected $view_engine = null;
+
+	/**
+	 * Global variables.
 	 *
 	 * @var array
 	 */
 	protected $globals = [];
 
 	/**
-	 * View composers
+	 * View composers.
 	 *
 	 * @var array
 	 */
 	protected $composers = [];
 
 	/**
-	 * Get global variables
+	 * Constructor.
+	 *
+	 * @param ViewEngineInterface $view_engine
+	 */
+	public function __construct( ViewEngineInterface $view_engine ) {
+		$this->view_engine = $view_engine;
+	}
+
+	/**
+	 * Get global variables.
 	 *
 	 * @return array
 	 */
@@ -35,7 +51,7 @@ class ViewService {
 	}
 
 	/**
-	 * Set a global variable
+	 * Set a global variable.
 	 *
 	 * @param  string $key
 	 * @param  mixed  $value
@@ -46,7 +62,7 @@ class ViewService {
 	}
 
 	/**
-	 * Set an array of global variables
+	 * Set an array of global variables.
 	 *
 	 * @param  array $globals
 	 * @return void
@@ -58,7 +74,7 @@ class ViewService {
 	}
 
 	/**
-	 * Get view composer
+	 * Get view composer.
 	 *
 	 * @param  string    $view
 	 * @return Handler[]
@@ -78,7 +94,7 @@ class ViewService {
 	}
 
 	/**
-	 * Add view composer
+	 * Add view composer.
 	 *
 	 * @param string|string[] $views
 	 * @param string|Closure  $composer
@@ -109,5 +125,17 @@ class ViewService {
 		foreach ( $composers as $composer ) {
 			$composer->execute( $view );
 		}
+	}
+
+	/**
+	 * Render the given view to string.
+	 *
+	 * @param  string|string[] $views
+	 * @param  array           $context
+	 * @return string
+	 */
+	public function toString( $views, $context = [] ) {
+		$views = Mixed::toArray( $views );
+		return $this->view_engine->make( $views, $context )->toString();
 	}
 }

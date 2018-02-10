@@ -1,8 +1,8 @@
 <?php
 
 use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\View;
 use WPEmerge\Responses\Response;
-use WPEmerge\Helpers\Mixed;
 
 if ( ! function_exists( 'app_response' ) ) {
 	/**
@@ -73,13 +73,10 @@ if ( ! function_exists( 'app_error' ) ) {
 if ( ! function_exists( 'app_partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see WPEmerge\View\PhpViewEngine::make()
-	 * @see WPEmerge\View\PhpView::toString()
-	 * @return void
+	 * @see WPEmerge\View\ViewService::toString()
+	 * @return string
 	 */
 	function app_partial( $views, $context = [] ) {
-		$views = Mixed::toArray( $views );
-		$engine = Framework::resolve( WPEMERGE_VIEW_ENGINE_PHP_KEY );
-		echo $engine->make( $views, $context )->toString();
+		return call_user_func_array( [View::class, 'toString'], func_get_args() );
 	}
 }

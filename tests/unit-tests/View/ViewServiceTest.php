@@ -4,6 +4,7 @@ namespace WPEmergeTests\View;
 
 use Mockery;
 use WPEmerge\View\ViewService;
+use WPEmerge\View\ViewEngineInterface;
 use WPEmerge\View\ViewInterface;
 use WP_UnitTestCase;
 
@@ -14,7 +15,7 @@ class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ViewService();
+		$this->subject = new ViewService( Mockery::mock( ViewEngineInterface::class ) );
 	}
 
 	public function tearDown() {
@@ -84,5 +85,28 @@ class ViewServiceTest extends WP_UnitTestCase {
 		$this->subject->compose( $view );
 
 		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::toString
+	 */
+	public function testToString() {
+		$view_engine = Mockery::mock( ViewEngineInterface::class );
+		$view = Mockery::mock( ViewInterface::class );
+		$subject = new ViewService( $view_engine );
+
+		$view_engine->shouldReceive( 'make' )
+			->with( ['foo'], ['foo'] )
+			->andReturn( $view );
+
+		$view_engine->shouldReceive( 'make' )
+			->with( ['foo', 'bar'], ['foobar'] )
+			->andReturn( $view );
+
+		$view->shouldReceive( 'toString' )
+			->andReturn( 'foo', 'foobar' );
+
+		$this->assertEquals( 'foo', $subject->toString( 'foo', ['foo'] ) );
+		$this->assertEquals( 'foobar', $subject->toString( ['foo', 'bar'], ['foobar'] ) );
 	}
 }

@@ -16,7 +16,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function( $c ) {
-			return new \WPEmerge\View\ViewService();
+			return new \WPEmerge\View\ViewService( $c[ WPEMERGE_VIEW_ENGINE_PHP_KEY ] );
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_PHP_KEY ] = function( $c ) {
