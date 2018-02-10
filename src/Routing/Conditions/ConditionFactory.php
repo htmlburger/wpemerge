@@ -4,11 +4,11 @@ namespace WPEmerge\Routing\Conditions;
 
 use Closure;
 use Exception;
+use ReflectionClass;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use ReflectionClass;
 
 /**
  * Check against the current url
