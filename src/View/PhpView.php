@@ -67,8 +67,9 @@ class PhpView implements ViewInterface {
 	 * @return string
 	 */
 	protected function render() {
+		$__context = $this->getContext();
 		ob_start();
-		extract( $this->getContext() );
+		extract( $__context );
 		include( $this->getFilepath() );
 		$html = ob_get_clean();
 
