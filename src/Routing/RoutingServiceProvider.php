@@ -25,6 +25,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
 		'post_id' => \WPEmerge\Routing\Conditions\PostIdCondition::class,
 		'post_slug' => \WPEmerge\Routing\Conditions\PostSlugCondition::class,
+		'post_status' => \WPEmerge\Routing\Conditions\PostStatusCondition::class,
 		'post_template' => \WPEmerge\Routing\Conditions\PostTemplateCondition::class,
 		'post_type' => \WPEmerge\Routing\Conditions\PostTypeCondition::class,
 		'query_var' => \WPEmerge\Routing\Conditions\QueryVarCondition::class,
