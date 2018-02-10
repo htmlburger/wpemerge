@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\Custom;
-use WPEmerge\Routing\Conditions\Factory;
+use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\Multiple;
 use WPEmerge\Routing\Conditions\PostId;
 use WPEmerge\Routing\Conditions\Url;
@@ -12,9 +12,9 @@ use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\Conditions\Factory
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\ConditionFactory
  */
-class FactoryTest extends WP_UnitTestCase {
+class ConditionFactoryTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
@@ -35,7 +35,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = '/foo/bar/';
 		$expected_class = Url::class;
 
-		$condition = Factory::make( $expected_param );
+		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertEquals( $expected_param, $condition->getUrl() );
 	}
@@ -50,7 +50,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = 10;
 		$expected_class = PostId::class;
 
-		$condition = Factory::make( ['post_id', $expected_param] );
+		$condition = ConditionFactory::make( ['post_id', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertEquals( $expected_param, $condition->getArguments( $this->request )[0] );
 	}
@@ -65,7 +65,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = function() {};
 		$expected_class = Custom::class;
 
-		$condition = Factory::make( ['custom', $expected_param] );
+		$condition = ConditionFactory::make( ['custom', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertSame( $expected_param, $condition->getCallable() );
 	}
@@ -80,7 +80,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = 'phpinfo';
 		$expected_class = Custom::class;
 
-		$condition = Factory::make( ['custom', $expected_param] );
+		$condition = ConditionFactory::make( ['custom', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertSame( $expected_param, $condition->getCallable() );
 	}
@@ -95,7 +95,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = function() {};
 		$expected_class = Custom::class;
 
-		$condition = Factory::make( [$expected_param] );
+		$condition = ConditionFactory::make( [$expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertSame( $expected_param, $condition->getCallable() );
 	}
@@ -110,7 +110,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = 'phpinfo';
 		$expected_class = Custom::class;
 
-		$condition = Factory::make( [$expected_param] );
+		$condition = ConditionFactory::make( [$expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertSame( $expected_param, $condition->getCallable() );
 	}
@@ -125,7 +125,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param2 = function() {};
 		$expected_class = Multiple::class;
 
-		$condition = Factory::make( [ [ $expected_param1 ], [ $expected_param2 ] ] );
+		$condition = ConditionFactory::make( [ [ $expected_param1 ], [ $expected_param2 ] ] );
 		$this->assertInstanceOf( $expected_class, $condition );
 
 		$condition_conditions = $condition->getConditions();
@@ -144,7 +144,7 @@ class FactoryTest extends WP_UnitTestCase {
 	public function testMake_UnknownConditionType_Exception() {
 		$expected_param = 'foobar';
 
-		$condition = Factory::make( [ $expected_param ] );
+		$condition = ConditionFactory::make( [ $expected_param ] );
 	}
 
 	/**
@@ -154,7 +154,7 @@ class FactoryTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No condition type
 	 */
 	public function testMake_NoConditionType_Exception() {
-		$condition = Factory::make( [] );
+		$condition = ConditionFactory::make( [] );
 	}
 
 	/**
@@ -165,7 +165,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = function() {};
 		$expected_class = Custom::class;
 
-		$condition = Factory::make( $expected_param );
+		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertSame( $expected_param, $condition->getCallable() );
 	}
@@ -177,7 +177,7 @@ class FactoryTest extends WP_UnitTestCase {
 		$expected_param = 'phpinfo';
 		$expected_class = Url::class;
 
-		$condition = Factory::make( $expected_param );
+		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
 		$this->assertEquals( '/' . $expected_param . '/', $condition->getUrl() );
 	}
@@ -190,6 +190,6 @@ class FactoryTest extends WP_UnitTestCase {
 	public function testMake_Object_Exception() {
 		$expected_param = new stdClass();
 
-		$condition = Factory::make( $expected_param );
+		$condition = ConditionFactory::make( $expected_param );
 	}
 }

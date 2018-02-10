@@ -13,7 +13,7 @@ use ReflectionClass;
 /**
  * Check against the current url
  */
-class Factory {
+class ConditionFactory {
 	/**
 	 * Create a new condition
 	 *

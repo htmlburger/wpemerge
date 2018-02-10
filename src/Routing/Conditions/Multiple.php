@@ -25,7 +25,7 @@ class Multiple implements ConditionInterface {
 			if ( is_a( $condition, ConditionInterface::class ) ) {
 				return $condition;
 			}
-			return Factory::make( $condition );
+			return ConditionFactory::make( $condition );
 		}, $conditions );
 	}
 
