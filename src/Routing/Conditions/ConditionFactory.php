@@ -14,6 +14,8 @@ use ReflectionClass;
  * Check against the current url
  */
 class ConditionFactory {
+	const NEGATE_CONDITION_PREFIX = '!';
+
 	/**
 	 * Create a new condition.
 	 *
@@ -53,18 +55,33 @@ class ConditionFactory {
 	}
 
 	/**
-	 * Resolve the condition type and its arguments from an options array.
+	 * Check if a condition is negated.
+	 *
+	 * @param  mixed   $condition
+	 * @return boolean
+	 */
+	protected static function isNegatedCondition( $condition ) {
+		return (
+			is_string( $condition )
+			&&
+			substr( $condition, 0, strlen( static::NEGATE_CONDITION_PREFIX ) ) === static::NEGATE_CONDITION_PREFIX
+		);
+	}
+
+	/**
+	 * Parse the condition type and its arguments from an options array.
 	 *
 	 * @throws Exception
 	 * @param  array $options
 	 * @return array
 	 */
-	protected static function getConditionTypeAndArguments( $options ) {
+	protected static function parseConditionOptions( $options ) {
 		$type = $options[0];
 		$arguments = array_values( array_slice( $options, 1 ) );
 
-		if ( is_string( $type ) && substr( $type, 0, 1 ) === '!' ) {
-			$arguments = array_merge( [ substr( $type, 1 ) ], $arguments );
+		if ( static::isNegatedCondition( $type ) ) {
+			$negated_condition = substr( $type, strlen( static::NEGATE_CONDITION_PREFIX ) );
+			$arguments = array_merge( [ $negated_condition ], $arguments );
 			$type = 'negate';
 		}
 
@@ -109,7 +126,7 @@ class ConditionFactory {
 			return static::makeFromArrayOfConditions( $options );
 		}
 
-		$condition_options = static::getConditionTypeAndArguments( $options );
+		$condition_options = static::parseConditionOptions( $options );
 		$condition_class = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_KEY . $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );

@@ -44,7 +44,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
 	public function testMake_ConditionInArray_ConditionInstance() {
@@ -59,7 +59,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
 	public function testMake_CustomConditionWithClosureInArray_CustonCondition() {
@@ -74,7 +74,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
 	public function testMake_CustomConditionWithCallableInArray_CustomCondition() {
@@ -89,7 +89,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
 	public function testMake_ClosureInArray_CustomCondition() {
@@ -104,7 +104,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
 	public function testMake_CallableInArray_CustomCondition() {
@@ -137,7 +137,8 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
+	 * @covers ::isNegatedCondition
 	 */
 	public function testMake_ExclamatedConditionName_NegateCondition() {
 		$expected_class = NegateCondition::class;
@@ -151,7 +152,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @covers ::getConditionTypeAndArguments
+	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Unknown condition
