@@ -47,7 +47,7 @@ class WPEmerge_Tests_Bootstrap {
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );
 
 		// load plugin
-		tests_add_filter( 'muplugins_loaded', array( $this, 'load_plugin' ) );
+		tests_add_filter( 'muplugins_loaded', [$this, 'load_plugin'] );
 
 		// load the WP testing environment
 		require_once( $this->wp_tests_dir . '/includes/bootstrap.php' );

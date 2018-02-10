@@ -94,10 +94,10 @@ class ConditionFactory {
 			}
 		}
 
-		return array(
+		return [
 			'type' => $type,
 			'arguments' => $arguments,
-		);
+		];
 	}
 
 	/**

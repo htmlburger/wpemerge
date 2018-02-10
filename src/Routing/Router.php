@@ -54,8 +54,8 @@ class Router implements HasRoutesInterface {
 	 * @return void
 	 */
 	public function boot() {
-		add_action( 'init', array( $this, 'registerRewriteRules' ), 1000 );
-		add_action( 'template_include', array( $this, 'execute' ), 1000 );
+		add_action( 'init', [$this, 'registerRewriteRules'], 1000 );
+		add_action( 'template_include', [$this, 'execute'], 1000 );
 	}
 
 	/**

@@ -54,7 +54,7 @@ class ResponseTest extends WP_UnitTestCase {
 	 * @covers ::json
 	 */
 	public function testJson() {
-		$input = array( 'foo' => 'bar' );
+		$input = ['foo' => 'bar'];
 		$expected = json_encode( $input );
 
 		$subject = $this->subject->json( $input );

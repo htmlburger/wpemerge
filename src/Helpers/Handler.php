@@ -64,17 +64,17 @@ class Handler {
 		$handlerPieces = array_filter( preg_split( '/@|::/', $raw_handler, 2 ) );
 
 		if ( count( $handlerPieces ) === 1 && $default_method !== null ) {
-			return array(
+			return [
 				'class' => $handlerPieces[0],
 				'method' => $default_method,
-			);
+			];
 		}
 
 		if ( count( $handlerPieces ) === 2 ) {
-			return array(
+			return [
 				'class' => $handlerPieces[0],
 				'method' => $handlerPieces[1],
-			);
+			];
 		}
 
 		return null;
