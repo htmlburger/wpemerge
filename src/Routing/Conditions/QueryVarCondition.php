@@ -20,7 +20,7 @@ class QueryVarCondition implements ConditionInterface {
 	/**
 	 * Query var value to check against.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	protected $value = '';
 

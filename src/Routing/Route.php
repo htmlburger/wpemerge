@@ -33,7 +33,7 @@ class Route implements RouteInterface {
 	/**
 	 * Route handler
 	 *
-	 * @var Handler
+	 * @var RouteHandler
 	 */
 	protected $handler = null;
 
