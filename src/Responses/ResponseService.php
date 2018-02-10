@@ -7,15 +7,33 @@ use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\View;
 use WPEmerge\Helpers\Mixed;
+use WPEmerge\Requests\Request;
 use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\View\ViewInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * A collection of tools for the creation of responses
+ * A collection of tools for the creation of responses.
  */
-class Response {
+class ResponseService {
+	/**
+	 * Current request.
+	 *
+	 * @var Request
+	 */
+	protected $request = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param Request $request
+	 */
+	public function __construct( Request $request ) {
+		$this->request = $request;
+	}
+
 	/**
 	 * Send output based on a response object.
 	 * @credit heavily modified version of slimphp/slim - Slim/App.php
@@ -24,11 +42,11 @@ class Response {
 	 * @param  ResponseInterface $response
 	 * @return void
 	 */
-	public static function respond( ResponseInterface $response ) {
+	public function respond( ResponseInterface $response ) {
 		if ( ! headers_sent() ) {
-			static::sendHeaders( $response );
+			$this::sendHeaders( $response );
 		}
-		static::sendBody( $response );
+		$this::sendBody( $response );
 	}
 
 	/**
@@ -38,7 +56,7 @@ class Response {
 	 * @param  ResponseInterface $response
 	 * @return void
 	 */
-	protected static function sendHeaders( ResponseInterface $response ) {
+	protected function sendHeaders( ResponseInterface $response ) {
 		// Status
 		header( sprintf(
 			'HTTP/%s %s %s',
@@ -62,7 +80,7 @@ class Response {
 	 * @param  ResponseInterface $response
 	 * @return StreamInterface
 	 */
-	protected static function getBody( ResponseInterface $response ) {
+	protected function getBody( ResponseInterface $response ) {
 		$body = $response->getBody();
 		if ( $body->isSeekable() ) {
 			$body->rewind();
@@ -77,11 +95,11 @@ class Response {
 	 * @param  ResponseInterface $response
 	 * @return integer
 	 */
-	protected static function getBodyContentLength( ResponseInterface $response ) {
+	protected function getBodyContentLength( ResponseInterface $response ) {
 		$content_length = $response->getHeaderLine( 'Content-Length' );
 
 		if ( ! $content_length ) {
-			$body = static::getBody( $response );
+			$body = $this::getBody( $response );
 			$content_length = $body->getSize();
 		}
 
@@ -100,14 +118,14 @@ class Response {
 	 * @param  integer           $chunk_size
 	 * @return void
 	 */
-	protected static function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
-		$body = static::getBody( $response );
-		$content_length = static::getBodyContentLength( $response );
+	protected function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
+		$body = $this::getBody( $response );
+		$content_length = $this::getBodyContentLength( $response );
 
 		if ( $content_length > 0 ) {
-			static::sendBodyWithLength( $body, $content_length, $chunk_size );
+			$this::sendBodyWithLength( $body, $content_length, $chunk_size );
 		} else {
-			static::sendBodyWithoutLength( $body, $chunk_size );
+			$this::sendBodyWithoutLength( $body, $chunk_size );
 		}
 	}
 
@@ -119,7 +137,7 @@ class Response {
 	 * @param  integer         $chunk_size
 	 * @return void
 	 */
-	protected static function sendBodyWithoutLength( StreamInterface $body, $chunk_size ) {
+	protected function sendBodyWithoutLength( StreamInterface $body, $chunk_size ) {
 		while ( ! $body->eof() ) {
 			echo $body->read( $chunk_size );
 
@@ -138,7 +156,7 @@ class Response {
 	 * @param  integer         $chunk_size
 	 * @return void
 	 */
-	protected static function sendBodyWithLength( StreamInterface $body, $length, $chunk_size ) {
+	protected function sendBodyWithLength( StreamInterface $body, $length, $chunk_size ) {
 		$content_left = $length;
 
 		while ( $content_left > 0 ) {
@@ -163,7 +181,7 @@ class Response {
 	 *
 	 * @return ResponseInterface
 	 */
-	public static function response() {
+	public function response() {
 		return new Psr7Response();
 	}
 
@@ -173,8 +191,8 @@ class Response {
 	 * @param  string            $output
 	 * @return ResponseInterface
 	 */
-	public static function output( $output ) {
-		$response = static::response();
+	public function output( $output ) {
+		$response = $this::response();
 		$response = $response->withBody( Psr7\stream_for( $output ) );
 		return $response;
 	}
@@ -185,8 +203,8 @@ class Response {
 	 * @param  mixed             $data
 	 * @return ResponseInterface
 	 */
-	public static function json( $data ) {
-		$response = static::response();
+	public function json( $data ) {
+		$response = $this::response();
 		$response = $response->withHeader( 'Content-Type', 'application/json' );
 		$response = $response->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
 		return $response;
@@ -197,8 +215,8 @@ class Response {
 	 *
 	 * @return RedirectResponse
 	 */
-	public static function redirect() {
-		return new RedirectResponse( Framework::resolve( WPEMERGE_REQUEST_KEY ) );
+	public function redirect() {
+		return new RedirectResponse( $this->request );
 	}
 
 	/**
@@ -208,7 +226,7 @@ class Response {
 	 * @param  array             $context
 	 * @return ViewInterface
 	 */
-	public static function view( $views, $context = [] ) {
+	public function view( $views, $context = [] ) {
 		return View::make( $views, $context );
 	}
 
@@ -218,13 +236,13 @@ class Response {
 	 * @param  integer           $status
 	 * @return ResponseInterface
 	 */
-	public static function error( $status ) {
+	public function error( $status ) {
 		global $wp_query;
 		if ( $status === 404 ) {
 			$wp_query->set_404();
 		}
 
-		return static::view( [$status, 'error', 'index'] )
+		return $this::view( [$status, 'error', 'index'] )
 			->toResponse()
 			->withStatus( $status );
 	}

@@ -5,14 +5,20 @@ namespace WPEmergeTests\Responses;
 use Mockery;
 use WPEmerge\Requests\Request;
 use WPEmerge\Responses\RedirectResponse;
-use WPEmerge\Responses\Response;
+use WPEmerge\Responses\ResponseService;
 use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Responses\Response
+ * @coversDefaultClass \WPEmerge\Responses\ResponseService
  */
 class ResponseTest extends WP_UnitTestCase {
+	public function setUp() {
+		parent::setUp();
+
+		$this->subject = new ResponseService( Mockery::mock( Request::class ) );
+	}
+
 	public function tearDown() {
 		parent::tearDown();
 
@@ -31,7 +37,7 @@ class ResponseTest extends WP_UnitTestCase {
 	 * @covers ::response
 	 */
 	public function testResponse() {
-		$this->assertInstanceOf( ResponseInterface::class, Response::response() );
+		$this->assertInstanceOf( ResponseInterface::class, $this->subject->response() );
 	}
 
 	/**
@@ -40,7 +46,7 @@ class ResponseTest extends WP_UnitTestCase {
 	public function testOutut() {
 		$expected = 'foobar';
 
-		$subject = Response::output( $expected );
+		$subject = $this->subject->output( $expected );
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -51,7 +57,7 @@ class ResponseTest extends WP_UnitTestCase {
 		$input = array( 'foo' => 'bar' );
 		$expected = json_encode( $input );
 
-		$subject = Response::json( $input );
+		$subject = $this->subject->json( $input );
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -59,7 +65,7 @@ class ResponseTest extends WP_UnitTestCase {
 	 * @covers ::redirect
 	 */
 	public function testRedirect() {
-		$this->assertInstanceOf( RedirectResponse::class, Response::redirect() );
+		$this->assertInstanceOf( RedirectResponse::class, $this->subject->redirect() );
 	}
 
 	/**
@@ -70,7 +76,7 @@ class ResponseTest extends WP_UnitTestCase {
 		$expected = file_get_contents( $view );
 
 		// Relies on PhpView - it should be mocked instead
-		$subject = Response::view( $view )->toResponse();
+		$subject = $this->subject->view( $view )->toResponse();
 		$this->assertEquals( $expected, $this->readStream( $subject->getBody() ) );
 	}
 
@@ -81,10 +87,10 @@ class ResponseTest extends WP_UnitTestCase {
 		$expected1 = 404;
 		$expected2 = 500;
 
-		$subject1 = Response::error( $expected1 );
+		$subject1 = $this->subject->error( $expected1 );
 		$this->assertEquals( $expected1, $subject1->getStatusCode() );
 
-		$subject2 = Response::error( $expected2 );
+		$subject2 = $this->subject->error( $expected2 );
 		$this->assertEquals( $expected2, $subject2->getStatusCode() );
 	}
 }

@@ -2,9 +2,8 @@
 
 namespace WPEmerge\Controllers;
 
-use WPEmerge\Responses\Response;
+use WPEmerge\Facades\Response;
 use WPEmerge\Requests\Request;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Handles normal WordPress requests without interfering
@@ -16,9 +15,9 @@ class WordPress {
 	/**
 	 * Default WordPress handler
 	 *
-	 * @param  Request           $request
-	 * @param  string            $view
-	 * @return ResponseInterface
+	 * @param  Request                             $request
+	 * @param  string                              $view
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function handle( Request $request, $view ) {
 		return Response::view( $view )

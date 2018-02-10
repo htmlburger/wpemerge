@@ -25,6 +25,10 @@ if ( ! defined( 'WPEMERGE_REQUEST_KEY' ) ) {
 	define( 'WPEMERGE_REQUEST_KEY', 'wpemerge.request' );
 }
 
+if ( ! defined( 'WPEMERGE_RESPONSE_SERVICE_KEY' ) ) {
+	define( 'WPEMERGE_RESPONSE_SERVICE_KEY', 'wpemerge.responses.response_service' );
+}
+
 if ( ! defined( 'WPEMERGE_ROUTING_ROUTER_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'wpemerge.routing.router' );
 }

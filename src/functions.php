@@ -1,12 +1,12 @@
 <?php
 
 use WPEmerge\Facades\View;
-use WPEmerge\Responses\Response;
+use WPEmerge\Facades\Response;
 
 if ( ! function_exists( 'app_response' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::response()
+	 * @see \WPEmerge\Responses\ResponseService::response()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_response() {
@@ -17,7 +17,7 @@ if ( ! function_exists( 'app_response' ) ) {
 if ( ! function_exists( 'app_output' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::output()
+	 * @see \WPEmerge\Responses\ResponseService::output()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_output( $output ) {
@@ -28,7 +28,7 @@ if ( ! function_exists( 'app_output' ) ) {
 if ( ! function_exists( 'app_json' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::json()
+	 * @see \WPEmerge\Responses\ResponseService::json()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_json( $data ) {
@@ -39,7 +39,7 @@ if ( ! function_exists( 'app_json' ) ) {
 if ( ! function_exists( 'app_redirect' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::redirect()
+	 * @see \WPEmerge\Responses\ResponseService::redirect()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_redirect() {
@@ -50,7 +50,7 @@ if ( ! function_exists( 'app_redirect' ) ) {
 if ( ! function_exists( 'app_view' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::view()
+	 * @see \WPEmerge\Responses\ResponseService::view()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_view( $views, $context = [] ) {
@@ -61,7 +61,7 @@ if ( ! function_exists( 'app_view' ) ) {
 if ( ! function_exists( 'app_error' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see Response::error()
+	 * @see \WPEmerge\Responses\ResponseService::error()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_error( $code ) {
@@ -72,7 +72,7 @@ if ( ! function_exists( 'app_error' ) ) {
 if ( ! function_exists( 'app_partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see WPEmerge\View\ViewService::toString()
+	 * @see \WPEmerge\View\ViewService::toString()
 	 * @return string
 	 */
 	function app_partial( $views, $context = [] ) {

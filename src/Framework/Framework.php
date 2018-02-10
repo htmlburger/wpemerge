@@ -12,7 +12,7 @@ use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
-use WPEmerge\Responses\Response;
+use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
@@ -43,6 +43,7 @@ class Framework {
 	 */
 	protected $service_providers = [
 		RequestsServiceProvider::class,
+		ResponsesServiceProvider::class,
 		RoutingServiceProvider::class,
 		ViewServiceProvider::class,
 		ControllersServiceProvider::class,
@@ -245,6 +246,6 @@ class Framework {
 	 * @return void
 	 */
 	public function respond( ResponseInterface $response ) {
-		Response::respond( $response );
+		$this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY )->respond( $response );
 	}
 }

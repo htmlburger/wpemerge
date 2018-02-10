@@ -6,7 +6,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\Request;
-use WPEmerge\Responses\Response;
+use WPEmerge\Facades\Response;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
