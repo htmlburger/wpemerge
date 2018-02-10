@@ -3,9 +3,9 @@
 namespace WPEmerge\Routing;
 
 use Exception;
+use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
-use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
 use WPEmerge\Routing\Conditions\UrlCondition;
@@ -48,7 +48,7 @@ class Route implements RouteInterface {
 	public function __construct( $methods, $target, $handler ) {
 		if ( ! $target instanceof ConditionInterface ) {
 			try {
-				$target = ConditionFactory::make( $target );
+				$target = RouteCondition::make( $target );
 			} catch ( InvalidRouteConditionException $e ) {
 				throw new Exception( 'Route target is not a valid route string or condition.' );
 			}

@@ -4,6 +4,8 @@ namespace WPEmerge\Routing;
 
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\Router as RouterFacade;
+use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
+use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
@@ -42,13 +44,18 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 
 		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = $container[ WPEMERGE_CONFIG_KEY ]['global_middleware'];
 
+		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
+
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function( $c ) {
 			return new Router( $c[ WPEMERGE_REQUEST_KEY ], $c[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] );
 		};
 
-		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
+		$container[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] = function( $c ) {
+			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
+		};
 
 		Framework::facade( 'Router', RouterFacade::class );
+		Framework::facade( 'RouteCondition', RouteConditionFacade::class );
 	}
 
 	/**

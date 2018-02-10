@@ -17,23 +17,40 @@ class ConditionFactory {
 	const NEGATE_CONDITION_PREFIX = '!';
 
 	/**
+	 * Registered condition types.
+	 *
+	 * @var array<string, string>
+	 */
+	protected $condition_types = [];
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param array<string, string> $condition_types
+	 */
+	public function __construct( $condition_types ) {
+		$this->condition_types = $condition_types;
+	}
+
+	/**
 	 * Create a new condition.
 	 *
 	 * @throws InvalidRouteConditionException
 	 * @param  string|array|Closure           $options
 	 * @return ConditionInterface
 	 */
-	public static function make( $options ) {
+	public function make( $options ) {
 		if ( is_string( $options ) ) {
-			return static::makeFromUrl( $options );
+			return $this->makeFromUrl( $options );
 		}
 
 		if ( is_array( $options ) ) {
-			return static::makeFromArray( $options );
+			return $this->makeFromArray( $options );
 		}
 
 		if ( $options instanceof Closure ) {
-			return static::makeFromClosure( $options );
+			return $this->makeFromClosure( $options );
 		}
 
 		throw new InvalidRouteConditionException( 'Invalid condition options supplied.' );
@@ -45,14 +62,12 @@ class ConditionFactory {
 	 * @param  string      $condition_type
 	 * @return string|null
 	 */
-	protected static function getConditionTypeClass( $condition_type ) {
-		$condition_types = Framework::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY );
-
-		if ( ! isset( $condition_types[ $condition_type ] ) ) {
+	protected function getConditionTypeClass( $condition_type ) {
+		if ( ! isset( $this->condition_types[ $condition_type ] ) ) {
 			return null;
 		}
 
-		return $condition_types[ $condition_type ];
+		return $this->condition_types[ $condition_type ];
 	}
 
 	/**
@@ -61,12 +76,12 @@ class ConditionFactory {
 	 * @param  mixed   $condition_type
 	 * @return boolean
 	 */
-	protected static function conditionTypeRegistered( $condition_type ) {
+	protected function conditionTypeRegistered( $condition_type ) {
 		if ( ! is_string( $condition_type ) ) {
 			return false;
 		}
 
-		return static::getConditionTypeClass( $condition_type );
+		return $this->getConditionTypeClass( $condition_type );
 	}
 
 	/**
@@ -75,7 +90,7 @@ class ConditionFactory {
 	 * @param  mixed   $condition
 	 * @return boolean
 	 */
-	protected static function isNegatedCondition( $condition ) {
+	protected function isNegatedCondition( $condition ) {
 		return (
 			is_string( $condition )
 			&&
@@ -90,7 +105,7 @@ class ConditionFactory {
 	 * @param  array  $arguments
 	 * @return array
 	 */
-	protected static function parseNegatedCondition( $type, $arguments ) {
+	protected function parseNegatedCondition( $type, $arguments ) {
 		$negated_type = substr( $type, strlen( static::NEGATE_CONDITION_PREFIX ) );
 		$arguments = array_merge( [ $negated_type ], $arguments );
 		$type = 'negate';
@@ -105,15 +120,15 @@ class ConditionFactory {
 	 * @param  array $options
 	 * @return array
 	 */
-	protected static function parseConditionOptions( $options ) {
+	protected function parseConditionOptions( $options ) {
 		$type = $options[0];
 		$arguments = array_values( array_slice( $options, 1 ) );
 
-		if ( static::isNegatedCondition( $type ) ) {
-			return static::parseNegatedCondition( $type, $arguments );
+		if ( $this->isNegatedCondition( $type ) ) {
+			return $this->parseNegatedCondition( $type, $arguments );
 		}
 
-		if ( ! static::conditionTypeRegistered( $type ) ) {
+		if ( ! $this->conditionTypeRegistered( $type ) ) {
 			if ( is_callable( $type ) ) {
 				return ['type' => 'custom', 'arguments' => $options];
 			}
@@ -130,7 +145,7 @@ class ConditionFactory {
 	 * @param  string             $url
 	 * @return ConditionInterface
 	 */
-	protected static function makeFromUrl( $url ) {
+	protected function makeFromUrl( $url ) {
 		return new UrlCondition( $url );
 	}
 
@@ -141,17 +156,17 @@ class ConditionFactory {
 	 * @param  array               $options
 	 * @return ConditionInterface
 	 */
-	protected static function makeFromArray( $options ) {
+	protected function makeFromArray( $options ) {
 		if ( count( $options ) === 0 ) {
 			throw new Exception( 'No condition type specified.' );
 		}
 
 		if ( is_array( $options[0] ) ) {
-			return static::makeFromArrayOfConditions( $options );
+			return $this->makeFromArrayOfConditions( $options );
 		}
 
-		$condition_options = static::parseConditionOptions( $options );
-		$condition_class = static::getConditionTypeClass( $condition_options['type'] );
+		$condition_options = $this->parseConditionOptions( $options );
+		$condition_class = $this->getConditionTypeClass( $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
 		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );
@@ -164,7 +179,7 @@ class ConditionFactory {
 	 * @param  array               $options
 	 * @return ConditionInterface
 	 */
-	protected static function makeFromArrayOfConditions( $options ) {
+	protected function makeFromArrayOfConditions( $options ) {
 		return new MultipleCondition( $options );
 	}
 
@@ -174,7 +189,7 @@ class ConditionFactory {
 	 * @param  Closure            $closure
 	 * @return ConditionInterface
 	 */
-	protected static function makeFromClosure( Closure $closure ) {
+	protected function makeFromClosure( Closure $closure ) {
 		return new CustomCondition( $closure );
 	}
 }

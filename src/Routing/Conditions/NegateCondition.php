@@ -2,6 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
+use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\Request;
 
 /**
@@ -26,7 +27,7 @@ class NegateCondition implements ConditionInterface {
 		if ( $condition instanceof ConditionInterface ) {
 			$this->condition = $condition;
 		} else {
-			$this->condition = call_user_func( [ConditionFactory::class, 'make'], func_get_args() );
+			$this->condition = call_user_func( [RouteCondition::class, 'make'], func_get_args() );
 		}
 	}
 

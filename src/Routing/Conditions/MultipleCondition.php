@@ -2,6 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
+use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\Request;
 
 /**
@@ -25,7 +26,7 @@ class MultipleCondition implements ConditionInterface {
 			if ( $condition instanceof ConditionInterface ) {
 				return $condition;
 			}
-			return ConditionFactory::make( $condition );
+			return RouteCondition::make( $condition );
 		}, $conditions );
 	}
 
