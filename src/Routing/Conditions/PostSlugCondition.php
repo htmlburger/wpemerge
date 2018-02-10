@@ -9,7 +9,7 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class PostSlug implements ConditionInterface {
+class PostSlugCondition implements ConditionInterface {
 	/**
 	 * Post slug to check against
 	 *

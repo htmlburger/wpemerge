@@ -20,15 +20,15 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @var string[string]
 	 */
 	protected static $condition_extensions = [
-		'url' => \WPEmerge\Routing\Conditions\Url::class,
-		'custom' => \WPEmerge\Routing\Conditions\Custom::class,
-		'multiple' => \WPEmerge\Routing\Conditions\Multiple::class,
-		'post_id' => \WPEmerge\Routing\Conditions\PostId::class,
-		'post_slug' => \WPEmerge\Routing\Conditions\PostSlug::class,
-		'post_template' => \WPEmerge\Routing\Conditions\PostTemplate::class,
-		'post_type' => \WPEmerge\Routing\Conditions\PostType::class,
-		'query_var' => \WPEmerge\Routing\Conditions\QueryVar::class,
-		'has_query_var' => \WPEmerge\Routing\Conditions\HasQueryVar::class,
+		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
+		'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
+		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
+		'post_id' => \WPEmerge\Routing\Conditions\PostIdCondition::class,
+		'post_slug' => \WPEmerge\Routing\Conditions\PostSlugCondition::class,
+		'post_template' => \WPEmerge\Routing\Conditions\PostTemplateCondition::class,
+		'post_type' => \WPEmerge\Routing\Conditions\PostTypeCondition::class,
+		'query_var' => \WPEmerge\Routing\Conditions\QueryVarCondition::class,
+		'has_query_var' => \WPEmerge\Routing\Conditions\HasQueryVarCondition::class,
 	];
 
 	/**

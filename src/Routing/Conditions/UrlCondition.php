@@ -8,7 +8,7 @@ use WPEmerge\Requests\Request;
 /**
  * Check against the current url
  */
-class Url implements ConditionInterface {
+class UrlCondition implements ConditionInterface {
 	const WILDCARD = '*';
 
 	/**
@@ -100,10 +100,10 @@ class Url implements ConditionInterface {
 	/**
 	 * Concatenate 2 url conditions into a new one
 	 *
-	 * @param  Url $url
-	 * @return Url
+	 * @param  UrlCondition $url
+	 * @return UrlCondition
 	 */
-	public function concatenate( Url $url ) {
+	public function concatenate( UrlCondition $url ) {
 		return new static( UrlUtility::removeTrailingSlash( $this->getUrl() ) . $url->getUrl() );
 	}
 

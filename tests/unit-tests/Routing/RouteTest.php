@@ -8,7 +8,6 @@ use WPEmerge\Requests\Request;
 use WPEmerge\Routing\RouteHandler;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\Custom;
 use stdClass;
 use WP_UnitTestCase;
 

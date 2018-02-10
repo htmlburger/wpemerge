@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge\Requests\Request;
-use WPEmerge\Routing\Conditions\Url;
+use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Controllers\WordPressController;
@@ -43,7 +43,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute() {
 		$methods = ['GET', 'POST'];
-		$target = new Url( '/foo/bar/' );
+		$target = new UrlCondition( '/foo/bar/' );
 		$handler = function() {};
 
 		$route = $this->subject->route( $methods, $target, $handler );
@@ -59,7 +59,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute_NoHandler_WordPressHandler() {
 		$methods = ['GET', 'POST'];
-		$target = new Url( '/foo/bar/' );
+		$target = new UrlCondition( '/foo/bar/' );
 
 		$route = $this->subject->route( $methods, $target );
 

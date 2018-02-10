@@ -8,7 +8,7 @@ use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
-use WPEmerge\Routing\Conditions\Url as UrlCondition;
+use WPEmerge\Routing\Conditions\UrlCondition;
 
 /**
  * Represent a route

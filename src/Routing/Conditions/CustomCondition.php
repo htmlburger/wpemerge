@@ -7,7 +7,7 @@ use WPEmerge\Requests\Request;
 /**
  * Check against a custom callable
  */
-class Custom implements ConditionInterface {
+class CustomCondition implements ConditionInterface {
 	/**
 	 * Callable to use
 	 *

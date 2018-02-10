@@ -9,7 +9,7 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class PostTemplate implements ConditionInterface {
+class PostTemplateCondition implements ConditionInterface {
 	/**
 	 * Post template to check against
 	 *

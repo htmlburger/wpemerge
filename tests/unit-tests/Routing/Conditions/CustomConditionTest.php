@@ -3,14 +3,14 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use WPEmerge\Routing\Conditions\Custom;
+use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\Conditions\Custom
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\CustomCondition
  */
-class CustomTest extends WP_UnitTestCase {
+class CustomConditionTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * @covers ::getCallable
@@ -21,7 +21,7 @@ class CustomTest extends WP_UnitTestCase {
 		$arguments = ['foo', 'bar'];
 		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
-		$subject = new Custom( $callable, $arguments[0], $arguments[1] );
+		$subject = new CustomCondition( $callable, $arguments[0], $arguments[1] );
 
 		$this->assertSame( $callable, $subject->getCallable() );
 		$this->assertEquals( $arguments, $subject->getArguments( $request ) );
@@ -33,10 +33,10 @@ class CustomTest extends WP_UnitTestCase {
 	public function testIsSatisfied() {
 		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
-		$subject1 = new Custom( '__return_true' );
+		$subject1 = new CustomCondition( '__return_true' );
 		$this->assertTrue( $subject1->isSatisfied( $request ) );
 
-		$subject2 = new Custom( '__return_false' );
+		$subject2 = new CustomCondition( '__return_false' );
 		$this->assertFalse( $subject2->isSatisfied( $request ) );
 	}
 }

@@ -3,11 +3,11 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use WPEmerge\Requests\Request;
-use WPEmerge\Routing\Conditions\Custom;
+use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\ConditionFactory;
-use WPEmerge\Routing\Conditions\Multiple;
-use WPEmerge\Routing\Conditions\PostId;
-use WPEmerge\Routing\Conditions\Url;
+use WPEmerge\Routing\Conditions\MultipleCondition;
+use WPEmerge\Routing\Conditions\PostIdCondition;
+use WPEmerge\Routing\Conditions\UrlCondition;
 use stdClass;
 use WP_UnitTestCase;
 
@@ -33,7 +33,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Url_UrlCondition() {
 		$expected_param = '/foo/bar/';
-		$expected_class = Url::class;
+		$expected_class = UrlCondition::class;
 
 		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -48,7 +48,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_ConditionInArray_ConditionInstance() {
 		$expected_param = 10;
-		$expected_class = PostId::class;
+		$expected_class = PostIdCondition::class;
 
 		$condition = ConditionFactory::make( ['post_id', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -63,7 +63,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_CustomConditionWithClosureInArray_CustonCondition() {
 		$expected_param = function() {};
-		$expected_class = Custom::class;
+		$expected_class = CustomCondition::class;
 
 		$condition = ConditionFactory::make( ['custom', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -78,7 +78,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_CustomConditionWithCallableInArray_CustomCondition() {
 		$expected_param = 'phpinfo';
-		$expected_class = Custom::class;
+		$expected_class = CustomCondition::class;
 
 		$condition = ConditionFactory::make( ['custom', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -93,7 +93,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_ClosureInArray_CustomCondition() {
 		$expected_param = function() {};
-		$expected_class = Custom::class;
+		$expected_class = CustomCondition::class;
 
 		$condition = ConditionFactory::make( [$expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -108,7 +108,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_CallableInArray_CustomCondition() {
 		$expected_param = 'phpinfo';
-		$expected_class = Custom::class;
+		$expected_class = CustomCondition::class;
 
 		$condition = ConditionFactory::make( [$expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -123,7 +123,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	public function testMake_ArrayOfConditionsInArray_MultipleCondition() {
 		$expected_param1 = function() {};
 		$expected_param2 = function() {};
-		$expected_class = Multiple::class;
+		$expected_class = MultipleCondition::class;
 
 		$condition = ConditionFactory::make( [ [ $expected_param1 ], [ $expected_param2 ] ] );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -163,7 +163,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Closure_CustomCondition() {
 		$expected_param = function() {};
-		$expected_class = Custom::class;
+		$expected_class = CustomCondition::class;
 
 		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -175,7 +175,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Callable_UrlCondition() {
 		$expected_param = 'phpinfo';
-		$expected_class = Url::class;
+		$expected_class = UrlCondition::class;
 
 		$condition = ConditionFactory::make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );

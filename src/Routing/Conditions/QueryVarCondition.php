@@ -9,7 +9,7 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class QueryVar implements ConditionInterface {
+class QueryVarCondition implements ConditionInterface {
 	/**
 	 * Query var name to check against
 	 *

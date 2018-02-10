@@ -7,7 +7,7 @@ use Exception;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\Url as UrlCondition;
+use WPEmerge\Routing\Conditions\UrlCondition;
 
 class RouteGroup implements RouteInterface, HasRoutesInterface {
 	use HasRoutesTrait {

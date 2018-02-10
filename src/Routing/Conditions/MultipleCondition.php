@@ -7,7 +7,7 @@ use WPEmerge\Requests\Request;
 /**
  * Check against an array of conditions in an AND logical relationship
  */
-class Multiple implements ConditionInterface {
+class MultipleCondition implements ConditionInterface {
 	/**
 	 * Array of conditions to check
 	 *

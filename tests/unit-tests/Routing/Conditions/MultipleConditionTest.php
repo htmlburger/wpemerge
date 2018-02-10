@@ -3,44 +3,44 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use WPEmerge\Routing\Conditions\Custom;
-use WPEmerge\Routing\Conditions\Multiple;
+use WPEmerge\Routing\Conditions\CustomCondition;
+use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\Conditions\Multiple
+ * @coversDefaultClass \WPEmerge\Routing\Conditions\MultipleCondition
  */
-class MultipleTest extends WP_UnitTestCase {
+class MultipleConditionTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * @covers ::getConditions
 	 */
 	public function testConstruct() {
-		$condition1 = new Custom( '__return_true' );
+		$condition1 = new CustomCondition( '__return_true' );
 		$condition2 = function() { return false; };
 		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
-		$subject = new Multiple( [$condition1, $condition2] );
+		$subject = new MultipleCondition( [$condition1, $condition2] );
 
-		$this->assertEquals( [$condition1, new Custom( $condition2 )], $subject->getConditions() );
+		$this->assertEquals( [$condition1, new CustomCondition( $condition2 )], $subject->getConditions() );
 	}
 
 	/**
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied() {
-		$condition1 = new Custom( '__return_true' );
-		$condition2 = new Custom( '__return_false' );
+		$condition1 = new CustomCondition( '__return_true' );
+		$condition2 = new CustomCondition( '__return_false' );
 		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
-		$subject1 = new Multiple( [$condition1] );
+		$subject1 = new MultipleCondition( [$condition1] );
 		$this->assertTrue( $subject1->isSatisfied( $request ) );
 
-		$subject2 = new Multiple( [$condition2] );
+		$subject2 = new MultipleCondition( [$condition2] );
 		$this->assertFalse( $subject2->isSatisfied( $request ) );
 
-		$subject3 = new Multiple( [$condition1, $condition2] );
+		$subject3 = new MultipleCondition( [$condition1, $condition2] );
 		$this->assertFalse( $subject3->isSatisfied( $request ) );
 	}
 
@@ -48,11 +48,11 @@ class MultipleTest extends WP_UnitTestCase {
 	 * @covers ::getArguments
 	 */
 	public function testGetArguments() {
-		$condition1 = new Custom( '__return_true', 'custom_arg_1', 'custom_arg_2' );
+		$condition1 = new CustomCondition( '__return_true', 'custom_arg_1', 'custom_arg_2' );
 		$condition2 = [function() { return false; }, 'custom_arg_3'];
 		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
 
-		$subject = new Multiple( [$condition1, $condition2] );
+		$subject = new MultipleCondition( [$condition1, $condition2] );
 
 		$this->assertEquals( ['custom_arg_1', 'custom_arg_2', 'custom_arg_3'], $subject->getArguments( $request ) );
 	}

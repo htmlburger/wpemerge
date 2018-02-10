@@ -9,7 +9,7 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class PostId implements ConditionInterface {
+class PostIdCondition implements ConditionInterface {
 	/**
 	 * Post id to check against
 	 *

@@ -9,7 +9,7 @@ use WPEmerge\Requests\Request;
  *
  * @codeCoverageIgnore
  */
-class HasQueryVar extends QueryVar {
+class HasQueryVarCondition extends QueryVar {
 	/**
 	 * {@inheritDoc}
 	 */
