@@ -30,7 +30,6 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		'post_template' => \WPEmerge\Routing\Conditions\PostTemplateCondition::class,
 		'post_type' => \WPEmerge\Routing\Conditions\PostTypeCondition::class,
 		'query_var' => \WPEmerge\Routing\Conditions\QueryVarCondition::class,
-		'has_query_var' => \WPEmerge\Routing\Conditions\HasQueryVarCondition::class,
 	];
 
 	/**
