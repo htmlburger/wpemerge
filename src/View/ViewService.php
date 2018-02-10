@@ -35,6 +35,7 @@ class ViewService {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param ViewEngineInterface $view_engine
 	 */
 	public function __construct( ViewEngineInterface $view_engine ) {
