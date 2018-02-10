@@ -3,6 +3,7 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
+use WPEmerge\Facades\View;
 use WPEmerge\View\PhpView;
 use WP_UnitTestCase;
 
@@ -13,12 +14,20 @@ class PhpViewTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		$this->view = View::getFacadeRoot();
+		$this->viewMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
+		View::swap( $this->viewMock );
+
 		$this->subject = new PhpView();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		View::swap( $this->view );
+		unset( $this->view );
+		unset( $this->viewMock );
 
 		unset( $this->subject );
 	}
@@ -41,6 +50,98 @@ class PhpViewTest extends WP_UnitTestCase {
 		$expected = 'foo';
 		$this->subject->setFilepath( $expected );
 		$this->assertEquals( $expected, $this->subject->getFilepath() );
+	}
+
+	/**
+	 * @covers ::toString
+	 * @covers ::render
+	 */
+	public function testToString_GlobalContext() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
+		$expected = 'Hello World!';
+
+		$this->viewMock->shouldReceive( 'getGlobals' )
+			->andReturn( ['world' => 'World'] )
+			->once();
+
+		$this->viewMock->shouldReceive( 'compose' )
+			->once();
+
+		$this->subject->setName( $view );
+		$this->subject->setFilepath( $view );
+
+		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
+	}
+
+	/**
+	 * @covers ::toString
+	 * @covers ::render
+	 */
+	public function testToString_ViewComposer() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$expected = 'Hello World!';
+
+		$this->viewMock->shouldReceive( 'getGlobals' )
+			->andReturn( [] )
+			->once();
+
+		$this->viewMock->shouldReceive( 'compose' )
+			->andReturnUsing( function( $view ) {
+				$view->with( ['world' => 'World'] );
+			} )
+			->once();
+
+		$this->subject->setName( $view );
+		$this->subject->setFilepath( $view );
+
+		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
+	}
+
+	/**
+	 * @covers ::toString
+	 * @covers ::render
+	 */
+	public function testToString_LocalContext() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$expected = 'Hello World!';
+
+		$this->viewMock->shouldReceive( 'getGlobals' )
+			->andReturn( [] )
+			->once();
+
+		$this->viewMock->shouldReceive( 'compose' )
+			->once();
+
+		$this->subject->setName( $view );
+		$this->subject->setFilepath( $view );
+		$this->subject->with( ['world' => 'World'] );
+
+		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
+	}
+
+	/**
+	 * @covers ::toString
+	 * @covers ::render
+	 */
+	public function testToString_LocalContextOverridesViewComposerContext() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$expected = 'Hello World!';
+
+		$this->viewMock->shouldReceive( 'getGlobals' )
+			->andReturn( [] )
+			->once();
+
+		$this->viewMock->shouldReceive( 'compose' )
+			->andReturnUsing( function( $view ) {
+				$view->with( ['world' => 'This should be overriden'] );
+			} )
+			->once();
+
+		$this->subject->setName( $view );
+		$this->subject->setFilepath( $view );
+		$this->subject->with( ['world' => 'World'] );
+
+		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
 	}
 
 	/**
