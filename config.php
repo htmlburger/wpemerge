@@ -54,7 +54,7 @@ if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_PHP_KEY' ) ) {
-	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'wpemerge.view.view_engine.php' );
+	define( 'WPEMERGE_VIEW_ENGINE_PHP_KEY', 'wpemerge.view.php_view_engine' );
 }
 
 if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {
