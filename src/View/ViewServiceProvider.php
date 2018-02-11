@@ -16,14 +16,14 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function( $c ) {
-			return new \WPEmerge\View\ViewService( $c[ WPEMERGE_VIEW_ENGINE_PHP_KEY ] );
+			return new \WPEmerge\View\ViewService( $c[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] );
 		};
 
-		$container[ WPEMERGE_VIEW_ENGINE_PHP_KEY ] = function( $c ) {
+		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function( $c ) {
 			return new \WPEmerge\View\PhpViewEngine();
 		};
 
-		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_ENGINE_PHP_KEY );
+		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
 
 		Framework::facade( 'View', \WPEmerge\Facades\View::class );
 		Framework::facade( 'ViewEngine', \WPEmerge\Facades\ViewEngine::class );
