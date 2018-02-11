@@ -54,6 +54,38 @@ class RequestTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::isGet
+	 * @covers ::isHead
+	 * @covers ::isPost
+	 * @covers ::isPut
+	 * @covers ::isPatch
+	 * @covers ::isDelete
+	 * @covers ::isOptions
+	 */
+	public function testIsMethod() {
+		$subject1 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'GET'], [] );
+		$this->assertTrue( $subject1->isGet() );
+
+		$subject = new Request( [], [], [], [], ['REQUEST_METHOD' => 'HEAD'], [] );
+		$this->assertTrue( $subject->isHead() );
+
+		$subject3 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$this->assertTrue( $subject3->isPost() );
+
+		$subject4 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'PUT'], [] );
+		$this->assertTrue( $subject4->isPut() );
+
+		$subject5 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'PATCH'], [] );
+		$this->assertTrue( $subject5->isPatch() );
+
+		$subject6 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'DELETE'], [] );
+		$this->assertTrue( $subject6->isDelete() );
+
+		$subject7 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS'], [] );
+		$this->assertTrue( $subject7->isOptions() );
+	}
+
+	/**
 	 * @covers ::getUrl
 	 */
 	public function testGetUrl() {

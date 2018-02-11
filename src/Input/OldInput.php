@@ -2,66 +2,63 @@
 
 namespace WPEmerge\Input;
 
-use Flash;
+use WPEmerge\Facades\Flash;
 use WPEmerge\Support\Arr;
 
 /**
- * Provide a way to get values from the previous request
+ * Provide a way to get values from the previous request.
  */
 class OldInput {
 	/**
-	 * Key to store the flashed data with
+	 * Key to store the flashed data with.
 	 *
 	 * @var string
 	 */
-	const FLASH_KEY = '__wpEmergeOldInput';
+	protected $flash_key = '';
 
 	/**
-	 * Get all previously flashed request data
+	 * Constructor.
 	 *
-	 * @return array
+	 * @param string $flash_key
 	 */
-	public function all() {
-		return Flash::peek( static::FLASH_KEY );
+	public function __construct( $flash_key = '__wpemergeOldInput' ) {
+		$this->flash_key = $flash_key;
 	}
 
 	/**
-	 * Get any previously flashed request data value
+	 * Get whether the old input service is enabled.
 	 *
-	 * @see Arr::get()
+	 * @return boolean.
 	 */
-	public function get() {
-		$arguments = array_merge( [
-			static::all(),
-		], func_get_args() );
-		return call_user_func_array( [Arr::class, 'get'], $arguments );
+	public function enabled() {
+		return Flash::enabled();
 	}
 
 	/**
-	 * Clear previously stored input
+	 * Get any flashed request value for key from the previous request.
+	 *
+	 * @see    Arr::get()
+	 * @param  string     $key
+	 * @param  mixed      $default
+	 * @return mixed
 	 */
-	public function clear() {
-		// @codeCoverageIgnoreStart
-		if ( ! Flash::enabled() ) {
-			return;
-		}
-		// @codeCoverageIgnoreEnd
-
-		Flash::clear( static::FLASH_KEY );
+	public function get( $key, $default = null ) {
+		return Arr::get( Flash::get( $this->flash_key, [] ), $key, $default );
 	}
 
 	/**
-	 * Store the current input
+	 * Set the current input.
 	 *
 	 * @param array $input
 	 */
-	public function store( $input ) {
-		// @codeCoverageIgnoreStart
-		if ( ! Flash::enabled() ) {
-			return;
-		}
-		// @codeCoverageIgnoreEnd
+	public function set( $input ) {
+		Flash::add( $this->flash_key, $input );
+	}
 
-		Flash::add( static::FLASH_KEY, $input );
+	/**
+	 * Clear stored input from the previous request.
+	 */
+	public function clear() {
+		Flash::clear( $this->flash_key );
 	}
 }

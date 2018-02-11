@@ -6,7 +6,7 @@ use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
- * Provide old input dependencies
+ * Provide old input dependencies.
  *
  * @codeCoverageIgnore
  */
@@ -33,6 +33,6 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function boot( $container ) {
-		// nothing to boot
+		// nothing to boot.
 	}
 }

@@ -10,49 +10,49 @@ use WPEmerge\Support\Arr;
  */
 class Request {
 	/**
-	 * GET parameters
+	 * GET parameters.
 	 *
 	 * @var array
 	 */
 	protected $get = [];
 
 	/**
-	 * POST parameters
+	 * POST parameters.
 	 *
 	 * @var array
 	 */
 	protected $post = [];
 
 	/**
-	 * COOKIE parameters
+	 * COOKIE parameters.
 	 *
 	 * @var array
 	 */
 	protected $cookie = [];
 
 	/**
-	 * FILES parameters
+	 * FILES parameters.
 	 *
 	 * @var array
 	 */
 	protected $files = [];
 
 	/**
-	 * SERVER parameters
+	 * SERVER parameters.
 	 *
 	 * @var array
 	 */
 	protected $server = [];
 
 	/**
-	 * Headers
+	 * Headers.
 	 *
 	 * @var array
 	 */
 	protected $headers = [];
 
 	/**
-	 * Create a new instance from php superglobals
+	 * Create a new instance from php superglobals.
 	 *
 	 * @return Request
 	 */
@@ -61,7 +61,7 @@ class Request {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param array $get
 	 * @param array $post
@@ -80,7 +80,7 @@ class Request {
 	}
 
 	/**
-	 * Get the request method
+	 * Get the request method.
 	 *
 	 * @return string
 	 */
@@ -96,7 +96,70 @@ class Request {
 	}
 
 	/**
-	 * Get the request url
+	 * Check if the request method is GET.
+	 *
+	 * @return string
+	 */
+	public function isGet() {
+		return $this->getMethod() === 'GET';
+	}
+
+	/**
+	 * Check if the request method is HEAD.
+	 *
+	 * @return string
+	 */
+	public function isHead() {
+		return $this->getMethod() === 'HEAD';
+	}
+
+	/**
+	 * Check if the request method is POST.
+	 *
+	 * @return string
+	 */
+	public function isPost() {
+		return $this->getMethod() === 'POST';
+	}
+
+	/**
+	 * Check if the request method is PUT.
+	 *
+	 * @return string
+	 */
+	public function isPut() {
+		return $this->getMethod() === 'PUT';
+	}
+
+	/**
+	 * Check if the request method is PATCH.
+	 *
+	 * @return string
+	 */
+	public function isPatch() {
+		return $this->getMethod() === 'PATCH';
+	}
+
+	/**
+	 * Check if the request method is DELETE.
+	 *
+	 * @return string
+	 */
+	public function isDelete() {
+		return $this->getMethod() === 'DELETE';
+	}
+
+	/**
+	 * Check if the request method is OPTIONS.
+	 *
+	 * @return string
+	 */
+	public function isOptions() {
+		return $this->getMethod() === 'OPTIONS';
+	}
+
+	/**
+	 * Get the request url.
 	 *
 	 * @return string
 	 */
@@ -112,9 +175,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from any of the request parameters
+	 * Get a value from any of the request parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	protected function input() {
@@ -130,9 +193,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the GET parameters
+	 * Get a value from the GET parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function get() {
@@ -140,9 +203,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the POST parameters
+	 * Get a value from the POST parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function post() {
@@ -150,9 +213,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the COOKIE parameters
+	 * Get a value from the COOKIE parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function cookie() {
@@ -160,9 +223,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the FILES parameters
+	 * Get a value from the FILES parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function files() {
@@ -170,9 +233,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the SERVER parameters
+	 * Get a value from the SERVER parameters.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function server() {
@@ -180,9 +243,9 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the headers
+	 * Get a value from the headers.
 	 *
-	 * @see  \WPEmerge\Support\Arr
+	 * @see    \WPEmerge\Support\Arr
 	 * @return mixed
 	 */
 	public function headers() {
