@@ -1,13 +1,13 @@
 <?php
 /**
- * Absolute path to framework's directory
+ * Absolute path to framework's directory.
  */
 if ( ! defined( 'WPEMERGE_DIR' ) ) {
 	define( 'WPEMERGE_DIR', __DIR__ );
 }
 
 /**
- * Service container keys and key prefixes
+ * Service container keys.
  */
 if ( ! defined( 'WPEMERGE_FRAMEWORK_KEY' ) ) {
 	define( 'WPEMERGE_FRAMEWORK_KEY', 'wpemerge.framework.framework' );
