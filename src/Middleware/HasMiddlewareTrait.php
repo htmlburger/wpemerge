@@ -82,7 +82,7 @@ trait HasMiddlewareTrait {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function executeMiddleware( $middleware, $request, Closure $next ) {
-		$top_middleware = array_pop( $middleware );
+		$top_middleware = array_shift( $middleware );
 
 		if ( $top_middleware === null ) {
 			return $next( $request );

@@ -18,88 +18,89 @@ class Flash {
 	const NEXT_KEY = 'next';
 
 	/**
-	 * Key to store flashed data in storage with.
+	 * Key to store flashed data in store with.
 	 *
 	 * @var string
 	 */
-	protected $storage_key = '';
+	protected $store_key = '';
 
 	/**
-	 * Root storage array or object implementing ArrayAccess.
+	 * Root store array or object implementing ArrayAccess.
 	 *
 	 * @var array|\ArrayAccess
 	 */
-	protected $root_storage = null;
+	protected $store = null;
 
 	/**
-	 * Flash storage array.
+	 * Flash store array.
 	 *
 	 * @var array
 	 */
-	protected $storage = null;
+	protected $flashed = [];
 
 	/**
 	 * Constructor.
 	 *
-	 * @param array|\ArrayAccess $storage
-	 * @param string             $storage_key
+	 * @param array|\ArrayAccess $store
+	 * @param string             $store_key
 	 */
-	public function __construct( &$storage, $storage_key = '__wpemergeFlash' ) {
-		$this->storage_key = $storage_key;
-		$this->setStorage( $storage );
+	public function __construct( &$store, $store_key = '__wpemergeFlash' ) {
+		$this->store_key = $store_key;
+		$this->setStore( $store );
 	}
 
 	/**
-	 * Get whether a storage object is valid.
+	 * Get whether a store object is valid.
 	 *
-	 * @param  mixed   $storage
+	 * @param  mixed   $store
 	 * @return boolean
 	 */
-	protected function isValidStorage( $storage ) {
-		return ( is_array( $storage ) || $storage instanceof ArrayAccess );
+	protected function isValidStore( $store ) {
+		return ( is_array( $store ) || $store instanceof ArrayAccess );
 	}
 
 	/**
-	 * Throw an exception if storage is not valid.
+	 * Throw an exception if store is not valid.
 	 *
 	 * @throws Exception
 	 * @return void
 	 */
-	protected function validateStorage() {
-		if ( ! $this->isValidStorage( $this->storage ) ) {
+	protected function validateStore() {
+		if ( ! $this->isValidStore( $this->store ) ) {
 			throw new Exception( 'Attempted to use Flash without an active session. Did you forget to call session_start()?' );
 		}
 	}
 
 	/**
-	 * Get the storage for flash messages.
+	 * Get the store for flash messages.
 	 *
 	 * @return array|\ArrayAccess
 	 */
-	public function getStorage() {
-		return $this->storage;
+	public function getStore() {
+		return $this->store;
 	}
 
 	/**
-	 * Set the storage for flash messages.
+	 * Set the store for flash messages.
 	 *
-	 * @param  array|\ArrayAccess $storage
+	 * @param  array|\ArrayAccess $store
 	 * @return void
 	 */
-	public function setStorage( &$storage ) {
-		if ( ! $this->isValidStorage( $storage ) ) {
+	public function setStore( &$store ) {
+		if ( ! $this->isValidStore( $store ) ) {
 			return;
 		}
 
-		if ( ! isset( $storage[ $this->storage_key ] ) ) {
-			$storage[ $this->storage_key ] = [
+		$this->store = &$store;
+
+		if ( ! isset( $this->store[ $this->store_key ] ) ) {
+			$this->store[ $this->store_key ] = [
 				static::CURRENT_KEY => [],
 				static::NEXT_KEY => [],
 			];
 		}
 
-		$this->root_storage = &$storage;
-		$this->storage = &$storage[ $this->storage_key ];
+		$this->flashed = $store[ $this->store_key ];
 	}
 
 	/**
@@ -108,11 +109,20 @@ class Flash {
 	 * @return boolean
 	 */
 	public function enabled() {
-		return $this->isValidStorage( $this->storage );
+		return $this->isValidStore( $this->store );
 	}
 
 	/**
-	 * Get the entire storage or the values for a key for a request.
+	 * Save flashed data to store.
+	 *
+	 * @return void
+	 */
+	public function save() {
+		$this->store[ $this->store_key ] = $this->flashed;
+	}
+
+	/**
+	 * Get the entire store or the values for a key for a request.
 	 *
 	 * @param  boolean     $next
 	 * @param  string|null $key
@@ -120,15 +130,15 @@ class Flash {
 	 * @return mixed
 	 */
 	protected function getFromRequest( $next, $key = null, $default = null ) {
-		$this->validateStorage();
+		$this->validateStore();
 
 		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
 
 		if ( $key === null ) {
-			return $this->storage[ $request_key ];
+			return $this->flashed[ $request_key ];
 		}
 
-		return Arr::get( $this->storage[ $request_key ], $key, $default );
+		return Arr::get( $this->flashed[ $request_key ], $key, $default );
 	}
 
 	/**
@@ -140,12 +150,12 @@ class Flash {
 	 * @return void
 	 */
 	protected function addToRequest( $next, $key, $new_items ) {
-		$this->validateStorage();
+		$this->validateStore();
 
 		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
 		$new_items = Mixed::toArray( $new_items );
 		$items = Mixed::toArray( $this->get( $key, [] ) );
-		$this->storage[ $request_key ][ $key ] = array_merge( $items, $new_items );
+		$this->flashed[ $request_key ][ $key ] = array_merge( $items, $new_items );
 	}
 
 	/**
@@ -156,26 +166,23 @@ class Flash {
 	 * @return void
 	 */
 	protected function clearFromRequest( $next, $key = null ) {
-		$this->validateStorage();
+		$this->validateStore();
 
 		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
-		$keys = $key === null ? array_keys( $storage ) : [$key];
-
-		foreach ( $this->storage[ $request_key ] as $key => $value ) {
-			unset( $this->storage[ $request_key ][ $key ] );
-		}
+		$keys = $key === null ? array_keys( $store ) : [$key];
+		$this->flashed[ $request_key ] = [];
 	}
 
 	/**
-	 * Shift current storage and replace it with next storage.
+	 * Shift current store and replace it with next store.
 	 *
 	 * @return void
 	 */
 	public function shift() {
-		$this->validateStorage();
+		$this->validateStore();
 
-		$this->storage[ static::CURRENT_KEY ] = $this->storage[ static::NEXT_KEY ];
-		$this->storage[ static::NEXT_KEY ] = [];
+		$this->flashed[ static::CURRENT_KEY ] = $this->flashed[ static::NEXT_KEY ];
+		$this->flashed[ static::NEXT_KEY ] = [];
 	}
 
 	/**
@@ -200,7 +207,7 @@ class Flash {
 	}
 
 	/**
-	 * Get the entire storage or the values for a key for the current request.
+	 * Get the entire store or the values for a key for the current request.
 	 *
 	 * @param  string|null $key
 	 * @param  mixed       $default
@@ -211,7 +218,7 @@ class Flash {
 	}
 
 	/**
-	 * Get the entire storage or the values for a key for the next request.
+	 * Get the entire store or the values for a key for the next request.
 	 *
 	 * @param  string|null $key
 	 * @param  mixed       $default
@@ -222,7 +229,7 @@ class Flash {
 	}
 
 	/**
-	 * Clear the entire storage or the values for a key for the current request.
+	 * Clear the entire store or the values for a key for the current request.
 	 *
 	 * @param  string|null $key
 	 * @return void
@@ -232,7 +239,7 @@ class Flash {
 	}
 
 	/**
-	 * Clear the entire storage or the values for a key for the next request.
+	 * Clear the entire store or the values for a key for the next request.
 	 *
 	 * @param  string|null $key
 	 * @return void

@@ -12,7 +12,9 @@ use WPEmerge\Facades\Response;
  * Provide routing for site requests (i.e. all non-api requests)
  */
 class Router implements HasRoutesInterface {
-	use HasRoutesTrait;
+	use HasRoutesTrait {
+		addRoute as traitAddRoute;
+	}
 
 	/**
 	 * Current request.
@@ -26,10 +28,24 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @var array
 	 */
-	protected $global_middleware = [];
+	protected $middleware = [];
 
 	/**
-	 * Current active route
+	 * Global middleware priority.
+	 *
+	 * @var array
+	 */
+	protected $middleware_priority = [];
+
+	/**
+	 * Default global middleware priority.
+	 *
+	 * @var integer
+	 */
+	protected $default_middleware_priority = 0;
+
+	/**
+	 * Current active route.
 	 *
 	 * @var RouteInterface
 	 */
@@ -40,15 +56,19 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param Request $request
-	 * @param array   $global_middleware
+	 * @param array   $middleware
+	 * @param array   $middleware_priority
+	 * @param integer $default_middleware_priority
 	 */
-	public function __construct( Request $request, $global_middleware ) {
+	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority ) {
 		$this->request = $request;
-		$this->global_middleware = $global_middleware;
+		$this->middleware_priority = $middleware_priority;
+		$this->default_middleware_priority = $default_middleware_priority;
+		$this->middleware = $this->sortMiddleware( $middleware );
 	}
 
 	/**
-	 * Hook into WordPress actions
+	 * Hook into WordPress actions.
 	 *
 	 * @codeCoverageIgnore
 	 * @return void
@@ -59,7 +79,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Register route rewrite rules with WordPress
+	 * Register route rewrite rules with WordPress.
 	 *
 	 * @codeCoverageIgnore
 	 * @return void
@@ -72,17 +92,49 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Add global middlewares and execute the first satisfied route (if any)
+	 * Get middleware priority.
+	 *
+	 * @param  mixed   $middleware
+	 * @return integer
+	 */
+	protected function getMiddlewarePriority( $middleware ) {
+		if ( is_string( $middleware ) && isset( $this->middleware_priority[ $middleware ] ) ) {
+			return $this->middleware_priority[ $middleware ];
+		}
+
+		return $this->default_middleware_priority;
+	}
+
+	/**
+	 * Sort middleware by priority in ascending order.
+	 *
+	 * @param  array $middleware
+	 * @return array
+	 */
+	protected function sortMiddleware( $middleware ) {
+		usort( $middleware, function( $a, $b ) {
+			return $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
+		} );
+
+		return $middleware;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function addRoute( $route ) {
+		$route->addMiddleware( $this->middleware );
+		return $this->traitAddRoute( $route );
+	}
+
+	/**
+	 * Execute the first satisfied route, if any.
 	 *
 	 * @param  string $view
 	 * @return string
 	 */
 	public function execute( $view ) {
 		$routes = $this->getRoutes();
-
-		foreach ( $routes as $route ) {
-			$route->addMiddleware( $this->global_middleware );
-		}
 
 		foreach ( $routes as $route ) {
 			if ( $route->isSatisfied( $this->request ) ) {
@@ -95,7 +147,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Execute a route
+	 * Execute a route.
 	 *
 	 * @throws Exception
 	 * @param  Request        $request
@@ -121,7 +173,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Get the current route
+	 * Get the current route.
 	 *
 	 * @return RouteInterface
 	 */
@@ -130,7 +182,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Set the current route
+	 * Set the current route.
 	 *
 	 * @param  RouteInterface
 	 * @return void
@@ -140,7 +192,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Handle ALL requests
+	 * Handle ALL requests.
 	 *
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface

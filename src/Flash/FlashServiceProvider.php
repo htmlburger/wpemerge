@@ -22,6 +22,13 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			]
 		);
 
+		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY ] = array_merge(
+			$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY ],
+			[
+				\WPEmerge\Flash\FlashMiddleware::class => 10,
+			]
+		);
+
 		$container[ WPEMERGE_FLASH_KEY ] = function( $c ) {
 			$session = null;
 			if ( isset( $c[ WPEMERGE_SESSION_KEY ] ) ) {
