@@ -14,7 +14,7 @@ class NameProxyViewEngine implements \WPEmerge\View\ViewEngineInterface {
 	 *
 	 * @var string
 	 */
-	protected $default = WPEMERGE_VIEW_ENGINE_PHP_KEY;
+	protected $default = WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY;
 
 	/**
 	 * Array of filename_suffix=>engine_container_key bindings
