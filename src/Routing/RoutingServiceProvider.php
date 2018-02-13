@@ -38,6 +38,18 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$this->registerConfiguration( $container );
+		$this->registerDependencies( $container );
+		$this->registerFacades( $container );
+	}
+
+	/**
+	 * Register condiguration options.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerConfiguration( $container ) {
 		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
 			'global_middleware' => [],
 		], $container[ WPEMERGE_CONFIG_KEY ] );
@@ -49,7 +61,15 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_DEFAULT_PRIORITY_KEY ] = 100;
 
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
+	}
 
+	/**
+	 * Register dependencies.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerDependencies( $container ) {
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function( $c ) {
 			return new Router(
 				$c[ WPEMERGE_REQUEST_KEY ],
@@ -62,7 +82,15 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		$container[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] = function( $c ) {
 			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
 		};
+	}
 
+	/**
+	 * Register facades.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerFacades( $container ) {
 		Framework::facade( 'Router', RouterFacade::class );
 		Framework::facade( 'RouteCondition', RouteConditionFacade::class );
 	}

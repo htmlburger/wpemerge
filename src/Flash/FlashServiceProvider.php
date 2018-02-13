@@ -15,6 +15,18 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$this->registerConfiguration( $container );
+		$this->registerDependencies( $container );
+		$this->registerFacades( $container );
+	}
+
+	/**
+	 * Register condiguration options.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerConfiguration( $container ) {
 		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = array_merge(
 			$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
 			[
@@ -28,7 +40,15 @@ class FlashServiceProvider implements ServiceProviderInterface {
 				\WPEmerge\Flash\FlashMiddleware::class => 10,
 			]
 		);
+	}
 
+	/**
+	 * Register dependencies.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerDependencies( $container ) {
 		$container[ WPEMERGE_FLASH_KEY ] = function( $c ) {
 			$session = null;
 			if ( isset( $c[ WPEMERGE_SESSION_KEY ] ) ) {
@@ -38,7 +58,15 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			}
 			return new \WPEmerge\Flash\Flash( $session );
 		};
+	}
 
+	/**
+	 * Register facades.
+	 *
+	 * @param  \Pimple\Container $container
+	 * @return void
+	 */
+	protected function registerFacades( $container ) {
 		Framework::facade( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
 
