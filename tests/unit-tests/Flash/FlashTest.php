@@ -167,6 +167,18 @@ class FlashTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::validateStore
+	 */
+	public function testValidateStore_Valid_DoesNotThrowException() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->get();
+
+		$this->assertTrue( true );
+	}
+
+	/**
 	 * @covers ::getFromRequest
 	 * @covers ::validateStore
 	 * @expectedException \Exception
