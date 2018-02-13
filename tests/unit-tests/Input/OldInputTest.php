@@ -71,7 +71,6 @@ class OldInputTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::all
 	 * @covers ::clear
 	 */
 	public function testClear() {
