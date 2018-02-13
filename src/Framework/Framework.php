@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use ReflectionMethod;
 use WPEmerge\Controllers\ControllersServiceProvider;
+use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
@@ -47,6 +48,7 @@ class Framework {
 		RoutingServiceProvider::class,
 		ViewServiceProvider::class,
 		ControllersServiceProvider::class,
+		CsrfServiceProvider::class,
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,
 	];

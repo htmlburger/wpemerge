@@ -76,3 +76,7 @@ if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {
 if ( ! defined( 'WPEMERGE_OLD_INPUT_KEY' ) ) {
 	define( 'WPEMERGE_OLD_INPUT_KEY', 'wpemerge.old_input.old_input' );
 }
+
+if ( ! defined( 'WPEMERGE_CSRF_KEY' ) ) {
+	define( 'WPEMERGE_CSRF_KEY', 'wpemerge.csrf.csrf' );
+}
