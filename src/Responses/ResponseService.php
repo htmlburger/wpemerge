@@ -44,9 +44,9 @@ class ResponseService {
 	 */
 	public function respond( ResponseInterface $response ) {
 		if ( ! headers_sent() ) {
-			$this::sendHeaders( $response );
+			$this->sendHeaders( $response );
 		}
-		$this::sendBody( $response );
+		$this->sendBody( $response );
 	}
 
 	/**
@@ -99,7 +99,7 @@ class ResponseService {
 		$content_length = $response->getHeaderLine( 'Content-Length' );
 
 		if ( ! $content_length ) {
-			$body = $this::getBody( $response );
+			$body = $this->getBody( $response );
 			$content_length = $body->getSize();
 		}
 
@@ -119,13 +119,13 @@ class ResponseService {
 	 * @return void
 	 */
 	protected function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
-		$body = $this::getBody( $response );
-		$content_length = $this::getBodyContentLength( $response );
+		$body = $this->getBody( $response );
+		$content_length = $this->getBodyContentLength( $response );
 
 		if ( $content_length > 0 ) {
-			$this::sendBodyWithLength( $body, $content_length, $chunk_size );
+			$this->sendBodyWithLength( $body, $content_length, $chunk_size );
 		} else {
-			$this::sendBodyWithoutLength( $body, $chunk_size );
+			$this->sendBodyWithoutLength( $body, $chunk_size );
 		}
 	}
 
@@ -192,7 +192,7 @@ class ResponseService {
 	 * @return ResponseInterface
 	 */
 	public function output( $output ) {
-		$response = $this::response();
+		$response = $this->response();
 		$response = $response->withBody( Psr7\stream_for( $output ) );
 		return $response;
 	}
@@ -204,7 +204,7 @@ class ResponseService {
 	 * @return ResponseInterface
 	 */
 	public function json( $data ) {
-		$response = $this::response();
+		$response = $this->response();
 		$response = $response->withHeader( 'Content-Type', 'application/json' );
 		$response = $response->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
 		return $response;
@@ -242,7 +242,7 @@ class ResponseService {
 			$wp_query->set_404();
 		}
 
-		return $this::view( [$status, 'error', 'index'] )
+		return $this->view( [$status, 'error', 'index'] )
 			->toResponse()
 			->withStatus( $status );
 	}
