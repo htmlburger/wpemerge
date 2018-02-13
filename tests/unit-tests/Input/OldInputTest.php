@@ -2,8 +2,8 @@
 
 namespace WPEmergeTests\Input;
 
-use Flash;
 use Mockery;
+use WPEmerge\Flash\Flash;
 use WPEmerge\Input\OldInput;
 use WP_UnitTestCase;
 
@@ -14,42 +14,60 @@ class OldInputTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->flash = Flash::getFacadeRoot();
-		$this->flashMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
-		Flash::swap( $this->flashMock );
-
-		$this->subject = new OldInput();
+		$this->flash = Mockery::mock( Flash::class );
+		$this->flash_key = '__foobar';
+		$this->subject = new OldInput( $this->flash, $this->flash_key );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		Flash::swap( $this->flash );
-		unset( $this->flash );
-		unset( $this->flashMock );
-
 		unset( $this->subject );
+		unset( $this->flash );
 	}
 
 	/**
-	 * @covers ::all
-	 * @covers ::store
+	 * @covers ::enabled
 	 */
-	public function testAll() {
-		$expected = ['foo' => 'bar', 'bar'=>'baz'];
+	public function testEnabled() {
+		$flash1 = Mockery::mock( Flash::class );
+		$flash1->shouldReceive( 'enabled' )
+			->andReturn( true );
+		$subject1 = new OldInput( $flash1 );
 
-		$this->flashMock->shouldReceive( 'add' )
-			->with( OldInput::FLASH_KEY, $expected )
-			->ordered();
+		$this->assertTrue( $subject1->enabled() );
 
-		$this->flashMock->shouldReceive( 'peek' )
-			->with( OldInput::FLASH_KEY )
-			->andReturn( $expected )
-			->ordered();
+		$flash2 = Mockery::mock( Flash::class );
+		$flash2->shouldReceive( 'enabled' )
+			->andReturn( false );
+		$subject2 = new OldInput( $flash2 );
 
-		$this->subject->store( $expected );
-		$this->assertEquals( $expected, $this->subject->all() );
+		$this->assertFalse( $subject2->enabled() );
+	}
+
+	/**
+	 * @covers ::get
+	 */
+	public function testGet() {
+		$this->flash->shouldReceive( 'get' )
+			->with( $this->flash_key, [] )
+			->andReturn( ['foo' => 'foobar'] );
+
+		$this->assertEquals( 'foobar', $this->subject->get( 'foo' ) );
+		$this->assertEquals( 'barbaz', $this->subject->get( 'bar', 'barbaz' ) );
+	}
+
+	/**
+	 * @covers ::set
+	 */
+	public function testSet() {
+		$this->flash->shouldReceive( 'add' )
+			->with( $this->flash_key, ['foo' => 'foobar'] );
+
+		$this->subject->set( ['foo' => 'foobar'] );
+
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -57,53 +75,11 @@ class OldInputTest extends WP_UnitTestCase {
 	 * @covers ::clear
 	 */
 	public function testClear() {
-		$expected = [];
-
-		$this->flashMock->shouldReceive( 'clear' )
-			->with( OldInput::FLASH_KEY )
-			->ordered();
-
-		$this->flashMock->shouldReceive( 'peek' )
-			->with( OldInput::FLASH_KEY )
-			->andReturn( $expected )
-			->ordered();
+		$this->flash->shouldReceive( 'clear' )
+			->with( $this->flash_key );
 
 		$this->subject->clear();
-		$this->assertEquals( $expected, $this->subject->all() );
-	}
 
-	/**
-	 * @covers ::get
-	 */
-	public function testGet_ExistingKey_ReturnValue() {
-		$data = ['foo' => 'bar', 'bar'=>'baz'];
-		$key = 'bar';
-		$expected = $data[ $key ];
-
-		$this->flashMock->shouldReceive( 'peek' )
-			->with( OldInput::FLASH_KEY )
-			->andReturn( $data );
-
-		$this->assertEquals( $expected, $this->subject->get( $key ) );
-	}
-
-	/**
-	 * @covers ::get
-	 */
-	public function testGet_NonexistantKey_ReturnDefault() {
-		$key = 'nonexistantKey';
-		$expected = 'foobar';
-
-		$this->flashMock->shouldReceive( 'peek' )
-			->with( OldInput::FLASH_KEY, $key, $expected )
-			->andReturn( $expected );
-
-		$this->assertEquals( $expected, $this->subject->get( $key, $expected ) );
-	}
-}
-
-class OldInputTestFlashFacade extends \WPEmerge\Support\Facade {
-	protected static function getFacadeAccessor() {
-		return 'flashMock';
+		$this->assertTrue( true );
 	}
 }

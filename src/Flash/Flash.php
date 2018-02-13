@@ -41,6 +41,7 @@ class Flash {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param array|\ArrayAccess $store
 	 * @param string             $store_key
 	 */
@@ -113,29 +114,18 @@ class Flash {
 	}
 
 	/**
-	 * Save flashed data to store.
-	 *
-	 * @return void
-	 */
-	public function save() {
-		$this->store[ $this->store_key ] = $this->flashed;
-	}
-
-	/**
 	 * Get the entire store or the values for a key for a request.
 	 *
-	 * @param  boolean     $next
+	 * @param  string      $request_key
 	 * @param  string|null $key
 	 * @param  mixed       $default
 	 * @return mixed
 	 */
-	protected function getFromRequest( $next, $key = null, $default = null ) {
+	protected function getFromRequest( $request_key, $key = null, $default = [] ) {
 		$this->validateStore();
 
-		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
-
 		if ( $key === null ) {
-			return $this->flashed[ $request_key ];
+			return Arr::get( $this->flashed, $request_key, $default );
 		}
 
 		return Arr::get( $this->flashed[ $request_key ], $key, $default );
@@ -144,15 +134,14 @@ class Flash {
 	/**
 	 * Add values for a key for a request.
 	 *
-	 * @param  boolean $next
+	 * @param  string  $request_key
 	 * @param  string  $key
 	 * @param  mixed   $new_items
 	 * @return void
 	 */
-	protected function addToRequest( $next, $key, $new_items ) {
+	protected function addToRequest( $request_key, $key, $new_items ) {
 		$this->validateStore();
 
-		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
 		$new_items = Mixed::toArray( $new_items );
 		$items = Mixed::toArray( $this->get( $key, [] ) );
 		$this->flashed[ $request_key ][ $key ] = array_merge( $items, $new_items );
@@ -161,16 +150,80 @@ class Flash {
 	/**
 	 * Remove all values or values for a key from a request.
 	 *
-	 * @param  boolean     $next
+	 * @param  string      $request_key
 	 * @param  string|null $key
 	 * @return void
 	 */
-	protected function clearFromRequest( $next, $key = null ) {
+	protected function clearFromRequest( $request_key, $key = null ) {
 		$this->validateStore();
 
-		$request_key = $next ? static::NEXT_KEY : static::CURRENT_KEY;
-		$keys = $key === null ? array_keys( $store ) : [$key];
-		$this->flashed[ $request_key ] = [];
+		$keys = $key === null ? array_keys( $this->flashed[ $request_key ] ) : [$key];
+		foreach ( $keys as $k ) {
+			unset( $this->flashed[ $request_key ][ $k ] );
+		}
+	}
+
+	/**
+	 * Add values for a key for the next request.
+	 *
+	 * @param  string $key
+	 * @param  mixed  $new_items
+	 * @return void
+	 */
+	public function add( $key, $new_items ) {
+		$this->addToRequest( static::NEXT_KEY, $key, $new_items );
+	}
+
+	/**
+	 * Add values for a key for the current request.
+	 *
+	 * @param string $key
+	 * @param mixed  $new_items
+	 */
+	public function addNow( $key, $new_items ) {
+		$this->addToRequest( static::CURRENT_KEY, $key, $new_items );
+	}
+
+	/**
+	 * Get the entire store or the values for a key for the current request.
+	 *
+	 * @param  string|null $key
+	 * @param  mixed       $default
+	 * @return mixed
+	 */
+	public function get( $key = null, $default = [] ) {
+		return $this->getFromRequest( static::CURRENT_KEY, $key, $default );
+	}
+
+	/**
+	 * Get the entire store or the values for a key for the next request.
+	 *
+	 * @param  string|null $key
+	 * @param  mixed       $default
+	 * @return mixed
+	 */
+	public function getNext( $key = null, $default = [] ) {
+		return $this->getFromRequest( static::NEXT_KEY, $key, $default );
+	}
+
+	/**
+	 * Clear the entire store or the values for a key for the current request.
+	 *
+	 * @param  string|null $key
+	 * @return void
+	 */
+	public function clear( $key = null ) {
+		$this->clearFromRequest( static::CURRENT_KEY, $key );
+	}
+
+	/**
+	 * Clear the entire store or the values for a key for the next request.
+	 *
+	 * @param  string|null $key
+	 * @return void
+	 */
+	public function clearNext( $key = null ) {
+		$this->clearFromRequest( static::NEXT_KEY, $key );
 	}
 
 	/**
@@ -186,65 +239,13 @@ class Flash {
 	}
 
 	/**
-	 * Add values for a key for the next request.
+	 * Save flashed data to store.
 	 *
-	 * @param  string $key
-	 * @param  mixed  $new_items
 	 * @return void
 	 */
-	public function add( $key, $new_items ) {
-		$this->addToRequest( true, $key, $new_items );
-	}
+	public function save() {
+		$this->validateStore();
 
-	/**
-	 * Add values for a key for the current request.
-	 *
-	 * @param string $key
-	 * @param mixed  $new_items
-	 */
-	public function addNow( $key, $new_items ) {
-		$this->addToRequest( false, $key, $new_items );
-	}
-
-	/**
-	 * Get the entire store or the values for a key for the current request.
-	 *
-	 * @param  string|null $key
-	 * @param  mixed       $default
-	 * @return mixed
-	 */
-	public function get( $key = null, $default = null ) {
-		return $this->getFromRequest( false, $key, $default );
-	}
-
-	/**
-	 * Get the entire store or the values for a key for the next request.
-	 *
-	 * @param  string|null $key
-	 * @param  mixed       $default
-	 * @return mixed
-	 */
-	public function getNext( $key = null, $default = null ) {
-		return $this->getFromRequest( true, $key, $default );
-	}
-
-	/**
-	 * Clear the entire store or the values for a key for the current request.
-	 *
-	 * @param  string|null $key
-	 * @return void
-	 */
-	public function clear( $key = null ) {
-		$this->clearFromRequest( false, $key );
-	}
-
-	/**
-	 * Clear the entire store or the values for a key for the next request.
-	 *
-	 * @param  string|null $key
-	 * @return void
-	 */
-	public function clearNext( $key = null ) {
-		$this->clearFromRequest( true, $key );
+		$this->store[ $this->store_key ] = $this->flashed;
 	}
 }

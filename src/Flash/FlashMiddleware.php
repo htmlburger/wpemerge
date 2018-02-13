@@ -14,13 +14,10 @@ class FlashMiddleware implements MiddlewareInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( $request, Closure $next ) {
-		if ( FlashService::enabled() ) {
-			FlashService::shift();
-		}
-
 		$response = $next( $request );
 
 		if ( FlashService::enabled() ) {
+			FlashService::shift();
 			FlashService::save();
 		}
 

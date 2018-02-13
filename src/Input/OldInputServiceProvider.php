@@ -29,8 +29,8 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 			]
 		);
 
-		$container[ WPEMERGE_OLD_INPUT_KEY ] = function() {
-			return new \WPEmerge\Input\OldInput();
+		$container[ WPEMERGE_OLD_INPUT_KEY ] = function( $c ) {
+			return new \WPEmerge\Input\OldInput( $c[ WPEMERGE_FLASH_KEY ] );
 		};
 
 		Framework::facade( 'OldInput', \WPEmerge\Facades\OldInput::class );

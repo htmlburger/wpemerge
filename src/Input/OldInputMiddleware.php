@@ -14,12 +14,10 @@ class OldInputMiddleware implements MiddlewareInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( $request, Closure $next ) {
-		$response = $next( $request );
-
 		if ( OldInputService::enabled() && $request->isPost() ) {
 			OldInputService::set( $request->post() );
 		}
 
-		return $response;
+		return $next( $request );
 	}
 }

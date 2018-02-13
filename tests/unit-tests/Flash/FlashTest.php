@@ -2,6 +2,8 @@
 
 namespace WPEmergeTests\Flash;
 
+use ArrayAccess;
+use Mockery;
 use stdClass;
 use WPEmerge\Flash\Flash;
 use WP_UnitTestCase;
@@ -11,205 +13,216 @@ use WP_UnitTestCase;
  */
 class FlashTest extends WP_UnitTestCase {
 	/**
-	 * @covers ::__construct
-	 * @covers ::getStorage
+	 * @covers ::getStore
+	 * @covers ::setStore
+	 * @covers ::isValidStore
 	 */
-	public function testConstruct() {
-		$expected = [];
-		$subject = new Flash( $expected );
-		$this->assertSame( $expected, $subject->getStorage() );
+	public function testGetStore() {
+		$store1 = [];
+		$subject1 = new Flash( $store1 );
+		$this->assertSame( $store1, $subject1->getStore() );
+
+		$store2 = Mockery::mock( ArrayAccess::class );
+		$store2->shouldReceive( 'offsetExists' )
+			->andReturn( false );
+		$store2->shouldReceive( 'offsetSet' );
+		$store2->shouldReceive( 'offsetGet' )
+			->andReturn( [] );
+		$subject2 = new Flash( $store2 );
+		$this->assertSame( $store2, $subject2->getStore() );
 	}
 
 	/**
-	 * @covers ::setStorage
-	 * @covers ::getStorage
-	 * @covers ::isValidStorage
+	 * @covers ::getStore
+	 * @covers ::isValidStore
 	 */
-	public function testSetStorage_ValidStorage_Assigned() {
-		$expected = [];
-		$initial_storage = [];
-
-		$subject = new Flash( $initial_storage );
-		$subject->setStorage( $expected );
-
-		$this->assertSame( $expected, $subject->getStorage() );
-	}
-
-	/**
-	 * @covers ::setStorage
-	 * @covers ::getStorage
-	 * @covers ::isValidStorage
-	 */
-	public function testSetStorage_InvalidStorage_Ignored() {
-		$expected = [];
-		$invalid_storage = new stdClass();
-
-		$subject = new Flash( $expected );
-		$subject->setStorage( $invalid_storage );
-
-		$this->assertSame( $expected, $subject->getStorage() );
+	public function testSetStore_InvalidStore_Ignored() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$this->assertNull( $subject->getStore() );
 	}
 
 	/**
 	 * @covers ::enabled
 	 */
 	public function testEnabled() {
-		$expected1 = false;
-		$storage1 = null;
-		$subject1 = new Flash( $storage1 );
-		$this->assertEquals( $expected1, $subject1->enabled() );
+		$store1 = [];
+		$subject1 = new Flash( $store1 );
+		$this->assertTrue( $subject1->enabled() );
 
-		$expected2 = true;
-		$storage2 = [];
-		$subject2 = new Flash( $storage2 );
-		$this->assertEquals( $expected2, $subject2->enabled() );
+		$store2 = null;
+		$subject2 = new Flash( $store2 );
+		$this->assertFalse( $subject2->enabled() );
 	}
 
 	/**
-	 * @covers ::peek
-	 * @covers ::validateStorage
-	 * @covers ::isValidStorage
+	 * @covers ::add
+	 * @covers ::addToRequest
+	 * @covers ::getNext
+	 * @covers ::getFromRequest
+	 */
+	public function testAdd() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->add( 'foo', 'foobar' );
+		$subject->add( 'bar', ['barbaz', 'bazfoo'] );
+
+		$this->assertEquals( ['foobar'], $subject->getNext( 'foo' ) );
+		$this->assertEquals( ['barbaz', 'bazfoo'], $subject->getNext( 'bar' ) );
+		$this->assertEquals( ['foo' => ['foobar'], 'bar' => ['barbaz', 'bazfoo']], $subject->getNext() );
+	}
+
+	/**
+	 * @covers ::addNow
+	 * @covers ::addToRequest
+	 * @covers ::get
+	 * @covers ::getFromRequest
+	 */
+	public function testAddNow() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->addNow( 'foo', 'foobar' );
+		$subject->addNow( 'bar', ['barbaz', 'bazfoo'] );
+
+		$this->assertEquals( ['foobar'], $subject->get( 'foo' ) );
+		$this->assertEquals( ['barbaz', 'bazfoo'], $subject->get( 'bar' ) );
+		$this->assertEquals( ['foo' => ['foobar'], 'bar' => ['barbaz', 'bazfoo']], $subject->get() );
+	}
+
+	/**
+	 * @covers ::clear
+	 * @covers ::clearFromRequest
+	 */
+	public function testClear() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->addNow( 'foo', 'foobar' );
+		$subject->addNow( 'bar', ['barbaz', 'bazfoo'] );
+		$subject->clear( 'foo' );
+
+		$this->assertEquals( [], $subject->get( 'foo' ) );
+		$this->assertEquals( null, $subject->get( 'foo', null ) );
+		$this->assertEquals( [ 'bar' => ['barbaz', 'bazfoo']], $subject->get() );
+
+		$subject->clear();
+
+		$this->assertEquals( [], $subject->get() );
+	}
+
+	/**
+	 * @covers ::clearNext
+	 * @covers ::clearFromRequest
+	 */
+	public function testClearNext() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->add( 'foo', 'foobar' );
+		$subject->add( 'bar', ['barbaz', 'bazfoo'] );
+		$subject->clearNext( 'foo' );
+
+		$this->assertEquals( [], $subject->getNext( 'foo' ) );
+		$this->assertEquals( null, $subject->getNext( 'foo', null ) );
+		$this->assertEquals( ['bar' => ['barbaz', 'bazfoo']], $subject->getNext() );
+
+		$subject->clearNext();
+
+		$this->assertEquals( [], $subject->getNext() );
+	}
+
+	/**
+	 * @covers ::shift
+	 */
+	public function testShift() {
+		$store = [];
+		$subject = new Flash( $store );
+
+		$subject->add( 'foo', 'foobar' );
+		$subject->shift();
+
+		$this->assertEquals( ['foobar'], $subject->get( 'foo' ) );
+		$this->assertEquals( [], $subject->getNext( 'foo' ) );
+	}
+
+	/**
+	 * @covers ::save
+	 */
+	public function testSave() {
+		$store_key = '__foobar';
+		$store = [];
+		$subject = new Flash( $store, $store_key );
+
+		$subject->add( 'foo', 'foobar' );
+		$subject->save();
+
+		$this->assertEquals( [
+			$store_key => [
+				Flash::CURRENT_KEY => [],
+				Flash::NEXT_KEY => ['foo' => ['foobar']],
+			]
+		], $store );
+	}
+
+	/**
+	 * @covers ::getFromRequest
+	 * @covers ::validateStore
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage without an active session
 	 */
-	public function testPeek_InvalidStorage_ThrowsException() {
-		$invalid_storage = new stdClass();
-		$subject = new Flash( $invalid_storage );
-		$subject->peek( 'foobar' );
+	public function testGetFromRequest_InvalidStore_ThrowException() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$subject->get( 'foo' );
 	}
 
 	/**
-	 * @covers ::add
-	 * @covers ::peek
-	 * @covers ::validateStorage
+	 * @covers ::addToRequest
+	 * @covers ::validateStore
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage without an active session
 	 */
-	public function testPeek_ExistingKey_ReturnValue() {
-		$expected = ['foo'];
-		$key = 'key';
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( $key, $expected );
-
-		$this->assertEquals( $expected, $subject->peek( $key ) );
+	public function testAddToRequest_InvalidStore_ThrowException() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$subject->add( 'foo', 'foobar' );
 	}
 
 	/**
-	 * @covers ::peek
-	 * @covers ::validateStorage
+	 * @covers ::clearFromRequest
+	 * @covers ::validateStore
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage without an active session
 	 */
-	public function testPeek_NonExistantKey_ReturnEmptyArray() {
-		$expected = [];
-		$key = 'key';
-		$storage = [];
-
-		$subject = new Flash( $storage );
-
-		$this->assertEquals( $expected, $subject->peek( $key ) );
+	public function testClearFromRequest_InvalidStore_ThrowException() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$subject->clear( 'foo' );
 	}
 
 	/**
-	 * @covers ::add
-	 * @covers ::peek
-	 * @covers ::validateStorage
+	 * @covers ::shift
+	 * @covers ::validateStore
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage without an active session
 	 */
-	public function testPeek_StringValue_ReturnValueInArray() {
-		$expected_value = 'foo';
-		$expected = [$expected_value];
-		$key = 'key';
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( $key, $expected_value );
-
-		$this->assertEquals( $expected, $subject->peek( $key ) );
+	public function testShift_InvalidStore_ThrowException() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$subject->shift();
 	}
 
 	/**
-	 * @covers ::add
-	 * @covers ::get
-	 * @covers ::validateStorage
+	 * @covers ::save
+	 * @covers ::validateStore
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage without an active session
 	 */
-	public function testGet_ExistingKey_ReturnValueAndClear() {
-		$expected1 = ['foo'];
-		$expected2 = [];
-		$key = 'key';
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( $key, $expected1 );
-
-		$this->assertEquals( $expected1, $subject->get( $key ) );
-		$this->assertEquals( $expected2, $subject->get( $key ) );
-	}
-
-	/**
-	 * @covers ::add
-	 * @covers ::peek
-	 * @covers ::validateStorage
-	 */
-	public function testAdd_CalledMultipledTimes_ReturnArrayOfValues() {
-		$expected = ['foo', 'bar', 'baz'];
-		$key = 'key';
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( $key, $expected[0] );
-		$subject->add( $key, $expected[1] );
-		$subject->add( $key, $expected[2] );
-
-		$this->assertEquals( $expected, $subject->peek( $key ) );
-	}
-
-	/**
-	 * @covers ::add
-	 * @covers ::peek
-	 * @covers ::validateStorage
-	 */
-	public function testAdd_CalledWithDifferentKeys_StoreNestedArray() {
-		$expected = ['key1' => ['foo'], 'key2' => ['bar']];
-		$values = array_values( $expected );
-		$keys = array_keys( $expected );
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( $keys[0], $values[0][0] );
-		$subject->add( $keys[1], $values[1][0] );
-
-		$this->assertEquals( $expected, $subject->peek() );
-	}
-
-	/**
-	 * @covers ::peek
-	 * @covers ::clear
-	 * @covers ::validateStorage
-	 */
-	public function testClear_WithKey_ClearKey() {
-		$expected = ['key1' => [], 'key2'=>['bar']];
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( 'key1', 'foo' );
-		$subject->add( 'key2', 'bar' );
-		$subject->clear( 'key1' );
-
-		$this->assertEquals( $expected, $subject->peek() );
-	}
-
-	/**
-	 * @covers ::peek
-	 * @covers ::clear
-	 * @covers ::validateStorage
-	 */
-	public function testClear_WithoutKey_ClearAll() {
-		$expected = ['key1' => [], 'key2'=>[]];
-		$storage = [];
-
-		$subject = new Flash( $storage );
-		$subject->add( 'key1', 'foo' );
-		$subject->add( 'key2', 'bar' );
-		$subject->clear();
-
-		$this->assertEquals( $expected, $subject->peek() );
+	public function testSave_InvalidStore_ThrowException() {
+		$store = new stdClass();
+		$subject = new Flash( $store );
+		$subject->save();
 	}
 }
