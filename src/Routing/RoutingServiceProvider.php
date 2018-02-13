@@ -2,13 +2,12 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Facades\Framework;
-use WPEmerge\Facades\Router as RouterFacade;
-use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
-use WPEmerge\Routing\Conditions\ConditionFactory;
-use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
+use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
+use WPEmerge\Facades\Router as RouterFacade;
+use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
  * Provide routing dependencies
