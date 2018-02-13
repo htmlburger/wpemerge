@@ -65,14 +65,14 @@ if ( ! defined( 'WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY' ) ) {
 	define( 'WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY', 'wpemerge.view.php_view_engine' );
 }
 
+if ( ! defined( 'WPEMERGE_SERVICE_PROVIDERS_KEY' ) ) {
+	define( 'WPEMERGE_SERVICE_PROVIDERS_KEY', 'wpemerge.service_providers' );
+}
+
 if ( ! defined( 'WPEMERGE_FLASH_KEY' ) ) {
 	define( 'WPEMERGE_FLASH_KEY', 'wpemerge.flash.flash' );
 }
 
 if ( ! defined( 'WPEMERGE_OLD_INPUT_KEY' ) ) {
 	define( 'WPEMERGE_OLD_INPUT_KEY', 'wpemerge.old_input.old_input' );
-}
-
-if ( ! defined( 'WPEMERGE_SERVICE_PROVIDERS_KEY' ) ) {
-	define( 'WPEMERGE_SERVICE_PROVIDERS_KEY', 'wpemerge.service_providers' );
 }
