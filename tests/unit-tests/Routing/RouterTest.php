@@ -3,13 +3,13 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use Psr\Http\Message\ResponseInterface;
+use stdClass;
 use WPEmerge\Facades\Framework;
+use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
-use WPEmerge\Middleware\MiddlewareInterface;
-use Psr\Http\Message\ResponseInterface;
-use stdClass;
 use WP_UnitTestCase;
 
 /**
@@ -27,6 +27,61 @@ class RouterTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		unset( $this->subject );
+	}
+
+	/**
+	 * @covers ::getMiddlewarePriority
+	 */
+	public function testGetMiddlewarePriority() {
+		$default_middleware_priority = 100;
+		$middleware1 = 'foo';
+		$middleware1_priority = 99;
+		$middleware2 = 'bar';
+		$middleware3 = function() {};
+
+		$subject = new Router( Mockery::mock( Request::class ), [], [
+			$middleware1 => $middleware1_priority,
+		], $default_middleware_priority );
+
+		$this->assertEquals( $middleware1_priority, $subject->getMiddlewarePriority( $middleware1 ) );
+		$this->assertEquals( $default_middleware_priority, $subject->getMiddlewarePriority( $middleware2 ) );
+		$this->assertEquals( $default_middleware_priority, $subject->getMiddlewarePriority( $middleware3 ) );
+	}
+
+	/**
+	 * @covers ::sortMiddleware
+	 */
+	public function testSortMiddleware() {
+		$default_middleware_priority = 100;
+		$middleware1 = 'foo';
+		$middleware1_priority = 99;
+		$middleware2 = 'bar';
+		$middleware3 = function() {};
+
+		$subject = new Router( Mockery::mock( Request::class ), [], [
+			$middleware1 => $middleware1_priority,
+		], $default_middleware_priority );
+
+		$expected = $middleware1;
+		$result = $subject->sortMiddleware( [$middleware3, $middleware2, $middleware1] );
+		// We only check that the first middleware is the correct one because (PHP docs):
+		// > If two members compare as equal, their relative order in the sorted array is undefined.
+		$this->assertEquals( $expected, $result[0] );
+	}
+
+	/**
+	 * @covers ::addRoute
+	 */
+	public function testAddRoute() {
+		$route = Mockery::mock( RouteInterface::class );
+		$middleware = [Mockery::mock( MiddlewareInterface::class )];
+		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0 );
+
+		$route->shouldReceive( 'addMiddleware' )
+			->with( $middleware )
+			->once();
+
+		$this->assertSame( $route, $subject->addRoute( $route ) );
 	}
 
 	/**

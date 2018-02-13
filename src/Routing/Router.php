@@ -5,8 +5,8 @@ namespace WPEmerge\Routing;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Facades\Framework;
-use WPEmerge\Requests\Request;
 use WPEmerge\Facades\Response;
+use WPEmerge\Requests\Request;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
@@ -97,7 +97,7 @@ class Router implements HasRoutesInterface {
 	 * @param  mixed   $middleware
 	 * @return integer
 	 */
-	protected function getMiddlewarePriority( $middleware ) {
+	public function getMiddlewarePriority( $middleware ) {
 		if ( is_string( $middleware ) && isset( $this->middleware_priority[ $middleware ] ) ) {
 			return $this->middleware_priority[ $middleware ];
 		}
@@ -111,12 +111,12 @@ class Router implements HasRoutesInterface {
 	 * @param  array $middleware
 	 * @return array
 	 */
-	protected function sortMiddleware( $middleware ) {
+	public function sortMiddleware( $middleware ) {
 		usort( $middleware, function( $a, $b ) {
 			return $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
 		} );
 
-		return $middleware;
+		return array_values( $middleware );
 	}
 
 	/**
