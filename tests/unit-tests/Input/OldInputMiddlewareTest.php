@@ -2,10 +2,10 @@
 
 namespace WPEmergeTests\Input;
 
-use WPEmerge\Facades\OldInput;
 use Mockery;
-use WPEmerge\Requests\Request;
+use WPEmerge\Facades\OldInput;
 use WPEmerge\Input\OldInputMiddleware;
+use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
 
 /**
