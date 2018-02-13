@@ -98,7 +98,7 @@ class Request {
 	/**
 	 * Check if the request method is GET.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isGet() {
 		return $this->getMethod() === 'GET';
@@ -107,7 +107,7 @@ class Request {
 	/**
 	 * Check if the request method is HEAD.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isHead() {
 		return $this->getMethod() === 'HEAD';
@@ -116,7 +116,7 @@ class Request {
 	/**
 	 * Check if the request method is POST.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isPost() {
 		return $this->getMethod() === 'POST';
@@ -125,7 +125,7 @@ class Request {
 	/**
 	 * Check if the request method is PUT.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isPut() {
 		return $this->getMethod() === 'PUT';
@@ -134,7 +134,7 @@ class Request {
 	/**
 	 * Check if the request method is PATCH.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isPatch() {
 		return $this->getMethod() === 'PATCH';
@@ -143,7 +143,7 @@ class Request {
 	/**
 	 * Check if the request method is DELETE.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isDelete() {
 		return $this->getMethod() === 'DELETE';
@@ -152,7 +152,7 @@ class Request {
 	/**
 	 * Check if the request method is OPTIONS.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function isOptions() {
 		return $this->getMethod() === 'OPTIONS';
