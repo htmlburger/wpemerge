@@ -93,6 +93,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @covers ::makeFromArray
 	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
+	 * @covers ::getConditionTypeClass
 	 */
 	public function testMake_ClosureInArray_CustomCondition() {
 		$expected_param = function() {};
@@ -157,6 +158,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @covers ::makeFromArray
 	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
+	 * @covers ::getConditionTypeClass
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Unknown condition
 	 */
