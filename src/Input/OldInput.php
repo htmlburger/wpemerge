@@ -38,7 +38,7 @@ class OldInput {
 	/**
 	 * Get whether the old input service is enabled.
 	 *
-	 * @return boolean.
+	 * @return boolean
 	 */
 	public function enabled() {
 		return $this->flash->enabled();
