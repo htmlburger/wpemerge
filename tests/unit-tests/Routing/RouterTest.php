@@ -19,7 +19,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new Router( Mockery::mock( Request::class ), [] );
+		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0 );
 	}
 
 	public function tearDown() {
@@ -48,7 +48,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware = Mockery::mock( MiddlewareInterface::class );
 		$middleware_array = [$middleware];
 
-		$subject = new Router( Mockery::mock( Request::class ), $middleware_array );
+		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0 );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )

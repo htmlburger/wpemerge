@@ -213,7 +213,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 		};
 		$closure = $this->getClosureMock( $mock, 'foobarbaz' );
 
-		$mock->shouldReceive( 'baz' )
+		$mock->shouldReceive( 'foo' )
 			->once()
 			->ordered();
 
@@ -221,7 +221,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 			->once()
 			->ordered();
 
-		$mock->shouldReceive( 'foo' )
+		$mock->shouldReceive( 'baz' )
 			->once()
 			->ordered();
 
