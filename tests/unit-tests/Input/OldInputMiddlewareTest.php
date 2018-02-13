@@ -2,7 +2,7 @@
 
 namespace WPEmergeTests\Input;
 
-use OldInput;
+use WPEmerge\Facades\OldInput;
 use Mockery;
 use WPEmerge\Requests\Request;
 use WPEmerge\Input\OldInputMiddleware;
@@ -15,9 +15,9 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->oldInput = OldInput::getFacadeRoot();
-		$this->oldInputMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
-		OldInput::swap( $this->oldInputMock );
+		$this->oldInputBackup = OldInput::getFacadeRoot();
+		$this->oldInput = Mockery::mock();
+		OldInput::swap( $this->oldInput );
 
 		$this->subject = new OldInputMiddleware();
 	}
@@ -26,9 +26,9 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		OldInput::swap( $this->oldInput );
+		OldInput::swap( $this->oldInputBackup );
+		unset( $this->oldInputBackup );
 		unset( $this->oldInput );
-		unset( $this->oldInputMock );
 
 		unset( $this->subject );
 	}
@@ -36,100 +36,44 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::handle
 	 */
-	public function testHandle_PostRequest_StoresAll() {
-		$post = ['foo' => 'bar'];
-		$request = new Request( [], $post, [], [], ['REQUEST_METHOD' => 'POST'], [] );
-		$expected = $post;
+	public function testHandle_DisabledPostRequest_Ignore() {
+		$request = new Request( [], ['foo' => 'bar'], [], [], ['REQUEST_METHOD' => 'POST'], [] );
 
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered();
-		$this->oldInputMock->shouldReceive( 'store' )
-			->with( $post )
-			->ordered();
+		$this->oldInput->shouldReceive( 'enabled' )
+			->andReturn( false );
+		$this->oldInput->shouldNotReceive( 'set' );
 
-		$this->subject->handle( $request, function() {} );
-		$this->assertTrue( true );
+		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
+		$this->assertSame( $request, $result );
 	}
 
 	/**
 	 * @covers ::handle
 	 */
-	public function testHandle_GetRequest_DoesNotStore() {
-		$post = ['foo' => 'bar'];
-		$request = new Request( [], $post, [], [], ['REQUEST_METHOD' => 'GET'], [] );
-		$expected = [];
+	public function testHandle_EnabledPostRequest_StoresAll() {
+		$expected = ['foo' => 'bar'];
+		$request = new Request( [], $expected, [], [], ['REQUEST_METHOD' => 'POST'], [] );
 
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered();
-		$this->oldInputMock->shouldReceive( 'store' )
-			->never()
-			->ordered();
+		$this->oldInput->shouldReceive( 'enabled' )
+			->andReturn( true );
+		$this->oldInput->shouldReceive( 'set' )
+			->with( $expected );
 
-		$this->subject->handle( $request, function() {} );
-		$this->assertTrue( true );
+		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
+		$this->assertSame( $request, $result );
 	}
 
 	/**
 	 * @covers ::handle
 	 */
-	public function testHandle_TwoRequests_ClearsPrevious() {
-		$post1 = ['foo' => 'bar'];
-		$request1 = new Request( [], $post1, [], [], ['REQUEST_METHOD' => 'POST'], [] );
-		$expected1 = $post1;
+	public function testHandle_EnabledGetRequest_Ignore() {
+		$request = new Request( ['foo' => 'bar'], [], [], [], ['REQUEST_METHOD' => 'GET'], [] );
 
-		$post2 = ['bar' => 'foo'];
-		$request2 = new Request( [], $post2, [], [], ['REQUEST_METHOD' => 'GET'], [] );
-		$expected2 = [];
+		$this->oldInput->shouldReceive( 'enabled' )
+			->andReturn( true );
+		$this->oldInput->shouldNotReceive( 'set' );
 
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered(1);
-		$this->oldInputMock->shouldReceive( 'store' )
-			->with( $post1 )
-			->ordered(1);
-
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered(2);
-		$this->oldInputMock->shouldReceive( 'store' )
-			->never()
-			->ordered(2);
-
-		$this->subject->handle( $request1, function() {} );
-		$this->subject->handle( $request2, function() {} );
-		$this->assertTrue( true );
-	}
-
-	/**
-	 * @covers ::handle
-	 */
-	public function testHandle_TwoPostRequests_StoresSecondOnly() {
-		$post1 = ['foo' => 'bar'];
-		$request1 = new Request( [], $post1, [], [], ['REQUEST_METHOD' => 'POST'], [] );
-		$expected1 = $post1;
-
-		$post2 = ['bar' => 'foo'];
-		$request2 = new Request( [], $post2, [], [], ['REQUEST_METHOD' => 'POST'], [] );
-		$expected2 = $post2;
-
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered(1);
-		$this->oldInputMock->shouldReceive( 'store' )
-			->with( $post1 )
-			->ordered(1);
-
-		$this->oldInputMock->shouldReceive( 'clear' )
-			->ordered(2);
-		$this->oldInputMock->shouldReceive( 'store' )
-			->with( $post2 )
-			->ordered(2);
-
-		$this->subject->handle( $request1, function() {} );
-		$this->subject->handle( $request2, function() {} );
-		$this->assertTrue( true );
-	}
-}
-
-class OldInputMiddlewareTestOldInputFacade extends \WPEmerge\Support\Facade {
-	protected static function getFacadeAccessor() {
-		return 'oldInputMock';
+		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
+		$this->assertSame( $request, $result );
 	}
 }
