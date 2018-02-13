@@ -33,7 +33,7 @@ class FlashTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getStore
+	 * @covers ::setStore
 	 * @covers ::isValidStore
 	 */
 	public function testSetStore_InvalidStore_Ignored() {
