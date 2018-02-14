@@ -125,6 +125,19 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::removeMiddleware
+	 */
+	public function testRemoveMiddleware() {
+		$callable = function() {};
+		$middleware = [$this->middleware_stub1, $this->middleware_stub2, $callable];
+		$removed_middleware = [$this->middleware_stub1, function() {}, $callable];
+
+		$this->subject->addMiddleware( $middleware );
+		$this->subject->removeMiddleware( $removed_middleware );
+		$this->assertSame( [$this->middleware_stub2], $this->subject->getMiddleware() );
+	}
+
+	/**
 	 * @covers ::executeMiddleware
 	 */
 	public function testExecuteMiddleware_EmptyList_CallsClosureOnce() {
