@@ -15,7 +15,6 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	}
 	use HasMiddlewareTrait {
 		addMiddleware as traitAddMiddleware;
-		removeMiddleware as traitRemoveMiddleware;
 	}
 
 	/**
@@ -104,18 +103,5 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 		}
 
 		return $this->traitAddMiddleware( $middleware );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function removeMiddleware( $middleware ) {
-		$routes = $this->getRoutes();
-
-		foreach ( $routes as $route ) {
-			$route->removeMiddleware( $middleware );
-		}
-
-		return $this->traitRemoveMiddleware( $middleware );
 	}
 }

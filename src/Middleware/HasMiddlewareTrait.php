@@ -7,20 +7,18 @@ use Exception;
 use WPEmerge\Helpers\Mixed;
 
 /**
- * Allow objects to have middleware.
- *
- * Implements WPEmerge\Middleware\HasMiddlewareInterface.
+ * Allow objects to have middleware
  */
 trait HasMiddlewareTrait {
 	/**
-	 * Array of all registered middleware.
+	 * Array of all registered middleware
 	 *
 	 * @var array
 	 */
 	protected $middleware = [];
 
 	/**
-	 * Check if the passed entity is a valid middleware.
+	 * Check if the passed entity is a valid middleware
 	 *
 	 * @param  mixed   $middleware
 	 * @return boolean
@@ -34,7 +32,7 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Get registered middleware.
+	 * Get registered middleware
 	 *
 	 * @return array
 	 */
@@ -44,7 +42,7 @@ trait HasMiddlewareTrait {
 
 	/**
 	 * Add middleware.
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @throws Exception
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
@@ -64,28 +62,8 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Remove middleware.
-	 *
-	 * @throws Exception
-	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
-	 * @return static                                                         $this
-	 */
-	public function removeMiddleware( $middleware ) {
-		$middleware = Mixed::toArray( $middleware );
-		$current_middleware = $this->getMiddleware();
-
-		$this->middleware = array_filter( $current_middleware, function( $item ) use ( $middleware ) {
-			return ! in_array( $item, $middleware, true );
-		} );
-
-		$this->middleware = array_values( $this->middleware );
-
-		return $this;
-	}
-
-	/**
 	 * Alias for addMiddleware.
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
@@ -96,18 +74,7 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Alias for removeMiddleware.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
-	 * @return static                                                         $this
-	 */
-	public function remove( $middleware ) {
-		return call_user_func_array( [$this, 'removeMiddleware'], func_get_args() );
-	}
-
-	/**
-	 * Execute an array of middleware recursively (last in, first out).
+	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array                               $middleware
 	 * @param  \WPEmerge\Requests\Request          $request
