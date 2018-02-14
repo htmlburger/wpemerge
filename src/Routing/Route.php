@@ -24,11 +24,11 @@ class Route implements RouteInterface {
 	protected $methods = [];
 
 	/**
-	 * Route target
+	 * Route condition
 	 *
 	 * @var ConditionInterface
 	 */
-	protected $target = null;
+	protected $condition = null;
 
 	/**
 	 * Route handler
@@ -42,20 +42,20 @@ class Route implements RouteInterface {
 	 *
 	 * @throws Exception
 	 * @param  string[]        $methods
-	 * @param  mixed           $target
+	 * @param  mixed           $condition
 	 * @param  string|\Closure $handler
 	 */
-	public function __construct( $methods, $target, $handler ) {
-		if ( ! $target instanceof ConditionInterface ) {
+	public function __construct( $methods, $condition, $handler ) {
+		if ( ! $condition instanceof ConditionInterface ) {
 			try {
-				$target = RouteCondition::make( $target );
+				$condition = RouteCondition::make( $condition );
 			} catch ( InvalidRouteConditionException $e ) {
-				throw new Exception( 'Route target is not a valid route string or condition.' );
+				throw new Exception( 'Route condition is not a valid route string or condition.' );
 			}
 		}
 
 		$this->methods = $methods;
-		$this->target = $target;
+		$this->condition = $condition;
 		$this->handler = new RouteHandler( $handler );
 	}
 
@@ -69,12 +69,12 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get target
+	 * Get condition
 	 *
 	 * @return ConditionInterface
 	 */
-	public function getTarget() {
-		return $this->target;
+	public function getCondition() {
+		return $this->condition;
 	}
 
 	/**
@@ -93,14 +93,14 @@ class Route implements RouteInterface {
 		if ( ! in_array( $request->getMethod(), $this->methods) ) {
 			return false;
 		}
-		return $this->target->isSatisfied( $request );
+		return $this->condition->isSatisfied( $request );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function handle( Request $request, $view ) {
-		$arguments = array_merge( [$request, $view], $this->target->getArguments( $request ) );
+		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
 		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );
 		} );
@@ -114,11 +114,11 @@ class Route implements RouteInterface {
 	 * @return static    $this
 	 */
 	public function rewrite( $rewrite_to ) {
-		if ( ! $this->target instanceof UrlCondition ) {
-			throw new Exception( 'Only routes with url targets can add rewrite rules.' );
+		if ( ! $this->condition instanceof UrlCondition ) {
+			throw new Exception( 'Only routes with url conditions can add rewrite rules.' );
 		}
 
-		$regex = $this->target->getValidationRegex( $this->target->getUrl(), false );
+		$regex = $this->condition->getValidationRegex( $this->condition->getUrl(), false );
 		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
 
 		add_filter( 'wpemerge.routing.rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {

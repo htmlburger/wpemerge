@@ -18,29 +18,29 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	}
 
 	/**
-	 * Route target
+	 * Route condition
 	 *
 	 * @var ConditionInterface
 	 */
-	protected $target = null;
+	protected $condition = null;
 
 	/**
 	 * Constructor
 	 *
 	 * @throws Exception
-	 * @param  string|ConditionInterface $target
+	 * @param  string|ConditionInterface $condition
 	 * @param  Closure                   $closure
 	 */
-	public function __construct( $target, Closure $closure ) {
-		if ( is_string( $target ) ) {
-			$target = new UrlCondition( $target );
+	public function __construct( $condition, Closure $closure ) {
+		if ( is_string( $condition ) ) {
+			$condition = new UrlCondition( $condition );
 		}
 
-		if ( ! $target instanceof UrlCondition ) {
+		if ( ! $condition instanceof UrlCondition ) {
 			throw new Exception( 'Route groups can only use route strings.' );
 		}
 
-		$this->target = $target;
+		$this->condition = $condition;
 
 		$closure( $this );
 	}
@@ -79,17 +79,17 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function route( $methods, $target, $handler ) {
-		if ( is_string( $target ) ) {
-			$target = new UrlCondition( $target );
+	public function route( $methods, $condition, $handler ) {
+		if ( is_string( $condition ) ) {
+			$condition = new UrlCondition( $condition );
 		}
 
-		if ( ! $target instanceof UrlCondition ) {
+		if ( ! $condition instanceof UrlCondition ) {
 			throw new Exception( 'Routes inside route groups can only use route strings.' );
 		}
 
-		$target = $this->target->concatenate( $target );
-		return $this->traitRoute( $methods, $target, $handler );
+		$condition = $this->condition->concatenate( $condition );
+		return $this->traitRoute( $methods, $condition, $handler );
 	}
 
 	/**
