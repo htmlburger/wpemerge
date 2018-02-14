@@ -4,15 +4,19 @@ namespace WPEmerge\Routing;
 
 use Closure;
 use Exception;
+use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\MultipleCondition;
 
 class RouteGroup implements RouteInterface, HasRoutesInterface {
 	use HasRoutesTrait {
 		route as traitRoute;
+		group as traitGroup;
 	}
+
 	use HasMiddlewareTrait {
 		addMiddleware as traitAddMiddleware;
 	}
@@ -28,16 +32,12 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * Constructor
 	 *
 	 * @throws Exception
-	 * @param  string|ConditionInterface $condition
-	 * @param  Closure                   $closure
+	 * @param  mixed     $condition
+	 * @param  Closure   $closure
 	 */
 	public function __construct( $condition, Closure $closure ) {
-		if ( is_string( $condition ) ) {
-			$condition = new UrlCondition( $condition );
-		}
-
-		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception( 'Route groups can only use route strings.' );
+		if ( ! $condition instanceof ConditionInterface ) {
+			$condition = RouteCondition::make( $condition );
 		}
 
 		$this->condition = $condition;
@@ -61,6 +61,30 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	}
 
 	/**
+	 * Merge 2 conditions (in supplied order).
+	 *
+	 * @param  ConditionInterface|null $parent
+	 * @param  ConditionInterface      $child
+	 * @return ConditionInterface
+	 */
+	protected function mergeConditions( $parent, $child ) {
+		if ( $parent === null ) {
+			return $child;
+		}
+
+		if ( $parent instanceof UrlCondition ) {
+			if ( $child instanceof UrlCondition ) {
+				return $parent->concatenate( $child );
+			}
+
+			// Ignore parent if conditions are incompatible.
+			return $child;
+		}
+
+		return new MultipleCondition( [ $parent, $child ] );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( Request $request ) {
@@ -80,16 +104,26 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * {@inheritDoc}
 	 */
 	public function route( $methods, $condition, $handler ) {
-		if ( is_string( $condition ) ) {
-			$condition = new UrlCondition( $condition );
+		if ( ! $condition instanceof ConditionInterface ) {
+			$condition = RouteCondition::make( $condition );
 		}
 
-		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception( 'Routes inside route groups can only use route strings.' );
-		}
+		$condition = $this->mergeConditions( $this->condition, $condition );
 
-		$condition = $this->condition->concatenate( $condition );
 		return $this->traitRoute( $methods, $condition, $handler );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function group( $condition, Closure $closure ) {
+		if ( ! $condition instanceof ConditionInterface ) {
+			$condition = RouteCondition::make( $condition );
+		}
+
+		$condition = $this->mergeConditions( $this->condition, $condition );
+
+		return $this->traitGroup( $condition, $closure );
 	}
 
 	/**
