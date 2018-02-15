@@ -5,6 +5,7 @@ namespace WPEmerge\Routing;
 use Closure;
 use Exception;
 use WPEmerge\Facades\RouteCondition;
+use WPEmerge\Helpers\Arguments;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -32,17 +33,19 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * Constructor
 	 *
 	 * @throws Exception
-	 * @param  mixed     $condition
-	 * @param  Closure   $closure
+	 * @param  string|Closure $condition
+	 * @param  Closure|null   $routes
 	 */
-	public function __construct( $condition, Closure $closure ) {
-		if ( ! $condition instanceof ConditionInterface ) {
+	public function __construct( $condition, $routes = null ) {
+		list( $condition, $routes ) = Arguments::flip( $condition, $routes );
+
+		if ( $condition !== null && ! $condition instanceof ConditionInterface ) {
 			$condition = RouteCondition::make( $condition );
 		}
 
 		$this->condition = $condition;
 
-		$closure( $this );
+		$routes( $this );
 	}
 
 	/**
@@ -116,14 +119,16 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function group( $condition, Closure $closure ) {
-		if ( ! $condition instanceof ConditionInterface ) {
+	public function group( $condition, $routes = null ) {
+		list( $condition, $routes ) = Arguments::flip( $condition, $routes );
+
+		if ( $condition !== null && ! $condition instanceof ConditionInterface ) {
 			$condition = RouteCondition::make( $condition );
 		}
 
 		$condition = $this->mergeConditions( $this->condition, $condition );
 
-		return $this->traitGroup( $condition, $closure );
+		return $this->traitGroup( $condition, $routes );
 	}
 
 	/**

@@ -4,6 +4,7 @@ namespace WPEmerge\Middleware;
 
 use Closure;
 use Exception;
+use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\Mixed;
 
 /**
@@ -57,13 +58,12 @@ trait HasMiddlewareTrait {
 			}
 		}
 
-		$this->middleware = array_merge( $this->getMiddleware(), $middleware );
+		$this->middleware = Router::sortMiddleware( array_merge( $this->getMiddleware(), $middleware ) );
 		return $this;
 	}
 
 	/**
 	 * Alias for addMiddleware.
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware

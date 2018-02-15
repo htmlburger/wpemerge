@@ -36,11 +36,11 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route group
 	 *
-	 * @param  string         $condition
-	 * @param  Closure        $closure
+	 * @param  string|Closure $condition
+	 * @param  Closure|null   $routes
 	 * @return RouteInterface
 	 */
-	public function group( $condition, Closure $closure );
+	public function group( $condition, $routes = null );
 
 	/**
 	 * Create and add a route for the GET and HEAD methods
