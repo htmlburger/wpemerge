@@ -194,7 +194,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Handle ALL requests.
 	 *
-	 * @param  string|Closure|null $handler
+	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
 	 */
 	public function handleAll( $handler = null ) {
