@@ -36,7 +36,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route group
 	 *
-	 * @param  string|Closure|ConditionInterface $condition
+	 * @param  string|Closure|\WPEmerge\Routing\Conditions\ConditionInterface $condition
 	 * @param  Closure|null                      $routes
 	 * @return RouteInterface
 	 */
