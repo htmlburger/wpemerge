@@ -33,8 +33,8 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * Constructor
 	 *
 	 * @throws Exception
-	 * @param  string|Closure $condition
-	 * @param  Closure|null   $routes
+	 * @param string|Closure|ConditionInterface $condition
+	 * @param Closure|null                      $routes
 	 */
 	public function __construct( $condition, $routes = null ) {
 		list( $condition, $routes ) = Arguments::flip( $condition, $routes );

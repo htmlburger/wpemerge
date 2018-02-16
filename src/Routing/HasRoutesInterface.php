@@ -36,8 +36,8 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a route group
 	 *
-	 * @param  string|Closure $condition
-	 * @param  Closure|null   $routes
+	 * @param  string|Closure|ConditionInterface $condition
+	 * @param  Closure|null                      $routes
 	 * @return RouteInterface
 	 */
 	public function group( $condition, $routes = null );
