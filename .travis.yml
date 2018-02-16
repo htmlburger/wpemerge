@@ -24,6 +24,7 @@ before_install:
   - composer self-update
 
 before_script:
+  - composer require --dev johnpbloch/wordpress
   - mysql -e "create database IF NOT EXISTS wpemerge_tests;" -uroot
   - bash tests/bin/install.sh wpemerge_tests root '' localhost $WP_VERSION
 
