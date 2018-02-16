@@ -18,7 +18,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	/**
 	 * Key=>Class dictionary of condition types
 	 *
-	 * @var string[string]
+	 * @var array<string, string>
 	 */
 	protected static $condition_types = [
 		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
