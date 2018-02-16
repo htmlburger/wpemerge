@@ -8,10 +8,9 @@ namespace WPEmerge\Helpers;
 class Arguments {
 	/**
 	 * Get a closure which will flip preceding optional arguments around.
-	 * @example list( $argument1, $argument2 ) = Arguments::flip( $optional_arguments )( $argument1, $argument2 );
+	 * @example list( $argument1, $argument2 ) = Arguments::flip( $argument1, $argument2 );
 	 *
-	 * @param  int      $optional_arguments
-	 * @return \Closure
+	 * @return array
 	 */
 	public static function flip() {
 		$arguments = func_get_args();
