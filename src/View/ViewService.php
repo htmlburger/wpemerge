@@ -3,7 +3,7 @@
 namespace WPEmerge\View;
 
 use Closure;
-use ViewEngine;
+use WPEmerge\Facades\ViewEngine;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\Mixed;
 
