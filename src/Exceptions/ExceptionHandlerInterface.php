@@ -2,15 +2,15 @@
 
 namespace WPEmerge\Exceptions;
 
-use Exception;
+use Exception as PhpException;
 use Psr\Http\Message\ResponseInterface;
 
 interface ExceptionHandlerInterface {
 	/**
 	 * Handle an exception by returning a suitable response or rethrowing it.
 	 *
-	 * @param  Exception         $e
+	 * @param  PhpException      $e
 	 * @return ResponseInterface
 	 */
-	public function handle( Exception $e );
+	public function handle( PhpException $e );
 }

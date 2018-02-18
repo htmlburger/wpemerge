@@ -2,14 +2,14 @@
 
 namespace WPEmerge\Exceptions;
 
-use Exception;
+use Exception as PhpException;
 use WPEmerge\Facades\Response;
 
 class ExceptionHandler implements ExceptionHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Exception $e ) {
+	public function handle( PhpException $e ) {
 		if ( $e instanceof NotFoundException ) {
 			return Response::error( 404 );
 		}
