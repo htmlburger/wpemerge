@@ -65,11 +65,10 @@ abstract class Facade
 	 */
 	protected static function createFreshMockInstance()
 	{
-		return tap(static::createMock(), function ($mock) {
-			static::swap($mock);
-
-			$mock->shouldAllowMockingProtectedMethods();
-		});
+		$mock = static::createMock();
+		static::swap($mock);
+		$mock->shouldAllowMockingProtectedMethods();
+		return $mock;
 	}
 
 	/**

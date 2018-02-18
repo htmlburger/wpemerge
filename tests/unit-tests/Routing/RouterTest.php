@@ -2,6 +2,7 @@
 
 namespace WPEmergeTests\Routing;
 
+use ArrayAccess;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
@@ -25,6 +26,8 @@ class RouterTest extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		Framework::clearResolvedInstances();
 
 		unset( $this->subject );
 	}
@@ -172,6 +175,8 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testExecute_InvalidResponse_ReturnErrorResponse() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$container = Mockery::mock( ArrayAccess::class );
+		$response = null;
 
 		$route->shouldReceive( 'isSatisfied' )
 			->andReturn( true )
@@ -183,11 +188,21 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->subject->addRoute( $route );
 
-		add_filter( 'wpemerge.debug', '__return_false' );
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( false );
+
+		Framework::shouldReceive( 'getContainer' )
+			->andReturn( $container );
+
+		$container->shouldReceive( 'offsetSet' )
+			->andReturnUsing( function( $key, $value ) use ( &$response ) {
+				$response = $value;
+			} );
+
+		$container->shouldReceive( 'offsetUnset' );
 
 		$this->subject->execute( '' );
 
-		$response = apply_filters( 'wpemerge.response', null );
 		$this->assertEquals( 500, $response->getStatusCode() );
 	}
 
@@ -210,6 +225,9 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->subject->addRoute( $route );
 
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( true );
+
 		$this->subject->execute( '' );
 	}
 
@@ -217,9 +235,10 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::execute
 	 * @covers ::handle
 	 */
-	public function testExecute_Response_AddsFilter() {
+	public function testExecute_Response() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
+		$container = Mockery::mock( ArrayAccess::class );
 
 		$route->shouldReceive( 'isSatisfied' )
 			->andReturn( true )
@@ -231,10 +250,18 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->subject->addRoute( $route );
 
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( false );
+
+		Framework::shouldReceive( 'getContainer' )
+			->andReturn( $container );
+
+		$container->shouldReceive( 'offsetSet' )
+			->with( WPEMERGE_RESPONSE_KEY, $response );
+
 		$this->subject->execute( '' );
 
-		$filter_response = apply_filters( 'wpemerge.response', null );
-		$this->assertSame( $response, $filter_response );
+		$this->assertTrue( true );
 	}
 
 	/**

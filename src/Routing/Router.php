@@ -165,9 +165,8 @@ class Router implements HasRoutesInterface {
 			$response = Response::error( 500 );
 		}
 
-		add_filter( 'wpemerge.response', function() use ( $response ) {
-			return $response;
-		} );
+		$container = Framework::getContainer();
+		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
 
 		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 	}
