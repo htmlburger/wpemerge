@@ -281,6 +281,8 @@ class RouterTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::execute
 	 * @covers ::handle
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage Exception handled
 	 */
 	public function testExecute_Exception_UseExceptionHandler() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
@@ -296,13 +298,13 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->exception_handler->shouldReceive( 'handle' )
 			->with( $exception )
-			->andReturn( Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing() );
+			->andReturnUsing( function() {
+				throw new Exception( 'Exception handled' );
+			} );
 
 		$this->subject->addRoute( $route );
 
 		$this->subject->execute( '' );
-
-		$this->assertTrue( true );
 	}
 
 	/**
