@@ -3,9 +3,11 @@
 namespace WPEmergeTests\Routing;
 
 use ArrayAccess;
+use Exception;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use WPEmerge\Exceptions\ExceptionHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\Request;
@@ -20,15 +22,17 @@ class RouterTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0 );
+		$this->exception_handler = Mockery::mock( ExceptionHandlerInterface::class )->shouldIgnoreMissing();
+		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0, $this->exception_handler );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		Framework::clearResolvedInstances();
+		Framework::clearResolvedInstance( WPEMERGE_FRAMEWORK_KEY );
 
+		unset( $this->exception_handler );
 		unset( $this->subject );
 	}
 
@@ -44,7 +48,7 @@ class RouterTest extends WP_UnitTestCase {
 
 		$subject = new Router( Mockery::mock( Request::class ), [], [
 			$middleware1 => $middleware1_priority,
-		], $default_middleware_priority );
+		], $default_middleware_priority, $this->exception_handler );
 
 		$this->assertEquals( $middleware1_priority, $subject->getMiddlewarePriority( $middleware1 ) );
 		$this->assertEquals( $default_middleware_priority, $subject->getMiddlewarePriority( $middleware2 ) );
@@ -63,7 +67,7 @@ class RouterTest extends WP_UnitTestCase {
 
 		$subject = new Router( Mockery::mock( Request::class ), [], [
 			$middleware1 => $middleware1_priority,
-		], $default_middleware_priority );
+		], $default_middleware_priority, $this->exception_handler );
 
 		$expected = $middleware1;
 		$result = $subject->sortMiddleware( [$middleware3, $middleware2, $middleware1] );
@@ -78,7 +82,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function testAddRoute() {
 		$route = Mockery::mock( RouteInterface::class );
 		$middleware = [Mockery::mock( MiddlewareInterface::class )];
-		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0 );
+		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0, $this->exception_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware )
@@ -106,7 +110,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware = Mockery::mock( MiddlewareInterface::class );
 		$middleware_array = [$middleware];
 
-		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0 );
+		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0, $this->exception_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )
@@ -127,12 +131,10 @@ class RouterTest extends WP_UnitTestCase {
 		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$route1->shouldReceive( 'isSatisfied' )
-			->andReturn( false )
-			->once();
+			->andReturn( false );
 
 		$route2->shouldReceive( 'isSatisfied' )
-			->andReturn( false )
-			->once();
+			->andReturn( false );
 
 		$this->subject->addRoute( $route1 );
 		$this->subject->addRoute( $route2 );
@@ -151,12 +153,10 @@ class RouterTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route1->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route1->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$route2->shouldReceive( 'isSatisfied' )
 			->never();
@@ -179,12 +179,10 @@ class RouterTest extends WP_UnitTestCase {
 		$response = null;
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( new stdClass() )
-			->once();
+			->andReturn( new stdClass() );
 
 		$this->subject->addRoute( $route );
 
@@ -216,12 +214,10 @@ class RouterTest extends WP_UnitTestCase {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( new stdClass() )
-			->once();
+			->andReturn( new stdClass() );
 
 		$this->subject->addRoute( $route );
 
@@ -241,12 +237,10 @@ class RouterTest extends WP_UnitTestCase {
 		$container = Mockery::mock( ArrayAccess::class );
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$this->subject->addRoute( $route );
 
@@ -274,16 +268,41 @@ class RouterTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$this->subject->addRoute( $route );
 
 		$this->assertSame( $expected, $this->subject->execute( '' ) );
+	}
+
+	/**
+	 * @covers ::execute
+	 * @covers ::handle
+	 */
+	public function testExecute_Exception_UseExceptionHandler() {
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$exception = new Exception();
+
+		$route->shouldReceive( 'isSatisfied' )
+			->andReturn( true );
+
+		$route->shouldReceive( 'handle' )
+			->andReturnUsing( function() use ( $exception ) {
+				throw $exception;
+			} );
+
+		$this->exception_handler->shouldReceive( 'handle' )
+			->with( $exception )
+			->andReturn( Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing() );
+
+		$this->subject->addRoute( $route );
+
+		$this->subject->execute( '' );
+
+		$this->assertTrue( true );
 	}
 
 	/**

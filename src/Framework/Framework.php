@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use ReflectionMethod;
 use WPEmerge\Controllers\ControllersServiceProvider;
+use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
@@ -42,6 +43,7 @@ class Framework {
 	 * @var string[]
 	 */
 	protected $service_providers = [
+		ExceptionsServiceProvider::class,
 		RequestsServiceProvider::class,
 		ResponsesServiceProvider::class,
 		RoutingServiceProvider::class,

@@ -29,6 +29,10 @@ if ( ! defined( 'WPEMERGE_RESPONSE_KEY' ) ) {
 	define( 'WPEMERGE_RESPONSE_KEY', 'wpemerge.response' );
 }
 
+if ( ! defined( 'WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY' ) ) {
+	define( 'WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY', 'wpemerge.exceptions.exception_handler' );
+}
+
 if ( ! defined( 'WPEMERGE_RESPONSE_SERVICE_KEY' ) ) {
 	define( 'WPEMERGE_RESPONSE_SERVICE_KEY', 'wpemerge.responses.response_service' );
 }
