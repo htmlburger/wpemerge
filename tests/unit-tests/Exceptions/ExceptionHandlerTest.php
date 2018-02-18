@@ -10,7 +10,7 @@ use WPEmerge\Facades\Response;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Flash\Flash
+ * @coversDefaultClass \WPEmerge\Exceptions\ExceptionHandler
  */
 class ExceptionHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
