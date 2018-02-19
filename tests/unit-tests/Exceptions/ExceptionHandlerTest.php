@@ -6,7 +6,7 @@ use Exception;
 use Mockery;
 use WPEmerge\Exceptions\ExceptionHandler;
 use WPEmerge\Exceptions\NotFoundException;
-use WPEmerge\Facades\Response;
+use WPEmerge\Support\Facade;
 use WP_UnitTestCase;
 
 /**
@@ -23,7 +23,7 @@ class ExceptionHandlerTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		Response::clearResolvedInstance( WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY );
+		Facade::clearResolvedInstance( WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY );
 
 		unset( $this->subject );
 	}

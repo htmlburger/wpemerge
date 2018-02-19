@@ -13,6 +13,7 @@ use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
+use WPEmerge\Support\Facade;
 use WP_UnitTestCase;
 
 /**
@@ -30,7 +31,8 @@ class RouterTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		Framework::clearResolvedInstance( WPEMERGE_FRAMEWORK_KEY );
+		Facade::clearResolvedInstance( WPEMERGE_RESPONSE_KEY );
+		Facade::clearResolvedInstance( WPEMERGE_FRAMEWORK_KEY );
 
 		unset( $this->exception_handler );
 		unset( $this->subject );
