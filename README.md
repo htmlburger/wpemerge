@@ -1,4 +1,6 @@
-# WPEmerge [![Build Status](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/build.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/htmlburger/wpemerge/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/?branch=master)
+# WP Emerge
+
+[![Packagist](https://img.shields.io/packagist/vpre/htmlburger/wpemerge.svg?style=flat-square&colorB=0366d6)](https://packagist.org/packages/htmlburger/wpemerge) [![Travis branch](https://img.shields.io/travis/htmlburger/wpemerge/master.svg?style=flat-square)](https://travis-ci.org/htmlburger/wpemerge/builds) [![Scrutinizer](https://img.shields.io/scrutinizer/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/) [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/code-structure/master/code-coverage)
 
 A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
 
