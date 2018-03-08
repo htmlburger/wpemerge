@@ -68,10 +68,11 @@ class MyController {
 
 Returns a new response object with the supplied string as the body.
 
-### `app_view( $views, $context = [] );`
+### `app_view( $views );`
 
 Uses `locate_template( $views )` to resolve a view and applies the view output as the response body.
-Optionally, a context array can be supplied to be used from inside the view.
+
+Optionally, you can pass context values to be used from inside the view by chaining `->with( ['foo' => 'bar'] )`.
 
 ### `app_json( $data );`
 

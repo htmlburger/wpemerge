@@ -55,13 +55,11 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 */
 	public function testMake_View() {
 		$file = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
-		$context = ['foo' => 'bar'];
-		$view = $this->subject->make( [$file], $context );
+		$view = $this->subject->make( [$file] );
 
 		$this->assertInstanceOf( ViewInterface::class, $view );
 		$this->assertEquals( $file, $view->getName() );
 		$this->assertEquals( $file, $view->getFilepath() );
-		$this->assertEquals( $context, $view->getContext() );
 	}
 
 	/**

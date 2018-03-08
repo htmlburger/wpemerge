@@ -58,12 +58,12 @@ class NameProxyViewEngine implements \WPEmerge\View\ViewEngineInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function make( $views, $context = [] ) {
+	public function make( $views ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
 				$engine_key = $this->getBindingForFile( $view );
 				$engine = Framework::resolve( $engine_key );
-				return $engine->make( [$view], $context );
+				return $engine->make( [$view] );
 			}
 		}
 

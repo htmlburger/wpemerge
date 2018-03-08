@@ -26,8 +26,7 @@ interface ViewEngineInterface {
 	 * Create a view instance from the first view name that exists.
 	 *
 	 * @param  string[]      $views
-	 * @param  array         $context
 	 * @return ViewInterface
 	 */
-	public function make( $views, $context = [] );
+	public function make( $views );
 }
