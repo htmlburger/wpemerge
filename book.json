@@ -1,0 +1,17 @@
+{
+    "root": "./docs",
+    "plugins": [ "-sharing", "theme-api" ],
+    "pluginsConfig": {
+        "theme-api": {
+            "theme": "dark",
+            "split": true,
+            "languages": [
+                {
+                    "lang": "php",
+                    "name": "PHP",
+                    "default": true
+                }
+            ]
+        }
+    }
+}
