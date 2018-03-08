@@ -1,4 +1,4 @@
-# WP Emerge
+# <a href="http://wpemerge.com"><img src="https://raw.githubusercontent.com/htmlburger/wpemerge/master/assets/logo-bar.png" height="60" alt="WP Emerge Logo" aria-label='WPEmerge.com' /></a>
 
 [![Packagist](https://img.shields.io/packagist/vpre/htmlburger/wpemerge.svg?style=flat-square&colorB=0366d6)](https://packagist.org/packages/htmlburger/wpemerge) [![Travis branch](https://img.shields.io/travis/htmlburger/wpemerge/master.svg?style=flat-square)](https://travis-ci.org/htmlburger/wpemerge/builds) [![Scrutinizer](https://img.shields.io/scrutinizer/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/) [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/code-structure/master/code-coverage)
 
@@ -8,7 +8,7 @@ Integration is incremental - you can use it only on the pages you want or on all
 
 If you've used Laravel, Slim or Symfony and miss the control over the request+response flow in WordPress - WP Emerge is definitely for you.
 
-## Documentation
+## Features & Documentation
 
 [https://docs.wpemerge.com/](https://docs.wpemerge.com/)
 
@@ -31,11 +31,11 @@ Brought to you by the lovely folks at [htmlBurger](http://htmlburger.com)
 | View Composers | ✔ | ✖ | ✖ |
 | Service Container | ✔ | ✖ | ✖ |
 
-_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison check out the official _[_WP Emerge Theme_](https://github.com/htmlburger/wpemerge-theme)_._
+_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison you'll have to wait for the official WP Emerge Starter Theme._
 
-_² WP Emerge is theme agnostic - you can use it even inside the mentioned themes_
+_² WP Emerge is theme agnostic - you can use it in any theme._
 
-_³ Sage's Controller is more a View Model than a Controller_
+_³ Sage's Controller is more a View Model than a Controller._
 
 ## Features
 

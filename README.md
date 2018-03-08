@@ -1,4 +1,4 @@
-# WP Emerge
+# <a href="http://wpemerge.com"><img src="https://raw.githubusercontent.com/htmlburger/wpemerge/master/assets/logo-bar.png" height="60" alt="WP Emerge Logo" aria-label='WPEmerge.com' /></a>
 
 [![Packagist](https://img.shields.io/packagist/vpre/htmlburger/wpemerge.svg?style=flat-square&colorB=0366d6)](https://packagist.org/packages/htmlburger/wpemerge) [![Travis branch](https://img.shields.io/travis/htmlburger/wpemerge/master.svg?style=flat-square)](https://travis-ci.org/htmlburger/wpemerge/builds) [![Scrutinizer](https://img.shields.io/scrutinizer/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/) [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/code-structure/master/code-coverage)
 
@@ -8,13 +8,9 @@ Integration is incremental - you can use it only on the pages you want or on all
 
 If you've used Laravel, Slim or Symfony and miss the control over the request+response flow in WordPress - WP Emerge is definitely for you.
 
-## Documentation
+## Features & Documentation
 
 https://docs.wpemerge.com/
-
-## API Reference
-
-https://api.wpemerge.com/
 
 ## Development Team
 
