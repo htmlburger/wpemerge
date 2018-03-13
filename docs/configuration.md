@@ -5,7 +5,6 @@ When booting WPEmerge you have to option to specify a number of configuration op
 WPEmerge::boot( [
     // Array of classes that implement \WPEmerge\ServiceProviders\ServiceProviderInterface
     'providers' => [
-        
         // Examples:
         MyServiceProviders::class,
         WPEmergeBlade\View\ServiceProvider::class, // see htmlburger/wpemerge-blade
