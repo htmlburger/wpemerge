@@ -21,5 +21,15 @@ WPEmerge::boot( [
             return $response;
         },
     ],
+    
+    // Array of global middleware priority to change execution order
+    'global_middleware_priority' => [
+        // Examples:
+        MyMiddleware::class => 90,
+        MySecondMiddleware::class => 110,
+    ],
+    
+    // Default global middleware priority
+    'global_middleware_default_priority' => 100,
 ] )
 ```
