@@ -5,7 +5,7 @@
         "anchorjs": {
           "selector": "h2,h3,h4,h5",
           "icon": "#",
-          "position": "left"
+          "placement": "left"
         },
         "theme-api": {
             "theme": "dark",
