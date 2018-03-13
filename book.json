@@ -1,6 +1,5 @@
 {
     "root": "./docs",
-    {
     "plugins": [ "anchorjs", "-sharing", "theme-api", "versions" ],
     "pluginsConfig": {
         "anchorjs": {
