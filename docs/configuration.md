@@ -5,7 +5,6 @@ When booting WPEmerge you have to option to specify a number of configuration op
 WPEmerge::boot( [
     // Array of classes that implement \WPEmerge\ServiceProviders\ServiceProviderInterface
     'providers' => [
-        
         // Examples:
         MyServiceProviders::class,
         WPEmergeBlade\View\ServiceProvider::class, // see htmlburger/wpemerge-blade
@@ -21,5 +20,15 @@ WPEmerge::boot( [
             return $response;
         },
     ],
+    
+    // Array of global middleware priority to change execution order
+    'global_middleware_priority' => [
+        // Examples:
+        MyMiddleware::class => 90,
+        MySecondMiddleware::class => 110,
+    ],
+    
+    // Default global middleware priority
+    'global_middleware_default_priority' => 100,
 ] )
 ```
