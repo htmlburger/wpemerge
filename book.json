@@ -4,7 +4,8 @@
     "pluginsConfig": {
         "anchorjs": {
           "selector": "h2,h3,h4,h5",
-          "icon": "#"
+          "icon": "#",
+          "position": "left"
         },
         "theme-api": {
             "theme": "dark",
