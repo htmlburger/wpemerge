@@ -43,7 +43,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	}
 
 	/**
-	 * Register condiguration options.
+	 * Register configuration options.
 	 *
 	 * @param  \Pimple\Container $container
 	 * @return void
