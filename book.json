@@ -1,7 +1,12 @@
 {
     "root": "./docs",
-    "plugins": [ "-sharing", "theme-api" ],
+    {
+    "plugins": [ "anchorjs", "-sharing", "theme-api", "versions" ],
     "pluginsConfig": {
+        "anchorjs": {
+          "selector": "h2,h3,h4,h5",
+          "icon": "#"
+        }
         "theme-api": {
             "theme": "dark",
             "split": true,
@@ -12,6 +17,9 @@
                     "default": true
                 }
             ]
+        },
+        "versions": {
+            "type": "tags"
         }
     }
 }
