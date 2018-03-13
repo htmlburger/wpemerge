@@ -5,6 +5,7 @@
 * [WP Emerge](README.md)
 * [Quickstart](quickstart.md)
 * [Configuration](configuration.md)
+* [0 to 100 Setup](0-100-setup.md)
 
 ## Routing
 
