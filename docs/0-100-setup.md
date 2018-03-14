@@ -267,7 +267,7 @@ We reduced PHP logic duplication, but this doesn't solve the use case where we w
 
 ##### What if we wish to have a partial that is reused throughout the site but it needs a certain variable? Do we have to add that logic to every controller which loads a view which includes that partial?
 
-Thankfully, no! This is where view composers come in to save the day - check out the [View Composers](../view/view-composers.md) article to see how they can solve this problem and more.
+Thankfully, no! This is where view composers come into play - check out the [View Composers](../view/view-composers.md) article to see how they can solve this problem and more.
 
 ##### What if we wanted to show the CTA on a page other than the homepage - do we have to hardcode that page's url in the route definition?
 
