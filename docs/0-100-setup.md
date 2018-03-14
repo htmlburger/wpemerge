@@ -1,4 +1,4 @@
-# 0 to 100 Setup (Work In Progress)
+# 0 to 100 Setup
 
 Sometimes it can be hard to see the full picture which is why this guide will show you how to add WP Emerge to the standard Twenty Seventeen WordPress theme, step-by-step.
 
