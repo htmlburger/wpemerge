@@ -174,7 +174,7 @@ class Router implements HasRoutesInterface {
 
 		if ( ! $response instanceof ResponseInterface ) {
 			if ( Framework::debugging() ) {
-				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
+				throw new Exception( 'Response returned by controller is not valid (expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = Response::error( 500 );
 		}
