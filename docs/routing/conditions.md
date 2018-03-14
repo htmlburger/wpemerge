@@ -108,7 +108,7 @@ Match against the current post type:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_type', 'crb_product'], $handler );
+Route::get( ['post_type', 'product'], $handler );
 ```
 {% endmethod %}
 
