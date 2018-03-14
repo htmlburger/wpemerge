@@ -2,13 +2,20 @@
 
 Sometimes it can be hard to see the full picture which is why this guide will show you how to add WP Emerge to the standard Twenty Seventeen WordPress theme, step-by-step.
 
+## What this guide will cover
+
+- Installation
+- Routing
+- Controllers
+- View Composers
+
 ## Assumptions & Definitions
 
 - You have PHP >= 5.5 installed.
 - You have Composer installed.
 - You have a blank WordPress >= 4.7 installation with the Twenty Seventeen theme installed and activated.
-- We will refer to your WordPress installation home url as `HOME_URL` (e.g. `http://localhost/wpemerge/`).
-- We will refer to your Twenty Seventeen theme directory as `THEME_DIR` (e.g. `/var/www/html/wpemerge/wp-content/themes/twentyseventeen/`).
+- We will refer to your WordPress installation home url as `HOME_URL` (e.g. `http://localhost/my-website/`).
+- We will refer to your Twenty Seventeen theme directory as `THEME_DIR` (e.g. `/var/www/html/my-website/wp-content/themes/twentyseventeen/`).
 
 ## Installing WP Emerge
 
@@ -80,7 +87,71 @@ If we open up our browser again we will now see the `Hello World!` sentence as w
 
 ## Making something useful
 
-TODO
+Let's go over what we achieved in the previous section:
+
+1. We installed WP Emerge.
+1. We defined a route which will override the homepage.
+1. We replaced the homepage content with a simple sentence.
+
+That's great and all but we didn't really do anything useful that can help us build a better website which is why in this section we will do the following:
+
+1. Create a landing Call-to-Action template with a "Skip" button.
+1. Show the CTA only on the homepage.
+1. Show the real homepage if the user clicks the "Skip" button.
+
+Let's get started!
+
+### Creating a CTA template
+
+Let's create a new `THEME_DIR/template-cta.php` file with the following content:
+    ```php
+    <?php
+    /**
+     * Template Name: Call To Action
+     */
+    ?>
+    <?php get_header(); ?>
+
+    <div class="wrap">
+        <div id="primary" class="content-area">
+            <main id="main" class="site-main" role="main">
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                <a href="#">Skip &raquo;</a>
+
+            </main><!-- #main -->
+        </div><!-- #primary -->
+    </div><!-- .wrap -->
+
+    <?php get_footer();
+    ```
+
+This is a pretty basic template with nothing but a little hard-coded Lorem Ipsum and a placeholder "Skip" link. Let's update the link so it adds `?cta=0` to our url, for example:
+    ```php
+    <a href="<?php echo esc_url( add_query_arg( 'cta', '0' ) ); ?>">Skip &raquo;</a>
+    ```
+
+This works OK but it is certainly not perfect and if we ever have other CTAs or other buttons that needs to skip the CTA we will end up with copy-pasted url logic. We'll keep this in mind for now and come back to it later when we have a better understanding of the control WP Emerge provides us with.
+
+### Using our new template
+
+We have our pretty basic template ready so let's put it to use by editing `THEME_DIR/app/framework.php` to look like this (deleting our previous test route):
+    ```php
+    <?php
+    /**
+     * Routes
+     */
+    Router::get( '/', function() {
+        return app_view( 'template-cta.php' );
+    } );
+    ```
+
+If we open up the homepage we will now be presented with our template.
+
+### Implementing the Skip button
+
+WP Emerge allows us to use anonymous functions to define as our route handlers, however, it's best if we define our own separate controller classes so our logic is neatly compartmentalized and separated from other handlers' logic.
 
 ## Partials
 
