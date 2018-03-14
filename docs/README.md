@@ -48,8 +48,10 @@ _³ Sage's Controller is more a View Model than a Controller._
 {% method -%}
 #### Routes with optional rewrite rule integration
 
+- Enables the use of controllers to compartmentalize your business logic from your presentation.
 - Use existing routes or add new ones with a rewrite.
-- Alternatively, use built-in conditions or even custom ones using anonymous functions.
+- Use built-in dynamic route conditions or define your own custom ones.
+- Use anonymous functions for quick one-off conditions.
 
 {% sample lang="php" -%}
 ```php
@@ -69,6 +71,7 @@ Router::get( function() {
 {% method -%}
 #### Controllers
 
+- Separate unrelated business logic into controllers, and related business logic into controller methods.
 - Receive an object representing the current request and respond with a PSR-7 response.
 - Use different methods for different routes.
 - Respond with a view, json, a redirect etc.
@@ -90,7 +93,7 @@ class HomeController {
 {% method -%}
 #### Middleware
 
-- Hook before and/or after request handling.
+- Hook before and/or after route handler (e.g. controller method).
 - Add globally or to specific routes or route groups.
 - Powers features such as Flash and OldInput.
 
@@ -128,7 +131,7 @@ class HomeController {
 #### View Composers
 
 - Pass generic context to partials regardless of which controller or parent view uses them.
-- Works with any View engine (Php, Twig, Blade).
+- Work with any View engine (Php, Twig, Blade).
 
 {% sample lang="php" -%}
 ```php
@@ -141,7 +144,8 @@ View::addComposer( 'templates/about-us', function( $view ) {
 {% method -%}
 #### Service container
 
-- Define your dependencies in a DI container.
+- Define your dependencies in a service container.
+- Override any and all WP Emerge dependencies when needed.
 - Enables automatic dependency injection.
 - Uses Pimple - [read more](https://pimple.symfony.com/).
 
@@ -157,7 +161,7 @@ $container['my_service'] = function() {
 {% method -%}
 #### Service providers
 
-- Register dependencies into the container and boot them, if needed.
+- Register dependencies into the service container and boot them, if needed.
 - Enables to split your dependencies logically into separate providers.
 - WP Emerge's own dependencies are provided via Service providers.
 
