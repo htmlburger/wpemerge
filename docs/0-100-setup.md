@@ -154,7 +154,7 @@ If we open up the homepage we will now be presented with our template.
 
 WP Emerge allows us to use anonymous functions to define as our route handlers, however, it's best if we define controller classes instead so our logic is neatly compartmentalized and separated from other handlers' logic:
 
-1. Create a new `THEME_DIR/app/src` directory.
+1. Create a new `THEME_DIR/app/src/Controllers` directory.
 1. Create a new `THEME_DIR/app/src/Controllers/HomeController.php` file with the following content:
     ```php
     <?php
