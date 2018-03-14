@@ -48,7 +48,7 @@ _³ Sage's Controller is more a View Model than a Controller._
 {% method -%}
 #### Routes with optional rewrite rule integration
 
-- Enables the use of controllers to compartmentalize your business logic from your presentation.
+- Enables the use of controllers to compartmentalize your business logic away from your presentation.
 - Use existing routes or add new ones with a rewrite.
 - Use built-in dynamic route conditions or define your own custom ones.
 - Use anonymous functions for quick one-off conditions.
