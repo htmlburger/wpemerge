@@ -104,48 +104,48 @@ Let's get started!
 ### Creating a CTA template
 
 Let's create a new `THEME_DIR/template-cta.php` file with the following content:
-    ```php
-    <?php
-    /**
-     * Template Name: Call To Action
-     */
-    ?>
-    <?php get_header(); ?>
+```php
+<?php
+/**
+ * Template Name: Call To Action
+ */
+?>
+<?php get_header(); ?>
 
-    <div class="wrap">
-        <div id="primary" class="content-area">
-            <main id="main" class="site-main" role="main">
+<div class="wrap">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                <a href="#">Skip &raquo;</a>
+            <a href="#">Skip &raquo;</a>
 
-            </main><!-- #main -->
-        </div><!-- #primary -->
-    </div><!-- .wrap -->
+        </main><!-- #main -->
+    </div><!-- #primary -->
+</div><!-- .wrap -->
 
-    <?php get_footer();
-    ```
+<?php get_footer();
+```
 
 This is a pretty basic template with nothing but a little hard-coded Lorem Ipsum and a placeholder "Skip" link. Let's update the link so it adds `?cta=0` to our url, for example:
-    ```php
-    <a href="<?php echo esc_url( add_query_arg( 'cta', '0' ) ); ?>">Skip &raquo;</a>
-    ```
+```php
+<a href="<?php echo esc_url( add_query_arg( 'cta', '0' ) ); ?>">Skip &raquo;</a>
+```
 
 This works OK but it is certainly not perfect and if we ever have other CTAs or other buttons that needs to skip the CTA we will end up with copy-pasted url logic. We'll keep this in mind for now and come back to it later when we have a better understanding of the control WP Emerge provides us with.
 
 ### Using our new template
 
 We have our pretty basic template ready so let's put it to use by editing `THEME_DIR/app/framework.php` to look like this (deleting our previous test route):
-    ```php
-    <?php
-    /**
-     * Routes
-     */
-    Router::get( '/', function() {
-        return app_view( 'template-cta.php' );
-    } );
-    ```
+```php
+<?php
+/**
+ * Routes
+ */
+Router::get( '/', function() {
+    return app_view( 'template-cta.php' );
+} );
+```
 
 If we open up the homepage we will now be presented with our template.
 
@@ -177,9 +177,9 @@ WP Emerge allows us to use anonymous functions to define as our route handlers, 
     ```
 
 If we open up the homepage we will now be presented with an error:
-    ```
-    Fatal error: Uncaught Error: Class '\App\Controllers\HomeController' not found
-    ```
+```
+Fatal error: Uncaught Error: Class '\App\Controllers\HomeController' not found
+```
 
 This is because we have not loaded our class file. We can add a simple `require` statement but we will have to do this every time we add a new controller, view composer or other type of class. Instead let's add class autoloading to our theme:
 
@@ -212,14 +212,14 @@ If we refresh the homepage we will be greeted with our error-free CTA template a
 ### Implementing the Skip button
 
 Now that we have our controller's `index` method ready let's add some logic to it:
-    ```php
-    public function index( $request, $view ) {
-        if ( $request->get( 'cta' ) === '0' ) {
-            return app_view( $view );
-        }
-        return app_view( 'template-cta.php' );
+```php
+public function index( $request, $view ) {
+    if ( $request->get( 'cta' ) === '0' ) {
+        return app_view( $view );
     }
-    ```
+    return app_view( 'template-cta.php' );
+}
+```
 
 Now if we visit `HOME_URL` we will see our CTA template but when we click on our "Skip" link we will be presented with our usual homepage!
 
@@ -229,32 +229,32 @@ Let's say that we want to have 2 "Skip" buttons - one above and one below our Lo
 We could, of course, define a new variable at the top of our template file but this means that the variable will only be available in this particular template file (what if we wanted that variable to also appear in a child template partial?) and we will be mixing php logic with presentation (which we should always strive to avoid).
 
 Instead we can modify our controller method to supply our template (which we will be referring to as a `view` from now on) with a variable which will hold the skip url (we will refer to variables passed to views as `context`):
-    ```php
-    public function index( $request, $view ) {
-        if ( $request->get( 'cta' ) === '0' ) {
-            return app_view( $view );
-        }
-
-        $skip_url = add_query_arg( 'cta', '0', $request->getUrl() );
-
-        return app_view( 'template-cta.php' )
-            ->with( 'skip_url', $skip_url );
+```php
+public function index( $request, $view ) {
+    if ( $request->get( 'cta' ) === '0' ) {
+        return app_view( $view );
     }
-    ```
+
+    $skip_url = add_query_arg( 'cta', '0', $request->getUrl() );
+
+    return app_view( 'template-cta.php' )
+        ->with( 'skip_url', $skip_url );
+}
+```
 
 We also have to modify the template to use the newly available variable:
-    ```php
-    <a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
+```php
+<a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-    <a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
-    ```
+<a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
+```
     
 We reduced PHP logic duplication, but this doesn't solve the use case where we want to have that variable available in a view partial, for example. For this we can use the `app_partial( $view, $context = [] )` function which works very similarly to `get_template_part()` but as you can see it has an optional argument which allows you to pass context variables as well:
-    ```php
-    <?php app_partial( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
-    ```
+```php
+<?php app_partial( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
+```
 
 What if we wish to have a partial that is reused throughout the site but it needs a certain variable? Do we have to add that logic to every controller which loads a view which includes that partial?
 
