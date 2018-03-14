@@ -61,6 +61,7 @@ And we're done - we have composer and WP Emerge loaded and bootstrapped! But ...
     /**
      * Routes
      */
+    // Note: '/' is the URL we are matching with, and it is always relative to the WordPress homepage url
     Router::get( '/', function() {
         return app_output( 'Hello World!' );
     } );
@@ -214,9 +215,15 @@ If we refresh the homepage we will be greeted with our error-free CTA template a
 Now that we have our controller's `index` method ready let's add some logic to it:
 ```php
 public function index( $request, $view ) {
+    // $request is a WP Emerge class which represents the current request made to the server.
+    // $view is the view file that WordPress is trying to load for the current request.
+    
+    // If the request includes "cta" a GET parameter with a value of "0" ...
     if ( $request->get( 'cta' ) === '0' ) {
+        // ... return the view WordPress was trying to load:
         return app_view( $view );
     }
+    // otherwise, return our custom CTA view:
     return app_view( 'template-cta.php' );
 }
 ```
@@ -256,6 +263,15 @@ We reduced PHP logic duplication, but this doesn't solve the use case where we w
 <?php app_partial( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
 ```
 
-What if we wish to have a partial that is reused throughout the site but it needs a certain variable? Do we have to add that logic to every controller which loads a view which includes that partial?
+## FAQ
+
+### What if we wish to have a partial that is reused throughout the site but it needs a certain variable? Do we have to add that logic to every controller which loads a view which includes that partial?
 
 Thankfully, no! This is where view composers come in to save the day - check out the [View Composers](../view/view-composers.md) article to see how they can solve this problem and more.
+
+### What if we wanted to show the CTA on a page other than the homepage - do we have to hardcode that page's url in the route definition?
+
+We can but we don't have to. We can take advantage of WP Emerge's dynamic [Route Conditions](../routing/conditions.md). As an example, this is what our route definition will look like if we wish to show the CTA on any page that uses a custom template called `template-cta-enabled-page.php`:
+```php
+Router::get( ['post_template', 'template-cta-enabled-page.php'], '\App\Controllers\HomeController@index' );
+```
