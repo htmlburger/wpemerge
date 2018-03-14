@@ -47,7 +47,7 @@ $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
         '.twig.php' => WPEMERGETWIG_VIEW_TWIG_VIEW_ENGINE_KEY, // use Twig for twig.php views
         '.blade.php' => WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY, // use Blade for .blade.php
         '.php' => WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY, // use default Php engine for .php views
-    ], WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY ); // use Blade for all other cases as blade views can referenced in blade.format.as.well
+    ], WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY ); // use Blade for all other cases as blade views can be referenced in blade.format.as.well without an extension
 };
 ```
 _Note: the example above assumes you have included both WP Emerge Twig and WP Emerge Blade composer packages. `WPEMERGETWIG_VIEW_TWIG_VIEW_ENGINE_KEY` and `WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY` are not provided by default._
