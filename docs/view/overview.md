@@ -23,13 +23,13 @@ Implementing your own or a third-party engine is simple and straightforward - th
 
 ## External view engines
 
-### WP Emerge Twig
-
-Renders your views using Twig: https://github.com/htmlburger/wpemerge-twig
-
 ### WP Emerge Blade
 
 Renders your views using Blade: https://github.com/htmlburger/wpemerge-blade
+
+### WP Emerge Twig
+
+Renders your views using Twig: https://github.com/htmlburger/wpemerge-twig
 
 ## Other built-in view engines
 
