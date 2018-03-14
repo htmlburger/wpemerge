@@ -1,8 +1,8 @@
 # Route Middleware
 
 Middleware allow you to modify the request and/or response before and/or after it reaches the route handler. Middleware can be any of the following:
+1. the class name of a class that implements `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`). This is the recommended way of defining middleware.
 1. any closure (anonymous function)
-1. the class name of a class that implements `MiddlewareInterface` (see `src/Middleware/MiddlewareInterface`).
 1. an instance of a class  that implements `MiddlewareInterface`
 
 {% method -%}
