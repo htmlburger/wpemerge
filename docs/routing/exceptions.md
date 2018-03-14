@@ -4,7 +4,7 @@ WP Emerge comes with a simple `ExceptionHandler` class which is used to translat
 This functionality simplifies controller logic as you can throw certain exceptions as a short-cut to common responses.
 
 {% method -%}
-For example, the default `ExceptionHandler` class comes with automatic handling for the built-in `\WPEmerge\Exceptions\NotFoundException` exception. Such exceptions will be translated to 404 responses by setting the status header and loading the `404.php` view:
+For example, the default `ExceptionHandler` class comes with automatic handling for the built-in `\WPEmerge\Exceptions\NotFoundException` exception. Such exceptions will be translated to 404 responses by setting the status header to 404 and using the `404.php` view:
 
 {% sample lang="php" -%}
 ```php
