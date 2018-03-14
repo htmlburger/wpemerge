@@ -26,23 +26,23 @@
     ```json
     "autoload": {
         "psr-4": {
-            "Theme\\": "theme/"
+            "App\\": "app/"
         }
     }
     ```
-    - `Theme` represents the base namespace for your classes
-    - `theme/` represents the base path for your classes relative to your theme (i.e. `twentyseventeen/theme`)
+    - `App` represents the base namespace for your classes
+    - `app/` represents the base path for your classes relative to your theme (i.e. `twentyseventeen/app`)
 
-    With this change any class in the `Theme\` namespace will be autoloaded from the `theme/` directory relative to your `composer.json`.
+    With this change any class in the `App\` namespace will be autoloaded from the `app/` directory relative to your `composer.json`.
 1. Run `composer dumpautoload` so your changes take effect
 
 Here are a few example classes (and their filepaths) that will be autoloaded:
 
-| Class                    | File                         |
-|--------------------------|------------------------------|
-| `Theme\MyClass`          | `theme/MyClass.php`          |
-| `Theme\Foo\Bar\Baz`      | `theme/Foo/Bar/Baz.php`      |
-| `Theme\Controllers\Home` | `theme/Controllers/Home.php` |
+| Class                    | File                       |
+|--------------------------|----------------------------|
+| `App\MyClass`            | `app/MyClass.php`          |
+| `App\Foo\Bar\Baz`        | `app/Foo/Bar/Baz.php`      |
+| `App\Controllers\Home`   | `app/Controllers/Home.php` |
 
 
 You can find more information about PSR-4 autoloading on http://www.php-fig.org/psr/psr-4/
