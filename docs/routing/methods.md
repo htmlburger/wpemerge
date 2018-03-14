@@ -1,15 +1,15 @@
 # Route Method
 
-The method you call on the router when you start a route definitions defines which requestmethod the route will match
+The method you call on the router when you start a route definition defines which request method the route will match
 
 ```php
-Router::[get|post|put|patch|delete|options|any]( $target, $handler );
+Router::[get|post|put|patch|delete|options|any]( $condition, $handler );
 ```
 
 If you wish to match a specific set of methods you can also use the generic `Router::route()` method:
 
 ```php
-Router::route( ['GET', 'HEAD', 'POST'], $target, $handler );
+Router::route( ['GET', 'HEAD', 'POST'], $condition, $handler );
 ```
 
 ## Handling all requests
