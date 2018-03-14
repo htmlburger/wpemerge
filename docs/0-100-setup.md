@@ -89,9 +89,9 @@ If we open up our browser again we will now see the `Hello World!` sentence as w
 
 Let's go over what we achieved in the previous section:
 
-1. We installed WP Emerge.
-1. We defined a route which will override the homepage.
-1. We replaced the homepage content with a simple sentence.
+- We installed WP Emerge.
+- We defined a route which will override the homepage.
+- We replaced the homepage content with a simple sentence.
 
 That's great and all but we didn't really do anything useful that can help us build a better website which is why in this section we will do the following:
 
@@ -149,14 +149,113 @@ We have our pretty basic template ready so let's put it to use by editing `THEME
 
 If we open up the homepage we will now be presented with our template.
 
+### Creating our first controller
+
+WP Emerge allows us to use anonymous functions to define as our route handlers, however, it's best if we define controller classes instead so our logic is neatly compartmentalized and separated from other handlers' logic:
+
+1. Create a new `THEME_DIR/app/src` directory.
+1. Create a new `THEME_DIR/app/src/Controllers/HomeController.php` file with the following content:
+    ```php
+    <?php
+
+    namespace App\Controllers;
+    
+    class HomeController {
+        public function index( $request, $view ) {
+            return app_view( 'template-cta.php' );
+        }
+    }
+    ```
+    As you probably already guessed, this controller will do exactly the same as our anonymous function.
+1. Edit `THEME_DIR/app/framework.php` and assign our controller and its `index` method to the route:
+    ```php
+    <?php
+    /**
+     * Routes
+     */
+    Router::get( '/', '\App\Controllers\HomeController@index' );
+    ```
+
+If we open up the homepage we will now be presented with an error:
+    ```
+    Fatal error: Uncaught Error: Class '\App\Controllers\HomeController' not found
+    ```
+
+This is because we have not loaded our class file. We can add a simple `require` statement but we will have to do this every time we add a new controller, view composer or other type of class. Instead let's add class autoloading to our theme:
+
+1. Open `THEME_DIR/composer.json` - it should currently look something like this:
+    ```json
+    {
+        "require": {
+            "htmlburger/wpemerge": "^0.8.5"
+        }
+    }
+    ```
+1. Edit it so it looks like this:
+    ```json
+    {
+        "require": {
+            "htmlburger/wpemerge": "^0.8.5"
+        },
+        "autoload": {
+           "psr-4": {
+                "App\\": "app/src/"
+           }
+       }
+    }
+    ```
+    The above will tell Composer's autoloader package to autoload any class that is in the `App\` namespace by searching for a file in the `app/src/` directory according to [PSR-4](https://www.php-fig.org/psr/psr-4/) based on the class's namespace and class name.
+1. Execute `composer dump-autoload` in your terminal so the changes take effect.
+
+If we refresh the homepage we will be greeted with our error-free CTA template again.
+
 ### Implementing the Skip button
 
-WP Emerge allows us to use anonymous functions to define as our route handlers, however, it's best if we define our own separate controller classes so our logic is neatly compartmentalized and separated from other handlers' logic.
+Now that we have our controller's `index` method ready let's add some logic to it:
+    ```php
+    public function index( $request, $view ) {
+        if ( $request->get( 'cta' ) === '0' ) {
+            return app_view( $view );
+        }
+        return app_view( 'template-cta.php' );
+    }
+    ```
 
-## Partials
+Now if we visit `HOME_URL` we will see our CTA template but when we click on our "Skip" link we will be presented with our usual homepage!
 
-TODO
+## Improvements
 
-## Bonus
+Let's say that we want to have 2 "Skip" buttons - one above and one below our Lorem Ipsum content. The link url code is short but if we want to stay [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) we can't just copy-paste it.
+We could, of course, define a new variable at the top of our template file but this means that the variable will only be available in this particular template file (what if we wanted that variable to also appear in a child template partial?) and we will be mixing php logic with presentation (which we should always strive to avoid).
 
-TODO
+Instead we can modify our controller method to supply our template (which we will be referring to as a `view` from now on) with a variable which will hold the skip url (we will refer to variables passed to views as `context`):
+    ```php
+    public function index( $request, $view ) {
+        if ( $request->get( 'cta' ) === '0' ) {
+            return app_view( $view );
+        }
+
+        $skip_url = add_query_arg( 'cta', '0', $request->getUrl() );
+
+        return app_view( 'template-cta.php' )
+            ->with( 'skip_url', $skip_url );
+    }
+    ```
+
+We also have to modify the template to use the newly available variable:
+    ```php
+    <a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+    <a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
+    ```
+    
+We reduced PHP logic duplication, but this doesn't solve the use case where we want to have that variable available in a view partial, for example. For this we can use the `app_partial( $view, $context = [] )` function which works very similarly to `get_template_part()` but as you can see it has an optional argument which allows you to pass context variables as well:
+    ```php
+    <?php app_partial( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
+    ```
+
+What if we wish to have a partial that is reused throughout the site but it needs a certain variable? Do we have to add that logic to every controller which loads a view which includes that partial?
+
+Thankfully, no! This is where view composers come in to save the day - check out the [View Composers](../view/view-composers.md) article to see how they can solve this problem and more.
