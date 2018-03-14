@@ -14,6 +14,7 @@ Route handlers have a couple of requirements:
     1. Any `string` which will be output literally
     1. Any `array` which will be output as a JSON response
     1. an object implementing the `Psr\Http\Message\ResponseInterface` interface.
+1. Can optionally throw exceptions. Make sure you catch these exceptions in your `ExceptionHandler` and translate them to responses so that visitors are not greeted with blank pages or stack traces. An example exception that is handled for you by default is the `\WPEmerge\Exceptions\NotFoundException` exception which is translated to 404 response.
 
 ## Instantiation
 
@@ -70,7 +71,7 @@ Returns a new response object with the supplied string as the body.
 
 ### `app_view( $views );`
 
-Uses `locate_template( $views )` to resolve a view and applies the view output as the response body.
+By default, uses `locate_template( $views )` to resolve a view and applies the view output as the response body.
 
 Optionally, you can pass context values to be used from inside the view by chaining `->with( ['foo' => 'bar'] )`.
 
