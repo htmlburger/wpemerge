@@ -25,12 +25,12 @@ A typical use case is to flash error messages inside a controller method in resp
 if ( $email_is_invalid ) {
     // flash an error message
     Flash::add( 'errors', 'Please enter a valid email address.' );
-    // reload the page
-    return app_reload();
+    // redirect the user back to the form
+    return app_redirect()->back();
 }
 
 // inside your form view
-$errors = Flash::get( 'errors' ); // get AND clear the errors, if any
+$errors = Flash::get( 'errors' );
 foreach ( $errors as $error ) {
     echo '<p>' . $error . '</p>';
 }
