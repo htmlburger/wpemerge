@@ -14,7 +14,7 @@ __Step 2 and 3 are a critical part of bootstrapping which is why you should make
 ## template_include
 
 1. All defined routes are evaluated in the order they are defined until a satisified route is found.
-1. If no route is satisfied, normal WordPress execution takes place and no further action is taken by WP Emerge.
+    - If no route is satisfied, normal WordPress execution takes place and no further action is taken by WP Emerge.
 1. If a route is satisfied, normal WordPress template output will be halted and WP Emerge will take over.
 1. All suitable arguments depending on the route condition are prepared and passed to the route handler.
 1. All global and route-specific middleware are sorted according to the global middleware priority array and executed in ascending order. At the end of the middleware chain, the route handler (a controller method, for example) is executed. The middleware and route handler chain will be referred to as the `pipeline`.
