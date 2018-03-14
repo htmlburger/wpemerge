@@ -218,7 +218,7 @@ public function index( $request, $view ) {
     // $request is a WP Emerge class which represents the current request made to the server.
     // $view is the view file that WordPress is trying to load for the current request.
     
-    // If the request includes "cta" a GET parameter with a value of "0" ...
+    // If the request includes the "cta" GET parameter with a value of "0" ...
     if ( $request->get( 'cta' ) === '0' ) {
         // ... return the view WordPress was trying to load:
         return app_view( $view );
