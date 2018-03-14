@@ -1,7 +1,7 @@
 # Route Handlers
 
 {% method -%}
-A route handler can be an anonymous function or a reference in the `CONTROLLER_CLASS@CONTROLLER_METHOD` format.
+A route handler can be an anonymous function or a reference in the `'CONTROLLER_CLASS@CONTROLLER_METHOD'` format.
 
 The shown example will create a new instance of the `HomeController` class and call its `index` method.
 
