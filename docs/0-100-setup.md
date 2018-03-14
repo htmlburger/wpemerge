@@ -41,7 +41,7 @@ Once that's done, we have to make sure the Composer `autoload.php` file is requi
      * Load Composer's autoloader.
      */
     require 'vendor/autoload.php';
-    
+
     /**
      * Bootstrap WP Emerge.
      */
@@ -68,20 +68,20 @@ And we're done - we have composer and WP Emerge loaded and bootstrapped! But ...
 1. The above code defines a new route which matches the Homepage url. This way we will override what WordPress displays on the homepage as a quick test.
 
 Let's open up `HOME_URL` in our browser and we should be greeted with an almost blank page with the `Hello World!` sentence ... but we are not. Did we miss anything? Ah yes - we forgot to load our `framework.php` file! Let's fix this so our `functions.php` code looks like this:
-    ```php
-    /**
-     * Load Composer's autoloader.
-     */
-    require 'vendor/autoload.php';
-    
-    /**
-     * Bootstrap WP Emerge.
-     */
-    add_action( 'after_setup_theme', function() {
-        WPEmerge::boot();
-        require 'app/framework.php';
-    } );
-    ```
+```php
+/**
+ * Load Composer's autoloader.
+ */
+require 'vendor/autoload.php';
+
+/**
+ * Bootstrap WP Emerge.
+ */
+add_action( 'after_setup_theme', function() {
+    WPEmerge::boot();
+    require 'app/framework.php';
+} );
+```
 
 If we open up our browser again we will now see the `Hello World!` sentence as we originally expected!
 
