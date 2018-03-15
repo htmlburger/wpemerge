@@ -2,11 +2,11 @@
 
 [![Packagist](https://img.shields.io/packagist/vpre/htmlburger/wpemerge.svg?style=flat-square&colorB=0366d6)](https://packagist.org/packages/htmlburger/wpemerge) [![Travis branch](https://img.shields.io/travis/htmlburger/wpemerge/master.svg?style=flat-square)](https://travis-ci.org/htmlburger/wpemerge/builds) [![Scrutinizer](https://img.shields.io/scrutinizer/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/) [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/htmlburger/wpemerge.svg?style=flat-square)](https://scrutinizer-ci.com/g/htmlburger/wpemerge/code-structure/master/code-coverage)
 
-A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
+📦 A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.
 
-Integration is incremental - you can use it only on the pages you want or on all pages.
+🔥 Integration is incremental - you can use it only on the pages you want or on all pages.
 
-If you've used Laravel, Slim or Symfony and miss the control over the request+response flow in WordPress - WP Emerge is definitely for you.
+❤️ If you've used Laravel, Slim or Symfony and miss the control over the request+response flow in WordPress - WP Emerge is definitely for you.
 
 ## Requirements
 

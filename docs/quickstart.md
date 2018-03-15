@@ -34,7 +34,7 @@
     - `app/` represents the base path for your classes relative to your theme (i.e. `twentyseventeen/app`)
 
     With this change any class in the `App\` namespace will be autoloaded from the `app/` directory relative to your `composer.json`.
-1. Run `composer dumpautoload` so your changes take effect
+1. Run `composer dump-autoload` so your changes take effect
 
 Here are a few example classes (and their filepaths) that will be autoloaded:
 

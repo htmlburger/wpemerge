@@ -61,7 +61,9 @@ And we're done - we have composer and WP Emerge loaded and bootstrapped! But ...
     ```
 1. The above code defines a new route which matches the Homepage url. This way we will override what WordPress displays on the homepage as a quick test.
 
-Let's open up `HOME_URL` in our browser and we should be greeted with an almost blank page with the `Hello World!` sentence ... but we are not. Did we miss anything? Ah yes - we forgot to load our `framework.php` file! Let's fix this so our `functions.php` code looks like this:
+Let's open up `HOME_URL` in our browser and we should be greeted with an almost blank page with the `Hello World!` sentence ... but we are not. Did we miss anything?
+
+Ah yes - we forgot to load our `framework.php` file! Let's fix this so our `functions.php` code looks like this:
 ```php
 /**
  * Load Composer's autoloader.
