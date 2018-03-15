@@ -82,9 +82,10 @@ Router::get( function() {
 class HomeController {
     public function index( $request ) {
         $name = $request->get( 'name' );
-        return app_view( 'templates/home.php', [
-            'welcome' => 'Welcome, ' . $name . '!',
-        ] );
+        return app_view( 'templates/home.php' )
+            ->with( [
+                'welcome' => 'Welcome, ' . $name . '!',
+            ] );
     }
 }
 ```
