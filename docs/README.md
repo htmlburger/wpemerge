@@ -57,10 +57,10 @@ _³ Sage's Controller is more a View Model than a Controller._
 ```php
 Router::get( '/', 'HomeController@index' );
 
-Router::get( '/custom', 'HomeController@custom' )
+Router::get( '/custom', 'CustomController@custom' )
     ->rewrite( 'index.php?...' );
     
-Router::get( ['post_id', get_option('page_on_front')], 'HomeController@index' );
+Router::get( ['post_id', get_option('page_on_front')], 'PostController@index' );
 
 Router::get( function() {
     return is_front_page();
