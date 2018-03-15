@@ -202,7 +202,7 @@ $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
 
 WP Emerge is completely open source and we encourage everybody to participate by:
 
-* `Star`-ing the project on GitHub \([https://github.com/htmlburger/wpemerge](https://github.com/htmlburger/wpemerge)\)
+* ⭐ the project on GitHub \([https://github.com/htmlburger/wpemerge](https://github.com/htmlburger/wpemerge)\)
 * Posting bug reports \([https://github.com/htmlburger/wpemerge/issues](https://github.com/htmlburger/wpemerge/issues)\)
 * \(Emailing security issues to [info@htmlburger.com](mailto:info@htmlburger.com) instead\)
 * Posting feature suggestions \([https://github.com/htmlburger/wpemerge/issues](https://github.com/htmlburger/wpemerge/issues)\)
