@@ -1,6 +1,6 @@
 # Request Lifecycle
 
-In order to enable WP Emerge you first have to boot it. This is usually done in the `after_setup_theme` hook as it is early enough to allow WP Emerge to hook itself into `init` (which is required for functionality such as custom rewrite rules). Once WP Emerge is booted, it will hook into the`template_include` hook to process the request. This means that there are 2 major parts to the request lifecycle, each named after the hook they are executed in:
+In order to enable WP Emerge you first have to boot it. This is usually done in the `after_setup_theme` action as it is early enough to allow WP Emerge to hook itself into `init` (which is required for functionality such as custom rewrite rules). Once WP Emerge is booted, it will hook into the`template_include` action to process the request. This means that there are 2 major parts to the request lifecycle, each named after the action they are executed in:
 
 ## `after_setup_theme`
 
