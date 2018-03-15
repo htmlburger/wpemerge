@@ -6,7 +6,7 @@
 
 🔥 Integration is incremental - you can use it only on the pages you want or on all pages.
 
-❤️ If you've used Laravel, Slim or Symfony and miss the control over the request+response flow in WordPress - WP Emerge is definitely for you.
+❤️ If you've used frameworks such as Laravel, Slim or Symfony you'll love WP Emerge.
 
 ## Requirements
 
