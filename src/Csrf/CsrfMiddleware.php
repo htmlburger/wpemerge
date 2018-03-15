@@ -3,6 +3,7 @@
 namespace WPEmerge\Csrf;
 
 use Closure;
+use WPEmerge\Exceptions\InvalidCsrfTokenException;
 use WPEmerge\Facades\Csrf as CsrfService;
 use WPEmerge\Middleware\MiddlewareInterface;
 
@@ -14,10 +15,11 @@ class CsrfMiddleware implements MiddlewareInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( $request, Closure $next ) {
-		$old_token = CsrfService::getTokenForRequest( $request );
-
-		if ( ! CsrfService::isValidToken( $old_token ) ) {
-			CsrfService::die();
+		if ( ! $request->isReadVerb() ) {
+			$token = CsrfService::getTokenFromRequest( $request );
+			if ( ! CsrfService::isValidToken( $token ) ) {
+				throw new InvalidCsrfTokenException();
+			}
 		}
 
 		CsrfService::generateToken();

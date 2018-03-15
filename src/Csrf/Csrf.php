@@ -64,10 +64,10 @@ class Csrf {
 	/**
 	 * Get the csrf token from a request.
 	 *
-	 * @param  Request     $request
+	 * @param  Request $request
 	 * @return string
 	 */
-	public function getTokenForRequest( Request $request ) {
+	public function getTokenFromRequest( Request $request ) {
 		if ( $request->get( $this->key ) ) {
 			return $request->get( $this->key );
 		}
@@ -90,6 +90,7 @@ class Csrf {
 	 * @return string
 	 */
 	public function generateToken( $action = -1 ) {
+		$action = $action === -1 ? session_id() : $action;
 		$this->token = wp_create_nonce( $action );
 		return $this->getToken();
 	}
@@ -102,22 +103,15 @@ class Csrf {
 	 * @return boolean
 	 */
 	public function isValidToken( $token, $action = -1 ) {
+		$action = $action === -1 ? session_id() : $action;
 		$lifetime = intval( wp_verify_nonce( $token, $action ) );
 		return ( $lifetime > 0 && $lifetime <= $this->maximum_lifetime );
 	}
 
 	/**
-	 * Kill request with an "Are you sure?" message.
-	 *
-	 * @return void
-	 */
-	public function die() {
-		wp_nonce_ays( '' );
-	}
-
-	/**
 	 * Add the token to a URL.
 	 *
+	 * @param  string $url
 	 * @return string
 	 */
 	public function url( $url ) {
@@ -127,9 +121,9 @@ class Csrf {
 	/**
 	 * Return the markup for a hidden input which holds the current token.
 	 *
-	 * @return string
+	 * @return void
 	 */
 	public function field() {
-		return '<input type="hidden" name="' . esc_attr( $this->key ) . '" value="' . esc_attr( $this->getToken() ) . '" />';
+		echo '<input type="hidden" name="' . esc_attr( $this->key ) . '" value="' . esc_attr( $this->getToken() ) . '" />';
 	}
 }

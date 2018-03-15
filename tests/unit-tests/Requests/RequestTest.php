@@ -86,6 +86,20 @@ class RequestTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::isReadVerb
+	 */
+	public function testIsReadVerb() {
+		$subject1 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'GET'], [] );
+		$this->assertTrue( $subject1->isReadVerb() );
+
+		$subject2 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'HEAD'], [] );
+		$this->assertTrue( $subject2->isReadVerb() );
+
+		$subject3 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS'], [] );
+		$this->assertTrue( $subject3->isReadVerb() );
+	}
+
+	/**
 	 * @covers ::getUrl
 	 */
 	public function testGetUrl() {

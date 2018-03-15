@@ -47,5 +47,4 @@ class ExceptionHandlerTest extends WP_UnitTestCase {
 		$exception = new Exception( 'Rethrown exception' );
 		$this->subject->handle( $exception );
 	}
-
 }

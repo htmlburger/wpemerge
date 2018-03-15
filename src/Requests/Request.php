@@ -159,6 +159,15 @@ class Request {
 	}
 
 	/**
+	 * Check if the request method is a "read" verb.
+	 *
+	 * @return boolean
+	 */
+	public function isReadVerb() {
+		return in_array( $this->getMethod(), ['GET', 'HEAD', 'OPTIONS'] );
+	}
+
+	/**
 	 * Get the request url.
 	 *
 	 * @return string
