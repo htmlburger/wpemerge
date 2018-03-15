@@ -1,0 +1,26 @@
+{
+    "root": "./docs",
+    "plugins": [ "anchorjs", "-sharing", "theme-api", "versions" ],
+    "pluginsConfig": {
+        "anchorjs": {
+          "selector": "h2,h3,h4,h5",
+          "icon": "#",
+          "placement": "left",
+          "truncate": 64
+        },
+        "theme-api": {
+            "theme": "dark",
+            "split": true,
+            "languages": [
+                {
+                    "lang": "php",
+                    "name": "PHP",
+                    "default": true
+                }
+            ]
+        },
+        "versions": {
+            "type": "tags"
+        }
+    }
+}

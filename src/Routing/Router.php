@@ -4,6 +4,7 @@ namespace WPEmerge\Routing;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Exceptions\ExceptionHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\Response;
 use WPEmerge\Requests\Request;
@@ -45,6 +46,13 @@ class Router implements HasRoutesInterface {
 	protected $default_middleware_priority = 0;
 
 	/**
+	 * Exception handler.
+	 *
+	 * @var ExceptionHandlerInterface
+	 */
+	protected $exception_handler = null;
+
+	/**
 	 * Current active route.
 	 *
 	 * @var RouteInterface
@@ -55,16 +63,18 @@ class Router implements HasRoutesInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Request $request
-	 * @param array   $middleware
-	 * @param array   $middleware_priority
-	 * @param integer $default_middleware_priority
+	 * @param Request                   $request
+	 * @param array                     $middleware
+	 * @param array                     $middleware_priority
+	 * @param integer                   $default_middleware_priority
+	 * @param ExceptionHandlerInterface $exception_handler
 	 */
-	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority ) {
+	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority, ExceptionHandlerInterface $exception_handler ) {
 		$this->request = $request;
 		$this->middleware_priority = $middleware_priority;
 		$this->default_middleware_priority = $default_middleware_priority;
 		$this->middleware = $this->sortMiddleware( $middleware );
+		$this->exception_handler = $exception_handler;
 	}
 
 	/**
@@ -156,18 +166,21 @@ class Router implements HasRoutesInterface {
 	 * @return string
 	 */
 	protected function handle( Request $request, RouteInterface $route, $view ) {
-		$response = $route->handle( $request, $view );
+		try {
+			$response = $route->handle( $request, $view );
+		} catch ( Exception $e ) {
+			$response = $this->exception_handler->handle( $e );
+		}
 
 		if ( ! $response instanceof ResponseInterface ) {
 			if ( Framework::debugging() ) {
-				throw new Exception( 'Response returned by controller is not valid (expectected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
+				throw new Exception( 'Response returned by controller is not valid (expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 			}
 			$response = Response::error( 500 );
 		}
 
-		add_filter( 'wpemerge.response', function() use ( $response ) {
-			return $response;
-		} );
+		$container = Framework::getContainer();
+		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
 
 		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 	}
@@ -194,7 +207,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Handle ALL requests.
 	 *
-	 * @param  string|Closure|null $handler
+	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
 	 */
 	public function handleAll( $handler = null ) {

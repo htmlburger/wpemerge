@@ -121,10 +121,9 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 	 */
 	public function testMake() {
 		$view = 'file.php';
-		$context = ['foo' => 'bar'];
 		$result = 'foobar';
 
-		$this->container['engine_mockup'] = function() use ( $view, $context, $result ) {
+		$this->container['engine_mockup'] = function() use ( $view, $result ) {
 			$mock = Mockery::mock();
 
 			$mock->shouldReceive( 'exists' )
@@ -132,7 +131,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 				->andReturn( true );
 
 			$mock->shouldReceive( 'make' )
-				->with( [$view], $context )
+				->with( [$view] )
 				->andReturn( $result );
 
 			return $mock;
@@ -140,7 +139,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 
 		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
-		$this->assertEquals( $result, $subject->make( [$view], $context ) );
+		$this->assertEquals( $result, $subject->make( [$view] ) );
 	}
 
 	/**

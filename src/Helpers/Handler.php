@@ -46,11 +46,7 @@ class Handler {
 			return $raw_handler;
 		}
 
-		if ( is_string( $raw_handler ) )  {
-			return $this->parseFromString( $raw_handler, $default_method );
-		}
-
-		return null;
+		return $this->parseFromString( $raw_handler, $default_method );
 	}
 
 	/**

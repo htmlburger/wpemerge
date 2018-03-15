@@ -31,18 +31,18 @@ class RouteTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * @covers ::getMethods
-	 * @covers ::getTarget
+	 * @covers ::getCondition
 	 * @covers ::getHandler
 	 */
 	public function testConstruct_ConditionInterface() {
 		$expected_methods = ['FOO'];
-		$expected_target = Mockery::mock( ConditionInterface::class );
+		$expected_condition = Mockery::mock( ConditionInterface::class );
 		$handler = function() {};
 		$expected_handler = new RouteHandler( $handler );
 
-		$subject = new Route( $expected_methods, $expected_target, $handler );
+		$subject = new Route( $expected_methods, $expected_condition, $handler );
 		$this->assertEquals( $expected_methods, $subject->getMethods() );
-		$this->assertSame( $expected_target, $subject->getTarget() );
+		$this->assertSame( $expected_condition, $subject->getCondition() );
 		$this->assertEquals( $expected_handler, $subject->getHandler() );
 	}
 
@@ -53,13 +53,13 @@ class RouteTest extends WP_UnitTestCase {
 		$expected = function() {};
 
 		$subject = new Route( [], $expected, function() {} );
-		$this->assertEquals( $expected, $subject->getTarget()->getCallable() );
+		$this->assertEquals( $expected, $subject->getCondition()->getCallable() );
 	}
 
 	/**
 	 * @covers ::__construct
 	 * @expectedException \Exception
-	 * @expectedExceptionMessage Route target is not a valid
+	 * @expectedExceptionMessage Route condition is not a valid
 	 */
 	public function testConstruct_Invalid() {
 		$subject = new Route( [], new stdClass(), function() {} );
@@ -70,21 +70,21 @@ class RouteTest extends WP_UnitTestCase {
 	 */
 	public function testIsSatisfied() {
 		$request = Mockery::mock( Request::class );
-		$target = Mockery::mock( ConditionInterface::class );
+		$condition = Mockery::mock( ConditionInterface::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
 
-		$target->shouldReceive( 'isSatisfied' )
+		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( true );
 
-		$subject1 = new Route( ['BAR'], $target, function() {} );
+		$subject1 = new Route( ['BAR'], $condition, function() {} );
 		$this->assertFalse( $subject1->isSatisfied( $request ) );
 
-		$subject2 = new Route( ['FOO'], $target, function() {} );
+		$subject2 = new Route( ['FOO'], $condition, function() {} );
 		$this->assertTrue( $subject2->isSatisfied( $request ) );
 
-		$subject3 = new Route( ['FOO', 'BAR'], $target, function() {} );
+		$subject3 = new Route( ['FOO', 'BAR'], $condition, function() {} );
 		$this->assertTrue( $subject3->isSatisfied( $request ) );
 	}
 
@@ -93,15 +93,15 @@ class RouteTest extends WP_UnitTestCase {
 	 */
 	public function testIsSatisfied_ConditionFalse_False() {
 		$request = Mockery::mock( Request::class );
-		$target = Mockery::mock( ConditionInterface::class );
+		$condition = Mockery::mock( ConditionInterface::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
 
-		$target->shouldReceive( 'isSatisfied' )
+		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
 
-		$subject = new Route( ['FOO'], $target, function() {} );
+		$subject = new Route( ['FOO'], $condition, function() {} );
 		$this->assertFalse( $subject->isSatisfied( $request ) );
 	}
 }

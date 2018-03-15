@@ -3,7 +3,7 @@
 namespace WPEmerge\View;
 
 use Closure;
-use ViewEngine;
+use WPEmerge\Facades\ViewEngine;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\Mixed;
 
@@ -94,13 +94,14 @@ class ViewService {
 		return $composers;
 	}
 
-	/**
-	 * Add view composer.
-	 *
-	 * @param string|string[] $views
-	 * @param string|Closure  $composer
-	 * @return void
-	 */
+    /**
+     * Add view composer.
+     *
+     * @param string|string[] $views
+     * @param string|Closure  $composer
+     * @return void
+     * @throws \Exception
+     */
 	public function addComposer( $views, $composer ) {
 		$views = array_map( function( $view ) {
 			return ViewEngine::canonical( $view );
@@ -132,22 +133,10 @@ class ViewService {
 	 * Create a view instance.
 	 *
 	 * @param  string|string[] $views
-	 * @param  array           $context
 	 * @return ViewInterface
 	 */
-	public function make( $views, $context = [] ) {
+	public function make( $views ) {
 		$views = Mixed::toArray( $views );
-		return $this->view_engine->make( $views, $context );
-	}
-
-	/**
-	 * Render the given view to string.
-	 *
-	 * @param  string|string[] $views
-	 * @param  array           $context
-	 * @return string
-	 */
-	public function toString( $views, $context = [] ) {
-		return $this->make( $views, $context )->toString();
+		return $this->view_engine->make( $views );
 	}
 }

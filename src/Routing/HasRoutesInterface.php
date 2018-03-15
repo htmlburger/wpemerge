@@ -27,81 +27,81 @@ interface HasRoutesInterface {
 	 * Create and add a new route
 	 *
 	 * @param  string[]       $methods
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function route( $methods, $target, $handler );
+	public function route( $methods, $condition, $handler );
 
 	/**
 	 * Create and add a route group
 	 *
-	 * @param  string         $target
-	 * @param  Closure        $closure
+	 * @param  string|Closure|\WPEmerge\Routing\Conditions\ConditionInterface $condition
+	 * @param  Closure|null                      $routes
 	 * @return RouteInterface
 	 */
-	public function group( $target, Closure $closure );
+	public function group( $condition, $routes = null );
 
 	/**
 	 * Create and add a route for the GET and HEAD methods
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function get( $target, $handler );
+	public function get( $condition, $handler );
 
 	/**
 	 * Create and add a route for the POST method
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function post( $target, $handler );
+	public function post( $condition, $handler );
 
 	/**
 	 * Create and add a route for the PUT method
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function put( $target, $handler );
+	public function put( $condition, $handler );
 
 	/**
 	 * Create and add a route for the PATCH method
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function patch( $target, $handler );
+	public function patch( $condition, $handler );
 
 	/**
 	 * Create and add a route for the DELETE method
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function delete( $target, $handler );
+	public function delete( $condition, $handler );
 
 	/**
 	 * Create and add a route for the OPTIONS method
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function options( $target, $handler );
+	public function options( $condition, $handler );
 
 	/**
 	 * Create and add a route for all supported methods
 	 *
-	 * @param  mixed          $target
+	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
-	public function any( $target, $handler );
+	public function any( $condition, $handler );
 }

@@ -1,3 +1,4 @@
+/assets export-ignore
 /tests export-ignore
 /tmp export-ignore
 .gitattributes export-ignore

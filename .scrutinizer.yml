@@ -1,15 +1,13 @@
 build:
-  environment:
-    php:
-      version: 5.5
   nodes:
     analysis:
+      dependencies:
+        before:
+          - composer require --dev johnpbloch/wordpress
       project_setup:
-        override:
-          - 'true'
+        override: true
       tests:
-        override:
-          - 'true'
+        override: [php-scrutinizer-run]
 
 filter:
   excluded_paths:
@@ -17,6 +15,8 @@ filter:
     - 'tests/*'
     - 'tmp/*'
     - '.sami.php'
+  dependency_paths:
+    - wordpress/
 
 checks:
   php: true

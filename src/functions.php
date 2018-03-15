@@ -53,7 +53,7 @@ if ( ! function_exists( 'app_view' ) ) {
 	 * @see \WPEmerge\Responses\ResponseService::view()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function app_view( $views, $context = [] ) {
+	function app_view( $views ) {
 		return call_user_func_array( [Response::class, 'view'], func_get_args() );
 	}
 }
@@ -72,10 +72,13 @@ if ( ! function_exists( 'app_error' ) ) {
 if ( ! function_exists( 'app_partial' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\View\ViewService::toString()
+	 * @see \WPEmerge\View\ViewService::make()
+	 * @see \WPEmerge\View\ViewInterface::toString()
 	 * @return void
 	 */
 	function app_partial( $views, $context = [] ) {
-		echo call_user_func_array( [View::class, 'toString'], func_get_args() );
+	    echo View::make( $views )
+            ->with( $context )
+            ->toString();
 	}
 }

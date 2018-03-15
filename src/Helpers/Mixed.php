@@ -54,4 +54,16 @@ class Mixed {
 	public static function isClass( $class_name ) {
 		return ( is_string( $class_name ) && class_exists( $class_name ) );
 	}
+
+	/**
+	 * Normalize a path's slashes according to the current OS.
+	 * Solves mixed slashes that are sometimes returned by WordPress core functions.
+	 *
+	 * @param  string $path
+	 * @param  string $replace_with
+	 * @return string
+	 */
+	public static function normalizePath( $path, $replace_with = DIRECTORY_SEPARATOR ) {
+		return preg_replace( '~[/' . preg_quote( '\\', '~' ) . ']~', $replace_with, $path );
+	}
 }

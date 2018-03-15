@@ -25,6 +25,14 @@ if ( ! defined( 'WPEMERGE_REQUEST_KEY' ) ) {
 	define( 'WPEMERGE_REQUEST_KEY', 'wpemerge.request' );
 }
 
+if ( ! defined( 'WPEMERGE_RESPONSE_KEY' ) ) {
+	define( 'WPEMERGE_RESPONSE_KEY', 'wpemerge.response' );
+}
+
+if ( ! defined( 'WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY' ) ) {
+	define( 'WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY', 'wpemerge.exceptions.exception_handler' );
+}
+
 if ( ! defined( 'WPEMERGE_RESPONSE_SERVICE_KEY' ) ) {
 	define( 'WPEMERGE_RESPONSE_SERVICE_KEY', 'wpemerge.responses.response_service' );
 }
@@ -45,12 +53,12 @@ if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'wpemerge.routing.global_middleware' );
 }
 
-if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY', 'wpemerge.routing.global_middleware.priority' );
+if ( ! defined( 'WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY' ) ) {
+	define( 'WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY', 'wpemerge.routing.middleware.priority' );
 }
 
-if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_DEFAULT_PRIORITY_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_DEFAULT_PRIORITY_KEY', 'wpemerge.routing.global_middleware.priority.default' );
+if ( ! defined( 'WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY' ) ) {
+	define( 'WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY', 'wpemerge.routing.middleware.priority.default' );
 }
 
 if ( ! defined( 'WPEMERGE_VIEW_SERVICE_KEY' ) ) {

@@ -43,13 +43,13 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute() {
 		$methods = ['GET', 'POST'];
-		$target = new UrlCondition( '/foo/bar/' );
+		$condition = new UrlCondition( '/foo/bar/' );
 		$handler = function() {};
 
-		$route = $this->subject->route( $methods, $target, $handler );
+		$route = $this->subject->route( $methods, $condition, $handler );
 
 		$this->assertSame( $methods, $route->getMethods() );
-		$this->assertSame( $target, $route->getTarget() );
+		$this->assertSame( $condition, $route->getCondition() );
 		$this->assertSame( $handler, $route->getHandler()->get()->get() );
 		$this->assertSame( [$route], $this->subject->getRoutes() );
 	}
@@ -59,9 +59,9 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute_NoHandler_WordPressHandler() {
 		$methods = ['GET', 'POST'];
-		$target = new UrlCondition( '/foo/bar/' );
+		$condition = new UrlCondition( '/foo/bar/' );
 
-		$route = $this->subject->route( $methods, $target );
+		$route = $this->subject->route( $methods, $condition );
 
 		$this->assertEquals( WordPressController::class, $route->getHandler()->get()->get()['class'] );
 	}
@@ -70,9 +70,9 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 * @covers ::group
 	 */
 	public function testGroup() {
-		$target = '/foo/';
+		$condition = '/foo/';
 
-		$group = $this->subject->group( $target, function( $group ) {
+		$group = $this->subject->group( $condition, function( $group ) {
 
 		} );
 
@@ -89,27 +89,27 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 * @covers ::any
 	 */
 	public function testMethods() {
-		$target = '/foo/';
+		$condition = '/foo/';
 
-		$route1 = $this->subject->get( $target );
+		$route1 = $this->subject->get( $condition );
 		$this->assertEquals( ['GET', 'HEAD'], $route1->getMethods() );
 
-		$route2 = $this->subject->post( $target );
+		$route2 = $this->subject->post( $condition );
 		$this->assertEquals( ['POST'], $route2->getMethods() );
 
-		$route3 = $this->subject->put( $target );
+		$route3 = $this->subject->put( $condition );
 		$this->assertEquals( ['PUT'], $route3->getMethods() );
 
-		$route4 = $this->subject->patch( $target );
+		$route4 = $this->subject->patch( $condition );
 		$this->assertEquals( ['PATCH'], $route4->getMethods() );
 
-		$route5 = $this->subject->delete( $target );
+		$route5 = $this->subject->delete( $condition );
 		$this->assertEquals( ['DELETE'], $route5->getMethods() );
 
-		$route6 = $this->subject->options( $target );
+		$route6 = $this->subject->options( $condition );
 		$this->assertEquals( ['OPTIONS'], $route6->getMethods() );
 
-		$route7 = $this->subject->any( $target );
+		$route7 = $this->subject->any( $condition );
 		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route7->getMethods() );
 	}
 }

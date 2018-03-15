@@ -22,8 +22,8 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 			]
 		);
 
-		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY ] = array_merge(
-			$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_PRIORITY_KEY ],
+		$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] = array_merge(
+			$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ],
 			[
 				\WPEmerge\Input\OldInputMiddleware::class => 15,
 			]

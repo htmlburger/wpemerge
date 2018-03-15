@@ -92,4 +92,16 @@ class MixedTest extends WP_UnitTestCase {
 		$this->assertFalse( Mixed::isClass( new stdClass() ) );
 		$this->assertFalse( Mixed::isClass( [] ) );
 	}
+
+	/**
+	 * @covers ::normalizePath
+	 */
+	public function testNormalizePath() {
+		$ds = DIRECTORY_SEPARATOR;
+		$input = '/foo\\bar/baz\\foobar';
+
+		$this->assertEquals( "{$ds}foo{$ds}bar{$ds}baz{$ds}foobar", Mixed::normalizePath( $input ) );
+		$this->assertEquals( "/foo/bar/baz/foobar", Mixed::normalizePath( $input, '/' ) );
+		$this->assertEquals( "\\foo\\bar\\baz\\foobar", Mixed::normalizePath( $input, '\\' ) );
+	}
 }

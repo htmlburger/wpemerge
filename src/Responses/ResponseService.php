@@ -222,12 +222,11 @@ class ResponseService {
 	/**
 	 * Get a view convertible to a response.
 	 *
-	 * @param  string|string[]   $views
-	 * @param  array             $context
+	 * @param  string|string[] $views
 	 * @return ViewInterface
 	 */
-	public function view( $views, $context = [] ) {
-		return View::make( $views, $context );
+	public function view( $views ) {
+		return View::make( $views );
 	}
 
 	/**

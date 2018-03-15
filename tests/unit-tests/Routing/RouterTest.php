@@ -2,14 +2,18 @@
 
 namespace WPEmergeTests\Routing;
 
+use ArrayAccess;
+use Exception;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use WPEmerge\Exceptions\ExceptionHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
+use WPEmerge\Support\Facade;
 use WP_UnitTestCase;
 
 /**
@@ -19,13 +23,18 @@ class RouterTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0 );
+		$this->exception_handler = Mockery::mock( ExceptionHandlerInterface::class )->shouldIgnoreMissing();
+		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0, $this->exception_handler );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
+		Facade::clearResolvedInstance( WPEMERGE_RESPONSE_KEY );
+		Facade::clearResolvedInstance( WPEMERGE_FRAMEWORK_KEY );
+
+		unset( $this->exception_handler );
 		unset( $this->subject );
 	}
 
@@ -41,7 +50,7 @@ class RouterTest extends WP_UnitTestCase {
 
 		$subject = new Router( Mockery::mock( Request::class ), [], [
 			$middleware1 => $middleware1_priority,
-		], $default_middleware_priority );
+		], $default_middleware_priority, $this->exception_handler );
 
 		$this->assertEquals( $middleware1_priority, $subject->getMiddlewarePriority( $middleware1 ) );
 		$this->assertEquals( $default_middleware_priority, $subject->getMiddlewarePriority( $middleware2 ) );
@@ -60,7 +69,7 @@ class RouterTest extends WP_UnitTestCase {
 
 		$subject = new Router( Mockery::mock( Request::class ), [], [
 			$middleware1 => $middleware1_priority,
-		], $default_middleware_priority );
+		], $default_middleware_priority, $this->exception_handler );
 
 		$expected = $middleware1;
 		$result = $subject->sortMiddleware( [$middleware3, $middleware2, $middleware1] );
@@ -75,7 +84,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function testAddRoute() {
 		$route = Mockery::mock( RouteInterface::class );
 		$middleware = [Mockery::mock( MiddlewareInterface::class )];
-		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0 );
+		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0, $this->exception_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware )
@@ -103,7 +112,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware = Mockery::mock( MiddlewareInterface::class );
 		$middleware_array = [$middleware];
 
-		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0 );
+		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0, $this->exception_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )
@@ -124,12 +133,10 @@ class RouterTest extends WP_UnitTestCase {
 		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$route1->shouldReceive( 'isSatisfied' )
-			->andReturn( false )
-			->once();
+			->andReturn( false );
 
 		$route2->shouldReceive( 'isSatisfied' )
-			->andReturn( false )
-			->once();
+			->andReturn( false );
 
 		$this->subject->addRoute( $route1 );
 		$this->subject->addRoute( $route2 );
@@ -148,12 +155,10 @@ class RouterTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route1->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route1->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$route2->shouldReceive( 'isSatisfied' )
 			->never();
@@ -172,22 +177,32 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testExecute_InvalidResponse_ReturnErrorResponse() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$container = Mockery::mock( ArrayAccess::class );
+		$response = null;
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( new stdClass() )
-			->once();
+			->andReturn( new stdClass() );
 
 		$this->subject->addRoute( $route );
 
-		add_filter( 'wpemerge.debug', '__return_false' );
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( false );
+
+		Framework::shouldReceive( 'getContainer' )
+			->andReturn( $container );
+
+		$container->shouldReceive( 'offsetSet' )
+			->andReturnUsing( function( $key, $value ) use ( &$response ) {
+				$response = $value;
+			} );
+
+		$container->shouldReceive( 'offsetUnset' );
 
 		$this->subject->execute( '' );
 
-		$response = apply_filters( 'wpemerge.response', null );
 		$this->assertEquals( 500, $response->getStatusCode() );
 	}
 
@@ -201,14 +216,15 @@ class RouterTest extends WP_UnitTestCase {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( new stdClass() )
-			->once();
+			->andReturn( new stdClass() );
 
 		$this->subject->addRoute( $route );
+
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( true );
 
 		$this->subject->execute( '' );
 	}
@@ -217,24 +233,31 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::execute
 	 * @covers ::handle
 	 */
-	public function testExecute_Response_AddsFilter() {
+	public function testExecute_Response() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
+		$container = Mockery::mock( ArrayAccess::class );
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$this->subject->addRoute( $route );
 
+		Framework::shouldReceive( 'debugging' )
+			->andReturn( false );
+
+		Framework::shouldReceive( 'getContainer' )
+			->andReturn( $container );
+
+		$container->shouldReceive( 'offsetSet' )
+			->with( WPEMERGE_RESPONSE_KEY, $response );
+
 		$this->subject->execute( '' );
 
-		$filter_response = apply_filters( 'wpemerge.response', null );
-		$this->assertSame( $response, $filter_response );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -247,16 +270,43 @@ class RouterTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true )
-			->once();
+			->andReturn( true );
 
 		$route->shouldReceive( 'handle' )
-			->andReturn( $response )
-			->once();
+			->andReturn( $response );
 
 		$this->subject->addRoute( $route );
 
 		$this->assertSame( $expected, $this->subject->execute( '' ) );
+	}
+
+	/**
+	 * @covers ::execute
+	 * @covers ::handle
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage Exception handled
+	 */
+	public function testExecute_Exception_UseExceptionHandler() {
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$exception = new Exception();
+
+		$route->shouldReceive( 'isSatisfied' )
+			->andReturn( true );
+
+		$route->shouldReceive( 'handle' )
+			->andReturnUsing( function() use ( $exception ) {
+				throw $exception;
+			} );
+
+		$this->exception_handler->shouldReceive( 'handle' )
+			->with( $exception )
+			->andReturnUsing( function() {
+				throw new Exception( 'Exception handled' );
+			} );
+
+		$this->subject->addRoute( $route );
+
+		$this->subject->execute( '' );
 	}
 
 	/**

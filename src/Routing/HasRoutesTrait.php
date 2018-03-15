@@ -40,105 +40,105 @@ trait HasRoutesTrait {
 	 * Create and add a new route
 	 *
 	 * @param  string[]            $methods
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function route( $methods, $target, $handler = null ) {
+	public function route( $methods, $condition, $handler = null ) {
 		if ( $handler === null ) {
 			$handler = WordPressController::class . '@handle';
 		}
 
-		$route = new Route( $methods, $target, $handler );
+		$route = new Route( $methods, $condition, $handler );
 		return $this->addRoute( $route );
 	}
 
 	/**
 	 * Create and add a route group
 	 *
-	 * @param  string         $target
-	 * @param  Closure        $closure
+	 * @param  string|Closure|\WPEmerge\Routing\Conditions\ConditionInterface $condition
+	 * @param  Closure|null                                                   $routes
 	 * @return RouteInterface
 	 */
-	public function group( $target, Closure $closure ) {
-		$routeGroup = new RouteGroup( $target, $closure );
+	public function group( $condition, $routes = null ) {
+		$routeGroup = new RouteGroup( $condition, $routes );
 		return $this->addRoute( $routeGroup );
 	}
 
 	/**
 	 * Create and add a route for the GET and HEAD methods
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function get( $target, $handler = null ) {
-		return $this->route( ['GET', 'HEAD'], $target, $handler );
+	public function get( $condition, $handler = null ) {
+		return $this->route( ['GET', 'HEAD'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for the POST method
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function post( $target, $handler = null ) {
-		return $this->route( ['POST'], $target, $handler );
+	public function post( $condition, $handler = null ) {
+		return $this->route( ['POST'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for the PUT method
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function put( $target, $handler = null ) {
-		return $this->route( ['PUT'], $target, $handler );
+	public function put( $condition, $handler = null ) {
+		return $this->route( ['PUT'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for the PATCH method
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function patch( $target, $handler = null ) {
-		return $this->route( ['PATCH'], $target, $handler );
+	public function patch( $condition, $handler = null ) {
+		return $this->route( ['PATCH'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for the DELETE method
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function delete( $target, $handler = null ) {
-		return $this->route( ['DELETE'], $target, $handler );
+	public function delete( $condition, $handler = null ) {
+		return $this->route( ['DELETE'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for the OPTIONS method
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function options( $target, $handler = null ) {
-		return $this->route( ['OPTIONS'], $target, $handler );
+	public function options( $condition, $handler = null ) {
+		return $this->route( ['OPTIONS'], $condition, $handler );
 	}
 
 	/**
 	 * Create and add a route for all supported methods
 	 *
-	 * @param  mixed               $target
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function any( $target, $handler = null ) {
-		return $this->route( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $target, $handler );
+	public function any( $condition, $handler = null ) {
+		return $this->route( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $condition, $handler );
 	}
 }

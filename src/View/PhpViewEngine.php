@@ -27,11 +27,11 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function make( $views, $context = [] ) {
+	public function make( $views ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
 				$filepath = $this->resolveFilepath( $view );
-				return $this->makeView( $view, $filepath, $context );
+				return $this->makeView( $view, $filepath );
 			}
 		}
 
@@ -43,14 +43,12 @@ class PhpViewEngine implements ViewEngineInterface {
 	 *
 	 * @param  string        $name
 	 * @param  string        $filepath
-	 * @param  array         $context
 	 * @return ViewInterface
 	 */
-	protected function makeView( $name, $filepath, $context = [] ) {
+	protected function makeView( $name, $filepath ) {
 		return (new PhpView())
 			->setName( $name )
-			->setFilepath( $filepath )
-			->with( $context );
+			->setFilepath( $filepath );
 	}
 
 	/**
