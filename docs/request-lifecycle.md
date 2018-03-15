@@ -2,7 +2,7 @@
 
 In order to enable WP Emerge you first have to boot it. This is usually done in the `after_setup_theme` hook as it is early enough to allow WP Emerge to hook itself into `init` (which is required for functionality such as custom rewrite rules). Once WP Emerge is booted, it will hook into the`template_include` hook to process the request. This means that there are 2 major parts to the request lifecycle, each named after the hook they are executed in:
 
-## after_setup_theme
+## `after_setup_theme`
 
 1. Configuration options passed to `WPEmerge::boot( $config )` is loaded.
 1. All service providers listed in the configuration are registered.
@@ -11,7 +11,7 @@ In order to enable WP Emerge you first have to boot it. This is usually done in 
 __Step 2 and 3 are a critical part of bootstrapping which is why you should make sure your own service container registrations or overrides are done in your own Service Provider instead of after WP Emerge has been booted.__
 
 
-## template_include
+## `template_include`
 
 1. All defined routes are evaluated in the order they are defined until a satisified route is found.
     - If no route is satisfied, normal WordPress execution takes place and no further action is taken by WP Emerge.
