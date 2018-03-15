@@ -1,6 +1,6 @@
 # Extending
 
-WP Emerge uses a service container for all of it's dependencies which means that you can easily replace or add dependencies.
+WP Emerge uses a service container for all of its dependencies which means that you can easily replace or add dependencies.
 
 For a real-world example, we will be adding our own custom routing condition:
 

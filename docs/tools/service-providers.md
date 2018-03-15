@@ -3,7 +3,7 @@
 A service provider is a class that registers and bootstraps services into the WP Emerge service container.
 We __highly suggest__ you write simple service provider classes to define your dependencies instead of using `WPEmerge::getContainer()` (the documentation uses it for examples as it's simpler).
 
-WP Emerge itself uses service providers to register and bootstrap most of it's functionality, for example:
+WP Emerge itself uses service providers to register and bootstrap most of its functionality, for example:
 - `\WPEmerge\Flash\FlashServiceProvider`
 - `\WPEmerge\Routing\RoutingServiceProvider`
 

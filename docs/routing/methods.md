@@ -14,7 +14,7 @@ Router::route( ['GET', 'HEAD', 'POST'], $condition, $handler );
 
 ## Handling all requests
 
-By default, WP Emerge will only handle the requests which match it's routes so you can implement it only where you need to (even on legacy projects). However, you can also handle all requests if you wish to do so:
+By default, WP Emerge will only handle the requests which match its routes so you can implement it only where you need to (even on legacy projects). However, you can also handle all requests if you wish to do so:
 ```php
 // Add this AFTER all of your route definitions
 Router::handleAll();
