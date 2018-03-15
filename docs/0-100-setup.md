@@ -2,13 +2,6 @@
 
 Sometimes it can be hard to see the full picture which is why this guide will show you how to add WP Emerge to the standard Twenty Seventeen WordPress theme, step-by-step.
 
-## What this guide will cover
-
-- Installation
-- Routing
-- Controllers
-- View Composers
-
 ## Assumptions & Definitions
 
 - You have PHP >= 5.5 installed.
