@@ -18,7 +18,7 @@ __Step 2 and 3 are a critical part of bootstrapping which is why you should make
 1. If a route is satisfied, normal WordPress template output will be halted and WP Emerge will take over.
 1. All suitable arguments depending on the route condition are prepared and passed to the route handler.
 1. All global and route-specific middleware are sorted according to the global middleware priority array and executed in ascending order. At the end of the middleware chain, the route handler (a controller method, for example) is executed. The middleware and route handler chain will be referred to as the `pipeline`.
-1. If an exception is thrown from the pipeline the `ExceptionHandler` defined in the service container will be invoked with that exception as its argument and the pipeline will be halted. The exception handler must return a response object.
+1. If an exception is thrown from the pipeline the `ExceptionHandler` defined in the service container will be invoked with that exception as its argument and the pipeline will be halted. The exception handler must return a corresponding response object.
 1. The returned response object from the pipeline or exception handler will be used to set the headers and output the body, ending the response.
 
 ## WP Emerge and The Loop
