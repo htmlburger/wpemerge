@@ -4,7 +4,7 @@ In order to enable WP Emerge you first have to boot it. This is usually done in 
 
 ## `after_setup_theme`
 
-1. Configuration options passed to `WPEmerge::boot( $config )` is loaded.
+1. Configuration options passed to `WPEmerge::boot( $config )` are loaded.
 1. All service providers listed in the configuration are registered.
 1. All service providers listed in the configuration are booted.
 
