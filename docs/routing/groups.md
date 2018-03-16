@@ -1,31 +1,58 @@
 # Route Groups
 
 {% method -%}
-You can group URL-based routes into nested groups which will share the group url as a prefix as well as any middleware assigned to the group:
+You can group routes which will share the group condition as well as any middleware assigned to the group:
 
 {% sample lang="php" -%}
 ```php
 Route::group( '/foo/', function( $group ) {
-    $group->get( '/bar/', $handler ); // will match '/foo/bar/'
-    $group->get( '/baz/', $handler ); // will match '/foo/baz/'
-} );
+    $group->group( '/bar/', function( $group ) {
+        // Match if '/foo/bar/' is the full path:
+        $group->get( '/', $handler );
 
-Route::group( '/foo/', function( $group ) {
-    $group->get( '/bar/', $handler );
+        // Match if '/foo/bar/baz/' is the full path:
+        $group->get( '/baz/', $handler );
+    } );
+    
+    // Match if '/foo/' is the full path
+    // AND the query var 'my_query_var' is present:
+    $group->get( ['query_var', 'my_query_var'], $handler );
 } )->add( MyMiddleware::class );
-
 ```
 {% endmethod %}
 
-{% method -%}
-You can also group routes with dynamic conditions which will share the group condition(s) as well as any middleware assigned to the group:
+Note that URL conditions will be concatenated as long as they are directly one after the other and are in a chain which starts from a root group. The following examples will NOT concatenate URL conditions:
 
 {% sample lang="php" -%}
 ```php
-Route::group( ['post_type', 'product'], function( $group ) {
-    $group->get( ['query_var', 'quickview'], $handler ); // will match any post of type 'product' when there is a query var 'quickview' used to access it
+// Root condition is not a URL:
+Route::group( ['post_id', 1], function( $group ) {
+    // Match if the current query loads the single post with id of 1
+    // AND '/foo/' is the full path
+    // -> this usage is fine so far
+    $group->group( '/foo/', function( $group ) {
+        // Match if the current query loads the single post with id of 1
+        // AND '/foo/' is the full path
+        // AND '/bar/' is the full path
+        // -> The above will always fail since both '/foo/' and '/bar/' are required
+        // -> to be the full path as we've started with a non-URL root condition
+        $group->get( '/bar/', $handler );
+    } );
+} );
+
+// Root condition is a URL:
+Route::group( '/foo/', function( $group ) {
+    // Match if '/foo/' is the full path
+    // AND the current query loads the single post with id of 1
+    // -> this usage is fine, but note that we are breaking the URL chain
+    $group->group( ['post_id', 1], function( $group ) {
+        // Match if '/foo/' is the full path
+        // AND the current query loads the single post with id of 1
+        // AND '/bar/' is the full path
+        // -> the above will always fail since both '/foo/' and '/bar/' are required
+        // -> to be the full path as we've broken the concatenation chain
+        $group->get( '/bar/', $handler );
+    } );
 } );
 ```
 {% endmethod %}
-
-Mixing URL-based and dynamic conditions is not supported at this time and can lead to unexpected results.
