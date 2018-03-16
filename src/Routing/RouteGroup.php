@@ -64,27 +64,22 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	}
 
 	/**
-	 * Merge 2 conditions (in supplied order).
+	 * Merge 2 conditions.
+	 * If $parent is a UrlCondition and $child is a UrlCondition, concatenate them.
+	 * In all other cases, combine conditions into a MultipleCondition.
 	 *
-	 * @param  ConditionInterface|null $parent
-	 * @param  ConditionInterface      $child
+	 * @param  ConditionInterface $parent
+	 * @param  ConditionInterface $child
 	 * @return ConditionInterface
 	 */
 	protected function mergeConditions( $parent, $child ) {
-		if ( $parent === null ) {
-			return $child;
-		}
-
 		if ( $parent instanceof UrlCondition ) {
 			if ( $child instanceof UrlCondition ) {
 				return $parent->concatenate( $child );
 			}
-
-			// Ignore parent if conditions are incompatible.
-			return $child;
 		}
 
-		return new MultipleCondition( [ $parent, $child ] );
+		return new MultipleCondition( [$parent, $child] );
 	}
 
 	/**
@@ -111,7 +106,9 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 			$condition = RouteCondition::make( $condition );
 		}
 
-		$condition = $this->mergeConditions( $this->condition, $condition );
+		if ( $this->condition !== null ) {
+			$condition = $this->mergeConditions($this->condition, $condition);
+		}
 
 		return $this->traitRoute( $methods, $condition, $handler );
 	}
@@ -126,7 +123,9 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 			$condition = RouteCondition::make( $condition );
 		}
 
-		$condition = $this->mergeConditions( $this->condition, $condition );
+		if ( $this->condition !== null ) {
+			$condition = $this->mergeConditions( $this->condition, $condition );
+		}
 
 		return $this->traitGroup( $condition, $routes );
 	}
