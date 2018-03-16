@@ -21,6 +21,7 @@ Route::group( '/foo/', function( $group ) {
 ```
 {% endmethod %}
 
+{% method -%}
 Note that URL conditions will be concatenated as long as they are directly one after the other and are in a chain which starts from a root group. The following examples will NOT concatenate URL conditions:
 
 {% sample lang="php" -%}
