@@ -22,7 +22,7 @@ Route::group( '/foo/', function( $group ) {
 {% endmethod %}
 
 {% method -%}
-Note that URL conditions will be concatenated as long as they are directly one after the other and are in a chain which starts from a root group. The following examples will NOT concatenate URL conditions:
+Note that URL conditions will be concatenated as long as they are directly one after the other and are in a chain which starts from a root group. The following examples will **NOT** concatenate URL conditions:
 
 {% sample lang="php" -%}
 ```php
@@ -51,7 +51,7 @@ Route::group( '/foo/', function( $group ) {
         // AND the current query loads the single post with id of 1
         // AND '/bar/' is the full path
         // -> the above will always fail since both '/foo/' and '/bar/' are required
-        // -> to be the full path as we've broken the concatenation chain
+        // -> to be the full path as we've broken the URL condition chain
         $group->get( '/bar/', $handler );
     } );
 } );
