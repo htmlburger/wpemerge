@@ -31,6 +31,7 @@
 
 * [Flash](tools/flash.md)
 * [OldInput](tools/oldinput.md)
+* [CSRF Protection](tools/csrf-protection.md)
 * [Service Providers](tools/service-providers.md)
 
 ## Extending
