@@ -162,6 +162,6 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 
 		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
 
-		$subject->make( [$view], [] );
+		$subject->make( [$view] );
 	}
 }
