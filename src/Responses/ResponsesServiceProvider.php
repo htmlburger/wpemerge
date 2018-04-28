@@ -4,7 +4,6 @@ namespace WPEmerge\Responses;
 
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\Response as ResponseFacade;
-use WPEmerge\Responses\ResponseService;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**

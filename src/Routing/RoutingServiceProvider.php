@@ -2,7 +2,6 @@
 
 namespace WPEmerge\Routing;
 
-use Pimple\Container;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
 use WPEmerge\Facades\Router as RouterFacade;

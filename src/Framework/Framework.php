@@ -2,12 +2,9 @@
 
 namespace WPEmerge\Framework;
 
-use Closure;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use ReflectionMethod;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
@@ -16,7 +13,6 @@ use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
-use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
 use WPEmerge\View\ViewServiceProvider;
 
@@ -143,7 +139,6 @@ class Framework {
 	 * @return void
 	 */
 	protected function loadConfig( Container $container, $config ) {
-		$container = $this->getContainer();
 		$container[ WPEMERGE_CONFIG_KEY ] = array_merge(
 			$container[ WPEMERGE_CONFIG_KEY ],
 			$config

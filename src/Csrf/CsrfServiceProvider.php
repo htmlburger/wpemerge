@@ -2,7 +2,6 @@
 
 namespace WPEmerge\Csrf;
 
-use WPEmerge\Csrf\Csrf;
 use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 

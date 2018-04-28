@@ -2,7 +2,6 @@
 
 namespace WPEmerge\Requests;
 
-use WPEmerge\Requests\Request;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**

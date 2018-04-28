@@ -5,9 +5,6 @@ namespace WPEmerge\Routing\Conditions;
 use Closure;
 use Exception;
 use ReflectionClass;
-use WPEmerge\Routing\Conditions\CustomCondition;
-use WPEmerge\Routing\Conditions\MultipleCondition;
-use WPEmerge\Routing\Conditions\UrlCondition;
 
 /**
  * Check against the current url

@@ -4,11 +4,8 @@ namespace WPEmerge\Responses;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\View;
-use WPEmerge\Helpers\MixedType;
 use WPEmerge\Requests\Request;
-use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\View\ViewInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
