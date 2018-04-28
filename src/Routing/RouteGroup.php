@@ -51,6 +51,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * Get the first child route which is satisfied
 	 *
+	 * @param  Request $request
 	 * @return RouteInterface|null
 	 */
 	protected function getSatisfiedRoute( Request $request ) {

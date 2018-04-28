@@ -11,6 +11,7 @@ class Url {
 	/**
 	 * Get the path for the request relative to the home url
 	 *
+	 * @param  Request $request
 	 * @return string
 	 */
 	public static function getPath( Request $request ) {
