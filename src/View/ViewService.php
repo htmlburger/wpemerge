@@ -5,7 +5,7 @@ namespace WPEmerge\View;
 use Closure;
 use WPEmerge\Facades\ViewEngine;
 use WPEmerge\Helpers\Handler;
-use WPEmerge\Helpers\Mixed;
+use WPEmerge\Helpers\MixedType;
 
 /**
  * Provide general view-related functionality.
@@ -56,6 +56,7 @@ class ViewService {
 	 *
 	 * @param  string $key
 	 * @param  mixed  $value
+	 *
 	 * @return void
 	 */
 	public function addGlobal( $key, $value ) {
@@ -105,7 +106,7 @@ class ViewService {
 	public function addComposer( $views, $composer ) {
 		$views = array_map( function( $view ) {
 			return ViewEngine::canonical( $view );
-		}, Mixed::toArray( $views ) );
+		}, MixedType::toArray( $views ) );
 		$handler = new Handler( $composer, 'compose' );
 
 		$this->composers[] = [
@@ -136,7 +137,7 @@ class ViewService {
 	 * @return ViewInterface
 	 */
 	public function make( $views ) {
-		$views = Mixed::toArray( $views );
+		$views = MixedType::toArray( $views );
 		return $this->view_engine->make( $views );
 	}
 }

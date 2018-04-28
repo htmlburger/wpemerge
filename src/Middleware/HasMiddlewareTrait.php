@@ -5,7 +5,7 @@ namespace WPEmerge\Middleware;
 use Closure;
 use Exception;
 use WPEmerge\Facades\Router;
-use WPEmerge\Helpers\Mixed;
+use WPEmerge\Helpers\MixedType;
 
 /**
  * Allow objects to have middleware
@@ -50,7 +50,7 @@ trait HasMiddlewareTrait {
 	 * @return static                                                         $this
 	 */
 	public function addMiddleware( $middleware ) {
-		$middleware = Mixed::toArray( $middleware );
+		$middleware = MixedType::toArray( $middleware );
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
@@ -92,6 +92,6 @@ trait HasMiddlewareTrait {
 			return $this->executeMiddleware( $middleware, $request, $next );
 		};
 
-		return Mixed::value( $top_middleware, [$request, $top_middleware_next], 'handle' );
+		return MixedType::value( $top_middleware, [$request, $top_middleware_next], 'handle' );
 	}
 }

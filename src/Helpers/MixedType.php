@@ -2,11 +2,11 @@
 
 namespace WPEmerge\Helpers;
 
-class Mixed {
+class MixedType {
 	/**
 	 * Converts a value to an array containing this value unless it is an array
 	 *
-	 * @param  mixed   $argument
+	 * @param  mixed $argument
 	 * @return array
 	 */
 	public static function toArray( $argument ) {
@@ -27,6 +27,7 @@ class Mixed {
 	 * @param  mixed  $entity
 	 * @param  array  $arguments
 	 * @param  string $method
+	 *
 	 * @return mixed
 	 */
 	public static function value( $entity, $arguments = [], $method = '__invoke' ) {
@@ -49,6 +50,7 @@ class Mixed {
 	 * Check if a value is a valid class name
 	 *
 	 * @param  mixed   $class_name
+	 *
 	 * @return boolean
 	 */
 	public static function isClass( $class_name ) {

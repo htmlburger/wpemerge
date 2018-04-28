@@ -4,7 +4,7 @@ namespace WPEmerge\Flash;
 
 use ArrayAccess;
 use Exception;
-use WPEmerge\Helpers\Mixed;
+use WPEmerge\Helpers\MixedType;
 use WPEmerge\Support\Arr;
 
 /**
@@ -142,8 +142,8 @@ class Flash {
 	protected function addToRequest( $request_key, $key, $new_items ) {
 		$this->validateStore();
 
-		$new_items = Mixed::toArray( $new_items );
-		$items = Mixed::toArray( $this->get( $key, [] ) );
+		$new_items = MixedType::toArray( $new_items );
+		$items = MixedType::toArray( $this->get( $key, [] ) );
 		$this->flashed[ $request_key ][ $key ] = array_merge( $items, $new_items );
 	}
 

@@ -2,15 +2,15 @@
 
 namespace WPEmergeTests\Helpers;
 
-use WPEmerge\Helpers\Mixed;
+use WPEmerge\Helpers\MixedType;
 use WPEmergeTestTools\TestService;
 use stdClass;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Helpers\Mixed
+ * @coversDefaultClass \WPEmerge\Helpers\MixedType
  */
-class MixedTest extends WP_UnitTestCase {
+class MixedTypeTest extends WP_UnitTestCase {
 	public function callableStub( $message = 'foobar' ) {
 		return $message;
 	}
@@ -22,7 +22,7 @@ class MixedTest extends WP_UnitTestCase {
 		$parameter = 'foobar';
 		$expected = [$parameter];
 
-		$this->assertEquals( $expected, Mixed::toArray( $parameter ) );
+		$this->assertEquals( $expected, MixedType::toArray( $parameter ) );
 	}
 
 	/**
@@ -31,7 +31,7 @@ class MixedTest extends WP_UnitTestCase {
 	public function testToArray_Array_ReturnSameArray() {
 		$expected = ['foobar'];
 
-		$this->assertEquals( $expected, Mixed::toArray( $expected ) );
+		$this->assertEquals( $expected, MixedType::toArray( $expected ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class MixedTest extends WP_UnitTestCase {
 		$callable = [$this, 'callableStub'];
 		$expected = 'foobar';
 
-		$this->assertEquals( $expected, Mixed::value( $callable ) );
+		$this->assertEquals( $expected, MixedType::value( $callable ) );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class MixedTest extends WP_UnitTestCase {
 		$callable = [$this, 'callableStub'];
 		$expected = 'hello world';
 
-		$this->assertEquals( $expected, Mixed::value( $callable, [$expected] ) );
+		$this->assertEquals( $expected, MixedType::value( $callable, [$expected] ) );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class MixedTest extends WP_UnitTestCase {
 	public function testValue_Instance_CallInstanceMethodAndReturn() {
 		$expected = 'foobar';
 
-		$this->assertEquals( $expected, Mixed::value( $this, [], 'callableStub' ) );
+		$this->assertEquals( $expected, MixedType::value( $this, [], 'callableStub' ) );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class MixedTest extends WP_UnitTestCase {
 	public function testValue_ClassName_CreateInstanceCallMethodAndReturn() {
 		$expected = 'foobar';
 
-		$this->assertEquals( $expected, Mixed::value( TestService::class, [], 'getTest' ) );
+		$this->assertEquals( $expected, MixedType::value( TestService::class, [], 'getTest' ) );
 	}
 
 	/**
@@ -78,19 +78,19 @@ class MixedTest extends WP_UnitTestCase {
 	public function testValue_Other_ReturnSame() {
 		$expected = 'someStringThatIsNotACallable';
 
-		$this->assertSame( $expected, Mixed::value( $expected ) );
+		$this->assertSame( $expected, MixedType::value( $expected ) );
 	}
 
 	/**
 	 * @covers ::isClass
 	 */
 	public function testIsClass() {
-		$this->assertTrue( Mixed::isClass( 'stdClass' ) );
-		$this->assertTrue( Mixed::isClass( TestService::class ) );
-		$this->assertFalse( Mixed::isClass( 'NonExistantClassName' ) );
-		$this->assertFalse( Mixed::isClass( 1 ) );
-		$this->assertFalse( Mixed::isClass( new stdClass() ) );
-		$this->assertFalse( Mixed::isClass( [] ) );
+		$this->assertTrue( MixedType::isClass( 'stdClass' ) );
+		$this->assertTrue( MixedType::isClass( TestService::class ) );
+		$this->assertFalse( MixedType::isClass( 'NonExistantClassName' ) );
+		$this->assertFalse( MixedType::isClass( 1 ) );
+		$this->assertFalse( MixedType::isClass( new stdClass() ) );
+		$this->assertFalse( MixedType::isClass( [] ) );
 	}
 
 	/**
@@ -100,8 +100,8 @@ class MixedTest extends WP_UnitTestCase {
 		$ds = DIRECTORY_SEPARATOR;
 		$input = '/foo\\bar/baz\\foobar';
 
-		$this->assertEquals( "{$ds}foo{$ds}bar{$ds}baz{$ds}foobar", Mixed::normalizePath( $input ) );
-		$this->assertEquals( "/foo/bar/baz/foobar", Mixed::normalizePath( $input, '/' ) );
-		$this->assertEquals( "\\foo\\bar\\baz\\foobar", Mixed::normalizePath( $input, '\\' ) );
+		$this->assertEquals( "{$ds}foo{$ds}bar{$ds}baz{$ds}foobar", MixedType::normalizePath( $input ) );
+		$this->assertEquals( "/foo/bar/baz/foobar", MixedType::normalizePath( $input, '/' ) );
+		$this->assertEquals( "\\foo\\bar\\baz\\foobar", MixedType::normalizePath( $input, '\\' ) );
 	}
 }
