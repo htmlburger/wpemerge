@@ -23,6 +23,7 @@ class RedirectResponse extends Psr7Response {
 	 * @param Request $request
 	 */
 	public function __construct( Request $request ) {
+		parent::__construct();
 		$this->request = $request;
 	}
 
