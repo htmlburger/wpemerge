@@ -37,7 +37,7 @@ Brought to you by the lovely folks at [htmlBurger](http://htmlburger.com)
 | View Composers | ✔ | ✖ | ✖ |
 | Service Container | ✔ | ✖ | ✖ |
 
-_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison you'll have to wait for the official WP Emerge Starter Theme._
+_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/)._
 
 _² WP Emerge is theme agnostic - you can use it in any theme._
 
