@@ -34,7 +34,7 @@ Brought to you by [Atanas Angelov](https://github.com/atanas-angelov-dev) and th
 | Routing | ✔ | ✖ | ✖ |
 | MVC | ✖✔✔ | ✖✔✖³ | ✖✔✖ |
 | Middleware | ✔ | ✖ | ✖ |
-| View Composers | ✔ | ✖ | ✖ |
+| View Composers | ✔ | ✔/✖⁴ | ✖ |
 | Service Container | ✔ | ✖ | ✖ |
 
 _¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/)._
@@ -42,6 +42,10 @@ _¹ We are comparing frameworks and themes - style, build tools etc. are not men
 _² WP Emerge is theme agnostic - you can use it in any theme._
 
 _³ Sage's Controller is more a View Model than a Controller._
+
+_⁴ Sage's Controller provides similar functionality but is limited to 1 composer (controller) per view and vice versa._
+
+_Email any factual inaccuracies to [atanas.angelov.dev@gmail.com](mailto:atanas.angelov.dev@gmail.com) so they can be corrected._ 
 
 ## Features
 
