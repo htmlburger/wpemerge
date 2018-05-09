@@ -1,10 +1,10 @@
 # Exceptions
 
 WP Emerge comes with a simple `ExceptionHandler` class which is used to translate exceptions which are thrown during the execution of a route or its middleware to response objects.
-This functionality simplifies controller logic as you can throw certain exceptions as a short-cut to common responses.
+This functionality simplifies controller logic as you can throw certain exceptions as a short-cut to common responses. A good example for this is throwing validation exceptions and then translating them to redirect responses with flashed error messages to handle form requests.
 
 {% method -%}
-For example, the default `ExceptionHandler` class comes with automatic handling for the built-in `\WPEmerge\Exceptions\NotFoundException` exception. Such exceptions will be translated to 404 responses by setting the status header to 404 and using the `404.php` view:
+The default `ExceptionHandler` class comes with automatic handling for the built-in `\WPEmerge\Exceptions\NotFoundException` exception. Such exceptions will be translated to 404 responses by setting the status header to 404 and using the `404.php` view:
 
 {% sample lang="php" -%}
 ```php

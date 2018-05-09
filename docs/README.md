@@ -37,7 +37,7 @@ Brought to you by [Atanas Angelov](https://github.com/atanas-angelov-dev) and th
 | View Composers | ✔ | ✖ | ✖ |
 | Service Container | ✔ | ✖ | ✖ |
 
-_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison you'll have to wait for the official WP Emerge Starter Theme._
+_¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/)._
 
 _² WP Emerge is theme agnostic - you can use it in any theme._
 
@@ -60,7 +60,7 @@ Router::get( '/', 'HomeController@index' );
 Router::get( '/custom', 'CustomController@custom' )
     ->rewrite( 'index.php?...' );
     
-Router::get( ['post_id', get_option('page_on_front')], 'PostController@index' );
+Router::get( ['post_id', get_option('page_on_front')], 'HomeController@index' );
 
 Router::get( function() {
     return is_front_page();
@@ -94,7 +94,7 @@ class HomeController {
 {% method -%}
 #### Middleware
 
-- Hook before and/or after route handler (e.g. controller method).
+- Hook before and/or after route handlers (e.g. controller methods).
 - Add globally or to specific routes or route groups.
 - Powers features such as Flash and OldInput.
 
@@ -132,7 +132,7 @@ class HomeController {
 #### View Composers
 
 - Pass generic context to partials regardless of which controller or parent view uses them.
-- Work with any View engine (Php, Twig, Blade).
+- Work with any View engine (Php, Blade, Twig).
 
 {% sample lang="php" -%}
 ```php
@@ -147,14 +147,14 @@ View::addComposer( 'templates/about-us', function( $view ) {
 
 - Define your dependencies in a service container.
 - Override any and all WP Emerge dependencies when needed.
-- Enables automatic dependency injection.
+- Enables dependency injection.
 - Uses Pimple - [read more](https://pimple.symfony.com/).
 
 {% sample lang="php" -%}
 ```php
 $container = WPEmerge::getContainer();
-$container['my_service'] = function() {
-    return new MyService();
+$container['my_service'] = function( $container ) {
+    return new MyService( $container['my_dependency'] );
 };
 ```
 {% endmethod %}
@@ -170,8 +170,8 @@ $container['my_service'] = function() {
 ```php
 class MyServiceProvider implements ServiceProviderInterface {
     public function register( $container ) {
-        $container['my_service'] = function() {
-            return new MyService();
+        $container['my_service'] = function( $container ) {
+            return new MyService( $container['my_dependency'] );
         };
     }
 
@@ -186,7 +186,7 @@ class MyServiceProvider implements ServiceProviderInterface {
 #### Custom view engine support
 
 - Replace the view engine used in the service container.
-- Twig and Blade available as add-on packages.
+- Blade and Twig available as add-on packages.
 - You can even write your own view engine and use it seamlessly.
 
 {% sample lang="php" -%}
