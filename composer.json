@@ -1,19 +1,21 @@
 {
     "name": "htmlburger/wpemerge",
     "description": "A micro framework which modernizes WordPress as a CMS development by providing tools to implement MVC and more.",
+    "type": "library",
     "keywords": ["wordpress", "framework", "controller", "template", "view", "request", "response", "middleware", "facade", "wpemerge"],
     "license": "GPL-2.0-only",
     "homepage": "https://wpemerge.com/",
     "authors": [
         {
-            "name": "htmlBurger",
-            "email": "wordpress@htmlburger.com",
-            "homepage": "https://htmlburger.com/",
+            "name": "Atanas Angelov",
+            "email": "atanas.angelov.dev@gmail.com",
+            "homepage": "https://github.com/atanas-angelov-dev/",
             "role": "Developer"
         },
         {
-            "name": "Atanas Angelov",
-            "email": "atanas.angelov.dev@gmail.com",
+            "name": "htmlBurger",
+            "email": "info@htmlburger.com",
+            "homepage": "http://htmlburger.com/",
             "role": "Developer"
         }
     ],
