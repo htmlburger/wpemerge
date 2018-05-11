@@ -6,7 +6,7 @@
 
 🔥 Integration is incremental - you can use it only on the pages you want or on all pages.
 
-❤️ If you've used frameworks such as Laravel, Slim or Symfony you will love WP Emerge.
+❤ If you've used frameworks such as Laravel, Slim or Symfony you will love WP Emerge.
 
 ## Requirements
 
@@ -17,6 +17,8 @@
 ## Features & Documentation
 
 [https://docs.wpemerge.com/](https://docs.wpemerge.com/)
+
+[https://docs.wpemerge.com/quickstart.html](https://docs.wpemerge.com/quickstart.html)
 
 ## API Reference
 
