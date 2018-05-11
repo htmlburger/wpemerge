@@ -3,8 +3,9 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
+use WPEmerge\Facades\ViewEngine;
+use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewService;
-use WPEmerge\View\ViewEngineInterface;
 use WPEmerge\View\ViewInterface;
 use WP_UnitTestCase;
 
@@ -15,12 +16,14 @@ class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ViewService( Mockery::mock( ViewEngineInterface::class ) );
+		$this->subject = new ViewService();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		Facade::clearResolvedInstance( WPEMERGE_VIEW_SERVICE_KEY );
 
 		unset( $this->subject );
 	}
@@ -91,15 +94,14 @@ class ViewServiceTest extends WP_UnitTestCase {
 	 * @covers ::make
 	 */
 	public function testMake() {
-		$view_engine = Mockery::mock( ViewEngineInterface::class );
 		$view = Mockery::mock( ViewInterface::class );
-		$subject = new ViewService( $view_engine );
+		$subject = new ViewService();
 
-		$view_engine->shouldReceive( 'make' )
+		ViewEngine::shouldReceive( 'make' )
 			->with( ['foo'] )
 			->andReturn( $view );
 
-		$view_engine->shouldReceive( 'make' )
+		ViewEngine::shouldReceive( 'make' )
 			->with( ['foo', 'bar'] )
 			->andReturn( $view );
 

@@ -12,13 +12,6 @@ use WPEmerge\Helpers\MixedType;
  */
 class ViewService {
 	/**
-	 * View engine.
-	 *
-	 * @var ViewEngineInterface
-	 */
-	protected $view_engine = null;
-
-	/**
 	 * Global variables.
 	 *
 	 * @var array
@@ -31,16 +24,6 @@ class ViewService {
 	 * @var array
 	 */
 	protected $composers = [];
-
-	/**
-	 * Constructor.
-	 *
-	 * @codeCoverageIgnore
-	 * @param ViewEngineInterface $view_engine
-	 */
-	public function __construct( ViewEngineInterface $view_engine ) {
-		$this->view_engine = $view_engine;
-	}
 
 	/**
 	 * Get global variables.
@@ -138,6 +121,6 @@ class ViewService {
 	 */
 	public function make( $views ) {
 		$views = MixedType::toArray( $views );
-		return $this->view_engine->make( $views );
+		return ViewEngine::make( $views );
 	}
 }
