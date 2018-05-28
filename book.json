@@ -1,6 +1,6 @@
 {
     "root": "./docs",
-    "plugins": [ "anchorjs", "ga", "-sharing", "theme-api", "versions" ],
+    "plugins": [ "anchorjs", "ga", "-sharing", "theme-api" ],
     "pluginsConfig": {
         "anchorjs": {
             "selector": "h2,h3,h4,h5",
@@ -21,9 +21,6 @@
                     "default": true
                 }
             ]
-        },
-        "versions": {
-            "type": "tags"
         }
     }
 }
