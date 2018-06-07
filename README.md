@@ -9,6 +9,8 @@
 
 ❤ If you've used frameworks such as Laravel, Slim or Symfony you will love WP Emerge.
 
+🚀 Also, make sure you check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/) project.
+
 ## Requirements
 
 - PHP >= 5.5
