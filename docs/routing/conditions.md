@@ -5,6 +5,9 @@
 {% method -%}
 Match against a specific path:
 
+_Note: Paths in URL conditions are relative to the site's home url._
+_Note: Paths in URL conditions are relative to the site's home url._
+
 {% sample lang="php" -%}
 ```php
 Route::get( '/foo/bar/', $handler );
@@ -34,8 +37,6 @@ Route::get(
 
 {% method -%}
 Add a rewrite rule for your route (if it does not match any predefined rewrite rule):
-
-_Note: Paths in URL conditions are relative to the site's home url._
 
 _Note: Remember to refresh your rewrite rules after this change._
 
