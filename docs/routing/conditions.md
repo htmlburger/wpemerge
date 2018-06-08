@@ -6,7 +6,6 @@
 Match against a specific path:
 
 _Note: Paths in URL conditions are relative to the site's home url._
-_Note: Paths in URL conditions are relative to the site's home url._
 
 {% sample lang="php" -%}
 ```php
