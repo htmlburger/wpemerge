@@ -258,13 +258,13 @@ Route::get( [
 {% method -%}
 The negate condition allows you to negate another condition's result. The following example will match any request as long as it is not for the singular view of the post with id of 3:
 
+_Note: The negate condition will also pass whatever arguments its child condition passes to the handler._
+
 {% sample lang="php" -%}
 ```php
 Router::get( ['!post_id', 3], $handler ); // notice the exclamation mark
 ```
 {% endmethod %}
-
-The negate condition will also pass whatever arguments its child condition passes to the handler.
 
 {% method -%}
 Since not all conditions are defined using strings, here's the full syntax which you can use for any condition:
