@@ -35,6 +35,8 @@ Route::get(
 {% method -%}
 Add a rewrite rule for your route (if it does not match any predefined rewrite rule):
 
+_Note: All path conditions are relative to the site's home url._
+
 _Note: Remember to refresh your rewrite rules after this change._
 
 _Note: See https://codex.wordpress.org/Rewrite_API/add_rewrite_rule for more details._
