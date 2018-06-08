@@ -43,7 +43,7 @@ _¹ We are comparing frameworks and themes - style, build tools etc. are not men
 
 _² WP Emerge is theme agnostic - you can use it in any theme._
 
-_³ Sage's Controller is more a View Model than a Controller._
+_³ Sage's Controller is more of a View Composer than a Controller._
 
 _⁴ Sage's Controller provides similar functionality but is limited to 1 composer (controller) per view and vice versa._
 
