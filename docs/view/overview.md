@@ -20,6 +20,7 @@ Implementing your own or a third-party engine is simple and straightforward - th
         return new MyCustomViewEngine();
     };
     ```
+    _Note: We're assigning to the container directly for the sake of brevity - a Service Provider is a much better solution._
 
 ## External view engines
 
@@ -50,4 +51,5 @@ $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
     ], WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY ); // use Blade for all other cases as blade views can be referenced in blade.format.as.well without an extension
 };
 ```
-_Note: the example above assumes you have included both WP Emerge Twig and WP Emerge Blade composer packages. `WPEMERGETWIG_VIEW_TWIG_VIEW_ENGINE_KEY` and `WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY` are not provided by default._
+_Note: The example above assumes you have included both WP Emerge Twig and WP Emerge Blade composer packages. `WPEMERGETWIG_VIEW_TWIG_VIEW_ENGINE_KEY` and `WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY` are not provided by default._
+_Note: The same note regarding the usage of a Service Container applies here as well._

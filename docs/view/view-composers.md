@@ -1,6 +1,6 @@
 # View Composers
 
-View composers are closures or class methods (`'CLASS_NAME@METHOD_NAME'` format) that prepare a context for a view whenever it is rendered.
+View composers are closures, class names or class methods (`'CLASS_NAME@METHOD_NAME'` format) that prepare a context for a view whenever it is rendered.
 
 __Default View Engine WARNING:__ Due to the nature of how the default view engine works, you __MUST__ render partials using `app_partial()` instead of `get_template_part()` in order to support composition.
 If you wish to compose core partials (e.g. `header.php`, `footer.php`) that are rendered using a `get_*()` function call (e.g. `get_header()`) you will have to use `app_partial( 'name' )` (e.g. `app_partial( 'header' )`) instead.
@@ -45,7 +45,7 @@ class LatestNewsViewComposer {
 
 ```php
 // immediately after WPEmerge::boot()
-View::addComposer( 'templates/partials/latest-news', 'LatestNewsViewComposer' );
+View::addComposer( 'templates/partials/latest-news', LatestNewsViewComposer::class );
 ```
 
 The expected method name by default is `compose` but you can use a custom one as well:
