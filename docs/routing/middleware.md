@@ -46,6 +46,8 @@ WPEmerge::boot( [
 {% method -%}
 It is important to note that middleware without a specified priority will be sorted and run in an undefined order (see `Note` on http://php.net/manual/en/function.sort.php). In most cases this will work perfectly fine, however, if you have middleware that depends on another middleware being run before it you may want to specify a priority to ensure a specific order of execution (priority is in ascending order).
 
+_Note: Middleware defined with an anonymous function will use the default priority of 100._
+
 {% sample lang="php" -%}
 ```php
 $container = WPEmerge::getContainer();
@@ -58,5 +60,3 @@ $container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] = array_merge(
 );
 ```
 {% endmethod %}
-
-Middleware defined with an anonymous function will use the default priority of 100.
