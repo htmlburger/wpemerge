@@ -191,7 +191,7 @@ You can also pass parameters to use built-in callables:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['is_tax', 'crb_custom_taxonomy'], $handler );
+Route::get( ['is_tax', 'app_custom_taxonomy'], $handler );
 ```
 {% endmethod %}
 
@@ -200,7 +200,7 @@ Any parameters you pass will be provided to both the callable AND the $handler:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['is_tax', 'crb_custom_taxonomy'], function( $request, $view, $taxonomy ) {
+Route::get( ['is_tax', 'app_custom_taxonomy'], function( $request, $view, $taxonomy ) {
     // $taxonomy is passed after $request and $view which are always passed to handlers
 } );
 ```
@@ -229,7 +229,7 @@ The multiple condition allows you to specify an array of conditions which must A
 {% sample lang="php" -%}
 ```php
 Route::get( ['multiple', [
-    ['is_tax', 'crb_custom_taxonomy'],
+    ['is_tax', 'app_custom_taxonomy'],
     [function() {
         return true;
     }],
@@ -245,7 +245,7 @@ The syntax can also be simplified by directly passing an array of conditions:
 {% sample lang="php" -%}
 ```php
 Route::get( [
-    ['is_tax', 'crb_custom_taxonomy'],
+    ['is_tax', 'app_custom_taxonomy'],
     [function() {
         return true;
     }],
@@ -285,7 +285,7 @@ Router::get( ['negate', function() {
 ], $handler );
 
 Router::get( ['negate', [
-    ['is_tax', 'crb_custom_taxonomy'],
+    ['is_tax', 'app_custom_taxonomy'],
     [function() {
         return true;
     }],
