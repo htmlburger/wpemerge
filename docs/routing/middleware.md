@@ -15,7 +15,7 @@ class AuthenticationMiddleware implements \WPEmerge\Middleware\MiddlewareInterfa
         if ( ! is_user_logged_in() ) {
             $return_url = $request->getUrl();
             $login_url = wp_login_url( $return_url );
-            return app_redirect( $login_url );
+            return app_redirect()->to( $login_url );
         }
         return $next( $request );
     }
