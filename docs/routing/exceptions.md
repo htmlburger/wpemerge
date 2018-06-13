@@ -26,6 +26,7 @@ public function index( $request, $view ) {
 To use a custom `ExceptionHandler` class, replace the `WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY` key in the service container with a class that implements the `\WPEmerge\Exceptions\ExceptionHandlerInterface` interface:
 {% sample lang="php" -%}
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY ] = function() {
     return new MyCustomExceptionHandler();

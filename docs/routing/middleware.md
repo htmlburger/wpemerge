@@ -50,6 +50,7 @@ _Note: Middleware defined with an anonymous function will use the default priori
 
 {% sample lang="php" -%}
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] = array_merge(
 	$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ],

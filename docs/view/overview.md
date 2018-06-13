@@ -15,6 +15,7 @@ Implementing your own or a third-party engine is simple and straightforward - th
 1. You must replace the built-in engine in the service container:
     ```php
     // ... somewhere after WPEmerge::boot()
+    // getContainer() used for brevity's sake - use a Service Provider instead.
     $container = WPEmerge::getContainer();
     $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function() {
         return new MyCustomViewEngine();
@@ -41,6 +42,7 @@ The main use-case for it is to allow you to use multiple view engines so you can
 
 Replacing the default view engine:
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
     return new \WPEmerge\View\NameProxyViewEngine( [

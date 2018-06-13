@@ -56,6 +56,7 @@ View::addComposer( 'templates/partials/latest-news', 'LatestNewsViewComposer@cus
 By default, WP Emerge will instantiate your class directly. However, if your class is registered in the service container with its class name as the key, then the class will be resolved from the service container instead of being directly instantiated:
 
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ LatestNewsViewComposer::class ] = function( $container ) {
     // your custom instantiation code here, e.g.:

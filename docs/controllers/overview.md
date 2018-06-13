@@ -24,6 +24,7 @@ However, if your controller class is registered in the service container with it
 
 {% sample lang="php" -%}
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ HomeController::class ] = function( $container ) {
     // your custom instantiation code here, e.g.:

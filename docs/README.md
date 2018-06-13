@@ -160,6 +160,7 @@ View::addComposer( 'templates/about-us', function( $view ) {
 
 {% sample lang="php" -%}
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container['my_service'] = function( $container ) {
     return new MyService( $container['my_dependency'] );
@@ -199,6 +200,7 @@ class MyServiceProvider implements ServiceProviderInterface {
 
 {% sample lang="php" -%}
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
     return new MyViewEngine();

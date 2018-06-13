@@ -11,6 +11,7 @@ add_action( 'init', function() {
 
 You can also replace the usage of `$_SESSION` with a different solution, as long as it implements `ArrayAccess`:
 ```php
+// getContainer() used for brevity's sake - use a Service Provider instead.
 $container = WPEmerge::getContainer();
 $container[ WPEMERGE_SESSION_KEY ] = function() {
     return new OtherSesssionImplementation();
