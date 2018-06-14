@@ -16,7 +16,9 @@ class ExceptionHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ExceptionHandler();
+		$this->subject = new ExceptionHandler( false, function() {
+			throw new Exception( 'Debug stack trace handler called unexpectedly.' );
+		} );
 	}
 
 	public function tearDown() {
@@ -36,6 +38,19 @@ class ExceptionHandlerTest extends WP_UnitTestCase {
 		$expected = 404;
 
 		$this->assertEquals( $expected, $this->subject->handle( $exception )->getStatusCode() );
+	}
+
+	/**
+	 * @covers ::handle
+	 */
+	public function testHandle_Debug_StackTraceHandlerCalled() {
+		$expected = 'foo';
+		$exception = new Exception( 'Rethrown exception' );
+		$subject = new ExceptionHandler( true, function() use ( $expected ) {
+			return $expected;
+		} );
+
+		$this->assertEquals( $expected, $subject->handle( $exception ) );
 	}
 
 	/**
