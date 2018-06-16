@@ -15,7 +15,7 @@
 * [Groups](routing/groups.md)
 * [Handlers](routing/handlers.md)
 * [Middleware](routing/middleware.md)
-* [Exceptions](routing/exceptions.md)
+* [Error Handling](routing/exceptions.md)
 
 ## Controllers
 
