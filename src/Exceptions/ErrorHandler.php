@@ -56,10 +56,9 @@ class ErrorHandler implements ErrorHandlerInterface {
 
 	/**
 	 * Convert an exception to a ResponseInterface instance if possible.
-	 * Return the original exception if unsupported.
 	 *
-	 * @param  PhpException $exception
-	 * @return mixed
+	 * @param  PhpException            $exception
+	 * @return ResponseInterface|false
 	 */
 	protected function toResponse( $exception ) {
 		// @codeCoverageIgnoreStart
@@ -72,7 +71,22 @@ class ErrorHandler implements ErrorHandlerInterface {
 			return Response::error( 404 );
 		}
 
-		return $exception;
+		return false;
+	}
+
+	/**
+	 * Convert an exception to a pretty error response.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  PhpException      $exception
+	 * @return ResponseInterface
+	 */
+	protected function toPrettyErrorResponse( $exception ) {
+		$method = RunInterface::EXCEPTION_HANDLER;
+		ob_start();
+		$this->whoops->$method( $exception );
+		$response = ob_get_clean();
+		return Response::output( $response )->withStatus( 500 );
 	}
 
 	/**
@@ -81,7 +95,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	public function getResponse( PhpException $exception ) {
 		$response = $this->toResponse( $exception );
 
-		if ( $response instanceof ResponseInterface ) {
+		if ( $response !== false ) {
 			return $response;
 		}
 
@@ -89,15 +103,9 @@ class ErrorHandler implements ErrorHandlerInterface {
 			return Response::error( 500 );
 		}
 
-		// @codeCoverageIgnoreStart
 		if ( $this->whoops instanceof RunInterface ) {
-			$method = RunInterface::EXCEPTION_HANDLER;
-			ob_start();
-			$this->whoops->$method( $exception );
-			$response = ob_get_clean();
-			return Response::output( $response )->withStatus( 500 );
+			return $this->toPrettyErrorResponse( $exception );
 		}
-		// @codeCoverageIgnoreEnd
 
 		throw $exception;
 	}
