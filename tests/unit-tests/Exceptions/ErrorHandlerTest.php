@@ -27,6 +27,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getResponse
+	 * @covers ::toResponse
 	 */
 	public function testGetResponse_NotFoundException_404Response() {
 		$exception = new NotFoundException();
@@ -47,6 +48,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getResponse
+	 * @covers ::toResponse
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Rethrown exception
 	 */

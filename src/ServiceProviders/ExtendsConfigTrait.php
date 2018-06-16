@@ -9,6 +9,7 @@ trait ExtendsConfigTrait {
 	/**
 	 * Extends the WP Emerge config in the container with a new key.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  \Pimple\Container $container
 	 * @param  string            $key
 	 * @param  mixed             $default
