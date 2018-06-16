@@ -4,7 +4,7 @@ namespace WPEmerge\Responses;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface ConvertibleToResponseInterface {
+interface ResponsableInterface {
 	/**
 	 * Convert to Psr\Http\Message\ResponseInterface.
 	 *

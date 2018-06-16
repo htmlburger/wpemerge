@@ -2,9 +2,11 @@
 
 namespace WPEmerge\Routing;
 
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Facades\Response;
 use WPEmerge\Helpers\Handler;
-use WPEmerge\Responses\ConvertibleToResponseInterface;
+use WPEmerge\Responses\ResponsableInterface;
 
 /**
  * Represent a Closure or a controller method to be executed in response to a request
@@ -36,15 +38,13 @@ class RouteHandler {
 	}
 
 	/**
-	 * Execute the handler
+	 * Convert a user returned response to a ResponseInterface instance if possible.
+	 * Return the original value if unsupported.
 	 *
-	 * @param  mixed $arguments,...
+	 * @param  mixed $response
 	 * @return mixed
 	 */
-	public function execute() {
-		$arguments = func_get_args();
-		$response = call_user_func_array( [$this->handler, 'execute'], $arguments );
-
+	protected function getResponse( $response ) {
 		if ( is_string( $response ) ) {
 			return Response::output( $response );
 		}
@@ -53,8 +53,26 @@ class RouteHandler {
 			return Response::json( $response );
 		}
 
-		if ( $response instanceof ConvertibleToResponseInterface ) {
+		if ( $response instanceof ResponsableInterface ) {
 			return $response->toResponse();
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Execute the handler
+	 *
+	 * @throws Exception
+	 * @param  mixed             $arguments,...
+	 * @return ResponseInterface
+	 */
+	public function execute() {
+		$response = call_user_func_array( [$this->handler, 'execute'], func_get_args() );
+		$response = $this->getResponse( $response );
+
+		if ( ! $response instanceof ResponseInterface ) {
+			throw new Exception( 'Response returned by controller is not valid (expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
 		}
 
 		return $response;

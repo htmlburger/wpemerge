@@ -2,12 +2,12 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Responses\ConvertibleToResponseInterface;
+use WPEmerge\Responses\ResponsableInterface;
 
 /**
  * Represent and render a view to a string.
  */
-interface ViewInterface extends HasContextInterface, ConvertibleToResponseInterface {
+interface ViewInterface extends HasContextInterface, ResponsableInterface {
 	/**
 	 * Get name.
 	 *

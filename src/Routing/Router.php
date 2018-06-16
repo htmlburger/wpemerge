@@ -3,10 +3,8 @@
 namespace WPEmerge\Routing;
 
 use Exception;
-use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Exceptions\ExceptionHandlerInterface;
+use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
-use WPEmerge\Facades\Response;
 use WPEmerge\Requests\Request;
 
 /**
@@ -48,9 +46,9 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Exception handler.
 	 *
-	 * @var ExceptionHandlerInterface
+	 * @var ErrorHandlerInterface
 	 */
-	protected $exception_handler = null;
+	protected $error_handler = null;
 
 	/**
 	 * Current active route.
@@ -63,18 +61,19 @@ class Router implements HasRoutesInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Request                   $request
-	 * @param array                     $middleware
-	 * @param array                     $middleware_priority
-	 * @param integer                   $default_middleware_priority
-	 * @param ExceptionHandlerInterface $exception_handler
+	 *
+	 * @param Request               $request
+	 * @param array                 $middleware
+	 * @param array                 $middleware_priority
+	 * @param integer               $default_middleware_priority
+	 * @param ErrorHandlerInterface $error_handler
 	 */
-	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority, ExceptionHandlerInterface $exception_handler ) {
+	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority, ErrorHandlerInterface $error_handler ) {
 		$this->request = $request;
 		$this->middleware_priority = $middleware_priority;
 		$this->default_middleware_priority = $default_middleware_priority;
 		$this->middleware = $this->sortMiddleware( $middleware );
-		$this->exception_handler = $exception_handler;
+		$this->error_handler = $error_handler;
 	}
 
 	/**
@@ -167,16 +166,11 @@ class Router implements HasRoutesInterface {
 	 */
 	protected function handle( Request $request, RouteInterface $route, $view ) {
 		try {
+			$this->error_handler->register();
 			$response = $route->handle( $request, $view );
+			$this->error_handler->unregister();
 		} catch ( Exception $e ) {
-			$response = $this->exception_handler->handle( $e );
-		}
-
-		if ( ! $response instanceof ResponseInterface ) {
-			if ( Framework::debugging() ) {
-				throw new Exception( 'Response returned by controller is not valid (expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
-			}
-			$response = Response::error( 500 );
+			$response = $this->error_handler->getResponse( $e );
 		}
 
 		$container = Framework::getContainer();

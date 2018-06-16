@@ -22,31 +22,19 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$this->extendConfig( $container, 'debug', [
-			'pretty_stack_trace' => true,
+			'pretty_errors' => true,
 		] );
 
 		$container['whoops'] = function( $container ) {
 			$run = new Run();
 			$run->allowQuit( false );
-			$run->pushHandler( $container['whoops.error_page_handler'] );
+			$run->pushHandler( new PrettyPageHandler() );
 			return $run;
 		};
 
-		$container['whoops.error_page_handler'] = function() {
-			return new PrettyPageHandler();
-		};
-
-		$container['whoops.exception_handler'] = $container->protect( function( $exception ) use ( $container ) {
-			$method = Run::EXCEPTION_HANDLER;
-			ob_start();
-			$container['whoops']->$method( $exception );
-			$response = ob_get_clean();
-			return Response::output( $response )->withStatus( 500 );
-		} );
-
-		$container[ WPEMERGE_EXCEPTIONS_EXCEPTION_HANDLER_KEY ] = function( $c ) {
-			$stack_trace_handler = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_stack_trace'] ? $c['whoops.exception_handler'] : null;
-			return new ExceptionHandler( Framework::debugging(), $stack_trace_handler );
+		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function( $c ) {
+			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
+			return new ErrorHandler( $whoops, Framework::debugging() );
 		};
 	}
 

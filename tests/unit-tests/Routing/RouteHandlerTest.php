@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge\Helpers\Handler;
-use WPEmerge\Responses\ConvertibleToResponseInterface;
+use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Routing\RouteHandler;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
@@ -38,6 +38,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
+	 * @covers ::getResponse()
 	 */
 	public function testExecute_ClosureReturningString_OutputResponse() {
 		$expected = 'foobar';
@@ -52,6 +53,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
+	 * @covers ::getResponse()
 	 */
 	public function testExecute_ClosureReturningArray_JsonResponse() {
 		$value = ['foo' => 'bar'];
@@ -67,9 +69,10 @@ class RouteHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
+	 * @covers ::getResponse()
 	 */
-	public function testExecute_ConvertibleToResponseInterface_Psr7Response() {
-		$input = Mockery::mock( ConvertibleToResponseInterface::class );
+	public function testExecute_ResponsableInterface_Psr7Response() {
+		$input = Mockery::mock( ResponsableInterface::class );
 		$expected = ResponseInterface::class;
 		$closure = function() use ( $input ) {
 			return $input;
@@ -93,5 +96,20 @@ class RouteHandlerTest extends WP_UnitTestCase {
 
 		$subject = new RouteHandler( $closure );
 		$this->assertSame( $expected, $subject->execute() );
+	}
+
+	/**
+	 * @covers ::execute
+	 * @covers ::getResponse()
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage Response returned by controller is not valid
+	 */
+	public function testExecute_InvalidResponse_ThrowsException() {
+		$closure = function() {
+			return null;
+		};
+
+		$subject = new RouteHandler( $closure );
+		$subject->execute();
 	}
 }

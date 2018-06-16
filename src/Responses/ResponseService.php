@@ -217,7 +217,7 @@ class ResponseService {
 	}
 
 	/**
-	 * Get a view convertible to a response.
+	 * Get a view file representation.
 	 *
 	 * @param  string|string[] $views
 	 * @return ViewInterface
