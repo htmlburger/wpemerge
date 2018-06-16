@@ -4,6 +4,7 @@ namespace WPEmergeTests\Exceptions;
 
 use Exception;
 use Mockery;
+use Whoops\RunInterface;
 use WPEmerge\Exceptions\ErrorHandler;
 use WPEmerge\Exceptions\NotFoundException;
 use WP_UnitTestCase;
@@ -30,8 +31,8 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	 * @covers ::toResponse
 	 */
 	public function testGetResponse_NotFoundException_404Response() {
-		$exception = new NotFoundException();
 		$expected = 404;
+		$exception = new NotFoundException();
 
 		$this->assertEquals( $expected, $this->subject->getResponse( $exception )->getStatusCode() );
 	}
@@ -40,10 +41,28 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	 * @covers ::getResponse
 	 */
 	public function testGetResponse_ProductionException_500Response() {
-		$exception = new Exception();
 		$expected = 500;
+		$exception = new Exception();
 
 		$this->assertEquals( $expected, $this->subject->getResponse( $exception )->getStatusCode() );
+	}
+
+	/**
+	 * @covers ::getResponse
+	 */
+	public function testGetResponse_DebugException_PrettyErrorResponse() {
+		$expected = 'foobar';
+		$exception = new Exception( $expected );
+
+		$whoops = Mockery::mock( RunInterface::class );
+		$whoops->shouldReceive( RunInterface::EXCEPTION_HANDLER )
+			->with( $exception )
+			->andReturnUsing( function( $exception ) {
+				echo $exception->getMessage();
+			} );
+		$subject = new ErrorHandler( $whoops, true );
+
+		$this->assertEquals( $expected, $subject->getResponse( $exception )->getBody()->read( strlen( $expected ) ) );
 	}
 
 	/**

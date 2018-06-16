@@ -39,7 +39,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function register() {
-		if ( $this->whoops instanceof RunInterface ) {
+		if ( $this->whoops !== null ) {
 			$this->whoops->register();
 		}
 	}
@@ -49,7 +49,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function unregister() {
-		if ( $this->whoops instanceof RunInterface ) {
+		if ( $this->whoops !== null ) {
 			$this->whoops->unregister();
 		}
 	}
@@ -103,7 +103,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 			return Response::error( 500 );
 		}
 
-		if ( $this->whoops instanceof RunInterface ) {
+		if ( $this->whoops !== null ) {
 			return $this->toPrettyErrorResponse( $exception );
 		}
 
