@@ -53,4 +53,3 @@ $container[ WPEMERGE_VIEW_ENGINE_KEY ] = function( $container ) {
 };
 ```
 _Note: The example above assumes you have included both WP Emerge Twig and WP Emerge Blade composer packages. `WPEMERGETWIG_VIEW_TWIG_VIEW_ENGINE_KEY` and `WPEMERGEBLADE_VIEW_BLADE_VIEW_ENGINE_KEY` are not provided by default._
-_Note: The same note regarding the usage of a Service Container applies here as well._
