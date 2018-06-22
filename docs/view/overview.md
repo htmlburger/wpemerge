@@ -21,7 +21,6 @@ Implementing your own or a third-party engine is simple and straightforward - th
         return new MyCustomViewEngine();
     };
     ```
-    _Note: We're assigning to the container directly for the sake of brevity - a Service Provider is a much better solution._
 
 ## External view engines
 
