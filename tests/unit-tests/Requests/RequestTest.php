@@ -40,17 +40,25 @@ class RequestTest extends WP_UnitTestCase {
 	 * @covers ::getMethod
 	 */
 	public function testGetMethod() {
-		$expected1 = 'POST';
-		$subject1 = new Request( [], [], [], [], ['REQUEST_METHOD' => $expected1], [] );
+		$expected1 = 'GET';
+		$subject1 = new Request( [], [], [], [], [], [] );
 		$this->assertEquals( $expected1, $subject1->getMethod() );
 
-		$expected2 = 'PUT';
+		$expected2 = 'POST';
 		$subject2 = new Request( [], [], [], [], ['REQUEST_METHOD' => $expected2], [] );
 		$this->assertEquals( $expected2, $subject2->getMethod() );
 
 		$expected3 = 'PUT';
 		$subject3 = new Request( [], [], [], [], ['REQUEST_METHOD' => 'POST'], ['X-HTTP-METHOD-OVERRIDE' => $expected3] );
 		$this->assertEquals( $expected3, $subject3->getMethod() );
+
+		$expected4 = 'PUT';
+		$subject4 = new Request( [], ['_method' => 'PUT'], [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$this->assertEquals( $expected4, $subject4->getMethod() );
+
+		$expected5 = 'PUT';
+		$subject5 = new Request( [], ['_method' => 'PUT'], [], [], ['REQUEST_METHOD' => 'POST'], ['X-HTTP-METHOD-OVERRIDE' => 'POST'] );
+		$this->assertEquals( $expected5, $subject5->getMethod() );
 	}
 
 	/**

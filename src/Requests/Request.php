@@ -87,9 +87,14 @@ class Request {
 	public function getMethod() {
 		$method = (string) $this->server( 'REQUEST_METHOD', 'GET' );
 
-		$override = (string) $this->headers( 'X-HTTP-METHOD-OVERRIDE' );
-		if ( $method === 'POST' && $override ) {
-			$method = $override;
+		$header_override = (string) $this->headers( 'X-HTTP-METHOD-OVERRIDE' );
+		if ( $method === 'POST' && $header_override ) {
+			$method = strtoupper( $header_override );
+		}
+
+		$body_override = (string) $this->post( '_method' );
+		if ( $method === 'POST' && $body_override ) {
+			$method = strtoupper( $body_override );
 		}
 
 		return strtoupper( $method );
