@@ -1,3 +1,9 @@
 .page-inner .markdown-section { padding-bottom: 20px }
 
-.anchorjs-link { margin-left: -0.75em !important; } 
+.anchorjs-link { margin-left: -0.75em !important; }
+
+.book-header h1 { opacity: 1; }
+
+/* Fix theme-api causing vertical scroll on page load. */
+.page-inner { margin-top: 0; }
+#book-search-results section > h1:first-child { padding-top: 50px; }

@@ -14,7 +14,7 @@ Route handlers have a couple of requirements:
     1. Any `string` which will be output literally
     1. Any `array` which will be output as a JSON response
     1. an object implementing the `Psr\Http\Message\ResponseInterface` interface.
-1. Can optionally throw exceptions. Make sure you catch these exceptions in your `ExceptionHandler` and translate them to responses so that visitors are not greeted with blank pages or stack traces. An example exception that is handled for you by default is the `\WPEmerge\Exceptions\NotFoundException` exception which is translated to a 404 response.
+1. Can optionally throw exceptions. Make sure you catch these exceptions in your `ErrorHandler` and translate them to responses so that visitors are not greeted with blank pages or stack traces. An example exception that is handled for you by default is the `\WPEmerge\Exceptions\NotFoundException` exception which is translated to a 404 response.
 
 ## Instantiation
 
