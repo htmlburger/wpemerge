@@ -6,7 +6,6 @@ use ArrayAccess;
 use Exception;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
