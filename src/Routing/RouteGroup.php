@@ -102,6 +102,14 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getArguments( Request $request ) {
+		$route = $this->getSatisfiedRoute( $request );
+		return $route ? $route->getArguments( $request ) : [];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function route( $methods, $condition, $handler ) {
 		if ( ! $condition instanceof ConditionInterface ) {
 			$condition = RouteCondition::make( $condition );

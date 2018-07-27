@@ -107,6 +107,13 @@ class Route implements RouteInterface {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function getArguments( Request $request ) {
+		return $this->getCondition()->getArguments( $request );
+	}
+
+	/**
 	 * Add a rewrite rule to WordPress for url-based routes
 	 *
 	 * @throws Exception
