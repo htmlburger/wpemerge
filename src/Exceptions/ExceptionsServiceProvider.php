@@ -26,6 +26,10 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 		] );
 
 		$container['whoops'] = function( $container ) {
+			if ( ! class_exists( Run::class ) ) {
+				return null;
+			}
+
 			$run = new Run();
 			$run->allowQuit( false );
 			$run->pushHandler( new PrettyPageHandler() );
