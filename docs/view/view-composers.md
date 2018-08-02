@@ -12,11 +12,11 @@ In this example we want to pass the latest posts to the `latest-news.php` partia
 ```php
 // immediately after WPEmerge::boot()
 View::addComposer( 'templates/partials/latest-news', function( $view ) {
-	return [
+	$view->with( [
 		'news' => new WP_Query( [
 			'posts_per_page' => 3,
 		] ),
-	];
+	] );
 } );
 ```
 
@@ -34,11 +34,11 @@ Here's the same example, but using a class:
 ```php
 class LatestNewsViewComposer {
     public function compose( $view ) {
-        return [
+        $view->with( [
             'news' => new WP_Query( [
                 'posts_per_page' => 3,
             ] ),
-        ];
+        ] );
     }
 } );
 ```
