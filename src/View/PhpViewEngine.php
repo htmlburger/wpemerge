@@ -2,7 +2,7 @@
 
 namespace WPEmerge\View;
 
-use Exception;
+use WPEmerge\Exceptions\ViewException;
 
 /**
  * Render view files with php.
@@ -35,7 +35,7 @@ class PhpViewEngine implements ViewEngineInterface {
 			}
 		}
 
-		throw new Exception( 'View not found for "' . implode( ', ', $views ) . '"' );
+		throw new ViewException( 'View not found for "' . implode( ', ', $views ) . '"' );
 	}
 
 	/**
@@ -46,13 +46,46 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * @return ViewInterface
 	 */
 	protected function makeView( $name, $filepath ) {
-		return (new PhpView())
+		$view = (new PhpView())
 			->setName( $name )
 			->setFilepath( $filepath );
+
+		$layout = $this->getViewLayout( $view );
+
+		if ( $layout !== null ) {
+			$view->setLayout( $layout );
+		}
+
+		return $view;
 	}
 
 	/**
-	 * Resolve a view or a view array to an absolute filepath
+	 * Create a view instance for the given view's layout header, if any.
+	 *
+	 * @param  PhpView       $view
+	 * @return ViewInterface
+	 */
+	protected function getViewLayout( PhpView $view ) {
+		$layout_headers = array_filter( get_file_data(
+			$view->getFilepath(),
+			['App Layout']
+		) );
+
+		if ( empty( $layout_headers ) ) {
+			return null;
+		}
+
+		$layout_file = trim( $layout_headers[0] );
+
+		if ( ! $this->exists( $layout_file ) ) {
+			throw new ViewException( 'View layout not found for "' . $layout_file . '"' );
+		}
+
+		return $this->makeView( $this->canonical( $layout_file ), $this->resolveFilepath( $layout_file ) );
+	}
+
+	/**
+	 * Resolve a view name to an absolute filepath.
 	 *
 	 * @param  string $view
 	 * @return string
@@ -61,12 +94,12 @@ class PhpViewEngine implements ViewEngineInterface {
 		$file = locate_template( $view, false );
 
 		if ( ! $file ) {
-			// locate_template failed to find the view - try adding a .php extension
+			// locate_template failed to find the view - try adding a .php extension.
 			$file = locate_template( $view . '.php', false );
 		}
 
 		if ( ! $file ) {
-			// locate_template failed to find the view - test if a valid absolute path was passed
+			// locate_template failed to find the view - test if a valid absolute path was passed.
 			$file = $this->resolveFilepathFromFilesystem( $view );
 		}
 
@@ -78,7 +111,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	}
 
 	/**
-	 * Resolve the view if it exists on the filesystem
+	 * Resolve a view if it exists on the filesystem.
 	 *
 	 * @param  string $view
 	 * @return string

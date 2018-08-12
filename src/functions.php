@@ -82,3 +82,14 @@ if ( ! function_exists( 'app_partial' ) ) {
             ->toString();
 	}
 }
+
+if ( ! function_exists( 'app_layout_content' ) ) {
+	/**
+	 * @codeCoverageIgnore
+	 * @see \WPEmerge\View\PhpView::getLayoutContent()
+	 * @return string
+	 */
+	function app_layout_content() {
+		echo \WPEmerge\View\PhpView::getLayoutContent();
+	}
+}

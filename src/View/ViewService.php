@@ -81,8 +81,8 @@ class ViewService {
     /**
      * Add view composer.
      *
-     * @param string|string[] $views
-     * @param string|Closure  $composer
+     * @param  string|string[] $views
+     * @param  string|Closure  $composer
      * @return void
      * @throws \Exception
      */

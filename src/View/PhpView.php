@@ -2,9 +2,9 @@
 
 namespace WPEmerge\View;
 
-use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
+use WPEmerge\Exceptions\ViewException;
 use WPEmerge\Facades\View;
 
 /**
@@ -14,11 +14,40 @@ class PhpView implements ViewInterface {
 	use HasNameTrait, HasContextTrait;
 
 	/**
+	 * Stack of rendered layout contents.
+	 *
+	 * @var array<string>
+	 */
+	protected static $layout_content_stack = [];
+
+	/**
 	 * Filepath to view.
 	 *
 	 * @var string
 	 */
 	protected $filepath = '';
+
+	/**
+	 * Layout to use.
+	 *
+	 * @var ViewInterface
+	 */
+	protected $layout = null;
+
+	/**
+	 * Get the top-most layout content from the stack.
+	 *
+	 * @return string
+	 */
+	public static function getLayoutContent() {
+		$stack = static::$layout_content_stack;
+
+		if ( empty( $stack ) ) {
+			return '';
+		}
+
+		return $stack[ count( $stack ) - 1 ];
+	}
 
 	/**
 	 * Get filepath.
@@ -41,24 +70,46 @@ class PhpView implements ViewInterface {
 	}
 
 	/**
+	 * Get layout.
+	 *
+	 * @return ViewInterface
+	 */
+	public function getLayout() {
+		return $this->layout;
+	}
+
+	/**
+	 * Set layout.
+	 *
+	 * @param  ViewInterface $layout
+	 * @return self          $this
+	 */
+	public function setLayout( ViewInterface $layout ) {
+		$this->layout = $layout;
+		return $this;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function toString() {
 		if ( empty( $this->getName() ) ) {
-			throw new Exception( 'View must have a name.' );
+			throw new ViewException( 'View must have a name.' );
 		}
 
 		if ( empty( $this->getFilepath() ) ) {
-			throw new Exception( 'View must have a filepath.' );
+			throw new ViewException( 'View must have a filepath.' );
 		}
 
-		$composed = clone $this;
-		$context = $composed->getContext();
-		$composed->with( ['global' => View::getGlobals()] );
-		View::compose( $composed );
-		$composed->with( $context );
+		$html = (clone $this)->compose()->render();
 
-		return $composed->render();
+		if ( $this->getLayout() !== null ) {
+			static::$layout_content_stack[] = $html;
+			$html = $this->getLayout()->toString();
+			array_pop( static::$layout_content_stack );
+		}
+
+		return $html;
 	}
 
 	/**
@@ -66,14 +117,26 @@ class PhpView implements ViewInterface {
 	 *
 	 * @return string
 	 */
-	protected function render() {
+	public function render() {
 		$__context = $this->getContext();
 		ob_start();
 		extract( $__context );
 		include( $this->getFilepath() );
 		$html = ob_get_clean();
-
 		return $html;
+	}
+
+	/**
+	 * Compose the context.
+	 *
+	 * @return self $this
+	 */
+	protected function compose() {
+		$context = $this->getContext();
+		$this->with( ['global' => View::getGlobals()] );
+		View::compose( $this );
+		$this->with( $context );
+		return $this;
 	}
 
 	/**
