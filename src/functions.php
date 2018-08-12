@@ -51,7 +51,7 @@ if ( ! function_exists( 'app_view' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see \WPEmerge\Responses\ResponseService::view()
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @return \WPEmerge\View\ViewInterface
 	 */
 	function app_view( $views ) {
 		return call_user_func_array( [Response::class, 'view'], func_get_args() );
