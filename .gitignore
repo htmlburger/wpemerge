@@ -9,3 +9,6 @@ api-reference/
 
 # phpstorm
 .idea
+
+# phpunit
+.clover.xml

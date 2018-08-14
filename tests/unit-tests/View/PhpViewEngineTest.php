@@ -5,6 +5,7 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\ViewInterface;
+use WPEmergeTestTools\Helper;
 use WP_UnitTestCase;
 
 /**
@@ -63,9 +64,33 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::makeView
+	 * @covers ::getViewLayout
+	 */
+	public function testMake_WithLayout() {
+		list( $view, $layout, $output, $handle ) = Helper::createLayoutView();
+		$view = $this->subject->make( [$view] );
+
+		$this->assertEquals( $layout, $view->getLayout()->getFilepath() );
+
+		Helper::deleteLayoutView( $handle );
+	}
+
+	/**
+	 * @covers ::getViewLayout
+	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedExceptionMessage View layout not found
+	 */
+	public function testMake_WithIncorrectLayout() {
+		// Rely on the fact that view-with-layout.php uses a sprintf() token instead of a real path so it fails.
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
+		$view = $this->subject->make( [$view] );
+	}
+
+	/**
 	 * @covers ::make
 	 * @covers ::makeView
-	 * @expectedException \Exception
+	 * @expectedException \WPEmerge\Exceptions\ViewException
 	 * @expectedExceptionMessage View not found
 	 */
 	public function testMake_NoView() {

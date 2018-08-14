@@ -37,6 +37,7 @@ class PhpView implements ViewInterface {
 	/**
 	 * Get the top-most layout content from the stack.
 	 *
+	 * @codeCoverageIgnore
 	 * @return string
 	 */
 	public static function getLayoutContent() {
@@ -113,20 +114,6 @@ class PhpView implements ViewInterface {
 	}
 
 	/**
-	 * Render the view to string.
-	 *
-	 * @return string
-	 */
-	public function render() {
-		$__context = $this->getContext();
-		ob_start();
-		extract( $__context );
-		include( $this->getFilepath() );
-		$html = ob_get_clean();
-		return $html;
-	}
-
-	/**
 	 * Compose the context.
 	 *
 	 * @return self $this
@@ -137,6 +124,19 @@ class PhpView implements ViewInterface {
 		View::compose( $this );
 		$this->with( $context );
 		return $this;
+	}
+
+	/**
+	 * Render the view to a string.
+	 *
+	 * @return string
+	 */
+	protected function render() {
+		$__context = $this->getContext();
+		ob_start();
+		extract( $__context, EXTR_OVERWRITE );
+		include( $this->getFilepath() );
+		return ob_get_clean();
 	}
 
 	/**

@@ -144,7 +144,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \Exception
+	 * @expectedException \WPEmerge\Exceptions\ViewException
 	 * @expectedExceptionMessage View not found
 	 */
 	public function testMake_NoView_EmptyString() {

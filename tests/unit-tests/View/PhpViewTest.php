@@ -5,6 +5,8 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\Facades\View;
 use WPEmerge\View\PhpView;
+use WPEmerge\View\ViewInterface;
+use WPEmergeTestTools\Helper;
 use WP_UnitTestCase;
 
 /**
@@ -43,10 +45,71 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::getLayout
+	 * @covers ::setLayout
+	 */
+	public function testGetLayout() {
+		$expected = Mockery::mock( ViewInterface::class );
+		$this->subject->setLayout( $expected );
+		$this->assertSame( $expected, $this->subject->getLayout() );
+	}
+
+	/**
 	 * @covers ::toString
 	 * @covers ::render
 	 */
-	public function testToString_GlobalContext() {
+	public function testRender() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$expected = file_get_contents( $view );
+
+		$this->subject->setName( $view );
+		$this->subject->setFilepath( $view );
+		$this->assertEquals( $expected, $this->subject->toString() );
+	}
+
+	/**
+	 * @covers ::toString
+	 */
+	public function testToString_Layout() {
+		list( $view, $layout, $expected, $handle ) = Helper::createLayoutView();
+
+		$layout = (new PhpView())
+			->setName( $layout )
+			->setFilepath( $layout );
+
+		$this->subject
+			->setName( $view )
+			->setFilepath( $view )
+			->setLayout( $layout );
+
+		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
+
+		Helper::deleteLayoutView( $handle );
+	}
+
+	/**
+	 * @covers ::toString
+	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedExceptionMessage must have a name
+	 */
+	public function testToString_WithoutName() {
+		$this->subject->toString();
+	}
+
+	/**
+	 * @covers ::toString
+	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedExceptionMessage must have a filepath
+	 */
+	public function testToString_WithoutFilepath() {
+		$this->subject->setName( 'foo' );
+		$this->subject->toString();
+	}
+
+	/**
+	 * @covers ::compose
+	 */
+	public function testCompose_GlobalContext() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
 		$expected = 'Hello World!';
 
@@ -64,10 +127,9 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::toString
-	 * @covers ::render
+	 * @covers ::compose
 	 */
-	public function testToString_ViewComposer() {
+	public function testCompose_ViewComposer() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
@@ -88,10 +150,9 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::toString
-	 * @covers ::render
+	 * @covers ::compose
 	 */
-	public function testToString_LocalContext() {
+	public function testCompose_LocalContext() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
@@ -110,10 +171,9 @@ class PhpViewTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::toString
-	 * @covers ::render
+	 * @covers ::compose
 	 */
-	public function testToString_LocalContextOverridesViewComposerContext() {
+	public function testCompose_LocalContextOverridesViewComposerContext() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
@@ -123,7 +183,7 @@ class PhpViewTest extends WP_UnitTestCase {
 
 		$this->viewMock->shouldReceive( 'compose' )
 			->andReturnUsing( function( $view ) {
-				$view->with( ['world' => 'This should be overriden'] );
+				$view->with( ['world' => 'This should be overridden'] );
 			} )
 			->once();
 
@@ -132,25 +192,6 @@ class PhpViewTest extends WP_UnitTestCase {
 		$this->subject->with( ['world' => 'World'] );
 
 		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
-	}
-
-	/**
-	 * @covers ::toString
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage must have a name
-	 */
-	public function testToString_WithoutName() {
-		$this->subject->toString();
-	}
-
-	/**
-	 * @covers ::toString
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage must have a filepath
-	 */
-	public function testToString_WithoutFilepath() {
-		$this->subject->setName( 'foo' );
-		$this->subject->toString();
 	}
 
 	/**
