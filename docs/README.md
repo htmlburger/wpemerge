@@ -34,12 +34,13 @@ Brought to you by [Atanas Angelov](https://github.com/atanas-angelov-dev) and th
 
 |  | WPEmerge | Sage | Timber |
 | --- | --- | --- | --- |
-| View Engine | PHP, Blade, Twig, Custom | PHP, Blade | Twig |
+| View Engine | PHP, Blade, Twig, any | Blade | Twig |
 | Routing | ✔ | ✖ | ✖ |
 | MVC | ✖✔✔ | ✖✔✖³ | ✖✔✖ |
 | Middleware | ✔ | ✖ | ✖ |
 | View Composers | ✔ | ✔/✖⁴ | ✖ |
-| Service Container | ✔ | ✖ | ✖ |
+| Service Container | ✔ | ✔ | ✖ |
+| [Advanced Error Reporting](https://docs.wpemerge.com/routing/exceptions.html) | ✔ | ✖ | ✖ |
 
 _¹ We are comparing frameworks and themes - style, build tools etc. are not mentioned. For a full comparison check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/)._
 

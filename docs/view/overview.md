@@ -2,7 +2,12 @@
 
 WP Emerge comes with a default view engine built-in - `\WPEmerge\View\PhpViewEngine`.
 This view engine uses `extract()` for the view context and then includes the view file. The resulting output is then passed as the rendered view string.
-Essentially, this engine loads views in the same way WordPress does, but with the added feature of context variable passing.
+Essentially, this engine loads views in the same way WordPress does, but with a couple extra features:
+
+1. Context variable passing.
+1. Ability to specify layouts for views.
+
+## Implementing other View Engines
 
 Implementing your own or a third-party engine is simple and straightforward - there are only a couple requirements:
 
