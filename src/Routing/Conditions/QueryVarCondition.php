@@ -49,7 +49,7 @@ class QueryVarCondition implements ConditionInterface {
 			return true;
 		}
 
-		return strval( $this->value ) === $query_var_value;
+		return (string) $this->value === $query_var_value;
 	}
 
 	/**

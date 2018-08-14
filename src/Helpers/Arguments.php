@@ -20,7 +20,8 @@ class Arguments {
 			return $arguments;
 		}
 
-		$first_null = intval( $first_null ); // only support integer keys
+		// Support integer keys only.
+		$first_null = (int) $first_null;
 
 		$arguments = array_values( array_merge(
 			array_slice( $arguments, $first_null ),

@@ -59,7 +59,7 @@ class Handler {
 	protected function parseFromString( $raw_handler, $default_method = null ) {
 		$handlerPieces = array_filter( preg_split( '/@|::/', $raw_handler, 2 ) );
 
-		if ( count( $handlerPieces ) === 1 && $default_method !== null ) {
+		if ( $default_method !== null && count( $handlerPieces ) === 1 ) {
 			return [
 				'class' => $handlerPieces[0],
 				'method' => $default_method,

@@ -74,10 +74,8 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	 * @return ConditionInterface
 	 */
 	protected function mergeConditions( $parent, $child ) {
-		if ( $parent instanceof UrlCondition ) {
-			if ( $child instanceof UrlCondition ) {
-				return $parent->concatenate( $child );
-			}
+		if ( $parent instanceof UrlCondition && $child instanceof UrlCondition ) {
+			return $parent->concatenate( $child );
 		}
 
 		return new MultipleCondition( [$parent, $child] );

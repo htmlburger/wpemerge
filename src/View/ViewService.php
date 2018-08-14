@@ -70,7 +70,7 @@ class ViewService {
 		$composers = [];
 
 		foreach ( $this->composers as $composer ) {
-			if ( in_array( $view, $composer['views'] ) ) {
+			if ( in_array( $view, $composer['views'], true ) ) {
 				$composers[] = $composer['composer'];
 			}
 		}

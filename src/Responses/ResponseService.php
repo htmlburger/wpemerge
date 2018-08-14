@@ -138,7 +138,7 @@ class ResponseService {
 		while ( ! $body->eof() ) {
 			echo $body->read( $chunk_size );
 
-			if ( connection_status() != CONNECTION_NORMAL ) {
+			if ( connection_status() !== CONNECTION_NORMAL ) {
 				break;
 			}
 		}
@@ -167,7 +167,7 @@ class ResponseService {
 
 			$content_left -= $read;
 
-			if ( connection_status() != CONNECTION_NORMAL ) {
+			if ( connection_status() !== CONNECTION_NORMAL ) {
 				break;
 			}
 		}

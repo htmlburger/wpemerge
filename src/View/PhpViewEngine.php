@@ -20,8 +20,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		$file = $this->resolveFilepath( $view );
-		return $file;
+		return $this->resolveFilepath( $view );
 	}
 
 	/**

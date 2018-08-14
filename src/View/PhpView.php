@@ -136,7 +136,7 @@ class PhpView implements ViewInterface {
 		$__context = $this->getContext();
 		ob_start();
 		extract( $__context, EXTR_OVERWRITE );
-		include( $this->getFilepath() );
+		include $this->getFilepath();
 		return ob_get_clean();
 	}
 

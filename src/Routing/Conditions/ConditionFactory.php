@@ -90,7 +90,7 @@ class ConditionFactory {
 		return (
 			is_string( $condition )
 			&&
-			substr( $condition, 0, strlen( static::NEGATE_CONDITION_PREFIX ) ) === static::NEGATE_CONDITION_PREFIX
+			strpos( $condition, static::NEGATE_CONDITION_PREFIX ) === 0
 		);
 	}
 
@@ -165,8 +165,7 @@ class ConditionFactory {
 		$condition_class = $this->getConditionTypeClass( $condition_options['type'] );
 
 		$reflection = new ReflectionClass( $condition_class );
-		$condition = $reflection->newInstanceArgs( $condition_options['arguments'] );
-		return $condition;
+		return $reflection->newInstanceArgs( $condition_options['arguments'] );
 	}
 
 	/**

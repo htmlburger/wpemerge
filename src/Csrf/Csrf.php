@@ -104,7 +104,7 @@ class Csrf {
 	 */
 	public function isValidToken( $token, $action = -1 ) {
 		$action = $action === -1 ? session_id() : $action;
-		$lifetime = intval( wp_verify_nonce( $token, $action ) );
+		$lifetime = (int) wp_verify_nonce( $token, $action );
 		return ( $lifetime > 0 && $lifetime <= $this->maximum_lifetime );
 	}
 

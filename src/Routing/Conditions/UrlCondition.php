@@ -137,7 +137,7 @@ class UrlCondition implements ConditionInterface {
 			$replacement = '(?:' . $replacement . ')?';
 		}
 
-		$placeholder = '___placeholder_' . sha1( count( $parameters) . '_' . $replacement . '_' . uniqid() ) . '___';
+		$placeholder = '___placeholder_' . sha1( count( $parameters ) . '_' . $replacement . '_' . uniqid( 'wpemerge_', true ) ) . '___';
 		$parameters[ $placeholder ] = $replacement;
 
 		return $placeholder;
