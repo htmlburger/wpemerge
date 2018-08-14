@@ -17,11 +17,11 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	public function register( $container ) {
 		$this->registerConfiguration( $container );
 		$this->registerDependencies( $container );
-		$this->registerFacades( $container );
+		$this->registerFacades();
 	}
 
 	/**
-	 * Register condiguration options.
+	 * Register configuration options.
 	 *
 	 * @param  \Pimple\Container $container
 	 * @return void
@@ -66,7 +66,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * @param  \Pimple\Container $container
 	 * @return void
 	 */
-	protected function registerFacades( $container ) {
+	protected function registerFacades() {
 		Framework::facade( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
 

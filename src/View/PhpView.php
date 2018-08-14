@@ -30,7 +30,7 @@ class PhpView implements ViewInterface {
 	/**
 	 * Layout to use.
 	 *
-	 * @var ViewInterface
+	 * @var ViewInterface|null
 	 */
 	protected $layout = null;
 
@@ -72,7 +72,7 @@ class PhpView implements ViewInterface {
 	/**
 	 * Get layout.
 	 *
-	 * @return ViewInterface
+	 * @return ViewInterface|null
 	 */
 	public function getLayout() {
 		return $this->layout;
@@ -81,8 +81,8 @@ class PhpView implements ViewInterface {
 	/**
 	 * Set layout.
 	 *
-	 * @param  ViewInterface $layout
-	 * @return self          $this
+	 * @param  ViewInterface|null $layout
+	 * @return self               $this
 	 */
 	public function setLayout( ViewInterface $layout ) {
 		$this->layout = $layout;

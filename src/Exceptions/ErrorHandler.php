@@ -26,7 +26,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param RunInterface|null $stack_trace_handler
+	 * @param RunInterface|null $whoops
 	 * @param boolean           $debug
 	 */
 	public function __construct( $whoops, $debug = false ) {

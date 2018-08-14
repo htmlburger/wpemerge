@@ -52,7 +52,7 @@ class Request {
 	protected $headers = [];
 
 	/**
-	 * Create a new instance from php superglobals.
+	 * Create a new instance from php super globals.
 	 *
 	 * @return Request
 	 */

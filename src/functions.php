@@ -87,7 +87,7 @@ if ( ! function_exists( 'app_layout_content' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see \WPEmerge\View\PhpView::getLayoutContent()
-	 * @return string
+	 * @return void
 	 */
 	function app_layout_content() {
 		echo \WPEmerge\View\PhpView::getLayoutContent();

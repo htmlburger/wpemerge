@@ -38,7 +38,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	public function register( $container ) {
 		$this->registerConfiguration( $container );
 		$this->registerDependencies( $container );
-		$this->registerFacades( $container );
+		$this->registerFacades();
 	}
 
 	/**
@@ -91,7 +91,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @param  \Pimple\Container $container
 	 * @return void
 	 */
-	protected function registerFacades( $container ) {
+	protected function registerFacades() {
 		Framework::facade( 'Router', RouterFacade::class );
 		Framework::facade( 'RouteCondition', RouteConditionFacade::class );
 	}

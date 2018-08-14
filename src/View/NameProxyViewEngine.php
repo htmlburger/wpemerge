@@ -8,7 +8,7 @@ use WPEmerge\Facades\Framework;
 /**
  * Render view files with different engines depending on their filename
  */
-class NameProxyViewEngine implements \WPEmerge\View\ViewEngineInterface {
+class NameProxyViewEngine implements ViewEngineInterface {
 	/**
 	 * Container key of default engine to use
 	 *

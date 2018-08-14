@@ -4,7 +4,6 @@ namespace WPEmerge\Exceptions;
 
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
-use WPEmerge\Facades\Response;
 use WPEmerge\Facades\Framework;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
@@ -25,7 +24,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			'pretty_errors' => true,
 		] );
 
-		$container['whoops'] = function( $container ) {
+		$container['whoops'] = function() {
 			if ( ! class_exists( Run::class ) ) {
 				return null;
 			}
