@@ -193,6 +193,45 @@ class MyServiceProvider implements ServiceProviderInterface {
 {% endmethod %}
 
 {% method -%}
+#### PHP View Layouts
+
+- Eliminate repeating `get_header()`/`get_footer()` calls in every view.
+- Reduce boilerplate and improve maintainability of views.
+
+{% sample lang="php" -%}
+`index.php`
+```php
+<?php
+/**
+* App Layout: layouts/app.php
+*/
+
+if ( is_single() ) {
+    Theme::partial( 'loop', 'single' );
+} else {
+    Theme::partial( 'loop' );
+}
+```
+`layouts/app.php`
+```php
+<?php
+get_header();
+
+if ( ! is_singular() ) {
+    app_the_title( '<h2 class="pagetitle">', '</h2>' );
+}
+
+// Output the actual view content:
+app_layout_content();
+
+get_sidebar();
+
+get_footer();
+```
+
+{% endmethod %}
+
+{% method -%}
 #### Custom view engine support
 
 - Replace the view engine used in the service container.

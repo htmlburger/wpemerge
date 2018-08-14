@@ -24,6 +24,7 @@
 ## View
 
 * [Overview](view/overview.md)
+* [Layouts](view/layouts.md)
 * [Global Context](view/global-context.md)
 * [View Composers](view/view-composers.md)
 
