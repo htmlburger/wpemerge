@@ -102,7 +102,8 @@ class PhpView implements ViewInterface {
 			throw new ViewException( 'View must have a filepath.' );
 		}
 
-		$html = (clone $this)->compose()->render();
+		$clone = clone $this;
+		$html = $clone->compose()->render();
 
 		if ( $this->getLayout() !== null ) {
 			static::$layout_content_stack[] = $html;
