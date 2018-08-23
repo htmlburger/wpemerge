@@ -25,7 +25,7 @@ class Csrf {
 	/**
 	 * Maximum token lifetime.
 	 *
-	 * @see https://codex.wordpress.org/Function_Reference/wp_verify_nonce
+	 * @link https://codex.wordpress.org/Function_Reference/wp_verify_nonce
 	 * @var integer
 	 */
 	protected $maximum_lifetime = 2;
