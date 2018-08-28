@@ -11,7 +11,7 @@ _Note: Paths in URL conditions are relative to the site's home url._
 
 {% sample lang="php" -%}
 ```php
-Route::get( '/foo/bar/', $handler );
+Router::get( '/foo/bar/', $handler );
 ```
 {% endmethod %}
 
@@ -27,7 +27,7 @@ _Parameter values are passed as arguments to the handler method._
 
 {% sample lang="php" -%}
 ```php
-Route::get(
+Router::get(
     '/foo/{param1}/bar/{param2?}/baz/{param3:\d+}/{param4?:\d+}',
     function( $request, $view, $param1, $param2, $param3, $param4 ) {
         // ...
@@ -47,7 +47,7 @@ _Note: See https://codex.wordpress.org/Rewrite_API/add_rewrite_rule for more det
 
 {% sample lang="php" -%}
 ```php
-Route::get( '/foo/bar/{page_id}', $handler )
+Router::get( '/foo/bar/{page_id}', $handler )
     ->rewrite( 'index.php?foo=1&bar=1&page_id=$matches[1]' );
 ```
 {% endmethod %}
@@ -59,7 +59,7 @@ _Note: `Router::handleAll()` uses this internally._
 
 {% sample lang="php" -%}
 ```php
-Route::get( '*', $handler );
+Router::get( '*', $handler );
 ```
 {% endmethod %}
 
@@ -70,7 +70,7 @@ Match against the current post id:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_id', 10], $handler );
+Router::get( ['post_id', 10], $handler );
 ```
 {% endmethod %}
 
@@ -81,7 +81,7 @@ Match against the current post slug:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_slug', 'about-us'], $handler );
+Router::get( ['post_slug', 'about-us'], $handler );
 ```
 {% endmethod %}
 
@@ -92,7 +92,7 @@ Match against the current post template:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_template', 'templates/contact-us.php'], $handler );
+Router::get( ['post_template', 'templates/contact-us.php'], $handler );
 ```
 {% endmethod %}
 
@@ -103,7 +103,7 @@ Match against the current post status:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_status', 'publish'], $handler );
+Router::get( ['post_status', 'publish'], $handler );
 ```
 {% endmethod %}
 
@@ -114,7 +114,7 @@ Match against the current post type:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['post_type', 'product'], $handler );
+Router::get( ['post_type', 'product'], $handler );
 ```
 {% endmethod %}
 
@@ -125,7 +125,7 @@ Match when a specified query var is present (any value is accepted):
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['query_var', 's'], $handler );
+Router::get( ['query_var', 's'], $handler );
 ```
 {% endmethod %}
 
@@ -141,7 +141,7 @@ add_action( 'init', function() {
 
 // ...
 
-Route::get( ['query_var', 'my_custom_endpoint'], $handler );
+Router::get( ['query_var', 'my_custom_endpoint'], $handler );
 ```
 {% endmethod %}
 
@@ -157,7 +157,7 @@ add_action( 'init', function() {
 
 ...
 
-Route::get( [
+Router::get( [
     ['post_template', 'templates/page-with-secret.php'],
     ['query_var', 'secret'],
 ], $handler );
@@ -169,7 +169,7 @@ You can match with a specific value of the query var as well:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['query_var', 'some_query_var_name', 'some_query_var_value'], $handler );
+Router::get( ['query_var', 'some_query_var_name', 'some_query_var_value'], $handler );
 ```
 {% endmethod %}
 
@@ -182,7 +182,7 @@ _Note: when using the array syntax, adding `'custom'` literally is optional and 
 
 {% sample lang="php" -%}
 ```php
-Route::get( function() {
+Router::get( function() {
     $my_condition = true; // your custom code here
     return $my_condition;
 }, $handler );
@@ -195,7 +195,7 @@ You can also pass parameters to use built-in callables:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['is_tax', 'app_custom_taxonomy'], $handler );
+Router::get( ['is_tax', 'app_custom_taxonomy'], $handler );
 ```
 {% endmethod %}
 
@@ -204,7 +204,7 @@ Any parameters you pass will be provided to both the callable AND the $handler:
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['is_tax', 'app_custom_taxonomy'], function( $request, $view, $taxonomy ) {
+Router::get( ['is_tax', 'app_custom_taxonomy'], function( $request, $view, $taxonomy ) {
     // $taxonomy is passed after $request and $view which are always passed to handlers
 } );
 ```
@@ -215,7 +215,7 @@ This works with closures as well, which can be used to reduce duplication:
 
 {% sample lang="php" -%}
 ```php
-Route::get( [function( $foo, $bar ) {
+Router::get( [function( $foo, $bar ) {
     // $foo and $bar are available here
     return true;
 }, 'foo', 'bar'], function( $request, $view, $foo, $bar ) {
@@ -232,7 +232,7 @@ The multiple condition allows you to specify an array of conditions which must A
 
 {% sample lang="php" -%}
 ```php
-Route::get( ['multiple', [
+Router::get( ['multiple', [
     ['is_tax', 'app_custom_taxonomy'],
     [function() {
         return true;
@@ -248,7 +248,7 @@ The syntax can also be simplified by directly passing an array of conditions:
 
 {% sample lang="php" -%}
 ```php
-Route::get( [
+Router::get( [
     ['is_tax', 'app_custom_taxonomy'],
     [function() {
         return true;

@@ -13,7 +13,7 @@ If the middleware cannot find a valid token in a non-read request (e.g. `POST`, 
 
 Here's how to add the middleware to a route:
 ```php
-Route::get( ... )
+Router::get( ... )
     ->add( \WPEmerge\Csrf\CsrfMiddleware::class );
 ```
 

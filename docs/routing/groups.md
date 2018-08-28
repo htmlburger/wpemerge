@@ -5,7 +5,7 @@ You can group routes which will share the group condition as well as any middlew
 
 {% sample lang="php" -%}
 ```php
-Route::group( '/foo/', function( $group ) {
+Router::group( '/foo/', function( $group ) {
     $group->group( '/bar/', function( $group ) {
         // Match if '/foo/bar/' is the full path:
         $group->get( '/', $handler );
@@ -27,7 +27,7 @@ Note that URL conditions will be concatenated as long as they are directly one a
 {% sample lang="php" -%}
 ```php
 // Root condition is not a URL:
-Route::group( ['post_id', 1], function( $group ) {
+Router::group( ['post_id', 1], function( $group ) {
     // Match if the current query loads the single post with id of 1
     // AND '/foo/' is the full path
     // -> this usage is fine so far
@@ -42,7 +42,7 @@ Route::group( ['post_id', 1], function( $group ) {
 } );
 
 // Root condition is a URL:
-Route::group( '/foo/', function( $group ) {
+Router::group( '/foo/', function( $group ) {
     // Match if '/foo/' is the full path
     // AND the current query loads the single post with id of 1
     // -> this usage is fine, but note that we are breaking the URL chain
