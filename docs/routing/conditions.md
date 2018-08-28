@@ -4,6 +4,7 @@
 
 {% method -%}
 Match against a specific path:
+__Important:__ You should use `->rewrite()` on routes which do not match any valid WordPress URL or your WP Query will consider the request as 404.
 
 _Note: Paths in URL conditions are relative to the site's home url._
 
@@ -39,12 +40,14 @@ Add a rewrite rule for your route (if it does not match any predefined rewrite r
 
 _Note: Remember to refresh your rewrite rules after this change._
 
+_Note: Route parameters can be referred to with `$matches[ORDER]` based on the order they appear in the route path, starting from 1._
+
 _Note: See https://codex.wordpress.org/Rewrite_API/add_rewrite_rule for more details._
 
 {% sample lang="php" -%}
 ```php
-Route::get( '/foo/bar/', $handler )
-    ->rewrite( 'index.php' );
+Route::get( '/foo/bar/{page_id}', $handler )
+    ->rewrite( 'index.php?foo=1&bar=1&page_id=$matches[1]' );
 ```
 {% endmethod %}
 
