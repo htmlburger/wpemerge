@@ -4,7 +4,8 @@
 
 {% method -%}
 Match against a specific path:
-__Important:__ You should use `->rewrite()` on routes which do not match any valid WordPress URL or your WP Query will consider the request as 404.
+
+__Important:__ _You should use `->rewrite()` on routes which do not match any valid WordPress URL or your WP Query will consider the request as a `404 - Not Found`._
 
 _Note: Paths in URL conditions are relative to the site's home url._
 
