@@ -3,6 +3,8 @@
 It is a common pattern in WordPress themes to see `get_header()` and `get_footer()` called in every template. In addition, these calls are often followed or preceded by related markup.
 In WP Emerge, all of this repetition can be avoided by utilizing layouts.
 
+__Important:__ _The layout functionality described below only applies to the default PHP view engine. Other view engines such as Blade and Twig have their own layout implementation which should be used instead._
+
 ## Example
 
 Here's the main `theme/index.php` view of the WP Emerge Theme:
