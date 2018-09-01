@@ -3,6 +3,7 @@
 namespace WPEmerge\View;
 
 use WPEmerge\Exceptions\ViewException;
+use WPEmerge\Helpers\MixedType;
 
 /**
  * Render view files with php.
@@ -20,7 +21,8 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		return $this->resolveFilepath( $view );
+		$match_root = '/^' . preg_quote( MixedType::normalizePath( get_template_directory() ) . DIRECTORY_SEPARATOR, '/' ) . '/i';
+		return preg_replace( $match_root, '', $this->resolveFilepath( $view ) );
 	}
 
 	/**
