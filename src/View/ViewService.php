@@ -123,4 +123,18 @@ class ViewService {
 		$views = MixedType::toArray( $views );
 		return ViewEngine::make( $views );
 	}
+
+	/**
+	 * Trigger core hooks for a partial, if any.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string $name
+	 * @return void
+	 */
+	public function triggerPartialHooks( $name ) {
+		$core_partial = '/^(header|sidebar|footer)(?:-(.*?))?(\.|$)/i';
+		if ( preg_match( $core_partial, $name, $matches ) ) {
+			do_action( "get_{$matches[1]}", $matches[2] );
+		}
+	}
 }

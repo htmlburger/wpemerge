@@ -77,9 +77,9 @@ if ( ! function_exists( 'app_partial' ) ) {
 	 * @return void
 	 */
 	function app_partial( $views, $context = [] ) {
-	    echo View::make( $views )
-            ->with( $context )
-            ->toString();
+		$view = View::make( $views )->with( $context );
+		View::triggerPartialHooks( $view->getName() );
+	    echo $view->toString();
 	}
 }
 
