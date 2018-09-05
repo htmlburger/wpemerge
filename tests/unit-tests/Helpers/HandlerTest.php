@@ -4,7 +4,6 @@ namespace WPEmergeTests\Helpers;
 
 use Mockery;
 use WPEmerge\Helpers\Handler;
-use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use WP_UnitTestCase;
 

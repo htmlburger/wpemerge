@@ -44,13 +44,13 @@ class WPEmerge_Tests_Bootstrap {
 		define( 'WPEMERGE_TEST_DIR', $this->tests_dir );
 
 		// load test function so tests_add_filter() is available
-		require_once( $this->wp_tests_dir . '/includes/functions.php' );
+		require_once $this->wp_tests_dir . '/includes/functions.php';
 
 		// load plugin
 		tests_add_filter( 'muplugins_loaded', [$this, 'load_plugin'] );
 
 		// load the WP testing environment
-		require_once( $this->wp_tests_dir . '/includes/bootstrap.php' );
+		require_once $this->wp_tests_dir . '/includes/bootstrap.php';
 
 		// make sure query vars are prepared
 		global $wp;
@@ -65,7 +65,7 @@ class WPEmerge_Tests_Bootstrap {
 	 * Load the plugin
 	 */
 	public function load_plugin() {
-		require_once( $this->library_directory . '/vendor/autoload.php' );
+		require_once $this->library_directory . '/vendor/autoload.php';
 	}
 
 	/**
@@ -74,7 +74,7 @@ class WPEmerge_Tests_Bootstrap {
 	 * @return WPEmerge_Tests_Bootstrap
 	 */
 	public static function instance() {
-		if ( is_null( static::$instance ) ) {
+		if ( static::$instance === null ) {
 			static::$instance = new static();
 		}
 

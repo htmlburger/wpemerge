@@ -5,7 +5,6 @@ namespace WPEmergeTests\Routing\Conditions;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\CustomCondition;
-use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;

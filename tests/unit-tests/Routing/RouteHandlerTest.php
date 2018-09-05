@@ -7,7 +7,6 @@ use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Routing\RouteHandler;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 use WP_UnitTestCase;
 
 /**

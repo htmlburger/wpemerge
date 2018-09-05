@@ -101,7 +101,7 @@ class MixedTypeTest extends WP_UnitTestCase {
 		$input = '/foo\\bar/baz\\foobar';
 
 		$this->assertEquals( "{$ds}foo{$ds}bar{$ds}baz{$ds}foobar", MixedType::normalizePath( $input ) );
-		$this->assertEquals( "/foo/bar/baz/foobar", MixedType::normalizePath( $input, '/' ) );
-		$this->assertEquals( "\\foo\\bar\\baz\\foobar", MixedType::normalizePath( $input, '\\' ) );
+		$this->assertEquals( '/foo/bar/baz/foobar', MixedType::normalizePath( $input, '/' ) );
+		$this->assertEquals( '\\foo\\bar\\baz\\foobar', MixedType::normalizePath( $input, '\\' ) );
 	}
 }

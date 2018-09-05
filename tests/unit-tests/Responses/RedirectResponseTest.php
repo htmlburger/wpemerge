@@ -5,7 +5,6 @@ namespace WPEmergeTests\Responses;
 use Mockery;
 use WPEmerge\Requests\Request;
 use WPEmerge\Responses\RedirectResponse;
-use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 
 /**

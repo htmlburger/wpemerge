@@ -63,7 +63,6 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	/**
 	 * Register facades.
 	 *
-	 * @param  \Pimple\Container $container
 	 * @return void
 	 */
 	protected function registerFacades() {
