@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# See https://github.com/wp-cli/wp-cli/blob/master/templates/install-wp-tests.sh
+# Modified version of WP CLI install script
+# https://github.com/wp-cli/wp-cli/blob/master/templates/install-wp-tests.sh
+# Copyright (C) 2011-2018 WP-CLI Development Group (https://github.com/wp-cli/wp-cli/contributors)
 
 # MySQL settings
 if [ $# -lt 3 ]; then
@@ -23,6 +25,7 @@ fi
 # Setup directory vars
 WP_TESTS_DIR="${BASEDIR}/tmp/wordpress-tests-lib"
 WP_CORE_DIR="${BASEDIR}/tmp/wordpress/"
+WP_MISC_DIR="${BASEDIR}/tests/misc"
 
 set -ex
 
@@ -64,7 +67,7 @@ install_wp() {
 	svn co --quiet http://develop.svn.wordpress.org/${url}/src/ .
 
 	# Copy the database settings (wp-content/db.php)
-	cp $BASEDIR/tests/misc/db.php $WP_CORE_DIR/wp-content/db.php
+	cp $WP_MISC_DIR/db.php $WP_CORE_DIR/wp-content/db.php
 }
 
 # Install the WordPress test suite
