@@ -6,6 +6,10 @@ use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
 use Pimple\Container;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // @codeCoverageIgnoreStart
 $container = new Container();
 $container[ WPEMERGE_FRAMEWORK_KEY ] = function( $container ) {
