@@ -3,9 +3,9 @@
 View composers are closures, class names or class methods (`'CLASS_NAME@METHOD_NAME'` format) that prepare a context for a view whenever it is rendered.
 This includes views, partials and even layouts.
 
-__Default View Engine WARNING:__ Due to the nature of how the default view engine works, you __MUST__ render partials using `app_partial()` instead of `get_template_part()` in order to support composition.
-If you wish to compose core partials (e.g. `header.php`, `footer.php`) that are rendered using a `get_*()` function call (e.g. `get_header()`) you will have to use `app_partial( 'name' )` (e.g. `app_partial( 'header' )`) instead.
-More information on how to use `app_partial()` is available at the end of this article.
+__Default View Engine WARNING:__ Due to the nature of how the default view engine works, you __MUST__ render partials using `app_render()` instead of `get_template_part()` in order to support composition.
+If you wish to compose core partials (e.g. `header.php`, `footer.php`) that are rendered using a `get_*()` function call (e.g. `get_header()`) you will have to use `app_render( 'name' )` (e.g. `app_render( 'header' )`) instead.
+More information on how to use `app_render()` is available at the end of this article.
 
 ## Example
 
@@ -65,13 +65,13 @@ $container[ LatestNewsViewComposer::class ] = function( $container ) {
 }
 ```
 
-## app_partial( $views, $context = [] )
+## app_render( $views, $context = [] )
 
-Why you would use `app_partial()`:
+Why you would use `app_render()`:
 
 1. You are using the default default view engine. You do not need it when using Blade or Twig, for example, as they have composition built-in.
-1. Partials rendered using `include`, `require`, `get_template_part()` etc. __DO NOT__ support composition, `app_partial()` does.
-1. `app_partial()` optionally provides context to the partial through the `$context` parameter.
+1. Partials rendered using `include`, `require`, `get_template_part()` etc. __DO NOT__ support composition, `app_render()` does.
+1. `app_render()` optionally provides context to the partial through the `$context` parameter.
 
 For example, instead of using
 ```php
@@ -79,7 +79,7 @@ For example, instead of using
 ```
 you would use
 ```php
-<?php app_partial( 'latest-news' ); ?>
+<?php app_render( 'latest-news' ); ?>
 ```
 or instead of using
 ```php
@@ -87,7 +87,7 @@ or instead of using
 ```
 you would use
 ```php
-<?php app_partial( ['post-' . $post_type, 'post'] ); ?>
+<?php app_render( ['post-' . $post_type, 'post'] ); ?>
 ```
 
 If you do not need composition or context for a given partial, feel free to use `get_template_part()` instead.

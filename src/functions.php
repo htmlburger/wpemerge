@@ -69,15 +69,15 @@ if ( ! function_exists( 'app_error' ) ) {
 	}
 }
 
-if ( ! function_exists( 'app_partial' ) ) {
+if ( ! function_exists( 'app_render' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see \WPEmerge\View\ViewService::make()
 	 * @see \WPEmerge\View\ViewInterface::toString()
 	 * @return void
 	 */
-	function app_partial( $views, $context = [] ) {
-		$view = View::make( $views )->with( $context );
+	function app_render( $views, $context = [] ) {
+		$view = app_view( $views )->with( $context );
 		View::triggerPartialHooks( $view->getName() );
 	    echo $view->toString();
 	}

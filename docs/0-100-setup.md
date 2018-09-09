@@ -253,9 +253,9 @@ We also have to modify the template to use the newly available variable:
 <a href="<?php echo esc_url( $skip_url ); ?>">Skip &raquo;</a>
 ```
     
-We reduced PHP logic duplication, but this doesn't solve the use case where we want to have that variable available in a view partial, for example. For this we can use the `app_partial( $view, $context = [] )` function which works very similarly to `get_template_part()` but as you can see it has an optional argument which allows you to pass context variables as well:
+We reduced PHP logic duplication, but this doesn't solve the use case where we want to have that variable available in a view partial, for example. For this we can use the `app_render( $view, $context = [] )` function which works very similarly to `get_template_part()` but as you can see it has an optional argument which allows you to pass context variables as well:
 ```php
-<?php app_partial( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
+<?php app_render( 'foo-partial.php', ['skip_url' => $skip_url] ); ?>
 ```
 
 ## FAQ
