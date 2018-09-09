@@ -39,10 +39,11 @@ trait HasRoutesTrait {
 	/**
 	 * Create and add a new route
 	 *
-	 * @param  string[]            $methods
-	 * @param  mixed               $condition
+	 * @param  string[] $methods
+	 * @param  mixed $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
+	 * @throws \WPEmerge\Exceptions\Exception
 	 */
 	public function route( $methods, $condition, $handler = null ) {
 		if ( $handler === null ) {

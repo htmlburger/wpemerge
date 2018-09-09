@@ -12,6 +12,7 @@ use WPEmerge\Middleware\MiddlewareInterface;
 class CsrfMiddleware implements MiddlewareInterface {
 	/**
 	 * {@inheritDoc}
+	 * @throws InvalidCsrfTokenException
 	 */
 	public function handle( $request, Closure $next ) {
 		if ( ! $request->isReadVerb() ) {

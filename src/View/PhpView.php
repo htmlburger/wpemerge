@@ -91,6 +91,7 @@ class PhpView implements ViewInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ViewException
 	 */
 	public function toString() {
 		if ( empty( $this->getName() ) ) {
@@ -141,6 +142,7 @@ class PhpView implements ViewInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ViewException
 	 */
 	public function toResponse() {
 		return (new Response())

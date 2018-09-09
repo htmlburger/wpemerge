@@ -206,8 +206,9 @@ class Framework {
 	/**
 	 * Resolve a dependency from the IoC container
 	 *
-	 * @param  string   $key
+	 * @param  string $key
 	 * @return mixed|null
+	 * @throws Exception
 	 */
 	public function resolve( $key ) {
 		$this->verifyBoot();
@@ -224,6 +225,7 @@ class Framework {
 	 *
 	 * @param  string $class
 	 * @return object
+	 * @throws Exception
 	 */
 	public function instantiate( $class ) {
 		$this->verifyBoot();
@@ -243,6 +245,7 @@ class Framework {
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return void
+	 * @throws Exception
 	 */
 	public function respond( ResponseInterface $response ) {
 		$this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY )->respond( $response );

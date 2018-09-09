@@ -116,9 +116,9 @@ class Flash {
 	/**
 	 * Get the entire store or the values for a key for a request.
 	 *
-	 * @param  string      $request_key
+	 * @param  string $request_key
 	 * @param  string|null $key
-	 * @param  mixed       $default
+	 * @param  mixed $default
 	 * @return mixed
 	 */
 	protected function getFromRequest( $request_key, $key = null, $default = [] ) {
@@ -134,9 +134,9 @@ class Flash {
 	/**
 	 * Add values for a key for a request.
 	 *
-	 * @param  string  $request_key
-	 * @param  string  $key
-	 * @param  mixed   $new_items
+	 * @param  string $request_key
+	 * @param  string $key
+	 * @param  mixed $new_items
 	 * @return void
 	 */
 	protected function addToRequest( $request_key, $key, $new_items ) {
@@ -150,7 +150,7 @@ class Flash {
 	/**
 	 * Remove all values or values for a key from a request.
 	 *
-	 * @param  string      $request_key
+	 * @param  string $request_key
 	 * @param  string|null $key
 	 * @return void
 	 */
@@ -167,7 +167,7 @@ class Flash {
 	 * Add values for a key for the next request.
 	 *
 	 * @param  string $key
-	 * @param  mixed  $new_items
+	 * @param  mixed $new_items
 	 * @return void
 	 */
 	public function add( $key, $new_items ) {
@@ -178,7 +178,7 @@ class Flash {
 	 * Add values for a key for the current request.
 	 *
 	 * @param string $key
-	 * @param mixed  $new_items
+	 * @param mixed $new_items
 	 */
 	public function addNow( $key, $new_items ) {
 		$this->addToRequest( static::CURRENT_KEY, $key, $new_items );
@@ -188,7 +188,7 @@ class Flash {
 	 * Get the entire store or the values for a key for the current request.
 	 *
 	 * @param  string|null $key
-	 * @param  mixed       $default
+	 * @param  mixed $default
 	 * @return mixed
 	 */
 	public function get( $key = null, $default = [] ) {
@@ -199,7 +199,7 @@ class Flash {
 	 * Get the entire store or the values for a key for the next request.
 	 *
 	 * @param  string|null $key
-	 * @param  mixed       $default
+	 * @param  mixed $default
 	 * @return mixed
 	 */
 	public function getNext( $key = null, $default = [] ) {

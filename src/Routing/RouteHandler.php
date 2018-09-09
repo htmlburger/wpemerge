@@ -23,6 +23,7 @@ class RouteHandler {
 	 * Constructor
 	 *
 	 * @param string|\Closure $handler
+	 * @throws Exception
 	 */
 	public function __construct( $handler ) {
 		$this->handler = new Handler( $handler );
@@ -64,7 +65,7 @@ class RouteHandler {
 	 * Execute the handler
 	 *
 	 * @throws Exception
-	 * @param  mixed             $arguments,...
+	 * @param  mixed             ...$arguments
 	 * @return ResponseInterface
 	 */
 	public function execute() {

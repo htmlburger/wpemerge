@@ -141,6 +141,7 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @param  string $view
 	 * @return string
+	 * @throws Exception
 	 */
 	public function execute( $view ) {
 		$routes = $this->getRoutes();

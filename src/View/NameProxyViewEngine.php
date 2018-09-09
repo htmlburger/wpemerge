@@ -56,6 +56,7 @@ class NameProxyViewEngine implements ViewEngineInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ViewNotFoundException
 	 */
 	public function make( $views ) {
 		foreach ( $views as $view ) {

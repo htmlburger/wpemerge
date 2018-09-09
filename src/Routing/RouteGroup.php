@@ -105,6 +105,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws \WPEmerge\Exceptions\Exception
 	 */
 	public function route( $methods, $condition, $handler ) {
 		if ( ! $condition instanceof ConditionInterface ) {
@@ -137,6 +138,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws \WPEmerge\Exceptions\Exception
 	 */
 	public function addMiddleware( $middleware ) {
 		$routes = $this->getRoutes();

@@ -4,6 +4,7 @@ namespace WPEmerge\Routing\Conditions;
 
 use Closure;
 use ReflectionClass;
+use ReflectionException;
 use WPEmerge\Exceptions\Exception;
 
 /**
@@ -32,6 +33,7 @@ class ConditionFactory {
 	/**
 	 * Create a new condition.
 	 *
+	 * @throws Exception
 	 * @throws InvalidRouteConditionException
 	 * @param  string|array|Closure           $options
 	 * @return ConditionInterface
@@ -164,8 +166,12 @@ class ConditionFactory {
 		$condition_options = $this->parseConditionOptions( $options );
 		$condition_class = $this->getConditionTypeClass( $condition_options['type'] );
 
-		$reflection = new ReflectionClass( $condition_class );
-		return $reflection->newInstanceArgs( $condition_options['arguments'] );
+		try {
+			$reflection = new ReflectionClass( $condition_class );
+			return $reflection->newInstanceArgs( $condition_options['arguments'] );
+		} catch ( ReflectionException $e ) {
+			throw new Exception( 'Condition class "' . $condition_class . '" does not exist.' );
+		}
 	}
 
 	/**

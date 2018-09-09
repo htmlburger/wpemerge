@@ -93,6 +93,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws PhpException
 	 */
 	public function getResponse( PhpException $exception ) {
 		$response = $this->toResponse( $exception );

@@ -88,7 +88,7 @@ class Handler {
 	/**
 	 * Execute the parsed handler with any provided arguments and return the result
 	 *
-	 * @param  mixed $arguments,...
+	 * @param  mixed ...$arguments
 	 * @return mixed
 	 */
 	public function execute() {

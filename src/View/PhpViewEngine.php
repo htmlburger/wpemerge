@@ -26,6 +26,7 @@ class PhpViewEngine implements ViewEngineInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ViewNotFoundException
 	 */
 	public function make( $views ) {
 		foreach ( $views as $view ) {
@@ -41,9 +42,10 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * Create a view instance.
 	 *
-	 * @param  string        $name
-	 * @param  string        $filepath
+	 * @param  string $name
+	 * @param  string $filepath
 	 * @return ViewInterface
+	 * @throws ViewNotFoundException
 	 */
 	protected function makeView( $name, $filepath ) {
 		$view = (new PhpView())
@@ -62,8 +64,9 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * Create a view instance for the given view's layout header, if any.
 	 *
-	 * @param  PhpView       $view
+	 * @param  PhpView $view
 	 * @return ViewInterface
+	 * @throws ViewNotFoundException
 	 */
 	protected function getViewLayout( PhpView $view ) {
 		$layout_headers = array_filter( get_file_data(
