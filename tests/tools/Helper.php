@@ -4,8 +4,8 @@ namespace WPEmergeTestTools;
 
 class Helper {
 	public static function createLayoutView() {
-		$layout = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'layout.php';
-		$view_template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
+		$layout = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'layout.php';
+		$view_template = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
 		$view_contents = file_get_contents( $view_template );
 		$handle = tmpfile();
 		fwrite( $handle, sprintf( $view_contents, $layout ) );

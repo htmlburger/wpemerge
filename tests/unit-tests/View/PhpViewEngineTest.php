@@ -32,7 +32,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 */
 	public function testExists() {
 		$index = 'index.php';
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 
 		$this->assertTrue( $this->subject->exists( $index ) );
 		$this->assertTrue( $this->subject->exists( $view ) );
@@ -55,7 +55,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 * @covers ::makeView
 	 */
 	public function testMake_View() {
-		$file = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$file = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 		$view = $this->subject->make( [$file] );
 
 		$this->assertInstanceOf( ViewInterface::class, $view );
@@ -83,7 +83,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 */
 	public function testMake_WithIncorrectLayout() {
 		// Rely on the fact that view-with-layout.php uses a sprintf() token instead of a real path so it fails.
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
 		$view = $this->subject->make( [$view] );
 	}
 

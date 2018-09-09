@@ -72,7 +72,7 @@ class ResponseTest extends WP_UnitTestCase {
 	 * @covers ::view
 	 */
 	public function testView() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 		$expected = file_get_contents( $view );
 
 		// Relies on PhpView - it should be mocked instead

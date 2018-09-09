@@ -59,7 +59,7 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::render
 	 */
 	public function testRender() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 		$expected = file_get_contents( $view );
 
 		$this->subject->setName( $view );
@@ -110,7 +110,7 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::compose
 	 */
 	public function testCompose_GlobalContext() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-global-context.php';
 		$expected = 'Hello World!';
 
 		$this->viewMock->shouldReceive( 'getGlobals' )
@@ -130,7 +130,7 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::compose
 	 */
 	public function testCompose_ViewComposer() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
 		$this->viewMock->shouldReceive( 'getGlobals' )
@@ -153,7 +153,7 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::compose
 	 */
 	public function testCompose_LocalContext() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
 		$this->viewMock->shouldReceive( 'getGlobals' )
@@ -174,7 +174,7 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::compose
 	 */
 	public function testCompose_LocalContextOverridesViewComposerContext() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-context.php';
 		$expected = 'Hello World!';
 
 		$this->viewMock->shouldReceive( 'getGlobals' )
