@@ -2,7 +2,6 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Exceptions\ViewException;
 use WPEmerge\Facades\Framework;
 
 /**
@@ -67,7 +66,7 @@ class NameProxyViewEngine implements ViewEngineInterface {
 			}
 		}
 
-		throw new ViewException( 'View not found for "' . implode( ', ', $views ) . '"' );
+		throw new ViewNotFoundException( 'View not found for "' . implode( ', ', $views ) . '"' );
 	}
 
 	/**

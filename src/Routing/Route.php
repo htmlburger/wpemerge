@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing;
 
-use Exception;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;

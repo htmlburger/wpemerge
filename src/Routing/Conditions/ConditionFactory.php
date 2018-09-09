@@ -3,8 +3,8 @@
 namespace WPEmerge\Routing\Conditions;
 
 use Closure;
-use Exception;
 use ReflectionClass;
+use WPEmerge\Exceptions\Exception;
 
 /**
  * Check against the current url

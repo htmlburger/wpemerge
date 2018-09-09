@@ -2,7 +2,6 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Exceptions\ViewException;
 use WPEmerge\Helpers\MixedType;
 
 /**
@@ -36,7 +35,7 @@ class PhpViewEngine implements ViewEngineInterface {
 			}
 		}
 
-		throw new ViewException( 'View not found for "' . implode( ', ', $views ) . '"' );
+		throw new ViewNotFoundException( 'View not found for "' . implode( ', ', $views ) . '"' );
 	}
 
 	/**
@@ -79,7 +78,7 @@ class PhpViewEngine implements ViewEngineInterface {
 		$layout_file = trim( $layout_headers[0] );
 
 		if ( ! $this->exists( $layout_file ) ) {
-			throw new ViewException( 'View layout not found for "' . $layout_file . '"' );
+			throw new ViewNotFoundException( 'View layout not found for "' . $layout_file . '"' );
 		}
 
 		return $this->makeView( $this->canonical( $layout_file ), $this->resolveFilepath( $layout_file ) );

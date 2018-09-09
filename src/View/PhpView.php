@@ -4,7 +4,6 @@ namespace WPEmerge\View;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
-use WPEmerge\Exceptions\ViewException;
 use WPEmerge\Facades\View;
 
 /**

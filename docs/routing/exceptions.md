@@ -9,11 +9,11 @@ In addition, the [filp/whoops](https://github.com/filp/whoops) package is includ
 Often it is a good idea is to extend the base `ErrorHandler` class and use it to translate common exceptions to responses - this way you will have handy shortcuts in controller methods. For example, you can throw a custom `ValidationException` and then translate it to a redirect responses with flashed error messages to handle invalid form requests.
 
 {% method -%}
-The default `ErrorHandler` class comes with automatic handling for the built-in `\WPEmerge\Exceptions\NotFoundException` exception. When thrown it will be translated to a 404 response by setting the status header to 404 and using the `404.php` view:
+The default `ErrorHandler` class comes with automatic handling for the built-in `\WPEmerge\Routing\NotFoundException` exception. When thrown it will be translated to a 404 response by setting the status header to 404 and using the `404.php` view:
 
 {% sample lang="php" -%}
 ```php
-use WPEmerge\Exceptions\NotFoundException;
+use WPEmerge\Routing\NotFoundException;
 
 // ...
 

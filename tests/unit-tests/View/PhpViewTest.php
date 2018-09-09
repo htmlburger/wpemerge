@@ -89,7 +89,7 @@ class PhpViewTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::toString
-	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedException \WPEmerge\View\ViewException
 	 * @expectedExceptionMessage must have a name
 	 */
 	public function testToString_WithoutName() {
@@ -98,7 +98,7 @@ class PhpViewTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::toString
-	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedException \WPEmerge\View\ViewException
 	 * @expectedExceptionMessage must have a filepath
 	 */
 	public function testToString_WithoutFilepath() {

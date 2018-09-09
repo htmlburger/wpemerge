@@ -2,11 +2,11 @@
 
 namespace WPEmerge\Framework;
 
-use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;

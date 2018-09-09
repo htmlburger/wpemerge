@@ -3,7 +3,7 @@
 namespace WPEmerge\Flash;
 
 use ArrayAccess;
-use Exception;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\Support\Arr;
 

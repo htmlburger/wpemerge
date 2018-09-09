@@ -3,7 +3,7 @@
 namespace WPEmerge\Middleware;
 
 use Closure;
-use Exception;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\MixedType;
 

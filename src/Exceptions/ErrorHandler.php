@@ -5,7 +5,9 @@ namespace WPEmerge\Exceptions;
 use Exception as PhpException;
 use Psr\Http\Message\ResponseInterface;
 use Whoops\RunInterface;
+use WPEmerge\Csrf\InvalidCsrfTokenException;
 use WPEmerge\Facades\Response;
+use WPEmerge\Routing\NotFoundException;
 
 class ErrorHandler implements ErrorHandlerInterface {
 	/**

@@ -3,7 +3,7 @@
 namespace WPEmerge\Helpers;
 
 use Closure;
-use Exception;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Framework;
 
 /**

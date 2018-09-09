@@ -6,7 +6,7 @@ use Exception;
 use Mockery;
 use Whoops\RunInterface;
 use WPEmerge\Exceptions\ErrorHandler;
-use WPEmerge\Exceptions\NotFoundException;
+use WPEmerge\Routing\NotFoundException;
 use WP_UnitTestCase;
 
 /**

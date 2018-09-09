@@ -3,7 +3,6 @@
 namespace WPEmerge\Routing;
 
 use Closure;
-use Exception;
 use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Helpers\Arguments;
 use WPEmerge\Middleware\HasMiddlewareTrait;
@@ -32,7 +31,6 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * Constructor
 	 *
-	 * @throws Exception
 	 * @param string|Closure|ConditionInterface $condition
 	 * @param Closure|null                      $routes
 	 */

@@ -2,8 +2,8 @@
 
 namespace WPEmerge\Routing;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Response;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ResponsableInterface;

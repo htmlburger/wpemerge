@@ -3,7 +3,6 @@
 namespace WPEmerge\Csrf;
 
 use Closure;
-use WPEmerge\Exceptions\InvalidCsrfTokenException;
 use WPEmerge\Facades\Csrf as CsrfService;
 use WPEmerge\Middleware\MiddlewareInterface;
 

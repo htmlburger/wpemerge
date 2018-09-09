@@ -78,7 +78,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getViewLayout
-	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedException \WPEmerge\View\ViewNotFoundException
 	 * @expectedExceptionMessage View layout not found
 	 */
 	public function testMake_WithIncorrectLayout() {
@@ -90,7 +90,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::make
 	 * @covers ::makeView
-	 * @expectedException \WPEmerge\Exceptions\ViewException
+	 * @expectedException \WPEmerge\View\ViewNotFoundException
 	 * @expectedExceptionMessage View not found
 	 */
 	public function testMake_NoView() {

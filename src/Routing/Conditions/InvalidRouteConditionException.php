@@ -2,7 +2,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use Exception;
+use WPEmerge\Exceptions\Exception;
 
 class InvalidRouteConditionException extends Exception {
 
