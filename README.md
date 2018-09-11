@@ -9,7 +9,7 @@
 
 ❤ If you've used frameworks such as Laravel, Slim or Symfony you will love WP Emerge.
 
-🚀 Also, make sure you check out the [WP Emerge Starter Theme](https://docs.theme.wpemerge.com/) project.
+🚀 Also, make sure you check out the [WP Emerge Starter Theme](https://docs.wpemerge.com/#/starter-theme/overview) project.
 
 ## Requirements
 
@@ -19,9 +19,9 @@
 
 ## Features & Documentation
 
-[https://docs.wpemerge.com/](https://docs.wpemerge.com/)
+[https://docs.wpemerge.com/#/framework/overview](https://docs.wpemerge.com/#/framework/overview)
 
-[https://docs.wpemerge.com/quickstart.html](https://docs.wpemerge.com/quickstart.html)
+[https://docs.wpemerge.com/#/framework/quickstart](https://docs.wpemerge.com/#/framework/quickstart)
 
 ## API Reference
 
