@@ -6,7 +6,7 @@ use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
 use Pimple\Container;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( php_sapi_name() !== 'cli' && ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
