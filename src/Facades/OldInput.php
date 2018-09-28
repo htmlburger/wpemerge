@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to old input service
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Input\OldInput
  */
 class OldInput extends Facade {
 	protected static function getFacadeAccessor() {

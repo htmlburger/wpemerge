@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to the route condition factory.
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Routing\Conditions\ConditionFactory
  */
 class RouteCondition extends Facade {
 	protected static function getFacadeAccessor() {

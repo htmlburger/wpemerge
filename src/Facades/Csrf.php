@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to the CSRF service.
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Csrf\Csrf
  */
 class Csrf extends Facade {
 	protected static function getFacadeAccessor() {

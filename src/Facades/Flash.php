@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to session flashing service
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Flash\Flash
  */
 class Flash extends Facade {
 	protected static function getFacadeAccessor() {

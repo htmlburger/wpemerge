@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to the router service
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Routing\Router
  */
 class Router extends Facade {
 	protected static function getFacadeAccessor() {

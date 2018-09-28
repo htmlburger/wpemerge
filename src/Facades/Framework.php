@@ -8,6 +8,7 @@ use WPEmerge\Support\Facade;
  * Provide access to the framework instance
  *
  * @codeCoverageIgnore
+ * @see \WPEmerge\Framework\Framework
  */
 class Framework extends Facade {
 	protected static function getFacadeAccessor() {
