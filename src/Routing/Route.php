@@ -114,18 +114,16 @@ class Route implements RouteInterface {
 	 * Set the main WordPress query vars filter and add it to the appropriate WordPress action.
 	 *
 	 * @param  callable|null $query_filter
-	 * @return self          $this
+	 * @return void
 	 */
 	public function setQueryFilter( $query_filter ) {
 		$this->query_filter = $query_filter;
-		$this->addQueryFilter();
-		return $this;
 	}
 
 	/**
 	 * Add the query filter to the appropriate WordPress action.
 	 *
-	 * @return self $this
+	 * @return void
 	 */
 	public function addQueryFilter() {
 		$filter = [$this, 'applyQueryFilter'];
@@ -133,14 +131,12 @@ class Route implements RouteInterface {
 		if ( ! has_action( 'request', $filter ) ) {
 			add_action( 'request', $filter, $this->query_filter_priority );
 		}
-
-		return $this;
 	}
 
 	/**
 	 * Remove the query filter from the appropriate WordPress action.
 	 *
-	 * @return self $this
+	 * @return void
 	 */
 	public function removeQueryFilter() {
 		$filter = [$this, 'applyQueryFilter'];
@@ -148,8 +144,6 @@ class Route implements RouteInterface {
 		if ( has_action( 'request', $filter ) ) {
 			remove_action( 'request', $filter, $this->query_filter_priority );
 		}
-
-		return $this;
 	}
 
 	/**
@@ -168,7 +162,7 @@ class Route implements RouteInterface {
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception( 'Routes with queries can only use URL condition. Is the route in a non-URL route group?' );
+			throw new Exception( 'Routes with queries can only use URL conditions. Is the route in a non-URL route group?' );
 		}
 
 		if ( $this->getCondition()->isSatisfied( $request ) ) {
@@ -188,7 +182,9 @@ class Route implements RouteInterface {
 	 * @return self     $this
 	 */
 	public function query( $query_filter ) {
-		return $this->setQueryFilter( $query_filter );
+		$this->setQueryFilter( $query_filter );
+		$this->addQueryFilter();
+		return $this;
 	}
 
 	/**
