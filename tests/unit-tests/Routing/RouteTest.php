@@ -17,15 +17,11 @@ use WP_UnitTestCase;
 class RouteTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
-
-		// $this->subject = new Route();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
-
-		// unset( $this->subject );
 	}
 
 	/**
