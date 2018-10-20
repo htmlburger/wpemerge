@@ -83,21 +83,7 @@ class Router implements HasRoutesInterface {
 	 * @return void
 	 */
 	public function boot() {
-		add_action( 'init', [$this, 'registerRewriteRules'], 1000 );
 		add_action( 'template_include', [$this, 'execute'], 1000 );
-	}
-
-	/**
-	 * Register route rewrite rules with WordPress.
-	 *
-	 * @codeCoverageIgnore
-	 * @return void
-	 */
-	public function registerRewriteRules() {
-		$rules = apply_filters( 'wpemerge.routing.rewrite_rules', [] );
-		foreach ( $rules as $rule => $rewrite_to ) {
-			add_rewrite_rule( $rule, $rewrite_to, 'top' );
-		}
 	}
 
 	/**
@@ -139,6 +125,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Execute the first satisfied route, if any.
 	 *
+	 * @internal
 	 * @param  string $view
 	 * @return string
 	 * @throws Exception

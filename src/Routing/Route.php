@@ -3,6 +3,7 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Exceptions\Exception;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\Request;
@@ -17,28 +18,42 @@ class Route implements RouteInterface {
 	use HasMiddlewareTrait;
 
 	/**
-	 * Allowed methods
+	 * Allowed methods.
 	 *
 	 * @var string[]
 	 */
 	protected $methods = [];
 
 	/**
-	 * Route condition
+	 * Route condition.
 	 *
 	 * @var ConditionInterface
 	 */
 	protected $condition = null;
 
 	/**
-	 * Route handler
+	 * Route handler.
 	 *
 	 * @var RouteHandler
 	 */
 	protected $handler = null;
 
 	/**
-	 * Constructor
+	 * Query filter.
+	 *
+	 * @var callable
+	 */
+	protected $query_filter = null;
+
+	/**
+	 * Query filter action priority.
+	 *
+	 * @var integer
+	 */
+	protected $query_filter_priority = 1000;
+
+	/**
+	 * Constructor.
 	 *
 	 * @throws Exception
 	 * @param  string[]        $methods
@@ -60,7 +75,7 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get allowed methods
+	 * Get allowed methods.
 	 *
 	 * @return string[]
 	 */
@@ -69,7 +84,7 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get condition
+	 * Get condition.
 	 *
 	 * @return ConditionInterface
 	 */
@@ -78,12 +93,102 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get handler
+	 * Get handler.
 	 *
 	 * @return RouteHandler
 	 */
 	public function getHandler() {
 		return $this->handler;
+	}
+
+	/**
+	 * Get the main WordPress query vars filter, if any.
+	 *
+	 * @return callable|null
+	 */
+	public function getQueryFilter() {
+		return $this->query_filter;
+	}
+
+	/**
+	 * Set the main WordPress query vars filter and add it to the appropriate WordPress action.
+	 *
+	 * @param  callable|null $query_filter
+	 * @return self          $this
+	 */
+	public function setQueryFilter( $query_filter ) {
+		$this->query_filter = $query_filter;
+		$this->addQueryFilter();
+		return $this;
+	}
+
+	/**
+	 * Add the query filter to the appropriate WordPress action.
+	 *
+	 * @return self $this
+	 */
+	public function addQueryFilter() {
+		$filter = [$this, 'applyQueryFilter'];
+
+		if ( ! has_action( 'request', $filter ) ) {
+			add_action( 'request', $filter, $this->query_filter_priority );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Remove the query filter from the appropriate WordPress action.
+	 *
+	 * @return self $this
+	 */
+	public function removeQueryFilter() {
+		$filter = [$this, 'applyQueryFilter'];
+
+		if ( has_action( 'request', $filter ) ) {
+			remove_action( 'request', $filter, $this->query_filter_priority );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Apply the query filter, if any.
+	 *
+	 * @throws Exception
+	 * @param  array<string, mixed> $query_vars
+	 * @return array<string, mixed>
+	 */
+	public function applyQueryFilter( $query_vars ) {
+		$request = Framework::resolve( WPEMERGE_REQUEST_KEY );
+		$condition = $this->getCondition();
+
+		if ( ! is_callable( $this->getQueryFilter() ) ) {
+			return $query_vars;
+		}
+
+		if ( ! $condition instanceof UrlCondition ) {
+			throw new Exception( 'Routes with queries can only use URL condition. Is the route in a non-URL route group?' );
+		}
+
+		if ( $this->getCondition()->isSatisfied( $request ) ) {
+			$arguments = $this->getCondition()->getArguments( $request );
+			$query_vars = call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], $arguments ) );
+		}
+
+		return $query_vars;
+	}
+
+	/**
+	 * Set the main WordPress query vars filter.
+	 * Alias of ::setQueryFilter()
+	 *
+	 * @codeCoverageIgnore
+	 * @param  callable $query_filter
+	 * @return self     $this
+	 */
+	public function query( $query_filter ) {
+		return $this->setQueryFilter( $query_filter );
 	}
 
 	/**
@@ -99,40 +204,17 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request, $view ) {
-		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
-		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
-			return call_user_func_array( [$this->handler, 'execute'], $arguments );
-		} );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getArguments( Request $request ) {
 		return $this->getCondition()->getArguments( $request );
 	}
 
 	/**
-	 * Add a rewrite rule to WordPress for url-based routes
-	 *
-	 * @throws Exception
-	 * @param  string    $rewrite_to
-	 * @return static    $this
+	 * {@inheritDoc}
 	 */
-	public function rewrite( $rewrite_to ) {
-		if ( ! $this->condition instanceof UrlCondition ) {
-			throw new Exception( 'Only routes with url conditions can add rewrite rules.' );
-		}
-
-		$regex = $this->condition->getValidationRegex( $this->condition->getUrl(), false );
-		$regex = preg_replace( '~^\^/~', '^', $regex ); // rewrite rules require NO leading slash
-
-		add_filter( 'wpemerge.routing.rewrite_rules', function( $rules ) use ( $regex, $rewrite_to ) {
-			$rules[ $regex ] = $rewrite_to;
-			return $rules;
+	public function handle( Request $request, $view ) {
+		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
+		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
+			return call_user_func_array( [$this->handler, 'execute'], $arguments );
 		} );
-
-		return $this;
 	}
 }
