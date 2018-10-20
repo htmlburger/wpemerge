@@ -205,7 +205,7 @@ class RouteTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getArguments
+	 * @covers ::handle
 	 */
 	public function testHandle() {
 		$request = Mockery::mock( Request::class );
