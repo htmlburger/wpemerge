@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\Request;
+use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
@@ -20,7 +21,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->request = new Request( [], [], [], [], [], [] );
-		$this->subject = Framework::resolve( WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY );
+		$this->subject = new ConditionFactory( Framework::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY ) );
 	}
 
 	public function tearDown() {
@@ -174,7 +175,18 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No condition type
 	 */
 	public function testMake_NoConditionType_Exception() {
-		$condition = $this->subject->make( [] );
+		$this->subject->make( [] );
+	}
+
+	/**
+	 * @covers ::make
+	 * @covers ::makeFromArray
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage does not exist
+	 */
+	public function testMake_NonexistantConditionType_Exception() {
+		$subject = new ConditionFactory( ['nonexistant_condition_type' => 'Nonexistant\\Condition\\Type\\Class'] );
+		$subject->make( ['nonexistant_condition_type'] );
 	}
 
 	/**
@@ -208,8 +220,6 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Invalid condition options
 	 */
 	public function testMake_Object_Exception() {
-		$expected_param = new stdClass();
-
-		$condition = $this->subject->make( $expected_param );
+		$this->subject->make( new stdClass() );
 	}
 }
