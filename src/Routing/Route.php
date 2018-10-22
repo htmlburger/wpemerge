@@ -194,7 +194,7 @@ class Route implements RouteInterface {
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( Request $request ) {
-		if ( ! in_array( $request->getMethod(), $this->methods) ) {
+		if ( ! in_array( $request->getMethod(), $this->methods ) ) {
 			return false;
 		}
 		return $this->condition->isSatisfied( $request );

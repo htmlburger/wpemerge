@@ -113,7 +113,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 		}
 
 		if ( $this->condition !== null ) {
-			$condition = $this->mergeConditions($this->condition, $condition);
+			$condition = $this->mergeConditions( $this->condition, $condition );
 		}
 
 		return $this->traitRoute( $methods, $condition, $handler );
