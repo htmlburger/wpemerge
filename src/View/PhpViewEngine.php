@@ -20,8 +20,8 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		$path = MixedType::normalizePath( get_template_directory() ) . DIRECTORY_SEPARATOR;
-		$match_root = '/^' . preg_quote( $path, '/' ) . '/i';
+		$root = realpath( MixedType::normalizePath( get_template_directory() ) ) . DIRECTORY_SEPARATOR;
+		$match_root = '/^' . preg_quote( $root, '/' ) . '/';
 		return preg_replace( $match_root, '', $this->resolveFilepath( $view ) );
 	}
 

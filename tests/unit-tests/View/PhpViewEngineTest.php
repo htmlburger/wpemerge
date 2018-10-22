@@ -43,11 +43,14 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 * @covers ::canonical
 	 */
 	public function testCanonical() {
-		$expected = realpath( locate_template( 'index.php' ) );
+		$root = realpath( TEMPLATEPATH ) . DIRECTORY_SEPARATOR;
+		$full = realpath( locate_template( 'index.php' ) );
+		$expected = substr( $full, strlen( $root ) );
 
+		$this->assertEquals( '', $this->subject->canonical( '' ) );
 		$this->assertEquals( $expected, $this->subject->canonical( 'index' ) );
 		$this->assertEquals( $expected, $this->subject->canonical( 'index.php' ) );
-		$this->assertEquals( '', $this->subject->canonical( '' ) );
+		$this->assertEquals( $expected, $this->subject->canonical( $full ) );
 	}
 
 	/**
