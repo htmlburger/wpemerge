@@ -79,7 +79,7 @@ if ( ! function_exists( 'app_render' ) ) {
 	function app_render( $views, $context = [] ) {
 		$view = app_view( $views )->with( $context );
 		View::triggerPartialHooks( $view->getName() );
-	    echo $view->toString();
+		echo $view->toString();
 	}
 }
 

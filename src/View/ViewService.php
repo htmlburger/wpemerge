@@ -78,14 +78,14 @@ class ViewService {
 		return $composers;
 	}
 
-    /**
-     * Add view composer.
-     *
-     * @param  string|string[] $views
-     * @param  string|Closure  $composer
-     * @return void
-     * @throws \Exception
-     */
+	/**
+	 * Add view composer.
+	 *
+	 * @param  string|string[] $views
+	 * @param  string|Closure  $composer
+	 * @return void
+	 * @throws \Exception
+	 */
 	public function addComposer( $views, $composer ) {
 		$views = array_map( function( $view ) {
 			return ViewEngine::canonical( $view );
