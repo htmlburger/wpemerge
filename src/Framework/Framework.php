@@ -158,7 +158,7 @@ class Framework {
 			$container[ WPEMERGE_CONFIG_KEY ]['providers']
 		);
 
-		$service_providers = array_map( function( $service_provider ) {
+		$service_providers = array_map( function ( $service_provider ) {
 			return new $service_provider();
 		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
 

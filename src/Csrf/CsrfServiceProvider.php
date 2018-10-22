@@ -15,7 +15,7 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_CSRF_KEY ] = function() {
+		$container[ WPEMERGE_CSRF_KEY ] = function () {
 			return new Csrf();
 		};
 

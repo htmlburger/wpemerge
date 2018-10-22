@@ -107,7 +107,7 @@ class Router implements HasRoutesInterface {
 	 * @return array
 	 */
 	public function sortMiddleware( $middleware ) {
-		usort( $middleware, function( $a, $b ) {
+		usort( $middleware, function ( $a, $b ) {
 			return $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
 		} );
 

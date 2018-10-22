@@ -12,7 +12,7 @@ if ( php_sapi_name() !== 'cli' && ! defined( 'ABSPATH' ) ) {
 
 // @codeCoverageIgnoreStart
 $container = new Container();
-$container[ WPEMERGE_FRAMEWORK_KEY ] = function( $container ) {
+$container[ WPEMERGE_FRAMEWORK_KEY ] = function ( $container ) {
 	return new Framework( $container );
 };
 

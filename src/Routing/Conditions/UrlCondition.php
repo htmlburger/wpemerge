@@ -154,7 +154,7 @@ class UrlCondition implements ConditionInterface {
 		$parameters = [];
 
 		// Replace all parameters with placeholders
-		$validation_regex = preg_replace_callback( $this->url_regex, function( $matches ) use ( &$parameters ) {
+		$validation_regex = preg_replace_callback( $this->url_regex, function ( $matches ) use ( &$parameters ) {
 			return $this->replaceRegexParameterWithPlaceholder( $matches, $parameters );
 		}, $url );
 

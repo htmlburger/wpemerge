@@ -16,7 +16,7 @@ class ResponsesServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_RESPONSE_SERVICE_KEY ] = function( $c ) {
+		$container[ WPEMERGE_RESPONSE_SERVICE_KEY ] = function ( $c ) {
 			return new ResponseService( $c[ WPEMERGE_REQUEST_KEY ] );
 		};
 

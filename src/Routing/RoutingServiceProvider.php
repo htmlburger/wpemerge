@@ -70,7 +70,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerDependencies( $container ) {
-		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function( $c ) {
+		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function ( $c ) {
 			return new Router(
 				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
@@ -80,7 +80,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] = function( $c ) {
+		$container[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] = function ( $c ) {
 			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
 		};
 	}

@@ -49,7 +49,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerDependencies( $container ) {
-		$container[ WPEMERGE_FLASH_KEY ] = function( $c ) {
+		$container[ WPEMERGE_FLASH_KEY ] = function ( $c ) {
 			$session = null;
 			if ( isset( $c[ WPEMERGE_SESSION_KEY ] ) ) {
 				$session = &$c[ WPEMERGE_SESSION_KEY ];

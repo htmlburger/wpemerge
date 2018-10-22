@@ -24,7 +24,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			'pretty_errors' => true,
 		] );
 
-		$container['whoops'] = function() {
+		$container['whoops'] = function () {
 			if ( ! class_exists( Run::class ) ) {
 				return null;
 			}
@@ -35,7 +35,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			return $run;
 		};
 
-		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function( $c ) {
+		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) {
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
 			return new ErrorHandler( $whoops, Framework::debugging() );
 		};

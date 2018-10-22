@@ -14,7 +14,7 @@ class RequestsServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_REQUEST_KEY ] = function() {
+		$container[ WPEMERGE_REQUEST_KEY ] = function () {
 			return Request::fromGlobals();
 		};
 	}

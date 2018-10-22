@@ -88,7 +88,7 @@ trait HasMiddlewareTrait {
 			return $next( $request );
 		}
 
-		$top_middleware_next = function( $request ) use ( $middleware, $next ) {
+		$top_middleware_next = function ( $request ) use ( $middleware, $next ) {
 			return $this->executeMiddleware( $middleware, $request, $next );
 		};
 

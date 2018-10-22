@@ -209,7 +209,7 @@ class Route implements RouteInterface {
 	 */
 	public function handle( Request $request, $view ) {
 		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
-		return $this->executeMiddleware( $this->getMiddleware(), $request, function() use ( $arguments ) {
+		return $this->executeMiddleware( $this->getMiddleware(), $request, function () use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );
 		} );
 	}

@@ -87,7 +87,7 @@ class ViewService {
 	 * @throws \Exception
 	 */
 	public function addComposer( $views, $composer ) {
-		$views = array_map( function( $view ) {
+		$views = array_map( function ( $view ) {
 			return ViewEngine::canonical( $view );
 		}, MixedType::toArray( $views ) );
 		$handler = new Handler( $composer, 'compose' );
