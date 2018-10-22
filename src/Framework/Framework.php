@@ -152,7 +152,7 @@ class Framework {
 	 * @param  Container $container
 	 * @return void
 	 */
-	protected function loadServiceProviders( Container $container ) {
+	protected function loadServiceProviders(Container $container) {
 		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
 			$this->service_providers,
 			$container[ WPEMERGE_CONFIG_KEY ]['providers']
