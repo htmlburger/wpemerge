@@ -23,6 +23,9 @@ filter:
 checks:
   php: true
 
+build_failure_conditions:
+  - 'issues.exists'
+
 tools:
   sensiolabs_security_checker: true
   external_code_coverage: true
