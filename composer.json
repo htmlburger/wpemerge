@@ -24,6 +24,9 @@
         "issues": "https://github.com/htmlburger/wpemerge/issues",
         "email": "wordpress@htmlburger.com"
     },
+	"scripts": {
+		"lint": "phpcs"
+	},
     "autoload": {
         "psr-4": {
             "WPEmerge\\": "src/",
@@ -43,6 +46,8 @@
     },
     "require-dev": {
         "mockery/mockery": "^0.9",
-        "filp/whoops": "^2.2"
+        "filp/whoops": "^2.2",
+        "squizlabs/php_codesniffer": "^3.3",
+        "phpcompatibility/php-compatibility": "^9.0"
     }
 }

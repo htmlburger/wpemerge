@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="WPEmerge">
+	<description>WP Emerge Coding Standard</description>
+	<config name="installed_paths" value="vendor/phpcompatibility/php-compatibility" />
+	<config name="testVersion" value="5.5-"/>
+
+	<!-- Files -->
+	<file>./src</file>
+	<file>./.sami.php</file>
+	<file>./config.php</file>
+	<exclude-pattern>src/Support/*</exclude-pattern>
+
+	<!-- Arguments -->
+	<arg name="tab-width" value="4"/>
+
+	<!-- Rules -->
+	<rule ref="PSR2">
+		<exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
+		<exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
+		<exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
+		<exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceAfterOpen"/>
+		<exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceBeforeClose"/>
+		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+		<exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
+		<exclude name="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed"/>
+	</rule>
+
+	<rule ref="PHPCompatibility"/>
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent" />
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="indent" value="4"/>
+			<property name="tabIndent" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
+		<properties>
+			<property name="checkFunctions" value="true"/>
+			<property name="checkClosures" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+		<properties>
+			<property name="equalsSpacing" value="1"/>
+			<property name="requiredSpacesAfterOpen" value="1"/>
+			<property name="requiredSpacesBeforeClose" value="1"/>
+		</properties>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature">
+		<properties>
+			<property name="requiredSpacesAfterOpen" value="1"/>
+			<property name="requiredSpacesBeforeClose" value="1"/>
+			<!-- ... and for multi-line function calls, there should only be one parameter per line. -->
+			<property name="allowMultipleArguments" value="true"/>
+		</properties>
+
+		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
+		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
+	</rule>
+</ruleset>
