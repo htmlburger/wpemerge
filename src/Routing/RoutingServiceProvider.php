@@ -54,13 +54,17 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			'global_middleware' => [],
 		], $container[ WPEMERGE_CONFIG_KEY ] );
 
-		$container[ WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY ] = $container[ WPEMERGE_CONFIG_KEY ]['middleware_default_priority'];
+		$container[ WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY ] =
+			$container[ WPEMERGE_CONFIG_KEY ]['middleware_default_priority'];
 
-		$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] = $container[ WPEMERGE_CONFIG_KEY ]['middleware_priority'];
+		$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] =
+			$container[ WPEMERGE_CONFIG_KEY ]['middleware_priority'];
 
-		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] = $container[ WPEMERGE_CONFIG_KEY ]['global_middleware'];
+		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] =
+			$container[ WPEMERGE_CONFIG_KEY ]['global_middleware'];
 
-		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
+		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] =
+			static::$condition_types;
 	}
 
 	/**

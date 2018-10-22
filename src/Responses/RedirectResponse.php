@@ -59,6 +59,3 @@ class RedirectResponse extends Psr7Response {
 		return $this->to( $url, $status );
 	}
 }
-
-
-

@@ -124,6 +124,10 @@ class Csrf {
 	 * @return void
 	 */
 	public function field() {
-		echo '<input type="hidden" name="' . esc_attr( $this->key ) . '" value="' . esc_attr( $this->getToken() ) . '" />';
+		echo sprintf(
+			'<input type="hidden" name="%1$s" value="%2$s" />',
+			esc_attr( $this->key ),
+			esc_attr( $this->getToken() )
+		);
 	}
 }

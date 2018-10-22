@@ -162,7 +162,10 @@ class Route implements RouteInterface {
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception( 'Routes with queries can only use URL conditions. Is the route in a non-URL route group?' );
+			throw new Exception(
+				'Routes with queries can only use URL conditions. ' .
+				'Is the route in a non-URL route group?'
+			);
 		}
 
 		if ( $this->getCondition()->isSatisfied( $request ) ) {

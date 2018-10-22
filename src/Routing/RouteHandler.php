@@ -73,7 +73,10 @@ class RouteHandler {
 		$response = $this->getResponse( $response );
 
 		if ( ! $response instanceof ResponseInterface ) {
-			throw new Exception( 'Response returned by controller is not valid (expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').' );
+			throw new Exception(
+				'Response returned by controller is not valid ' .
+				'(expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').'
+			);
 		}
 
 		return $response;

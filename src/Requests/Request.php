@@ -57,7 +57,14 @@ class Request {
 	 * @return Request
 	 */
 	public static function fromGlobals() {
-		return new static( stripslashes_deep( $_GET ), stripslashes_deep( $_POST ), $_COOKIE, $_FILES, $_SERVER, getallheaders() );
+		return new static(
+			stripslashes_deep( $_GET ),
+			stripslashes_deep( $_POST ),
+			$_COOKIE,
+			$_FILES,
+			$_SERVER,
+			getallheaders()
+		);
 	}
 
 	/**

@@ -68,7 +68,13 @@ class Router implements HasRoutesInterface {
 	 * @param integer               $default_middleware_priority
 	 * @param ErrorHandlerInterface $error_handler
 	 */
-	public function __construct( Request $request, $middleware, $middleware_priority, $default_middleware_priority, ErrorHandlerInterface $error_handler ) {
+	public function __construct(
+		Request $request,
+		$middleware,
+		$middleware_priority,
+		$default_middleware_priority,
+		ErrorHandlerInterface $error_handler
+	) {
 		$this->request = $request;
 		$this->middleware_priority = $middleware_priority;
 		$this->default_middleware_priority = $default_middleware_priority;

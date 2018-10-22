@@ -68,7 +68,10 @@ class Flash {
 	 */
 	protected function validateStore() {
 		if ( ! $this->isValidStore( $this->store ) ) {
-			throw new Exception( 'Attempted to use Flash without an active session. Did you forget to call session_start()?' );
+			throw new Exception(
+				'Attempted to use Flash without an active session. ' .
+				'Did you forget to call session_start()?'
+			);
 		}
 	}
 

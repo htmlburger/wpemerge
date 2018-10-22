@@ -25,11 +25,11 @@ class UrlCondition implements ConditionInterface {
 	 */
 	protected $url_regex = '~
 		(?:/)                     # match leading slash
-		(?:\{)                    # require opening curly brace
-			(?P<name>[a-z]\w*)    # require a string starting with a-z and followed by any number of word characters for the parameter name
+		(?:\{)                    # opening curly brace
+			(?P<name>[a-z]\w*)    # string starting with a-z and followed by word characters for the parameter name
 			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using literal ?
 			(?::(?P<regex>.*?))?  # optionally allow the user to supply a regex to match the argument against
-		(?:\})                    # require closing curly brace
+		(?:\})                    # closing curly brace
 		(?=/)                     # lookahead for a trailing slash
 	~ix';
 
@@ -137,7 +137,12 @@ class UrlCondition implements ConditionInterface {
 			$replacement = '(?:' . $replacement . ')?';
 		}
 
-		$placeholder = '___placeholder_' . sha1( count( $parameters ) . '_' . $replacement . '_' . uniqid( 'wpemerge_', true ) ) . '___';
+		$hash = sha1( implode( '_', [
+			count( $parameters ),
+			$replacement,
+			uniqid( 'wpemerge_', true ),
+		] ) );
+		$placeholder = '___placeholder_' . $hash . '___';
 		$parameters[ $placeholder ] = $replacement;
 
 		return $placeholder;

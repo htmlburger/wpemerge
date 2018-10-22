@@ -2,6 +2,8 @@
 
 namespace WPEmerge\ServiceProviders;
 
+use WPEmerge\Support\Arr;
+
 /**
  * Allows objects to extend the config.
  */
@@ -16,7 +18,7 @@ trait ExtendsConfigTrait {
 	 * @return void
 	 */
 	protected function extendConfig( $container, $key, $default ) {
-		$config = isset( $container[ WPEMERGE_CONFIG_KEY ][ $key ] ) ? $container[ WPEMERGE_CONFIG_KEY ][ $key ] : $default;
+		$config = Arr::get( $container, WPEMERGE_CONFIG_KEY . '.' . $key, $default );
 
 		if ( is_array( $default ) && is_array( $config ) ) {
 			$config = array_replace_recursive( $default, $config );

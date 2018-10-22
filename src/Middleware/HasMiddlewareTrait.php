@@ -54,7 +54,10 @@ trait HasMiddlewareTrait {
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
-				throw new Exception( 'Passed middleware must be a closure or the name or instance of a class which implements the ' . MiddlewareInterface::class . ' interface.' );
+				throw new Exception(
+					'Passed middleware must be a closure or the name or instance of a class which ' .
+					'implements the ' . MiddlewareInterface::class . ' interface.'
+				);
 			}
 		}
 
