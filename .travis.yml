@@ -11,14 +11,14 @@ php:
   - 7.1
 
 env:
-# - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=4.8 WP_MULTISITE=0
   - WP_VERSION=4.7 WP_MULTISITE=0
 
 matrix:
   include:
   - php: 5.5
-    env: WP_VERSION=4.8 WP_MULTISITE=1
+    env: WP_VERSION=4.7 WP_MULTISITE=1
 
 before_install:
   - composer self-update
