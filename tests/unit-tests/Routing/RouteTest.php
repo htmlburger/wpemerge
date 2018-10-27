@@ -135,8 +135,8 @@ class RouteTest extends WP_UnitTestCase {
 		$arguments = ['arg1', 'arg2'];
 		$condition = Mockery::mock( UrlCondition::class );
 		$subject = new Route( [], $condition, function() {} );
-		$subject->query( function( $query_vars ) use ( $arguments ) {
-			return array_merge( $query_vars, $arguments );
+		$subject->query( function( $query_vars, $arg1, $arg2 ) {
+			return array_merge( $query_vars, [$arg1, $arg2] );
 		} );
 
 		$condition->shouldReceive( 'isSatisfied' )
