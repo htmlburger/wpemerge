@@ -17,9 +17,10 @@ env:
 
 matrix:
   fast_finish: true
+
   include:
-  - php: 5.5
-    env: WP_VERSION=4.7 WP_MULTISITE=1
+    - php: 5.5
+      env: WP_VERSION=4.7 WP_MULTISITE=1
 
 before_install:
   - composer self-update
