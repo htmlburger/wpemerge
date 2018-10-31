@@ -28,7 +28,11 @@ before_script:
   - mysql -e "create database IF NOT EXISTS wpemerge_tests;" -uroot
   - bash tests/bin/install.sh wpemerge_tests root '' localhost $WP_VERSION
 
-script: phpunit --coverage-clover=./tmp/clover.xml
+script:
+  # Check all PHP files for syntax errors.
+  # The usage of bash + || exit 1 is to ensure xargs does not exit on first error.
+  - find src/ \( -name '*.php' \) | xargs -n1 bash -c 'php -lf $0 || exit 1'
+  - phpunit --coverage-clover=./tmp/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
