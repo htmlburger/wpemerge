@@ -18,16 +18,16 @@ trait ExtendsConfigTrait {
 	/**
 	 * Extends the WP Emerge config in the container with a new key.
 	 *
-	 * @codeCoverageIgnore
 	 * @param  \Pimple\Container $container
 	 * @param  string            $key
 	 * @param  mixed             $default
 	 * @return void
 	 */
-	protected function extendConfig( $container, $key, $default ) {
-		$config = Arr::get( $container, WPEMERGE_CONFIG_KEY . '.' . $key, $default );
+	public function extendConfig( $container, $key, $default ) {
+		$config = isset( $container[ WPEMERGE_CONFIG_KEY ] ) ? $container[ WPEMERGE_CONFIG_KEY ] : [];
+		$config = Arr::get( $config, $key, $default );
 
-		if ( is_array( $default ) && is_array( $config ) ) {
+		if ( $config !== $default && is_array( $config ) && is_array( $default ) ) {
 			$config = array_replace_recursive( $default, $config );
 		}
 
