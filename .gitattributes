@@ -9,3 +9,4 @@
 /.scrutinizer.yml export-ignore
 /.travis.yml export-ignore
 /phpunit.xml export-ignore
+/RELEASE_GUIDE.md export-ignore
