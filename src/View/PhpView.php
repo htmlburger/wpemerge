@@ -20,9 +20,9 @@ class PhpView implements ViewInterface {
 	use HasNameTrait, HasContextTrait;
 
 	/**
-	 * Stack of rendered layout contents.
+	 * Stack of views ready to be rendered.
 	 *
-	 * @var array<string>
+	 * @var array<ViewInterface>
 	 */
 	protected static $layout_content_stack = [];
 
@@ -47,13 +47,9 @@ class PhpView implements ViewInterface {
 	 * @return string
 	 */
 	public static function getLayoutContent() {
-		$stack = static::$layout_content_stack;
+		$view = array_pop( static::$layout_content_stack );
 
-		if ( empty( $stack ) ) {
-			return '';
-		}
-
-		return $stack[ count( $stack ) - 1 ];
+		return $view->render();
 	}
 
 	/**
@@ -110,15 +106,13 @@ class PhpView implements ViewInterface {
 		}
 
 		$clone = clone $this;
-		$html = $clone->compose()->render();
+		static::$layout_content_stack[] = $clone->compose();
 
 		if ( $this->getLayout() !== null ) {
-			static::$layout_content_stack[] = $html;
-			$html = $this->getLayout()->toString();
-			array_pop( static::$layout_content_stack );
+			return $this->getLayout()->toString();
 		}
 
-		return $html;
+		return static::getLayoutContent();
 	}
 
 	/**
