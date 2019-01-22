@@ -71,6 +71,8 @@ class PhpViewTest extends WP_UnitTestCase {
 	 * @covers ::toString
 	 */
 	public function testToString_Layout() {
+		global $view_rendered;
+
 		list( $view, $layout, $expected, $handle ) = Helper::createLayoutView();
 
 		$layout = (new PhpView())
@@ -83,6 +85,9 @@ class PhpViewTest extends WP_UnitTestCase {
 			->setLayout( $layout );
 
 		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
+
+		// Ensure the child view is rendered last.
+		$this->assertEquals( 'child', $view_rendered );
 
 		Helper::deleteLayoutView( $handle );
 	}
