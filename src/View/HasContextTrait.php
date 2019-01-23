@@ -23,14 +23,15 @@ trait HasContextTrait {
 	 * Get context values.
 	 *
 	 * @param  string|null $key
+	 * @param  mixed|null  $default
 	 * @return mixed
 	 */
-	public function getContext( $key = null ) {
+	public function getContext( $key = null, $default = null ) {
 		if ( $key === null ) {
 			return $this->context;
 		}
 
-		return Arr::get( $this->context, $key );
+		return Arr::get( $this->context, $key, $default );
 	}
 
 	/**

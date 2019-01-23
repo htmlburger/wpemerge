@@ -14,9 +14,10 @@ interface HasContextInterface {
 	 * Get context values.
 	 *
 	 * @param  string|null $key
+	 * @param  mixed|null  $default
 	 * @return mixed
 	 */
-	public function getContext( $key = null );
+	public function getContext( $key = null, $default = null );
 
 	/**
 	 * Add context values.
