@@ -10,7 +10,7 @@
 namespace WPEmerge\Responses;
 
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * A collection of tools for the creation of responses
@@ -19,7 +19,7 @@ class RedirectResponse extends Psr7Response {
 	/**
 	 * Current request.
 	 *
-	 * @var Request
+	 * @var RequestInterface
 	 */
 	protected $request = null;
 
@@ -27,9 +27,9 @@ class RedirectResponse extends Psr7Response {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Request $request
+	 * @param RequestInterface $request
 	 */
-	public function __construct( Request $request ) {
+	public function __construct( RequestInterface $request ) {
 		parent::__construct();
 		$this->request = $request;
 	}

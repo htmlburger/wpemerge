@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Responses;
 
 use Mockery;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
 use WP_UnitTestCase;
 
@@ -21,7 +21,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 	 * @covers ::to
 	 */
 	public function testTo_Location() {
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing()->asUndefined();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing()->asUndefined();
 		$expected = '/foobar';
 
 		$subject = (new RedirectResponse( $request ))->to( $expected );
@@ -32,7 +32,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 	 * @covers ::to
 	 */
 	public function testTo_Status() {
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing()->asUndefined();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing()->asUndefined();
 		$expected1 = 301;
 		$expected2 = 302;
 
@@ -48,7 +48,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 	 */
 	public function testBack_Location() {
 		$expected = 'http://example.com/foobar?hello=world';
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'headers' )
 			->with( 'Referer' )
@@ -63,7 +63,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 	 */
 	public function testBack_Location_Fallback() {
 		$expected = 'http://example.com/foobar?hello=world';
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'headers' )
 			->with( 'Referer' )
@@ -78,7 +78,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 	 */
 	public function testBack_Location_Current() {
 		$expected = 'http://example.com/foobar?hello=world';
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'headers' )
 			->with( 'Referer' )
@@ -98,7 +98,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 		$expected1 = 301;
 		$expected2 = 302;
 		$url = 'http://example.com/foobar?hello=world';
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'headers' )
 			->with( 'Referer' )

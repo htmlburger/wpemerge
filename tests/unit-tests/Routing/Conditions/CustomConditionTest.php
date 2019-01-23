@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
 use WPEmerge\Routing\Conditions\CustomCondition;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
 
 /**
@@ -19,7 +19,7 @@ class CustomConditionTest extends WP_UnitTestCase {
 	public function testConstruct() {
 		$callable = function() {};
 		$arguments = ['foo', 'bar'];
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject = new CustomCondition( $callable, $arguments[0], $arguments[1] );
 
@@ -31,7 +31,7 @@ class CustomConditionTest extends WP_UnitTestCase {
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied() {
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject1 = new CustomCondition( '__return_true' );
 		$this->assertTrue( $subject1->isSatisfied( $request ) );

@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing\Conditions;
 
 use WPEmerge\Facades\RouteCondition;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Negate another condition's result.
@@ -41,14 +41,14 @@ class NegateCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		return ! $this->condition->isSatisfied( $request );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		return $this->condition->getArguments( $request );
 	}
 }

@@ -10,6 +10,7 @@
 namespace WPEmerge\Middleware;
 
 use Closure;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Interface that middleware must implement
@@ -18,9 +19,9 @@ interface MiddlewareInterface {
 	/**
 	 * Execute middleware
 	 *
-	 * @param  \WPEmerge\Requests\Request          $request
+	 * @param  RequestInterface                    $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( $request, Closure $next );
+	public function handle( RequestInterface $request, Closure $next );
 }

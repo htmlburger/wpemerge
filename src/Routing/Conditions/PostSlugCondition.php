@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current post's slug
@@ -36,7 +36,7 @@ class PostSlugCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		$post = get_post();
 		return ( is_singular() && $post && $this->post_slug === $post->post_name );
 	}
@@ -44,7 +44,7 @@ class PostSlugCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		return [$this->post_slug];
 	}
 }

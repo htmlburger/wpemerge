@@ -12,7 +12,7 @@ namespace WPEmerge\Routing;
 use Exception;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
@@ -25,7 +25,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Current request.
 	 *
-	 * @var Request
+	 * @var RequestInterface
 	 */
 	protected $request = null;
 
@@ -69,14 +69,14 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @codeCoverageIgnore
 	 *
-	 * @param Request               $request
+	 * @param RequestInterface      $request
 	 * @param array                 $middleware
 	 * @param array                 $middleware_priority
 	 * @param integer               $default_middleware_priority
 	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
-		Request $request,
+		RequestInterface $request,
 		$middleware,
 		$middleware_priority,
 		$default_middleware_priority,
@@ -160,12 +160,12 @@ class Router implements HasRoutesInterface {
 	 * Execute a route.
 	 *
 	 * @throws Exception
-	 * @param  Request        $request
-	 * @param  RouteInterface $route
-	 * @param  string         $view
+	 * @param  RequestInterface $request
+	 * @param  RouteInterface   $route
+	 * @param  string           $view
 	 * @return string
 	 */
-	protected function handle( Request $request, RouteInterface $route, $view ) {
+	protected function handle( RequestInterface $request, RouteInterface $route, $view ) {
 		try {
 			$this->error_handler->register();
 			$response = $route->handle( $request, $view );

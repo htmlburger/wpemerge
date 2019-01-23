@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\RouteHandler;
 use WPEmerge\Routing\Route;
@@ -152,7 +152,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
 
 		$request->shouldReceive( 'getMethod' )
@@ -175,7 +175,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied_ConditionFalse_False() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
 
 		$request->shouldReceive( 'getMethod' )
@@ -192,7 +192,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::getArguments
 	 */
 	public function testGetArguments_PassThroughCondition() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
 		$expected = ['foo'];
 
@@ -208,7 +208,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 		$view = 'foobar.php';
 		$condition = Mockery::mock( ConditionInterface::class );
 		$expected = Mockery::mock( ResponseInterface::class );

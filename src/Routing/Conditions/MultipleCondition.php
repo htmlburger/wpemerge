@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing\Conditions;
 
 use WPEmerge\Facades\RouteCondition;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against an array of conditions in an AND logical relationship
@@ -40,7 +40,7 @@ class MultipleCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		foreach ( $this->conditions as $condition ) {
 			if ( ! $condition->isSatisfied( $request ) ) {
 				return false;
@@ -52,7 +52,7 @@ class MultipleCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		$arguments = [];
 		foreach ( $this->conditions as $condition ) {
 			$arguments = array_merge( $arguments, $condition->getArguments( $request ) );

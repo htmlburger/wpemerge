@@ -10,7 +10,7 @@
 namespace WPEmerge\Controllers;
 
 use WPEmerge\Facades\Response;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Handles normal WordPress requests without interfering
@@ -22,11 +22,11 @@ class WordPressController {
 	/**
 	 * Default WordPress handler.
 	 *
-	 * @param  Request                             $request
+	 * @param  RequestInterface                    $request
 	 * @param  string                              $view
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( Request $request, $view ) {
+	public function handle( RequestInterface $request, $view ) {
 		return Response::view( $view )
 			->toResponse()
 			->withStatus( http_response_code() );

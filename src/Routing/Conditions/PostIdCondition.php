@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current post's id
@@ -36,14 +36,14 @@ class PostIdCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		return ( is_singular() && (int) $this->post_id === (int) get_the_ID() );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		return [$this->post_id];
 	}
 }

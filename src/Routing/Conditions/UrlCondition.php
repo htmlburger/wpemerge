@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing\Conditions;
 
 use WPEmerge\Helpers\Url as UrlUtility;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current url
@@ -63,7 +63,7 @@ class UrlCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		if ( $this->getUrl() === static::WILDCARD ) {
 			return true;
 		}
@@ -76,7 +76,7 @@ class UrlCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
 		$url = UrlUtility::getPath( $request );
 		$matches = [];

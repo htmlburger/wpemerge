@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
 
 /**
@@ -19,7 +19,7 @@ class MultipleConditionTest extends WP_UnitTestCase {
 	public function testConstruct() {
 		$condition1 = new CustomCondition( '__return_true' );
 		$condition2 = function() { return false; };
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject = new MultipleCondition( [$condition1, $condition2] );
 
@@ -32,7 +32,7 @@ class MultipleConditionTest extends WP_UnitTestCase {
 	public function testIsSatisfied() {
 		$condition1 = new CustomCondition( '__return_true' );
 		$condition2 = new CustomCondition( '__return_false' );
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject1 = new MultipleCondition( [$condition1] );
 		$this->assertTrue( $subject1->isSatisfied( $request ) );
@@ -50,7 +50,7 @@ class MultipleConditionTest extends WP_UnitTestCase {
 	public function testGetArguments() {
 		$condition1 = new CustomCondition( '__return_true', 'custom_arg_1', 'custom_arg_2' );
 		$condition2 = [function() { return false; }, 'custom_arg_3'];
-		$request = Mockery::mock( Request::class )->shouldIgnoreMissing();
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject = new MultipleCondition( [$condition1, $condition2] );
 

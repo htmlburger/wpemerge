@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Csrf;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Provide CSRF protection utilities through WordPress nonces.
@@ -71,10 +71,10 @@ class Csrf {
 	/**
 	 * Get the csrf token from a request.
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return string
 	 */
-	public function getTokenFromRequest( Request $request ) {
+	public function getTokenFromRequest( RequestInterface $request ) {
 		if ( $request->get( $this->key ) ) {
 			return $request->get( $this->key );
 		}

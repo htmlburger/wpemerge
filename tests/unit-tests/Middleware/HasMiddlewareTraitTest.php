@@ -20,7 +20,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 		$this->subject = $this->getMockForTrait( HasMiddlewareTrait::class );
 		$this->middleware_stub1 = Mockery::mock( MiddlewareInterface::class )->shouldIgnoreMissing();
 		$this->middleware_stub2 = Mockery::mock( MiddlewareInterface::class )->shouldIgnoreMissing();
-		$this->request_stub = new Request( [], [], [], [], [], [] );
+		$this->request = new Request( [], [], [], [], [], [] );
 	}
 
 	public function tearDown() {
@@ -134,7 +134,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 
 		$mock->shouldReceive( $method )->once();
 
-		$this->subject->executeMiddleware( [], $this->request_stub, $closure );
+		$this->subject->executeMiddleware( [], $this->request, $closure );
 		$this->assertTrue( true );
 	}
 
@@ -154,11 +154,11 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 			->ordered();
 
 		$mock->shouldReceive( 'bar' )
-			->with( $this->request_stub )
+			->with( $this->request )
 			->once()
 			->ordered();
 
-		$this->subject->executeMiddleware( [$middleware], $this->request_stub, $closure );
+		$this->subject->executeMiddleware( [$middleware], $this->request, $closure );
 		$this->assertTrue( true );
 	}
 
@@ -170,11 +170,11 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 		$closure = $this->getClosureMock( $mock, 'foo' );
 
 		$mock->shouldReceive( 'foo' )
-			->with( $this->request_stub )
+			->with( $this->request )
 			->once()
 			->ordered();
 
-		$this->subject->executeMiddleware( [TestMiddleware::class], $this->request_stub, $closure );
+		$this->subject->executeMiddleware( [TestMiddleware::class], $this->request, $closure );
 		$this->assertTrue( true );
 	}
 
@@ -186,11 +186,11 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 		$closure = $this->getClosureMock( $mock, 'foo' );
 
 		$mock->shouldReceive( 'foo' )
-			->with( $this->request_stub )
+			->with( $this->request )
 			->once()
 			->ordered();
 
-		$this->subject->executeMiddleware( [new TestMiddleware()], $this->request_stub, $closure );
+		$this->subject->executeMiddleware( [new TestMiddleware()], $this->request, $closure );
 		$this->assertTrue( true );
 	}
 
@@ -226,11 +226,11 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 			->ordered();
 
 		$mock->shouldReceive( 'foobarbaz' )
-			->with( $this->request_stub )
+			->with( $this->request )
 			->once()
 			->ordered();
 
-		$this->subject->executeMiddleware( [$middleware1, $middleware2, $middleware3], $this->request_stub, $closure );
+		$this->subject->executeMiddleware( [$middleware1, $middleware2, $middleware3], $this->request, $closure );
 		$this->assertTrue( true );
 	}
 }

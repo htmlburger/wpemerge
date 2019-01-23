@@ -3,9 +3,9 @@
 namespace WPEmergeTests\Helpers;
 
 use Mockery;
-use WPEmerge\Helpers\Url;
-use WPEmerge\Requests\Request;
 use WP_UnitTestCase;
+use WPEmerge\Helpers\Url;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Url
@@ -17,7 +17,7 @@ class UrlTest extends WP_UnitTestCase {
 	public function testGetPath_Home_Slash() {
 		$expected = '/';
 
-		$mock = Mockery::mock( Request::class );
+		$mock = Mockery::mock( RequestInterface::class );
 		$mock->shouldReceive( 'getUrl' )
 			->andReturn( 'http://example.org/' );
 
@@ -30,7 +30,7 @@ class UrlTest extends WP_UnitTestCase {
 	public function testGetPath_Subpage_RelativePath() {
 		$expected = '/foo/bar/';
 
-		$mock = Mockery::mock( Request::class );
+		$mock = Mockery::mock( RequestInterface::class );
 		$mock->shouldReceive( 'getUrl' )
 			->andReturn( 'http://example.org/foo/bar/' );
 
@@ -43,7 +43,7 @@ class UrlTest extends WP_UnitTestCase {
 	public function testGetPath_QueryString_StripsQueryString() {
 		$expected = '/foo/bar/';
 
-		$mock = Mockery::mock( Request::class );
+		$mock = Mockery::mock( RequestInterface::class );
 		$mock->shouldReceive( 'getUrl' )
 			->andReturn( 'http://example.org/foo/bar/?foo=bar&baz=foobarbaz' );
 

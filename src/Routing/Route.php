@@ -13,7 +13,7 @@ use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Middleware\HasMiddlewareTrait;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
 use WPEmerge\Routing\Conditions\UrlCondition;
@@ -200,7 +200,7 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		if ( ! in_array( $request->getMethod(), $this->methods ) ) {
 			return false;
 		}
@@ -210,14 +210,14 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		return $this->getCondition()->getArguments( $request );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request, $view ) {
+	public function handle( RequestInterface $request, $view ) {
 		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
 		return $this->executeMiddleware( $this->getMiddleware(), $request, function () use ( $arguments ) {
 			return call_user_func_array( [$this->handler, 'execute'], $arguments );

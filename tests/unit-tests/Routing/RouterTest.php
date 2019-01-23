@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Support\Facade;
@@ -23,7 +23,7 @@ class RouterTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
-		$this->subject = new Router( Mockery::mock( Request::class ), [], [], 0, $this->error_handler );
+		$this->subject = new Router( Mockery::mock( RequestInterface::class ), [], [], 0, $this->error_handler );
 	}
 
 	public function tearDown() {
@@ -47,7 +47,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware2 = 'bar';
 		$middleware3 = function() {};
 
-		$subject = new Router( Mockery::mock( Request::class ), [], [
+		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [
 			$middleware1 => $middleware1_priority,
 		], $default_middleware_priority, $this->error_handler );
 
@@ -66,7 +66,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware2 = 'bar';
 		$middleware3 = function() {};
 
-		$subject = new Router( Mockery::mock( Request::class ), [], [
+		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [
 			$middleware1 => $middleware1_priority,
 		], $default_middleware_priority, $this->error_handler );
 
@@ -83,7 +83,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function testAddRoute() {
 		$route = Mockery::mock( RouteInterface::class );
 		$middleware = [Mockery::mock( MiddlewareInterface::class )];
-		$subject = new Router( Mockery::mock( Request::class ), $middleware, [], 0, $this->error_handler );
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $middleware, [], 0, $this->error_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware )
@@ -111,7 +111,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware = Mockery::mock( MiddlewareInterface::class );
 		$middleware_array = [$middleware];
 
-		$subject = new Router( Mockery::mock( Request::class ), $middleware_array, [], 0, $this->error_handler );
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $middleware_array, [], 0, $this->error_handler );
 
 		$route->shouldReceive( 'addMiddleware' )
 			->with( $middleware_array )

@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Responses;
 
 use Mockery;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\ResponseService;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +16,7 @@ class ResponseTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ResponseService( Mockery::mock( Request::class ) );
+		$this->subject = new ResponseService( Mockery::mock( RequestInterface::class ) );
 	}
 
 	public function tearDown() {

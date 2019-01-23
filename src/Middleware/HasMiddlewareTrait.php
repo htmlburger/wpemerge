@@ -13,6 +13,7 @@ use Closure;
 use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\MixedType;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Allow objects to have middleware
@@ -87,11 +88,11 @@ trait HasMiddlewareTrait {
 	 * Execute an array of middleware recursively (last in, first out)
 	 *
 	 * @param  array                               $middleware
-	 * @param  \WPEmerge\Requests\Request          $request
+	 * @param  RequestInterface                    $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function executeMiddleware( $middleware, $request, Closure $next ) {
+	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
 		$top_middleware = array_shift( $middleware );
 
 		if ( $top_middleware === null ) {

@@ -13,7 +13,7 @@ use Closure;
 use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Helpers\Arguments;
 use WPEmerge\Middleware\HasMiddlewareTrait;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
@@ -56,10 +56,10 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * Get the first child route which is satisfied
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return RouteInterface|null
 	 */
-	protected function getSatisfiedRoute( Request $request ) {
+	protected function getSatisfiedRoute( RequestInterface $request ) {
 		$routes = $this->getRoutes();
 		foreach ( $routes as $route ) {
 			if ( $route->isSatisfied( $request ) ) {
@@ -89,7 +89,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		$route = $this->getSatisfiedRoute( $request );
 		return $route !== null;
 	}
@@ -97,7 +97,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( Request $request, $view ) {
+	public function handle( RequestInterface $request, $view ) {
 		$route = $this->getSatisfiedRoute( $request );
 		return $route ? $route->handle( $request, $view ) : null;
 	}
@@ -105,7 +105,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		$route = $this->getSatisfiedRoute( $request );
 		return $route ? $route->getArguments( $request ) : [];
 	}

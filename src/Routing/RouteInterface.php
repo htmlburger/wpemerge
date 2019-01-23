@@ -9,8 +9,8 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Requests\Request;
 use WPEmerge\Middleware\HasMiddlewareInterface;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Interface that routes must implement
@@ -19,25 +19,25 @@ interface RouteInterface extends HasMiddlewareInterface {
 	/**
 	 * Get whether the route is satisfied.
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return boolean
 	 */
-	public function isSatisfied( Request $request );
+	public function isSatisfied( RequestInterface $request );
 
 	/**
 	 * Get a response for the given request.
 	 *
-	 * @param  Request                             $request
+	 * @param  RequestInterface                    $request
 	 * @param  string                              $view
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( Request $request, $view );
+	public function handle( RequestInterface $request, $view );
 
 	/**
 	 * Get arguments.
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return array
 	 */
-	public function getArguments( Request $request );
+	public function getArguments( RequestInterface $request );
 }

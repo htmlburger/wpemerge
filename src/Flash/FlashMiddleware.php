@@ -12,6 +12,7 @@ namespace WPEmerge\Flash;
 use Closure;
 use WPEmerge\Facades\Flash as FlashService;
 use WPEmerge\Middleware\MiddlewareInterface;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Store current request data and clear old request data
@@ -20,7 +21,7 @@ class FlashMiddleware implements MiddlewareInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( $request, Closure $next ) {
+	public function handle( RequestInterface $request, Closure $next ) {
 		$response = $next( $request );
 
 		if ( FlashService::enabled() ) {

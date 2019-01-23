@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Helpers;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * A collection of tools dealing with urls
@@ -18,10 +18,10 @@ class Url {
 	/**
 	 * Get the path for the request relative to the home url
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return string
 	 */
-	public static function getPath( Request $request ) {
+	public static function getPath( RequestInterface $request ) {
 		$url = $request->getUrl();
 		$relative_url = substr( $url, strlen( home_url( '/' ) ) );
 		$relative_url = static::addLeadingSlash( $relative_url );

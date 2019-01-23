@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against a query var value.
@@ -45,7 +45,7 @@ class QueryVarCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isSatisfied( Request $request ) {
+	public function isSatisfied( RequestInterface $request ) {
 		$query_var_value = get_query_var( $this->query_var, null );
 
 		if ( $query_var_value === null ) {
@@ -62,7 +62,7 @@ class QueryVarCondition implements ConditionInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getArguments( Request $request ) {
+	public function getArguments( RequestInterface $request ) {
 		return [$this->query_var, $this->value];
 	}
 }

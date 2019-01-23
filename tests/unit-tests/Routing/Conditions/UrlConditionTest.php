@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WP_UnitTestCase;
 
@@ -37,7 +37,7 @@ class UrlConditionTest extends WP_UnitTestCase {
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied_Wildcard_True() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 		$subject = new UrlCondition( UrlCondition::WILDCARD );
 
 		$this->assertTrue( $subject->isSatisfied( $request ) );
@@ -47,7 +47,7 @@ class UrlConditionTest extends WP_UnitTestCase {
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied_Url() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'getUrl' )
 			->andReturn( 'http://example.org/foo/bar/' );
@@ -79,7 +79,7 @@ class UrlConditionTest extends WP_UnitTestCase {
 	 * @covers ::getParameterNames
 	 */
 	public function testGetArguments() {
-		$request = Mockery::mock( Request::class );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$request->shouldReceive( 'getUrl' )
 			->andReturn( 'http://example.org/foo/bar/baz/1/2/3/' );

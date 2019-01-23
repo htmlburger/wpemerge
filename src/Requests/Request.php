@@ -13,9 +13,9 @@ use WPEmerge\Helpers\Url;
 use WPEmerge\Support\Arr;
 
 /**
- * A server request representation
+ * A representation of a request to the server.
  */
-class Request {
+class Request implements RequestInterface {
 	/**
 	 * GET parameters.
 	 *
@@ -59,9 +59,7 @@ class Request {
 	protected $headers = [];
 
 	/**
-	 * Create a new instance from php super globals.
-	 *
-	 * @return Request
+	 * {@inheritDoc}
 	 */
 	public static function fromGlobals() {
 		return new static(
@@ -94,9 +92,7 @@ class Request {
 	}
 
 	/**
-	 * Get the request method.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function getMethod() {
 		$method = (string) $this->server( 'REQUEST_METHOD', 'GET' );
@@ -115,81 +111,63 @@ class Request {
 	}
 
 	/**
-	 * Check if the request method is GET.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isGet() {
 		return $this->getMethod() === 'GET';
 	}
 
 	/**
-	 * Check if the request method is HEAD.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isHead() {
 		return $this->getMethod() === 'HEAD';
 	}
 
 	/**
-	 * Check if the request method is POST.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isPost() {
 		return $this->getMethod() === 'POST';
 	}
 
 	/**
-	 * Check if the request method is PUT.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isPut() {
 		return $this->getMethod() === 'PUT';
 	}
 
 	/**
-	 * Check if the request method is PATCH.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isPatch() {
 		return $this->getMethod() === 'PATCH';
 	}
 
 	/**
-	 * Check if the request method is DELETE.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isDelete() {
 		return $this->getMethod() === 'DELETE';
 	}
 
 	/**
-	 * Check if the request method is OPTIONS.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isOptions() {
 		return $this->getMethod() === 'OPTIONS';
 	}
 
 	/**
-	 * Check if the request method is a "read" verb.
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function isReadVerb() {
 		return in_array( $this->getMethod(), ['GET', 'HEAD', 'OPTIONS'] );
 	}
 
 	/**
-	 * Get the request url.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function getUrl() {
 		$https = $this->server( 'HTTPS' );
@@ -203,10 +181,8 @@ class Request {
 	}
 
 	/**
-	 * Get a value from any of the request parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	protected function input() {
 		$args = func_get_args();
@@ -221,60 +197,48 @@ class Request {
 	}
 
 	/**
-	 * Get a value from the GET parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function get() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['get'], func_get_args() ) );
 	}
 
 	/**
-	 * Get a value from the POST parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function post() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['post'], func_get_args() ) );
 	}
 
 	/**
-	 * Get a value from the COOKIE parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function cookie() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['cookie'], func_get_args() ) );
 	}
 
 	/**
-	 * Get a value from the FILES parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function files() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['files'], func_get_args() ) );
 	}
 
 	/**
-	 * Get a value from the SERVER parameters.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function server() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['server'], func_get_args() ) );
 	}
 
 	/**
-	 * Get a value from the headers.
-	 *
-	 * @see    \WPEmerge\Support\Arr
-	 * @return mixed
+	 * {@inheritDoc}
+	 * @see \WPEmerge\Support\Arr
 	 */
 	public function headers() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['headers'], func_get_args() ) );

@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 
 /**
  * Interface that condition types must implement
@@ -18,16 +18,16 @@ interface ConditionInterface {
 	/**
 	 * Get whether the condition is satisfied
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return boolean
 	 */
-	public function isSatisfied( Request $request );
+	public function isSatisfied( RequestInterface $request );
 
 	/**
 	 * Get an array of arguments for use in request
 	 *
-	 * @param  Request $request
+	 * @param  RequestInterface $request
 	 * @return array
 	 */
-	public function getArguments( Request $request );
+	public function getArguments( RequestInterface $request );
 }
