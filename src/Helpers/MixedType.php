@@ -69,10 +69,36 @@ class MixedType {
 	 * Solves mixed slashes that are sometimes returned by WordPress core functions.
 	 *
 	 * @param  string $path
-	 * @param  string $replace_with
+	 * @param  string $slash
 	 * @return string
 	 */
-	public static function normalizePath( $path, $replace_with = DIRECTORY_SEPARATOR ) {
-		return preg_replace( '~[/' . preg_quote( '\\', '~' ) . ']~', $replace_with, $path );
+	public static function normalizePath( $path, $slash = DIRECTORY_SEPARATOR ) {
+		return preg_replace( '~[' . preg_quote( '/\\', '~' ) . ']+~', $slash, $path );
+	}
+
+	/**
+	 * Ensure path has a trailing slash.
+	 *
+	 * @param  string $path
+	 * @param  string $slash
+	 * @return string
+	 */
+	public static function addTrailingSlash( $path, $slash = DIRECTORY_SEPARATOR ) {
+		$path = static::normalizePath( $path, $slash );
+		$path = preg_replace( '~' . preg_quote( $slash, '~' ) . '*$~', $slash, $path );
+		return $path;
+	}
+
+	/**
+	 * Ensure path does not have a trailing slash.
+	 *
+	 * @param  string $path
+	 * @param  string $slash
+	 * @return string
+	 */
+	public static function removeTrailingSlash( $path, $slash = DIRECTORY_SEPARATOR ) {
+		$path = static::normalizePath( $path, $slash );
+		$path = preg_replace( '~' . preg_quote( $slash, '~' ) . '+$~', '', $path );
+		return $path;
 	}
 }

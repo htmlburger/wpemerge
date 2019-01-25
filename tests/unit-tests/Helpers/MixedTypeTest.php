@@ -98,10 +98,28 @@ class MixedTypeTest extends WP_UnitTestCase {
 	 */
 	public function testNormalizePath() {
 		$ds = DIRECTORY_SEPARATOR;
-		$input = '/foo\\bar/baz\\foobar';
+		$input = '/foo\\bar/baz\\\\foobar';
 
 		$this->assertEquals( "{$ds}foo{$ds}bar{$ds}baz{$ds}foobar", MixedType::normalizePath( $input ) );
 		$this->assertEquals( '/foo/bar/baz/foobar', MixedType::normalizePath( $input, '/' ) );
 		$this->assertEquals( '\\foo\\bar\\baz\\foobar', MixedType::normalizePath( $input, '\\' ) );
+	}
+
+	/**
+	 * @covers ::addTrailingSlash
+	 */
+	public function testAddTrailingSlash() {
+		$input = '/foo';
+
+		$this->assertEquals( "/foo/", MixedType::addTrailingSlash( $input, '/' ) );
+	}
+
+	/**
+	 * @covers ::removeTrailingSlash
+	 */
+	public function testRemoveTrailingSlash() {
+		$input = '/foo/';
+
+		$this->assertEquals( "/foo", MixedType::removeTrailingSlash( $input, '/' ) );
 	}
 }
