@@ -60,6 +60,10 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR );
 		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
 		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view' ) );
+
+		$this->subject->setDirectory( '' );
+		$this->assertFalse( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'index.php' ) );
 	}
 
 	/**

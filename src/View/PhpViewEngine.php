@@ -166,15 +166,14 @@ class PhpViewEngine implements ViewEngineInterface {
 	 */
 	protected function resolveRelativeFilepath( $view ) {
 		$normalized_view = MixedType::normalizePath( $view );
-		$stylesheet_path = MixedType::addTrailingSlash( STYLESHEETPATH );
-		$template_path = MixedType::addTrailingSlash( TEMPLATEPATH );
+		$paths = [ STYLESHEETPATH, TEMPLATEPATH ];
 
-		if ( substr( $normalized_view, 0, strlen( $stylesheet_path ) ) === $stylesheet_path ) {
-			return substr( $normalized_view, strlen( $stylesheet_path ) );
-		}
+		foreach ( $paths as $path ) {
+			$path = MixedType::addTrailingSlash( $path );
 
-		if ( substr( $normalized_view, 0, strlen( $template_path ) ) === $template_path ) {
-			return substr( $normalized_view, strlen( $template_path ) );
+			if ( substr( $normalized_view, 0, strlen( $path ) ) === $path ) {
+				return substr( $normalized_view, strlen( $path ) );
+			}
 		}
 
 		// Bail if we've failed to convert the view to a relative path.
