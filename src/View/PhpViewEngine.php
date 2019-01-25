@@ -16,6 +16,44 @@ use WPEmerge\Helpers\MixedType;
  */
 class PhpViewEngine implements ViewEngineInterface {
 	/**
+	 * Custom views directory to check first.
+	 *
+	 * @var string
+	 */
+	protected $directory = '';
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param string $directory
+	 */
+	public function __construct( $directory = '' ) {
+		$this->setDirectory( $directory );
+	}
+
+	/**
+	 * Get the custom views directory.
+	 *
+	 * @codeCoverageIgnore
+	 * @return string
+	 */
+	public function getDirectory() {
+		return $this->directory;
+	}
+
+	/**
+	 * Set the custom views directory.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string $directory
+	 * @return void
+	 */
+	public function setDirectory( $directory ) {
+		$this->directory = MixedType::removeTrailingSlash( $directory );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function exists( $view ) {
@@ -102,20 +140,59 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * @return string
 	 */
 	protected function resolveFilepath( $view ) {
-		$file = locate_template( $view, false );
+		$file = $this->resolveFromCustomFilepath( $view );
 
 		if ( ! $file ) {
-			// locate_template failed to find the view - try adding a .php extension.
-			$file = locate_template( $view . '.php', false );
+			$file = $this->resolveFromThemeFilepath( $view );
 		}
 
 		if ( ! $file ) {
-			// locate_template failed to find the view - test if a valid absolute path was passed.
-			$file = $this->resolveFilepathFromFilesystem( $view );
+			$file = $this->resolveFromAbsoluteFilepath( $view );
 		}
 
 		if ( $file ) {
 			$file = realpath( $file );
+		}
+
+		return $file;
+	}
+
+	/**
+	 * Resolve a view if it exists in the custom views directory.
+	 *
+	 * @param  string $view
+	 * @return string
+	 */
+	protected function resolveFromCustomFilepath( $view ) {
+		$directory = $this->getDirectory();
+
+		if ( $directory === '' ) {
+			return '';
+		}
+
+		// Normalize to ensure there are no doubled separators.
+		$file = MixedType::normalizePath( $directory . DIRECTORY_SEPARATOR . $view );
+
+		if ( ! file_exists( $file ) ) {
+			// Try adding a .php extension.
+			$file .= '.php';
+		};
+
+		return file_exists( $file ) ? $file : '';
+	}
+
+	/**
+	 * Resolve a view if it exists in the current theme.
+	 *
+	 * @param  string $view
+	 * @return string
+	 */
+	protected function resolveFromThemeFilepath( $view ) {
+		$file = locate_template( $view, false );
+
+		if ( ! $file ) {
+			// Try adding a .php extension.
+			$file = locate_template( $view . '.php', false );
 		}
 
 		return $file;
@@ -127,7 +204,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * @param  string $view
 	 * @return string
 	 */
-	protected function resolveFilepathFromFilesystem( $view ) {
+	protected function resolveFromAbsoluteFilepath( $view ) {
 		return file_exists( $view ) ? $view : '';
 	}
 }

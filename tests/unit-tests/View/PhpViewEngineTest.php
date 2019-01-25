@@ -28,15 +28,38 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::exists
 	 * @covers ::resolveFilepath
-	 * @covers ::resolveFilepathFromFilesystem
+	 * @covers ::resolveFromThemeFilepath
+	 * @covers ::resolveFromAbsoluteFilepath
 	 */
 	public function testExists() {
-		$index = 'index.php';
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 
-		$this->assertTrue( $this->subject->exists( $index ) );
+		$this->assertTrue( $this->subject->exists( 'index.php' ) );
+		$this->assertTrue( $this->subject->exists( 'index' ) );
 		$this->assertTrue( $this->subject->exists( $view ) );
 		$this->assertFalse( $this->subject->exists( '' ) );
+	}
+
+	/**
+	 * @covers ::resolveFromCustomFilepath
+	 */
+	public function testResolveFromCustomFilepath() {
+		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
+		$this->assertTrue( $this->subject->exists( 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( 'view' ) );
+		$this->assertFalse( $this->subject->exists( 'nonexistant.php' ) );
+
+		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR );
+		$this->assertTrue( $this->subject->exists( 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( 'view' ) );
+
+		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
+		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view' ) );
+
+		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR );
+		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view' ) );
 	}
 
 	/**
