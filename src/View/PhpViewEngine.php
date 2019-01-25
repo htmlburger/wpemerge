@@ -140,6 +140,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * @return string
 	 */
 	protected function resolveFilepath( $view ) {
+		$view = $this->resolveRelativeFilepath( $view );
 		$file = $this->resolveFromCustomFilepath( $view );
 
 		if ( ! $file ) {
@@ -155,6 +156,29 @@ class PhpViewEngine implements ViewEngineInterface {
 		}
 
 		return $file;
+	}
+
+	/**
+	 * Resolve an absolute view to a relative one, if possible.
+	 *
+	 * @param  string $view
+	 * @return string
+	 */
+	protected function resolveRelativeFilepath( $view ) {
+		$normalized_view = MixedType::normalizePath( $view );
+		$stylesheet_path = MixedType::addTrailingSlash( STYLESHEETPATH );
+		$template_path = MixedType::addTrailingSlash( TEMPLATEPATH );
+
+		if ( substr( $normalized_view, 0, strlen( $stylesheet_path ) ) === $stylesheet_path ) {
+			return substr( $normalized_view, strlen( $stylesheet_path ) );
+		}
+
+		if ( substr( $normalized_view, 0, strlen( $template_path ) ) === $template_path ) {
+			return substr( $normalized_view, strlen( $template_path ) );
+		}
+
+		// Bail if we've failed to convert the view to a relative path.
+		return $view;
 	}
 
 	/**

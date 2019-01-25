@@ -63,6 +63,18 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::resolveRelativeFilepath
+	 */
+	public function testResolveRelativeFilepath() {
+		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
+		$this->assertTrue( $this->subject->exists( STYLESHEETPATH . DIRECTORY_SEPARATOR . 'view.php' ) );
+		$this->assertTrue( $this->subject->exists( TEMPLATEPATH . DIRECTORY_SEPARATOR . 'view.php' ) );
+
+		// The path is absolute and exists but converting it to relative should fail thus covering our final code path.
+		$this->assertTrue( $this->subject->exists( ABSPATH . DIRECTORY_SEPARATOR . 'wp-login.php' ) );
+	}
+
+	/**
 	 * @covers ::canonical
 	 */
 	public function testCanonical() {
