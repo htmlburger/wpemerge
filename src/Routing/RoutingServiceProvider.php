@@ -13,6 +13,7 @@ use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
 use WPEmerge\Facades\Router as RouterFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -21,6 +22,8 @@ use WPEmerge\ServiceProviders\ServiceProviderInterface;
  * @codeCoverageIgnore
  */
 class RoutingServiceProvider implements ServiceProviderInterface {
+	use ExtendsConfigTrait;
+
 	/**
 	 * Key=>Class dictionary of condition types
 	 *
@@ -55,11 +58,9 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerConfiguration( $container ) {
-		$container[ WPEMERGE_CONFIG_KEY ] = array_merge( [
-			'middleware_default_priority' => 100,
-			'middleware_priority' => [],
-			'global_middleware' => [],
-		], $container[ WPEMERGE_CONFIG_KEY ] );
+		$this->extendConfig( $container, 'middleware_default_priority', 100 );
+		$this->extendConfig( $container, 'middleware_priority', [] );
+		$this->extendConfig( $container, 'global_middleware', [] );
 
 		$container[ WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY ] =
 			$container[ WPEMERGE_CONFIG_KEY ]['middleware_default_priority'];
