@@ -185,7 +185,6 @@ class Route implements RouteInterface {
 
 	/**
 	 * Set the main WordPress query vars filter.
-	 * Alias of ::setQueryFilter()
 	 *
 	 * @codeCoverageIgnore
 	 * @param  callable $query_filter
