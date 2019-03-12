@@ -151,7 +151,11 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {
-			$route->addMiddleware( $middleware );
+			// Prepend group middleware.
+			$route->setMiddleware( array_merge(
+				$middleware,
+				$route->getMiddleware()
+			) );
 		}
 
 		return $this->traitAddMiddleware( $middleware );

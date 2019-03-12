@@ -14,18 +14,26 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Interface for HasMiddlewareTrait
+ * Interface for HasMiddlewareTrait.
  */
 interface HasMiddlewareInterface {
 	/**
-	 * Get registered middleware
+	 * Get registered middleware.
 	 *
 	 * @return array
 	 */
 	public function getMiddleware();
 
 	/**
-	 * Add middleware
+	 * Set registered middleware.
+	 *
+	 * @param  array $middleware
+	 * @return void
+	 */
+	public function setMiddleware( $middleware );
+
+	/**
+	 * Add middleware.
 	 *
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
@@ -34,7 +42,7 @@ interface HasMiddlewareInterface {
 
 	/**
 	 * Alias for addMiddleware.
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
@@ -42,7 +50,7 @@ interface HasMiddlewareInterface {
 	public function add( $middleware );
 
 	/**
-	 * Execute an array of middleware recursively (last in, first out)
+	 * Execute an array of middleware recursively (last in, first out).
 	 *
 	 * @param  array             $middleware
 	 * @param  RequestInterface  $request

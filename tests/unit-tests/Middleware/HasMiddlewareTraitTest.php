@@ -39,6 +39,16 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::setMiddleware
+	 */
+	public function testSetMiddleware() {
+		$expected = [TestMiddleware::class];
+
+		$this->subject->setMiddleware( $expected );
+		$this->assertEquals( $expected, $this->subject->getMiddleware() );
+	}
+
+	/**
 	 * @covers ::getMiddleware
 	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware

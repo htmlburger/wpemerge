@@ -20,14 +20,14 @@ use WPEmerge\Requests\RequestInterface;
  */
 trait HasMiddlewareTrait {
 	/**
-	 * Array of all registered middleware
+	 * Array of all registered middleware.
 	 *
 	 * @var array
 	 */
 	protected $middleware = [];
 
 	/**
-	 * Check if the passed entity is a valid middleware
+	 * Check if the passed entity is a valid middleware.
 	 *
 	 * @param  mixed   $middleware
 	 * @return boolean
@@ -41,7 +41,7 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Get registered middleware
+	 * Get registered middleware.
 	 *
 	 * @return array
 	 */
@@ -50,8 +50,18 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
+	 * Set registered middleware.
+	 *
+	 * @param  array $middleware
+	 * @return void
+	 */
+	public function setMiddleware( $middleware ) {
+		$this->middleware = $middleware;
+	}
+
+	/**
 	 * Add middleware.
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
 	 * @throws Exception
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
@@ -85,7 +95,7 @@ trait HasMiddlewareTrait {
 	}
 
 	/**
-	 * Execute an array of middleware recursively (last in, first out)
+	 * Execute an array of middleware recursively (last in, first out).
 	 *
 	 * @param  array                               $middleware
 	 * @param  RequestInterface                    $request

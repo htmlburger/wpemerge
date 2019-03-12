@@ -62,34 +62,59 @@ class RouterTest extends WP_UnitTestCase {
 	public function testSortMiddleware() {
 		$default_middleware_priority = 100;
 		$middleware1 = 'foo';
-		$middleware1_priority = 99;
 		$middleware2 = 'bar';
-		$middleware3 = function() {};
+		$middleware2_priority = 101;
+		$middleware3 = 'baz';
 
 		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [
-			$middleware1 => $middleware1_priority,
+			$middleware2 => $middleware2_priority,
 		], $default_middleware_priority, $this->error_handler );
 
-		$expected = $middleware1;
-		$result = $subject->sortMiddleware( [$middleware3, $middleware2, $middleware1] );
-		// We only check that the first middleware is the correct one because (PHP docs):
-		// > If two members compare as equal, their relative order in the sorted array is undefined.
-		$this->assertEquals( $expected, $result[0] );
+		$result = $subject->sortMiddleware( [$middleware1, $middleware3, $middleware2] );
+
+		$this->assertEquals( $middleware1, $result[0] );
+		$this->assertEquals( $middleware3, $result[1] );
+		$this->assertEquals( $middleware2, $result[2] );
 	}
 
 	/**
 	 * @covers ::addRoute
 	 */
 	public function testAddRoute() {
-		$route = Mockery::mock( RouteInterface::class );
-		$middleware = [Mockery::mock( MiddlewareInterface::class )];
-		$subject = new Router( Mockery::mock( RequestInterface::class ), $middleware, [], 0, $this->error_handler );
-
-		$route->shouldReceive( 'addMiddleware' )
-			->with( $middleware )
-			->once();
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [], 0, $this->error_handler );
 
 		$this->assertSame( $route, $subject->addRoute( $route ) );
+	}
+
+	/**
+	 * @covers ::addRoute
+	 */
+	public function testAddRoute_GlobalMiddleware_PrependToRoutes() {
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route_middleware = Mockery::mock( MiddlewareInterface::class );
+		$global_middleware = Mockery::mock( MiddlewareInterface::class );
+		$expected = [$global_middleware, $route_middleware];
+
+		$subject = new Router( Mockery::mock( RequestInterface::class ), [$global_middleware], [], 0, $this->error_handler );
+
+		$route->shouldReceive( 'getMiddleware' )
+			  ->andReturn( [$route_middleware] )
+			  ->once();
+
+		$success = false;
+
+		$route->shouldReceive( 'setMiddleware' )
+			->andReturnUsing( function ( $middleware ) use ( $expected, &$success ) {
+				// Do all of this because Mockery does not support passing a custom closure in with() to validate received arguments
+				// and we need to do that because Mockery matches an array even if the values are out of order.
+				$success = $middleware[0] === $expected[0];
+			} )
+			->once();
+
+		$subject->addRoute( $route );
+
+		$this->assertTrue( $success );
 	}
 
 	/**
@@ -106,30 +131,9 @@ class RouterTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::execute
 	 */
-	public function testExecute_GlobalMiddleware_AddToRoutes() {
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
-		$middleware = Mockery::mock( MiddlewareInterface::class );
-		$middleware_array = [$middleware];
-
-		$subject = new Router( Mockery::mock( RequestInterface::class ), $middleware_array, [], 0, $this->error_handler );
-
-		$route->shouldReceive( 'addMiddleware' )
-			->with( $middleware_array )
-			->once();
-
-		$subject->addRoute( $route );
-
-		$subject->execute( '' );
-
-		$this->assertTrue( true );
-	}
-
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecute_Routes_CheckIfRoutesAreSatisfied() {
-		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
-		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 
 		$route1->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
@@ -149,8 +153,8 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::execute
 	 */
 	public function testExecute_SatisfiedRoute_StopCheckingCallHandleSetCurrent() {
-		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
-		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route1->shouldReceive( 'isSatisfied' )
@@ -175,7 +179,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testExecute_Response() {
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 		$container = Mockery::mock( ArrayAccess::class );
 
@@ -207,7 +211,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testExecute_Response_ReturnsBuiltInView() {
 		$expected = WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 
 		$route->shouldReceive( 'isSatisfied' )
@@ -228,7 +232,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Exception handled
 	 */
 	public function testExecute_Exception_UseErrorHandler() {
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$exception = new Exception();
 
 		$route->shouldReceive( 'isSatisfied' )

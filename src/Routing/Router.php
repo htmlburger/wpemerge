@@ -120,8 +120,15 @@ class Router implements HasRoutesInterface {
 	 * @return array
 	 */
 	public function sortMiddleware( $middleware ) {
-		usort( $middleware, function ( $a, $b ) {
-			return $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
+		usort( $middleware, function ( $a, $b ) use ( $middleware ) {
+			$priority = $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
+
+			if ( $priority !== 0 ) {
+				return $priority;
+			}
+
+			// Keep original array order.
+			return array_search( $a, $middleware ) - array_search( $b, $middleware );
 		} );
 
 		return array_values( $middleware );
@@ -131,7 +138,12 @@ class Router implements HasRoutesInterface {
 	 * {@inheritDoc}
 	 */
 	public function addRoute( $route ) {
-		$route->addMiddleware( $this->middleware );
+		// Prepend global middleware.
+		$route->setMiddleware( array_merge(
+			$this->middleware,
+			$route->getMiddleware()
+		) );
+
 		return $this->traitAddRoute( $route );
 	}
 
