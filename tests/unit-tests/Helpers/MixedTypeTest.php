@@ -2,9 +2,10 @@
 
 namespace WPEmergeTests\Helpers;
 
+use Mockery;
+use stdClass;
 use WPEmerge\Helpers\MixedType;
 use WPEmergeTestTools\TestService;
-use stdClass;
 use WP_UnitTestCase;
 
 /**
@@ -75,6 +76,24 @@ class MixedTypeTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::value
 	 */
+	public function testValue_ClassNameWithInstantiator_UsesInstantiator() {
+		$method = 'foo';
+		$expected = 'bar';
+		$instantiator = function () use ( $method, $expected ) {
+			$mock = Mockery::mock();
+
+			$mock->shouldReceive( $method )
+				->andReturn( $expected );
+
+			return $mock;
+		};
+
+		$this->assertEquals( $expected, MixedType::value( TestService::class, [], $method, $instantiator ) );
+	}
+
+	/**
+	 * @covers ::value
+	 */
 	public function testValue_Other_ReturnSame() {
 		$expected = 'someStringThatIsNotACallable';
 
@@ -91,6 +110,15 @@ class MixedTypeTest extends WP_UnitTestCase {
 		$this->assertFalse( MixedType::isClass( 1 ) );
 		$this->assertFalse( MixedType::isClass( new stdClass() ) );
 		$this->assertFalse( MixedType::isClass( [] ) );
+	}
+
+	/**
+	 * @covers ::instantiate
+	 */
+	public function testInstantiate() {
+		$expected = TestService::class;
+
+		$this->assertInstanceOf( $expected, MixedType::instantiate( TestService::class ) );
 	}
 
 	/**

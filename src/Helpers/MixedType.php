@@ -31,13 +31,13 @@ class MixedType {
 	 * Class:    instantiate; call method; return result
 	 * Other:    return value without taking any action
 	 *
-	 * @param  mixed  $entity
-	 * @param  array  $arguments
-	 * @param  string $method
-	 *
+	 * @param  mixed    $entity
+	 * @param  array    $arguments
+	 * @param  string   $method
+	 * @param  callable $instantiator
 	 * @return mixed
 	 */
-	public static function value( $entity, $arguments = [], $method = '__invoke' ) {
+	public static function value( $entity, $arguments = [], $method = '__invoke', $instantiator = 'static::instantiate' ) {
 		if ( is_callable( $entity ) ) {
 			return call_user_func_array( $entity, $arguments );
 		}
@@ -47,7 +47,7 @@ class MixedType {
 		}
 
 		if ( static::isClass( $entity ) ) {
-			return call_user_func_array( [new $entity(), $method], $arguments );
+			return call_user_func_array( [call_user_func( $instantiator, $entity ), $method], $arguments );
 		}
 
 		return $entity;
@@ -57,11 +57,20 @@ class MixedType {
 	 * Check if a value is a valid class name
 	 *
 	 * @param  mixed   $class_name
-	 *
 	 * @return boolean
 	 */
 	public static function isClass( $class_name ) {
 		return ( is_string( $class_name ) && class_exists( $class_name ) );
+	}
+
+	/**
+	 * Create a new instance of the given class.
+	 *
+	 * @param  string $class_name
+	 * @return object
+	 */
+	public static function instantiate( $class_name ) {
+		return new $class_name();
 	}
 
 	/**
