@@ -97,7 +97,8 @@ class ViewService {
 		$views = array_map( function ( $view ) {
 			return ViewEngine::canonical( $view );
 		}, MixedType::toArray( $views ) );
-		$handler = new Handler( $composer, 'compose' );
+
+		$handler = new Handler( $composer, 'compose', '\\App\\ViewComposers\\' );
 
 		$this->composers[] = [
 			'views' => $views,

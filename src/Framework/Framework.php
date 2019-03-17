@@ -228,11 +228,12 @@ class Framework {
 	}
 
 	/**
-	 * Create and return a class instance
+	 * Create and return a class instance.
 	 *
 	 * @param  string $class
 	 * @return object
 	 * @throws Exception
+	 * @throws ClassNotFoundException
 	 */
 	public function instantiate( $class ) {
 		$this->verifyBoot();
@@ -240,6 +241,10 @@ class Framework {
 		$instance = $this->resolve( $class );
 
 		if ( $instance === null ) {
+			if ( ! class_exists( $class ) ) {
+				throw new ClassNotFoundException( 'Class not found: ' . $class );
+			}
+
 			$instance = new $class();
 		}
 

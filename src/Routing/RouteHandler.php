@@ -33,7 +33,7 @@ class RouteHandler {
 	 * @throws Exception
 	 */
 	public function __construct( $handler ) {
-		$this->handler = new Handler( $handler );
+		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\' );
 	}
 
 	/**

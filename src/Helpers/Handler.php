@@ -12,6 +12,7 @@ namespace WPEmerge\Helpers;
 use Closure;
 use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Framework;
+use WPEmerge\Framework\ClassNotFoundException;
 
 /**
  * Represent a generic handler - a Closure or a class method to be resolved from the service container
@@ -29,10 +30,11 @@ class Handler {
 	 *
 	 * @throws Exception
 	 * @param string|Closure $raw_handler
-	 * @param string|null    $default_method
+	 * @param string         $default_method
+	 * @param string         $class_prefix
 	 */
-	public function __construct( $raw_handler, $default_method = null ) {
-		$handler = $this->parse( $raw_handler, $default_method );
+	public function __construct( $raw_handler, $default_method = '', $class_prefix = '' ) {
+		$handler = $this->parse( $raw_handler, $default_method, $class_prefix );
 
 		if ( $handler === null ) {
 			throw new Exception( 'No or invalid handler provided.' );
@@ -45,38 +47,38 @@ class Handler {
 	 * Parse a raw handler to a Closure or a [class, method] array
 	 *
 	 * @param  string|Closure     $raw_handler
-	 * @param  string|null        $default_method
+	 * @param  string             $default_method
+	 * @param  string             $class_prefix
 	 * @return array|Closure|null
 	 */
-	protected function parse( $raw_handler, $default_method = null ) {
+	protected function parse( $raw_handler, $default_method, $class_prefix ) {
 		if ( $raw_handler instanceof Closure ) {
 			return $raw_handler;
 		}
 
-		return $this->parseFromString( $raw_handler, $default_method );
+		return $this->parseFromString( $raw_handler, $default_method, $class_prefix );
 	}
 
 	/**
 	 * Parse a raw string handler to a [class, method] array
 	 *
-	 * @param  string      $raw_handler
-	 * @param  string|null $default_method
+	 * @param  string     $raw_handler
+	 * @param  string     $default_method
+	 * @param  string     $class_prefix
 	 * @return array|null
 	 */
-	protected function parseFromString( $raw_handler, $default_method = null ) {
-		$handlerPieces = array_filter( preg_split( '/@|::/', $raw_handler, 2 ) );
+	protected function parseFromString( $raw_handler, $default_method, $class_prefix ) {
+		list( $class, $method ) = array_pad( preg_split( '/@|::/', $raw_handler, 2 ), 2, '' );
 
-		if ( $default_method !== null && count( $handlerPieces ) === 1 ) {
-			return [
-				'class' => $handlerPieces[0],
-				'method' => $default_method,
-			];
+		if ( empty( $method ) ) {
+			$method = $default_method;
 		}
 
-		if ( count( $handlerPieces ) === 2 ) {
+		if ( ! empty( $class ) && ! empty( $method ) ) {
 			return [
-				'class' => $handlerPieces[0],
-				'method' => $handlerPieces[1],
+				'class' => $class,
+				'method' => $method,
+				'class_prefix' => $class_prefix,
 			];
 		}
 
@@ -100,14 +102,25 @@ class Handler {
 	 */
 	public function execute() {
 		$arguments = func_get_args();
+
 		if ( $this->handler instanceof Closure ) {
 			return call_user_func_array( $this->handler, $arguments );
 		}
 
+		$class_prefix = $this->handler['class_prefix'];
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
-		$instance = Framework::instantiate( $class );
+		try {
+			$instance = Framework::instantiate( $class );
+		} catch ( ClassNotFoundException $e ) {
+			try {
+				$instance = Framework::instantiate( $class_prefix . $class );
+			} catch ( ClassNotFoundException $e ) {
+				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $class_prefix . $class );
+			}
+		}
+
 		return call_user_func_array( [$instance, $method], $arguments );
 	}
 }

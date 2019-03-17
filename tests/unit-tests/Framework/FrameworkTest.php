@@ -164,6 +164,18 @@ class FrameworkTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::instantiate
+	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedExceptionMessage Class not found
+	 */
+	public function testInstantiate_UnknownNonexistantClass_Exception() {
+		$class = \WPEmergeTestTools\NonExistantClass::class;
+
+		$this->subject->boot();
+		$this->subject->instantiate( $class );
+	}
+
+	/**
+	 * @covers ::instantiate
 	 * @covers ::verifyBoot
 	 */
 	public function testInstantiate_KnownClass_ResolveInstanceFromContainer() {

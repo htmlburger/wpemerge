@@ -53,6 +53,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'defaultMethod',
+			'class_prefix' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService', 'defaultMethod' );
@@ -64,7 +65,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromString
-	 * @expectedException \Exception
+	 * @expectedException \WPEmerge\Exceptions\Exception
 	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testSet_ClassWithoutMethodWithoutDefault_Exception() {
@@ -80,6 +81,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'getTest',
+			'class_prefix' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService@getTest' );
@@ -96,6 +98,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'getTest',
+			'class_prefix' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService::getTest' );
@@ -107,7 +110,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromString
-	 * @expectedException \Exception
+	 * @expectedException \WPEmerge\Exceptions\Exception
 	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testSet_InvalidString_ThrowException() {
@@ -156,6 +159,40 @@ class HandlerTest extends WP_UnitTestCase {
 
 		$subject = new Handler( $closure );
 		$this->assertSame( $expected, $subject->execute( $expected ) );
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testExecute_ClassWithPrefix_Execute() {
+		$subject = new Handler( 'HandlerTestMock@foo', '', '\\WPEmergeTests\\Helpers\\' );
+		$this->assertEquals( 'foo', $subject->execute() );
+	}
+
+	/**
+	 * @covers ::execute
+	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedExceptionMessage Class not found
+	 */
+	public function testExecute_NonexistantClassWithPrefix_Exception() {
+		$subject = new Handler( 'HandlerTestMock@foo', '', '\\WPEmergeTests\\NonexistantNamespace\\' );
+		$this->assertEquals( 'foo', $subject->execute() );
+	}
+
+	/**
+	 * @covers ::execute
+	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedExceptionMessage Class not found - tried
+	 */
+	public function testExecute_ClassWithoutPrefix_Exception() {
+		$subject = new Handler( 'HandlerTestMock@foo' );
+		$subject->execute();
+	}
+}
+
+class HandlerTestMock {
+	public function foo() {
+		return 'foo';
 	}
 }
 
