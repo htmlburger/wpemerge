@@ -11,6 +11,7 @@ namespace WPEmerge\Middleware;
 
 use Closure;
 use WPEmerge\Exceptions\Exception;
+use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\Requests\RequestInterface;
@@ -113,6 +114,6 @@ trait HasMiddlewareTrait {
 			return $this->executeMiddleware( $middleware, $request, $next );
 		};
 
-		return MixedType::value( $top_middleware, [$request, $top_middleware_next], 'handle' );
+		return MixedType::value( $top_middleware, [$request, $top_middleware_next], 'handle', [Framework::class, 'instantiate'] );
 	}
 }
