@@ -140,7 +140,7 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 		$this->subject->addMiddleware( $this->middleware_stub1 );
 		$this->subject->addMiddleware( $this->middleware_stub2 );
 
-		$this->assertSame( $expected, $this->subject->getMiddleware() );
+		$this->assertEquals( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
