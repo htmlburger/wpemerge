@@ -25,6 +25,7 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 	}
 
 	use HasMiddlewareTrait {
+		setMiddleware as traitSetMiddleware;
 		addMiddleware as traitAddMiddleware;
 	}
 
@@ -141,6 +142,19 @@ class RouteGroup implements RouteInterface, HasRoutesInterface {
 		}
 
 		return $this->traitGroup( $condition, $routes );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setMiddleware( $middleware ) {
+		$routes = $this->getRoutes();
+
+		foreach ( $routes as $route ) {
+			$route->setMiddleware( $middleware );
+		}
+
+		$this->traitSetMiddleware( $middleware );
 	}
 
 	/**

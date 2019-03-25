@@ -52,12 +52,26 @@ trait HasMiddlewareTrait {
 
 	/**
 	 * Set registered middleware.
+	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
-	 * @param  array $middleware
+	 * @throws Exception
+	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return void
 	 */
 	public function setMiddleware( $middleware ) {
-		$this->middleware = $middleware;
+		$middleware = MixedType::toArray( $middleware );
+
+		foreach ( $middleware as $item ) {
+			if ( ! $this->isMiddleware( $item ) ) {
+				throw new Exception(
+					'Passed middleware must be a closure or the name or instance of a class which ' .
+					'implements the ' . MiddlewareInterface::class . ' interface.'
+				);
+			}
+		}
+
+		// TODO this router dependency should be avoided.
+		$this->middleware = Router::sortMiddleware( $middleware );
 	}
 
 	/**
@@ -71,16 +85,8 @@ trait HasMiddlewareTrait {
 	public function addMiddleware( $middleware ) {
 		$middleware = MixedType::toArray( $middleware );
 
-		foreach ( $middleware as $item ) {
-			if ( ! $this->isMiddleware( $item ) ) {
-				throw new Exception(
-					'Passed middleware must be a closure or the name or instance of a class which ' .
-					'implements the ' . MiddlewareInterface::class . ' interface.'
-				);
-			}
-		}
+		$this->setMiddleware( array_merge( $this->getMiddleware(), $middleware ) );
 
-		$this->middleware = Router::sortMiddleware( array_merge( $this->getMiddleware(), $middleware ) );
 		return $this;
 	}
 

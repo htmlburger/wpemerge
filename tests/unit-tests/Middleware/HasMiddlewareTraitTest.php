@@ -39,9 +39,20 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::getMiddleware
 	 * @covers ::setMiddleware
 	 */
-	public function testSetMiddleware() {
+	public function testSetMiddleware_EmptyArray_EmptyArray() {
+		$expected = [];
+
+		$this->subject->setMiddleware( $expected );
+		$this->assertEquals( $expected, $this->subject->getMiddleware() );
+	}
+
+	/**
+	 * @covers ::setMiddleware
+	 */
+	public function testSetMiddleware_ValidArray_ValidArray() {
 		$expected = [TestMiddleware::class];
 
 		$this->subject->setMiddleware( $expected );
@@ -49,89 +60,87 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
+	 * @covers ::setMiddleware
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage must be a closure or the name or instance of a class
+	 */
+	public function testSetMiddleware_InvalidArray_Exception() {
+		$expected = [new stdClass()];
+
+		$this->subject->setMiddleware( $expected );
+	}
+
+	/**
 	 * @covers ::isMiddleware
 	 */
-	public function testAddMiddleware_MiddlewareInterfaceClassName_Accepted() {
+	public function testIsMiddleware_MiddlewareInterfaceClassName_Accepted() {
 		$class = TestMiddleware::class;
 		$expected = [$class];
 
-		$this->subject->addMiddleware( $class );
+		$this->subject->setMiddleware( $class );
 		$this->assertEquals( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware
 	 */
-	public function testAddMiddleware_MiddlewareInterfaceInstance_Accepted() {
+	public function testIsMiddleware_MiddlewareInterfaceInstance_Accepted() {
 		$expected = [$this->middleware_stub1];
 
-		$this->subject->addMiddleware( $this->middleware_stub1 );
+		$this->subject->setMiddleware( $this->middleware_stub1 );
 		$this->assertEquals( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware
 	 */
-	public function testAddMiddleware_ArrayClosure_Accepted() {
+	public function testIsMiddleware_ArrayClosure_Accepted() {
 		$closure = function() {};
 		$expected = [$closure];
 
-		$this->subject->addMiddleware( $closure );
+		$this->subject->setMiddleware( $closure );
 		$this->assertEquals( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware
 	 */
-	public function testAddMiddleware_ArrayOfMiddlewareInterface_Accepted() {
+	public function testIsMiddleware_ArrayOfMiddlewareInterface_Accepted() {
 		$expected = [$this->middleware_stub1];
 
-		$this->subject->addMiddleware( $expected );
+		$this->subject->setMiddleware( $expected );
 		$this->assertEquals( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage must be a closure or the name or instance of a class
 	 */
-	public function testAddMiddleware_Callable_ThrowsException() {
+	public function testIsMiddleware_Callable_ThrowsException() {
 		$this->assertTrue( is_callable( [$this, 'callableStub'] ) );
-		$this->subject->addMiddleware( [$this, 'callableStub'] );
+		$this->subject->setMiddleware( [$this, 'callableStub'] );
 	}
 
 	/**
-	 * @covers ::getMiddleware
-	 * @covers ::addMiddleware
 	 * @covers ::isMiddleware
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage must be a closure or the name or instance of a class
 	 */
-	public function testAddMiddleware_InvalidMiddleware_ThrowsException() {
-		$this->subject->addMiddleware( new stdClass() );
+	public function testIsMiddleware_InvalidMiddleware_ThrowsException() {
+		$this->subject->setMiddleware( new stdClass() );
 	}
 
 	/**
-	 * @covers ::getMiddleware
 	 * @covers ::addMiddleware
-	 * @covers ::isMiddleware
 	 */
-	public function testAddMiddleware_CalledTwiceWithMiddlewareInterfaceInstance_MiddlewareMerged() {
+	public function testAddMiddleware() {
 		$expected = [$this->middleware_stub1, $this->middleware_stub2];
 
 		$this->subject->addMiddleware( $this->middleware_stub1 );
 		$this->subject->addMiddleware( $this->middleware_stub2 );
-		$this->assertEquals( $expected, $this->subject->getMiddleware() );
+
+		$this->assertSame( $expected, $this->subject->getMiddleware() );
 	}
 
 	/**
