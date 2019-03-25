@@ -18,7 +18,7 @@ use WPEmerge\Responses\ResponsableInterface;
 /**
  * Represent a Closure or a controller method to be executed in response to a request
  */
-class RouteHandler {
+class PipelineHandler {
 	/**
 	 * Actual handler
 	 *

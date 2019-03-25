@@ -9,10 +9,10 @@
 
 namespace WPEmerge\Routing;
 
+use Closure;
 use WPEmerge\Exceptions\Exception;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\RouteCondition;
-use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
@@ -22,8 +22,6 @@ use WPEmerge\Routing\Conditions\UrlCondition;
  * Represent a route
  */
 class Route implements RouteInterface {
-	use HasMiddlewareTrait;
-
 	/**
 	 * Allowed methods.
 	 *
@@ -39,11 +37,11 @@ class Route implements RouteInterface {
 	protected $condition = null;
 
 	/**
-	 * Route handler.
+	 * Route pipeline.
 	 *
-	 * @var RouteHandler
+	 * @var Pipeline
 	 */
-	protected $handler = null;
+	protected $pipeline = null;
 
 	/**
 	 * Query filter.
@@ -78,7 +76,7 @@ class Route implements RouteInterface {
 
 		$this->methods = $methods;
 		$this->condition = $condition;
-		$this->handler = new RouteHandler( $handler );
+		$this->pipeline = new Pipeline( $handler );
 	}
 
 	/**
@@ -100,12 +98,12 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get handler.
+	 * Get pipeline.
 	 *
-	 * @return RouteHandler
+	 * @return Pipeline
 	 */
-	public function getHandler() {
-		return $this->handler;
+	public function getPipeline() {
+		return $this->pipeline;
 	}
 
 	/**
@@ -218,8 +216,52 @@ class Route implements RouteInterface {
 	 */
 	public function handle( RequestInterface $request, $view ) {
 		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
-		return $this->executeMiddleware( $this->getMiddleware(), $request, function () use ( $arguments ) {
-			return call_user_func_array( [$this->handler, 'execute'], $arguments );
-		} );
+
+		return $this->getPipeline()->run( $request, $arguments );
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * {@inheritDoc}
+	 */
+	public function getMiddleware() {
+		return $this->getPipeline()->getMiddleware();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function setMiddleware( $middleware ) {
+		$this->getPipeline()->setMiddleware( $middleware );
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * @throws Exception
+	 * {@inheritDoc}
+	 */
+	public function addMiddleware( $middleware ) {
+		$this->getPipeline()->addMiddleware( $middleware );
+
+		return $this;
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * {@inheritDoc}
+	 */
+	public function add( $middleware ) {
+		$this->getPipeline()->add( $middleware );
+
+		return $this;
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * {@inheritDoc}
+	 */
+	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
+		return $this->getPipeline()->executeMiddleware( $middleware, $request, $next );
 	}
 }

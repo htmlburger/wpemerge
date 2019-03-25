@@ -5,14 +5,14 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ResponsableInterface;
-use WPEmerge\Routing\RouteHandler;
+use WPEmerge\Routing\PipelineHandler;
 use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\RouteHandler
+ * @coversDefaultClass \WPEmerge\Routing\PipelineHandler
  */
-class RouteHandlerTest extends WP_UnitTestCase {
+class PipelineHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 	}
@@ -30,7 +30,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 		$closure = function() {};
 		$expected = new Handler( $closure );
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -45,7 +45,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 			return $value;
 		};
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 		$response = $subject->execute( $expected );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
 	}
@@ -61,7 +61,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 			return $value;
 		};
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 		$response = $subject->execute( $value );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
 	}
@@ -80,7 +80,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 		$input->shouldReceive( 'toResponse' )
 			->andReturn( Mockery::mock( ResponseInterface::class ) );
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 		$this->assertInstanceOf( $expected, $subject->execute() );
 	}
 
@@ -93,7 +93,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 			return $expected;
 		};
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 		$this->assertSame( $expected, $subject->execute() );
 	}
 
@@ -108,7 +108,7 @@ class RouteHandlerTest extends WP_UnitTestCase {
 			return null;
 		};
 
-		$subject = new RouteHandler( $closure );
+		$subject = new PipelineHandler( $closure );
 		$subject->execute();
 	}
 }

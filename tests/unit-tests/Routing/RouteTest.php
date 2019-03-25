@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use WPEmerge\Routing\RouteHandler;
+use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use stdClass;
@@ -30,18 +30,18 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::getMethods
 	 * @covers ::getCondition
-	 * @covers ::getHandler
+	 * @covers ::getPipeline
 	 */
 	public function testConstruct_ConditionInterface() {
 		$expected_methods = ['FOO'];
 		$expected_condition = Mockery::mock( ConditionInterface::class );
 		$handler = function() {};
-		$expected_handler = new RouteHandler( $handler );
+		$expected_pipeline = new Pipeline( $handler );
 
 		$subject = new Route( $expected_methods, $expected_condition, $handler );
 		$this->assertEquals( $expected_methods, $subject->getMethods() );
 		$this->assertSame( $expected_condition, $subject->getCondition() );
-		$this->assertEquals( $expected_handler, $subject->getHandler() );
+		$this->assertEquals( $expected_pipeline, $subject->getPipeline() );
 	}
 
 	/**
