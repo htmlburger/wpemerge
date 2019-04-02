@@ -306,7 +306,7 @@ class Router implements HasRoutesInterface {
 		$route->setMiddleware( $this->mergeMiddleware(
 			array_merge(
 				$this->middleware,
-				Arr::get( $group, 'middleware', [] ),
+				Arr::get( $group, 'middleware', [] )
 			),
 			$route->getMiddleware()
 		) );
