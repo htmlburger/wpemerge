@@ -66,19 +66,6 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::group
-	 */
-	public function testGroup() {
-		$condition = '/foo/';
-
-		$group = $this->subject->group( $condition, function( $group ) {
-
-		} );
-
-		$this->assertSame( [$group], $this->subject->getRoutes() );
-	}
-
-	/**
 	 * @covers ::get
 	 * @covers ::post
 	 * @covers ::put

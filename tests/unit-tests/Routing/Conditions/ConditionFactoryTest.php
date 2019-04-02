@@ -55,7 +55,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 
 		$condition = $this->subject->make( ['post_id', $expected_param] );
 		$this->assertInstanceOf( $expected_class, $condition );
-		$this->assertEquals( $expected_param, $condition->getArguments( $this->request )[0] );
+		$this->assertEquals( $expected_param, $condition->getArguments( $this->request )['post_id'] );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		$condition = $this->subject->make( ['!query_var', 'foo', 'bar'] );
 		$this->assertInstanceOf( $expected_class, $condition );
 
-		$this->assertEquals( ['foo', 'bar'], $condition->getArguments( $this->request ) );
+		$this->assertEquals( ['query_var' => 'foo', 'value' => 'bar'], $condition->getArguments( $this->request ) );
 	}
 
 	/**

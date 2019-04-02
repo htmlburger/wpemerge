@@ -15,7 +15,7 @@ use WPEmerge\Requests\RequestInterface;
 /**
  * Interface that routes must implement
  */
-interface RouteInterface extends HasMiddlewareInterface {
+interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	/**
 	 * Get whether the route is satisfied.
 	 *

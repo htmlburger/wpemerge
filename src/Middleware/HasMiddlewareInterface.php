@@ -47,7 +47,7 @@ interface HasMiddlewareInterface {
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
-	public function add( $middleware );
+	public function middleware( $middleware );
 
 	/**
 	 * Execute an array of middleware recursively (last in, first out).

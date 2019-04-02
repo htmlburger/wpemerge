@@ -17,13 +17,13 @@ use WPEmerge\Requests\RequestInterface;
  *
  * @codeCoverageIgnore
  */
-class NegateCondition implements ConditionInterface {
+class NegateCondition implements ConditionInterface, HasUrlInterface {
 	/**
 	 * Condition to negate.
 	 *
 	 * @var ConditionInterface
 	 */
-	protected $condition = [];
+	protected $condition = null;
 
 	/**
 	 * Constructor.
@@ -50,5 +50,25 @@ class NegateCondition implements ConditionInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return $this->condition->getArguments( $request );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function getUrlWhere() {
+		if ( $this->condition instanceof HasUrlInterface ) {
+			$this->condition->getUrlWhere();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function setUrlWhere( $where ) {
+		if ( $this->condition instanceof HasUrlInterface ) {
+			$this->condition->setUrlWhere( $where );
+		}
 	}
 }

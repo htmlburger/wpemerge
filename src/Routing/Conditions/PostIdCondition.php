@@ -44,6 +44,6 @@ class PostIdCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->post_id];
+		return ['post_id' => $this->post_id];
 	}
 }

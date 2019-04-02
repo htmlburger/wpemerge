@@ -33,10 +33,15 @@ class Url {
 	/**
 	 * Ensure url has a leading slash
 	 *
-	 * @param  string $url
+	 * @param  string  $url
+	 * @param  boolean $leave_blank
 	 * @return string
 	 */
-	public static function addLeadingSlash( $url ) {
+	public static function addLeadingSlash( $url, $leave_blank = false ) {
+		if ( $leave_blank && $url === '' ) {
+			return '';
+		}
+
 		return '/' . static::removeLeadingSlash( $url );
 	}
 
@@ -53,10 +58,15 @@ class Url {
 	/**
 	 * Ensure url has a trailing slash
 	 *
-	 * @param  string $url
+	 * @param  string  $url
+	 * @param  boolean $leave_blank
 	 * @return string
 	 */
-	public static function addTrailingSlash( $url ) {
+	public static function addTrailingSlash( $url, $leave_blank = false ) {
+		if ( $leave_blank && $url === '' ) {
+			return '';
+		}
+
 		return trailingslashit( $url );
 	}
 

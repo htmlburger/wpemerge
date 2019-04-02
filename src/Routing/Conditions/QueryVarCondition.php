@@ -63,6 +63,6 @@ class QueryVarCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->query_var, $this->value];
+		return ['query_var' => $this->query_var, 'value' => $this->value];
 	}
 }

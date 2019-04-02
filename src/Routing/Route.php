@@ -75,7 +75,7 @@ class Route implements RouteInterface {
 		}
 
 		$this->methods = $methods;
-		$this->condition = $condition;
+		$this->setCondition( $condition );
 		$this->pipeline = new Pipeline( $handler );
 	}
 
@@ -89,12 +89,17 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get condition.
-	 *
-	 * @return ConditionInterface
+	 * {@inheritDoc}
 	 */
 	public function getCondition() {
 		return $this->condition;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setCondition( $condition ) {
+		$this->condition = $condition;
 	}
 
 	/**
@@ -104,6 +109,28 @@ class Route implements RouteInterface {
 	 */
 	public function getPipeline() {
 		return $this->pipeline;
+	}
+
+	/**
+	 * Set custom partial regex matching for the specified parameter.
+	 *
+	 * @param  string $parameter
+	 * @param  string $regex
+	 * @return static $this
+	 */
+	public function where( $parameter, $regex ) {
+		$condition = $this->getCondition();
+
+		if ( ! $condition instanceof UrlCondition ) {
+			throw new Exception( 'Only routes with URL conditions can specify parameter regex matching.' );
+		}
+
+		$condition->setUrlWhere( array_merge(
+			$condition->getUrlWhere(),
+			[$parameter => $regex]
+		) );
+
+		return $this;
 	}
 
 	/**
@@ -175,7 +202,7 @@ class Route implements RouteInterface {
 
 		if ( $this->getCondition()->isSatisfied( $request ) ) {
 			$arguments = $this->getCondition()->getArguments( $request );
-			$query_vars = call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], $arguments ) );
+			$query_vars = call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
 		}
 
 		return $query_vars;
@@ -215,14 +242,14 @@ class Route implements RouteInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $view ) {
-		$arguments = array_merge( [$request, $view], $this->condition->getArguments( $request ) );
+		$arguments = array_merge( [$request, $view], array_values( $this->condition->getArguments( $request ) ) );
 
 		return $this->getPipeline()->run( $request, $arguments );
 	}
 
 	/**
-	 * @codeCoverageIgnore
 	 * {@inheritDoc}
+	 * @codeCoverageIgnore
 	 */
 	public function getMiddleware() {
 		return $this->getPipeline()->getMiddleware();
@@ -237,9 +264,9 @@ class Route implements RouteInterface {
 	}
 
 	/**
+	 * {@inheritDoc}
 	 * @codeCoverageIgnore
 	 * @throws Exception
-	 * {@inheritDoc}
 	 */
 	public function addMiddleware( $middleware ) {
 		$this->getPipeline()->addMiddleware( $middleware );
@@ -248,18 +275,18 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * @codeCoverageIgnore
 	 * {@inheritDoc}
+	 * @codeCoverageIgnore
 	 */
-	public function add( $middleware ) {
-		$this->getPipeline()->add( $middleware );
+	public function middleware( $middleware ) {
+		$this->getPipeline()->middleware( $middleware );
 
 		return $this;
 	}
 
 	/**
-	 * @codeCoverageIgnore
 	 * {@inheritDoc}
+	 * @codeCoverageIgnore
 	 */
 	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
 		return $this->getPipeline()->executeMiddleware( $middleware, $request, $next );

@@ -45,6 +45,6 @@ class PostSlugCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->post_slug];
+		return ['post_slug' => $this->post_slug];
 	}
 }

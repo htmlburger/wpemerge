@@ -11,22 +11,30 @@ namespace WPEmerge\Routing\Conditions;
 
 use WPEmerge\Helpers\Url as UrlUtility;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Support\Arr;
 
 /**
  * Check against the current url
  */
-class UrlCondition implements ConditionInterface {
+class UrlCondition implements ConditionInterface, HasUrlInterface {
 	const WILDCARD = '*';
 
 	/**
-	 * URL to check against
+	 * URL to check against.
 	 *
 	 * @var string
 	 */
 	protected $url = '';
 
 	/**
-	 * Regex to detect parameters in urls
+	 * URL where.
+	 *
+	 * @var array<string,string>
+	 */
+	protected $url_where = [];
+
+	/**
+	 * Regex to detect parameters in urls.
 	 *
 	 * @var string
 	 */
@@ -35,29 +43,43 @@ class UrlCondition implements ConditionInterface {
 		(?:\{)                    # opening curly brace
 			(?P<name>[a-z]\w*)    # string starting with a-z and followed by word characters for the parameter name
 			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using literal ?
-			(?::(?P<regex>.*?))?  # optionally allow the user to supply a regex to match the argument against
 		(?:\})                    # closing curly brace
 		(?=/)                     # lookahead for a trailing slash
 	~ix';
 
 	/**
-	 * Regex to detect valid parameters in url segments
+	 * Regex to detect valid parameters in url segments.
 	 *
 	 * @var string
 	 */
 	protected $parameter_regex = '[^/]+';
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param string $url
 	 */
 	public function __construct( $url ) {
-		if ( $url !== static::WILDCARD ) {
-			$url = UrlUtility::addLeadingSlash( $url );
-			$url = UrlUtility::addTrailingSlash( $url );
+		$this->setUrl( $url );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function whereIsSatisfied( RequestInterface $request ) {
+		$where = $this->getUrlWhere();
+		$arguments = $this->getArguments( $request );
+
+		foreach ( $where as $parameter => $regex ) {
+			$value = Arr::get( $arguments, $parameter, '' );
+
+			if ( ! preg_match( $regex, $value ) ) {
+				return false;
+			}
 		}
-		$this->url = $url;
+
+		return true;
 	}
 
 	/**
@@ -70,7 +92,13 @@ class UrlCondition implements ConditionInterface {
 
 		$validation_regex = $this->getValidationRegex( $this->getUrl() );
 		$url = UrlUtility::getPath( $request );
-		return (bool) preg_match( $validation_regex, $url );
+		$match = (bool) preg_match( $validation_regex, $url );
+
+		if ( ! $match || empty( $this->getUrlWhere() ) ) {
+			return $match;
+		}
+
+		return $this->whereIsSatisfied( $request );
 	}
 
 	/**
@@ -89,14 +117,14 @@ class UrlCondition implements ConditionInterface {
 		$arguments = [];
 		$parameter_names = $this->getParameterNames( $this->getUrl() );
 		foreach ( $parameter_names as $parameter_name ) {
-			$arguments[] = ! empty( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
+			$arguments[ $parameter_name ] = ! empty( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
 		}
 
 		return $arguments;
 	}
 
 	/**
-	 * Get the url for this condition
+	 * Get the url for this condition.
 	 *
 	 * @return string
 	 */
@@ -105,17 +133,52 @@ class UrlCondition implements ConditionInterface {
 	}
 
 	/**
-	 * Concatenate 2 url conditions into a new one
+	 * Set the url for this condition.
 	 *
-	 * @param  UrlCondition $url
-	 * @return UrlCondition
+	 * @param  string $url
+	 * @return void
 	 */
-	public function concatenate( UrlCondition $url ) {
-		return new static( UrlUtility::removeTrailingSlash( $this->getUrl() ) . $url->getUrl() );
+	public function setUrl( $url ) {
+		if ( $url !== static::WILDCARD ) {
+			$url = UrlUtility::addLeadingSlash( UrlUtility::addTrailingSlash( $url ) );
+		}
+
+		$this->url = $url;
 	}
 
 	/**
-	 * Get parameter names as defined in the url
+	 * {@inheritDoc}
+	 */
+	public function getUrlWhere() {
+		return $this->url_where;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setUrlWhere( $where ) {
+		$this->url_where = $where;
+	}
+
+	/**
+	 * Append a url to this one returning a new instance.
+	 *
+	 * @param  string $url
+	 * @return static
+	 */
+	public function concatenateUrl( $url ) {
+		if ( $this->getUrl() === static::WILDCARD || $url === static::WILDCARD ) {
+			return new static( static::WILDCARD );
+		}
+
+		$leading = UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $this->getUrl() ), true );
+		$trailing = UrlUtility::addLeadingSlash( UrlUtility::addTrailingSlash( $url ) );
+
+		return new static( $leading . $trailing );
+	}
+
+	/**
+	 * Get parameter names as defined in the url.
 	 *
 	 * @param  string   $url
 	 * @return string[]
@@ -127,7 +190,7 @@ class UrlCondition implements ConditionInterface {
 	}
 
 	/**
-	 * Validation regex replace callback
+	 * Validation regex replace callback.
 	 *
 	 * @param  array  $matches
 	 * @param  array  $parameters
@@ -136,9 +199,8 @@ class UrlCondition implements ConditionInterface {
 	protected function replaceRegexParameterWithPlaceholder( $matches, &$parameters ) {
 		$name = $matches['name'];
 		$optional = ! empty( $matches['optional'] );
-		$regex = ! empty( $matches['regex'] ) ? $matches['regex'] : $this->parameter_regex;
 
-		$replacement = '/(?P<' . $name . '>' . $regex . ')';
+		$replacement = '/(?P<' . $name . '>' . $this->parameter_regex . ')';
 
 		if ( $optional ) {
 			$replacement = '(?:' . $replacement . ')?';
@@ -156,7 +218,7 @@ class UrlCondition implements ConditionInterface {
 	}
 
 	/**
-	 * Get regex to test whether normal urls match the parameter-based one
+	 * Get regex to test whether normal urls match the parameter-based one.
 	 *
 	 * @param  string  $url
 	 * @param  boolean $wrap

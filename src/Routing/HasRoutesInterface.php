@@ -41,15 +41,6 @@ interface HasRoutesInterface {
 	public function route( $methods, $condition, $handler );
 
 	/**
-	 * Create and add a route group
-	 *
-	 * @param  string|Closure|\WPEmerge\Routing\Conditions\ConditionInterface $condition
-	 * @param  Closure|null                      $routes
-	 * @return RouteInterface
-	 */
-	public function group( $condition, $routes = null );
-
-	/**
 	 * Create and add a route for the GET and HEAD methods
 	 *
 	 * @param  mixed          $condition

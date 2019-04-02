@@ -55,6 +55,6 @@ class PostTemplateCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->post_template, $this->post_types];
+		return ['post_template' => $this->post_template, 'post_types' => $this->post_types];
 	}
 }

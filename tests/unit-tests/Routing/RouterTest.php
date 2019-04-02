@@ -10,6 +10,7 @@ use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Support\Facade;
@@ -23,7 +24,13 @@ class RouterTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
-		$this->subject = new Router( Mockery::mock( RequestInterface::class ), [], [], 0, $this->error_handler );
+		$this->condition_factory = new ConditionFactory( [
+			'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
+			'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
+			'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
+			'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
+		] );
+		$this->subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [], [], 0, $this->error_handler );
 	}
 
 	public function tearDown() {
@@ -34,6 +41,7 @@ class RouterTest extends WP_UnitTestCase {
 		Facade::clearResolvedInstance( WPEMERGE_FRAMEWORK_KEY );
 
 		unset( $this->error_handler );
+		unset( $this->condition_factory );
 		unset( $this->subject );
 	}
 
@@ -47,7 +55,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware2 = 'bar';
 		$middleware3 = function() {};
 
-		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [], [
 			$middleware1 => $middleware1_priority,
 		], $default_middleware_priority, $this->error_handler );
 
@@ -66,7 +74,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware2_priority = 101;
 		$middleware3 = 'baz';
 
-		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [], [
 			$middleware2 => $middleware2_priority,
 		], $default_middleware_priority, $this->error_handler );
 
@@ -82,7 +90,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testAddRoute() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$subject = new Router( Mockery::mock( RequestInterface::class ), [], [], 0, $this->error_handler );
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [], [], 0, $this->error_handler );
 
 		$this->assertSame( $route, $subject->addRoute( $route ) );
 	}
@@ -90,13 +98,13 @@ class RouterTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::addRoute
 	 */
-	public function testAddRoute_GlobalMiddleware_PrependToRoutes() {
+	public function testAddRoute_GlobalMiddleware_PrependToRoute() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 		$route_middleware = Mockery::mock( MiddlewareInterface::class );
 		$global_middleware = Mockery::mock( MiddlewareInterface::class );
 		$expected = [$global_middleware, $route_middleware];
 
-		$subject = new Router( Mockery::mock( RequestInterface::class ), [$global_middleware], [], 0, $this->error_handler );
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [$global_middleware], [], 0, $this->error_handler );
 
 		$route->shouldReceive( 'getMiddleware' )
 			  ->andReturn( [$route_middleware] )

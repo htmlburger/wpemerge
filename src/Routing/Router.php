@@ -13,6 +13,11 @@ use Exception;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\HasUrlInterface;
+use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Support\Arr;
 
 /**
  * Provide routing for site requests (i.e. all non-api requests)
@@ -28,6 +33,13 @@ class Router implements HasRoutesInterface {
 	 * @var RequestInterface
 	 */
 	protected $request = null;
+
+	/**
+	 * Condition factory.
+	 *
+	 * @var ConditionFactory
+	 */
+	protected $condition_factory = null;
 
 	/**
 	 * Global middleware.
@@ -65,11 +77,19 @@ class Router implements HasRoutesInterface {
 	protected $current_route = null;
 
 	/**
+	 * Group stack.
+	 *
+	 * @var array<array<string,mixed>>
+	 */
+	protected $group_stack = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
 	 *
 	 * @param RequestInterface      $request
+	 * @param ConditionFactory      $condition_factory
 	 * @param array                 $middleware
 	 * @param array                 $middleware_priority
 	 * @param integer               $default_middleware_priority
@@ -77,12 +97,14 @@ class Router implements HasRoutesInterface {
 	 */
 	public function __construct(
 		RequestInterface $request,
+		ConditionFactory $condition_factory,
 		$middleware,
 		$middleware_priority,
 		$default_middleware_priority,
 		ErrorHandlerInterface $error_handler
 	) {
 		$this->request = $request;
+		$this->condition_factory = $condition_factory;
 		$this->middleware_priority = $middleware_priority;
 		$this->default_middleware_priority = $default_middleware_priority;
 		$this->middleware = $this->sortMiddleware( $middleware );
@@ -135,12 +157,157 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
+	 * Create a condition.
+	 *
+	 * @param  string|array|ConditionInterface $condition
+	 * @return ConditionInterface
+	 */
+	protected function makeCondition( $condition ) {
+		if ( $condition instanceof ConditionInterface ) {
+			return $condition;
+		}
+
+		return $this->condition_factory->make( $condition );
+	}
+
+	/**
+	 * Merge group condition attribute.
+	 *
+	 * @param  string|array|ConditionInterface $old
+	 * @param  string|array|ConditionInterface $new
+	 * @return ConditionInterface|string
+	 */
+	protected function mergeCondition( $old, $new ) {
+		if ( empty( $old ) ) {
+			if ( empty( $new ) ) {
+				return '';
+			}
+			return $this->makeCondition( $new );
+		} else if ( empty( $new ) ) {
+			return $this->makeCondition( $old );
+		}
+
+		return $this->mergeConditionInstances( $this->makeCondition( $old ), $this->makeCondition( $new ) );
+	}
+
+	/**
+	 * Merge condition instances.
+	 *
+	 * @param  ConditionInterface $old
+	 * @param  ConditionInterface $new
+	 * @return ConditionInterface
+	 */
+	protected function mergeConditionInstances( ConditionInterface $old, ConditionInterface $new ) {
+		if ( $old instanceof UrlCondition && $new instanceof UrlCondition ) {
+			return $old->concatenateUrl( $new->getUrl() );
+		}
+
+		return $this->makeCondition( ['multiple', [$old, $new]] );
+	}
+
+	/**
+	 * Merge group where attribute.
+	 *
+	 * @param array<string,string> $old
+	 * @param array<string,string> $new
+	 * @return array
+	 */
+	protected function mergeWhere( $old, $new ) {
+		return array_merge( $old, $new );
+	}
+
+	/**
+	 * Merge group middleware attribute.
+	 *
+	 * @param array $old
+	 * @param array $new
+	 * @return array
+	 */
+	protected function mergeMiddleware( $old, $new ) {
+		return array_merge( $old, $new );
+	}
+
+	/**
+	 * Add a group to the group stack, mergin all previous attributes.
+	 *
+	 * @param array<string,mixed> $attributes
+	 * @return void
+	 */
+	protected function addGroupToStack( $attributes ) {
+		$last_group = Arr::last( $this->group_stack, null, [] );
+
+		$attributes = array(
+			'condition' => $this->mergeCondition(
+				Arr::get( $last_group, 'condition', '' ),
+				Arr::get( $attributes, 'condition', '' )
+			),
+			'where' => $this->mergeWhere(
+				Arr::get( $last_group, 'where', [] ),
+				Arr::get( $attributes, 'where', [] )
+			),
+			'middleware' => $this->mergeMiddleware(
+				(array) Arr::get( $last_group, 'middleware', [] ),
+				(array) Arr::get( $attributes, 'middleware', [] )
+			),
+		);
+
+		$this->group_stack[] = $attributes;
+	}
+
+	/**
+	 * Remove last group from the group stack.
+	 *
+	 * @return void
+	 */
+	protected function removeLastGroupFromStack() {
+		array_pop( $this->group_stack );
+	}
+
+	/**
+	 * Create a new route group.
+	 *
+	 * @param array<string,mixed> $attributes
+	 * @param \Closure            $routes
+	 * @return void
+	 */
+	public function group( $attributes, $routes ) {
+		$this->addGroupToStack( $attributes );
+
+		$routes();
+
+		$this->removeLastGroupFromStack();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function addRoute( $route ) {
-		// Prepend global middleware.
-		$route->setMiddleware( array_merge(
-			$this->middleware,
+		$group = Arr::last( $this->group_stack, null, [] );
+		$condition = $route->getCondition();
+
+		$condition = $this->mergeCondition(
+			Arr::get( $group, 'condition', '' ),
+			$condition
+		);
+
+		if ( $condition === '' ) {
+			$condition = $this->makeCondition( $condition );
+		}
+
+		if ( $condition instanceof HasUrlInterface ) {
+			$condition->setUrlWhere( $this->mergeWhere(
+				Arr::get( $group, 'where', [] ),
+				$condition->getUrlWhere()
+			) );
+		}
+
+		$route->setCondition( $condition );
+
+		$route->setMiddleware( $this->mergeMiddleware(
+			array_merge(
+				$this->middleware,
+				Arr::get( $group, 'middleware', [] ),
+			),
 			$route->getMiddleware()
 		) );
 

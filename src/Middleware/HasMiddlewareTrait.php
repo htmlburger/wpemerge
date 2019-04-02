@@ -97,7 +97,7 @@ trait HasMiddlewareTrait {
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */
-	public function add( $middleware ) {
+	public function middleware( $middleware ) {
 		return call_user_func_array( [$this, 'addMiddleware'], func_get_args() );
 	}
 

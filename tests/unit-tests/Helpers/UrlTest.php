@@ -54,31 +54,37 @@ class UrlTest extends WP_UnitTestCase {
 	 * @covers ::addLeadingSlash
 	 */
 	public function testAddLeadingSlash() {
-		$this->assertEquals( '/example', Url::addLeadingSlash('example') );
-		$this->assertEquals( '/example', Url::addLeadingSlash('/example') );
+		$this->assertEquals( '', Url::addLeadingSlash( '', true ) );
+		$this->assertEquals( '/', Url::addLeadingSlash( '' ) );
+		$this->assertEquals( '/', Url::addLeadingSlash( '/' ) );
+		$this->assertEquals( '/example', Url::addLeadingSlash( 'example') );
+		$this->assertEquals( '/example', Url::addLeadingSlash( '/example') );
 	}
 
 	/**
 	 * @covers ::removeLeadingSlash
 	 */
 	public function testRemoveLeadingSlash() {
-		$this->assertEquals( 'example', Url::removeLeadingSlash('/example') );
-		$this->assertEquals( 'example', Url::removeLeadingSlash('example') );
+		$this->assertEquals( 'example', Url::removeLeadingSlash( '/example') );
+		$this->assertEquals( 'example', Url::removeLeadingSlash( 'example') );
 	}
 
 	/**
 	 * @covers ::addTrailingSlash
 	 */
 	public function testAddTrailingSlash() {
-		$this->assertEquals( 'example/', Url::addTrailingSlash('example') );
-		$this->assertEquals( 'example/', Url::addTrailingSlash('example/') );
+		$this->assertEquals( '', Url::addLeadingSlash( '', true ) );
+		$this->assertEquals( '/', Url::addLeadingSlash( '' ) );
+		$this->assertEquals( '/', Url::addLeadingSlash( '/' ) );
+		$this->assertEquals( 'example/', Url::addTrailingSlash( 'example') );
+		$this->assertEquals( 'example/', Url::addTrailingSlash( 'example/') );
 	}
 
 	/**
 	 * @covers ::removeTrailingSlash
 	 */
 	public function testRemoveTrailingSlash() {
-		$this->assertEquals( 'example', Url::removeTrailingSlash('example/') );
-		$this->assertEquals( 'example', Url::removeTrailingSlash('example') );
+		$this->assertEquals( 'example', Url::removeTrailingSlash( 'example/') );
+		$this->assertEquals( 'example', Url::removeTrailingSlash( 'example') );
 	}
 }

@@ -44,6 +44,6 @@ class PostTypeCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->post_type];
+		return ['post_type' => $this->post_type];
 	}
 }

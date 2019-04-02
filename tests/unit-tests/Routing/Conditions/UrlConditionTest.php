@@ -12,10 +12,9 @@ use WP_UnitTestCase;
  */
 class UrlConditionTest extends WP_UnitTestCase {
 	/**
-	 * @covers ::__construct
-	 * @covers ::getUrl
+	 * @covers ::setUrl
 	 */
-	public function testConstruct_String_AddLeadingAndTrailingSlashes() {
+	public function testSetUrl_String_AddLeadingAndTrailingSlashes() {
 		$expected = '/foo/bar/';
 		$subject = new UrlCondition( 'foo/bar' );
 
@@ -23,10 +22,10 @@ class UrlConditionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::__construct
 	 * @covers ::getUrl
+	 * @covers ::setUrl
 	 */
-	public function testConstruct_Wildcard_DoNotAddSlashes() {
+	public function testSetUrlWildcard_DoNotAddSlashes() {
 		$expected = UrlCondition::WILDCARD;
 		$subject = new UrlCondition( UrlCondition::WILDCARD );
 
@@ -41,6 +40,69 @@ class UrlConditionTest extends WP_UnitTestCase {
 		$subject = new UrlCondition( UrlCondition::WILDCARD );
 
 		$this->assertTrue( $subject->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::getUrl
+	 */
+	public function testGetUrl() {
+		$subject1 = new UrlCondition( '' );
+		$this->assertEquals( '/', $subject1->getUrl() );
+
+		$subject2 = new UrlCondition( 'foo' );
+		$this->assertEquals( '/foo/', $subject2->getUrl() );
+
+		$subject3 = new UrlCondition( '/foo' );
+		$this->assertEquals( '/foo/', $subject3->getUrl() );
+
+		$subject4 = new UrlCondition( 'foo/' );
+		$this->assertEquals( '/foo/', $subject4->getUrl() );
+
+		$subject5 = new UrlCondition( '/foo/' );
+		$this->assertEquals( '/foo/', $subject5->getUrl() );
+	}
+
+	/**
+	 * @covers ::getUrlWhere
+	 * @covers ::setUrlWhere
+	 */
+	public function testGetUrlWhere() {
+		$expected = ['foo' => 'bar'];
+		$subject = new UrlCondition( '' );
+		$subject->setUrlWhere( $expected );
+		$this->assertEquals( $expected, $subject->getUrlWhere() );
+	}
+
+	/**
+	 * @covers ::concatenateUrl
+	 */
+	public function testConcatenateUrl() {
+		$expected = '/foo/bar/';
+
+		$subject1 = new UrlCondition( 'foo' );
+		$subject2 = $subject1->concatenateUrl( 'bar' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
+		$this->assertNotSame( $subject2, $subject1 );
+
+		$subject1 = new UrlCondition( '/foo' );
+		$subject2 = $subject1->concatenateUrl( '/bar' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
+
+		$subject1 = new UrlCondition( 'foo/' );
+		$subject2 = $subject1->concatenateUrl( 'bar/' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
+
+		$subject1 = new UrlCondition( 'foo/' );
+		$subject2 = $subject1->concatenateUrl( '/bar' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
+
+		$subject1 = new UrlCondition( '/foo' );
+		$subject2 = $subject1->concatenateUrl( 'bar/' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
+
+		$subject1 = new UrlCondition( '/foo/' );
+		$subject2 = $subject1->concatenateUrl( '/bar/' );
+		$this->assertEquals( $expected, $subject2->getUrl() );
 	}
 
 	/**
@@ -91,31 +153,16 @@ class UrlConditionTest extends WP_UnitTestCase {
 		$this->assertEquals( [], $subject2->getArguments( $request ) );
 
 		$subject3 = new UrlCondition( '/foo/{param1}/baz/1/2/3/' );
-		$this->assertEquals( ['bar'], $subject3->getArguments( $request ) );
+		$this->assertEquals( ['param1' => 'bar'], $subject3->getArguments( $request ) );
 
 		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?}/' );
-		$this->assertEquals( ['3'], $subject4->getArguments( $request ) );
+		$this->assertEquals( ['param1' => '3'], $subject4->getArguments( $request ) );
 
 		$subject5 = new UrlCondition( '/foo/bar/baz/1/2/3/{param1?}/' );
-		$this->assertEquals( [''], $subject5->getArguments( $request ) );
+		$this->assertEquals( ['param1' => ''], $subject5->getArguments( $request ) );
 
 		$subject6 = new UrlCondition( '/foo/{param1}/baz/{param2}/2/3/{param3?}/' );
-		$this->assertEquals( ['bar', '1', ''], $subject6->getArguments( $request ) );
-	}
-
-	/**
-	 * @covers ::concatenate
-	 */
-	public function testConcatenate() {
-		$expected = '/foo/bar/';
-
-		$subject1 = new UrlCondition( '/foo/' );
-		$subject2 = new UrlCondition( '/bar/' );
-
-		$subject3 = $subject1->concatenate( $subject2 );
-		$this->assertEquals( $expected, $subject3->getUrl() );
-		$this->assertNotSame( $subject3, $subject1 );
-		$this->assertNotSame( $subject3, $subject2 );
+		$this->assertEquals( ['param1' => 'bar', 'param2' => '1', 'param3' => ''], $subject6->getArguments( $request ) );
 	}
 
 	/**
@@ -132,17 +179,14 @@ class UrlConditionTest extends WP_UnitTestCase {
 		$subject3 = new UrlCondition( '/foo/{param1}/baz/1/2/3/' );
 		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/1/2/3/?$~', $subject3->getValidationRegex( $subject3->getUrl() ) );
 
-		$subject3 = new UrlCondition( '/foo/bar/baz/1/2/{param1:\d+}/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2/(?P<param1>\d+)/?$~', $subject3->getValidationRegex( $subject3->getUrl() ) );
+		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?}/' );
+		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
 
-		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?:\d+}/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>\d+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
+		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?}/{param2?}/' );
+		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?(?:/(?P<param2>[^/]+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
 
-		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?:\d+}/{param2?:\d+}/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>\d+))?(?:/(?P<param2>\d+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
-
-		$subject5 = new UrlCondition( '/foo/{param1}/baz/{param2:\d+}/2/{param3?}/' );
-		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/(?P<param2>\d+)/2(?:/(?P<param3>[^/]+))?/?$~', $subject5->getValidationRegex( $subject5->getUrl() ) );
+		$subject5 = new UrlCondition( '/foo/{param1}/baz/{param2}/2/{param3?}/' );
+		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/(?P<param2>[^/]+)/2(?:/(?P<param3>[^/]+))?/?$~', $subject5->getValidationRegex( $subject5->getUrl() ) );
 
 	}
 }

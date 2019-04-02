@@ -45,6 +45,6 @@ class PostStatusCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return [$this->post_status];
+		return ['post_status' => $this->post_status];
 	}
 }

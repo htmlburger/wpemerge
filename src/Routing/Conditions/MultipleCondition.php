@@ -13,18 +13,18 @@ use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Check against an array of conditions in an AND logical relationship
+ * Check against an array of conditions in an AND logical relationship.
  */
-class MultipleCondition implements ConditionInterface {
+class MultipleCondition implements ConditionInterface, HasUrlInterface {
 	/**
-	 * Array of conditions to check
+	 * Array of conditions to check.
 	 *
 	 * @var array<ConditionInterface>
 	 */
 	protected $conditions = [];
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param array $conditions
 	 */
@@ -54,9 +54,11 @@ class MultipleCondition implements ConditionInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		$arguments = [];
+
 		foreach ( $this->conditions as $condition ) {
 			$arguments = array_merge( $arguments, $condition->getArguments( $request ) );
 		}
+
 		return $arguments;
 	}
 
@@ -67,5 +69,25 @@ class MultipleCondition implements ConditionInterface {
 	 */
 	public function getConditions() {
 		return $this->conditions;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function getUrlWhere() {
+		return [];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function setUrlWhere( $where ) {
+		foreach ( $this->conditions as $condition ) {
+			if ( $condition instanceof HasUrlInterface ) {
+				$condition->setUrlWhere( $where );
+			}
+		}
 	}
 }
