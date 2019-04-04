@@ -33,16 +33,6 @@ class UrlConditionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::isSatisfied
-	 */
-	public function testIsSatisfied_Wildcard_True() {
-		$request = Mockery::mock( RequestInterface::class );
-		$subject = new UrlCondition( UrlCondition::WILDCARD );
-
-		$this->assertTrue( $subject->isSatisfied( $request ) );
-	}
-
-	/**
 	 * @covers ::getUrl
 	 */
 	public function testGetUrl() {
@@ -106,6 +96,25 @@ class UrlConditionTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::concatenateUrl
+	 */
+	public function testConcatenateUrl_Wildcard_WildcardPersists() {
+		$expected = UrlCondition::WILDCARD;
+
+		$subject = new UrlCondition( UrlCondition::WILDCARD );
+		$subject = $subject->concatenateUrl( 'bar' );
+		$this->assertEquals( $expected, $subject->getUrl() );
+
+		$subject = new UrlCondition( 'foo' );
+		$subject = $subject->concatenateUrl( UrlCondition::WILDCARD );
+		$this->assertEquals( $expected, $subject->getUrl() );
+
+		$subject = new UrlCondition( UrlCondition::WILDCARD );
+		$subject = $subject->concatenateUrl( UrlCondition::WILDCARD );
+		$this->assertEquals( $expected, $subject->getUrl() );
+	}
+
+	/**
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied_Url() {
@@ -134,6 +143,69 @@ class UrlConditionTest extends WP_UnitTestCase {
 
 		$subject5 = new UrlCondition( '/foo/{param1:\d+}/' );
 		$this->assertFalse( $subject5->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::isSatisfied
+	 * @covers ::whereIsSatisfied
+	 */
+	public function testIsSatisfied_Where() {
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'getUrl' )
+			->andReturn( 'http://example.org/foo/bar/' );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$this->assertTrue( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param1' => '/^[fobar]+$/i',
+		] );
+		$this->assertTrue( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param1' => '/^[fobar]+$/i',
+			'param2' => '/^[fobar]+$/i',
+		] );
+		$this->assertTrue( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param1' => '/^\d+$/i',
+		] );
+		$this->assertFalse( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param2' => '/^\d+$/i',
+		] );
+		$this->assertFalse( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param1' => '/^\d+$/i',
+			'param2' => '/^[fobar]+$/i',
+		] );
+		$this->assertFalse( $subject->isSatisfied( $request ) );
+
+		$subject = new UrlCondition( '/{param1}/{param2}' );
+		$subject->setUrlWhere( [
+			'param1' => '/^[fobar]+$/i',
+			'param2' => '/^\d+$/i',
+		] );
+		$this->assertFalse( $subject->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::isSatisfied
+	 */
+	public function testIsSatisfied_Wildcard_True() {
+		$request = Mockery::mock( RequestInterface::class );
+		$subject = new UrlCondition( UrlCondition::WILDCARD );
+
+		$this->assertTrue( $subject->isSatisfied( $request ) );
 	}
 
 	/**

@@ -97,6 +97,7 @@ class Route implements RouteInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @codeCoverageIgnore
 	 */
 	public function setCondition( $condition ) {
 		$this->condition = $condition;

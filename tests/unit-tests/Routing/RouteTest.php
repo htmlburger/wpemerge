@@ -64,6 +64,50 @@ class RouteTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::where
+	 */
+	public function testWhere_UrlCondition_Appended() {
+		$condition = Mockery::mock( UrlCondition::class );
+		$subject = new Route( [], $condition, function() {} );
+		$expected1 = ['foo' => '/^foo$/i'];
+		$expected2 = ['foo' => '/^foo$/i', 'bar' => '/^bar$/i'];
+
+		$condition->shouldReceive( 'getUrlWhere' )
+			->andReturn( [] )
+			->once();
+
+		$condition->shouldReceive( 'setUrlWhere' )
+			->with( $expected1 )
+			->once();
+
+		$subject->where( 'foo', $expected1['foo'] );
+
+		$condition->shouldReceive( 'getUrlWhere' )
+			->andReturn( $expected1 )
+			->once();
+
+		$condition->shouldReceive( 'setUrlWhere' )
+			->with( $expected2 )
+			->once();
+
+		$subject->where( 'bar', $expected2['bar'] );
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::where
+	 * @expectedException \WPEmerge\Exceptions\Exception
+	 * @expectedExceptionMessage Only routes with URL conditions
+	 */
+	public function testWhere_NonUrlCondition_Exception() {
+		$condition = Mockery::mock( ConditionInterface::class );
+		$subject = new Route( [], $condition, function() {} );
+
+		$subject->where( 'foo', '/^foo$/i' );
+	}
+
+	/**
 	 * @covers ::getQueryFilter
 	 * @covers ::setQueryFilter
 	 */

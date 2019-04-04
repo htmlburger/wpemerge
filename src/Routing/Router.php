@@ -199,7 +199,14 @@ class Router implements HasRoutesInterface {
 	 */
 	protected function mergeConditionInstances( ConditionInterface $old, ConditionInterface $new ) {
 		if ( $old instanceof UrlCondition && $new instanceof UrlCondition ) {
-			return $old->concatenateUrl( $new->getUrl() );
+			$concatenated = $old->concatenateUrl( $new->getUrl() );
+
+			$concatenated->setUrlWhere( array_merge(
+				$old->getUrlWhere(),
+				$new->getUrlWhere()
+			) );
+
+			return $concatenated;
 		}
 
 		return $this->makeCondition( ['multiple', [$old, $new]] );
@@ -285,11 +292,6 @@ class Router implements HasRoutesInterface {
 		$group = Arr::last( $this->group_stack, null, [] );
 		$condition = $route->getCondition();
 
-		$condition = $this->mergeCondition(
-			Arr::get( $group, 'condition', '' ),
-			$condition
-		);
-
 		if ( $condition === '' ) {
 			$condition = $this->makeCondition( $condition );
 		}
@@ -300,6 +302,11 @@ class Router implements HasRoutesInterface {
 				$condition->getUrlWhere()
 			) );
 		}
+
+		$condition = $this->mergeCondition(
+			Arr::get( $group, 'condition', '' ),
+			$condition
+		);
 
 		$route->setCondition( $condition );
 

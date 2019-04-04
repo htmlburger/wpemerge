@@ -11,6 +11,9 @@ use WPEmerge\Facades\Framework;
 use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\MultipleCondition;
+use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Support\Facade;
@@ -83,6 +86,60 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( $middleware1, $result[0] );
 		$this->assertEquals( $middleware3, $result[1] );
 		$this->assertEquals( $middleware2, $result[2] );
+	}
+
+	/**
+	 * Quick and dirty test to cover basic group functionality.
+	 * Better and more extensive tests are needed.
+	 *
+	 * @covers ::group
+	 */
+	public function testGroup() {
+		$condition1 = Mockery::mock( ConditionInterface::class );
+		$condition2 = Mockery::mock( UrlCondition::class );
+		$middleware1 = function () {};
+		$middleware2 = function () {};
+		$middleware3 = function () {};
+		$where1 = ['foo' => 'foo'];
+		$where2 = ['bar' => 'bar'];
+
+		$subject = new Router( Mockery::mock( RequestInterface::class ), $this->condition_factory, [$middleware1], [], 100, $this->error_handler );
+		$mock = Mockery::mock( RouteInterface::class );
+
+		$mock->shouldReceive( 'getCondition' )
+			->andReturn( $condition2 );
+
+		$condition2->shouldReceive( 'getUrlWhere' )
+			->andReturn( $where2 );
+
+		$condition2->shouldReceive( 'setUrlWhere' )
+			->with( array_merge( $where1, $where2 ) );
+
+		$mock->shouldReceive( 'setCondition' )
+			->with( Mockery::on( function ( $condition ) use ( $condition1, $condition2 ) {
+				$is_multiple = $condition instanceof MultipleCondition;
+				$conditions = $condition->getConditions();
+				$condition1_matches = $conditions[0] === $condition1;
+				$condition2_matches = $conditions[1] === $condition2;
+
+				return $is_multiple && $condition1_matches && $condition2_matches;
+			} ) );
+
+		$mock->shouldReceive( 'getMiddleware' )
+			->andReturn( [$middleware3] );
+
+		$mock->shouldReceive( 'setMiddleware' )
+			->with( [$middleware1, $middleware2, $middleware3] );
+
+		$subject->group( [
+			'condition' => $condition1,
+			'where' => $where1,
+			'middleware' => $middleware2,
+		], function () use ( $subject, $mock ) {
+			$subject->addRoute( $mock );
+		} );
+
+		$this->assertTrue( true );
 	}
 
 	/**
