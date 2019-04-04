@@ -117,7 +117,7 @@ class UrlCondition implements ConditionInterface, HasUrlInterface {
 		$arguments = [];
 		$parameter_names = $this->getParameterNames( $this->getUrl() );
 		foreach ( $parameter_names as $parameter_name ) {
-			$arguments[ $parameter_name ] = ! empty( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
+			$arguments[ $parameter_name ] = isset( $matches[ $parameter_name ] ) ? $matches[ $parameter_name ] : '';
 		}
 
 		return $arguments;
