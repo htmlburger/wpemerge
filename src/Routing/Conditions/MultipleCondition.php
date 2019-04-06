@@ -15,7 +15,7 @@ use WPEmerge\Requests\RequestInterface;
 /**
  * Check against an array of conditions in an AND logical relationship.
  */
-class MultipleCondition implements ConditionInterface, HasUrlInterface {
+class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**
 	 * Array of conditions to check.
 	 *
@@ -85,7 +85,7 @@ class MultipleCondition implements ConditionInterface, HasUrlInterface {
 	 */
 	public function setUrlWhere( $where ) {
 		foreach ( $this->conditions as $condition ) {
-			if ( $condition instanceof HasUrlInterface ) {
+			if ( $condition instanceof HasUrlWhereInterface ) {
 				$condition->setUrlWhere( $where );
 			}
 		}

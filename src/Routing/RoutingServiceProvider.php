@@ -30,7 +30,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @var array<string, string>
 	 */
 	protected static $condition_types = [
-		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
+		'url' => \WPEmerge\Routing\Conditions\UrlWhereCondition::class,
 		'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
 		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
 		'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,

@@ -12,7 +12,7 @@ namespace WPEmerge\Routing\Conditions;
 /**
  * Interface for conditions that accept a URL.
  */
-interface HasUrlInterface {
+interface HasUrlWhereInterface {
 	/**
 	 * Get the URL where.
 	 *

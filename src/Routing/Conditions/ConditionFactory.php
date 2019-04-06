@@ -62,6 +62,20 @@ class ConditionFactory {
 	}
 
 	/**
+	 * Ensure value is a condition.
+	 *
+	 * @param  string|array|Closure|ConditionInterface $options
+	 * @return ConditionInterface
+	 */
+	public function condition( $value ) {
+		if ( $value instanceof ConditionInterface ) {
+			return $value;
+		}
+
+		return $this->make( $value );
+	}
+
+	/**
 	 * Get condition class for condition type.
 	 *
 	 * @param  string      $condition_type
@@ -151,7 +165,7 @@ class ConditionFactory {
 	 * @return ConditionInterface
 	 */
 	protected function makeFromUrl( $url ) {
-		return new UrlCondition( $url );
+		return new UrlWhereCondition( $url );
 	}
 
 	/**
@@ -199,5 +213,40 @@ class ConditionFactory {
 	 */
 	protected function makeFromClosure( Closure $closure ) {
 		return new CustomCondition( $closure );
+	}
+
+	/**
+	 * Merge group condition attribute.
+	 *
+	 * @param  string|array|Closure|ConditionInterface $old
+	 * @param  string|array|Closure|ConditionInterface $new
+	 * @return ConditionInterface|null
+	 */
+	public function merge( $old, $new ) {
+		if ( empty( $old ) ) {
+			if ( empty( $new ) ) {
+				return null;
+			}
+			return $this->condition( $new );
+		} else if ( empty( $new ) ) {
+			return $this->condition( $old );
+		}
+
+		return $this->mergeConditions( $this->condition( $old ), $this->condition( $new ) );
+	}
+
+	/**
+	 * Merge condition instances.
+	 *
+	 * @param  ConditionInterface $old
+	 * @param  ConditionInterface $new
+	 * @return ConditionInterface
+	 */
+	public function mergeConditions( ConditionInterface $old, ConditionInterface $new ) {
+		if ( $old instanceof UrlWhereCondition && $new instanceof UrlWhereCondition ) {
+			return $old->concatenate( $new->getUrl(), $new->getUrlWhere() );
+		}
+
+		return $this->makeFromArrayOfConditions( [$old, $new] );
 	}
 }

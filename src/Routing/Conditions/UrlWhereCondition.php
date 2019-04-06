@@ -16,7 +16,7 @@ use WPEmerge\Support\Arr;
 /**
  * Check against the current url
  */
-class UrlCondition implements ConditionInterface, HasUrlInterface {
+class UrlWhereCondition implements ConditionInterface, HasUrlWhereInterface {
 	const WILDCARD = '*';
 
 	/**
@@ -29,7 +29,7 @@ class UrlCondition implements ConditionInterface, HasUrlInterface {
 	/**
 	 * URL where.
 	 *
-	 * @var array<string,string>
+	 * @var array<string, string>
 	 */
 	protected $url_where = [];
 
@@ -59,9 +59,11 @@ class UrlCondition implements ConditionInterface, HasUrlInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param string $url
+	 * @param array<string, string> $where
 	 */
-	public function __construct( $url ) {
+	public function __construct( $url, $where = [] ) {
 		$this->setUrl( $url );
+		$this->setUrlWhere( $where );
 	}
 
 	/**
@@ -163,10 +165,11 @@ class UrlCondition implements ConditionInterface, HasUrlInterface {
 	/**
 	 * Append a url to this one returning a new instance.
 	 *
-	 * @param  string $url
+	 * @param  string                $url
+	 * @param  array<string, string> $where
 	 * @return static
 	 */
-	public function concatenateUrl( $url ) {
+	public function concatenate( $url, $where = [] ) {
 		if ( $this->getUrl() === static::WILDCARD || $url === static::WILDCARD ) {
 			return new static( static::WILDCARD );
 		}
@@ -174,7 +177,12 @@ class UrlCondition implements ConditionInterface, HasUrlInterface {
 		$leading = UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $this->getUrl() ), true );
 		$trailing = UrlUtility::addLeadingSlash( UrlUtility::addTrailingSlash( $url ) );
 
-		return new static( $leading . $trailing );
+		$concatenated = new static( $leading . $trailing, array_merge(
+			$this->getUrlWhere(),
+			$where
+		) );
+
+		return $concatenated;
 	}
 
 	/**

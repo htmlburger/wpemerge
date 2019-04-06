@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\UrlWhereCondition;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Controllers\WordPressController;
@@ -42,7 +42,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute() {
 		$methods = ['GET', 'POST'];
-		$condition = new UrlCondition( '/foo/bar/' );
+		$condition = new UrlWhereCondition( '/foo/bar/' );
 		$handler = function() {};
 
 		$route = $this->subject->route( $methods, $condition, $handler );
@@ -58,7 +58,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	 */
 	public function testRoute_NoHandler_WordPressHandler() {
 		$methods = ['GET', 'POST'];
-		$condition = new UrlCondition( '/foo/bar/' );
+		$condition = new UrlWhereCondition( '/foo/bar/' );
 
 		$route = $this->subject->route( $methods, $condition );
 

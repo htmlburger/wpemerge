@@ -14,9 +14,7 @@ use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
-use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\HasUrlInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\HasUrlWhereInterface;
 use WPEmerge\Support\Arr;
 
 /**
@@ -79,7 +77,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Group stack.
 	 *
-	 * @var array<array<string,mixed>>
+	 * @var array<array<string, mixed>>
 	 */
 	protected $group_stack = [];
 
@@ -157,103 +155,46 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Create a condition.
+	 * Get the current route.
 	 *
-	 * @param  string|array|ConditionInterface $condition
-	 * @return ConditionInterface
+	 * @return RouteInterface
 	 */
-	protected function makeCondition( $condition ) {
-		if ( $condition instanceof ConditionInterface ) {
-			return $condition;
-		}
-
-		return $this->condition_factory->make( $condition );
+	public function getCurrentRoute() {
+		return $this->current_route;
 	}
 
 	/**
-	 * Merge group condition attribute.
+	 * Set the current route.
 	 *
-	 * @param  string|array|ConditionInterface $old
-	 * @param  string|array|ConditionInterface $new
-	 * @return ConditionInterface|string
+	 * @param  RouteInterface
+	 * @return void
 	 */
-	protected function mergeCondition( $old, $new ) {
-		if ( empty( $old ) ) {
-			if ( empty( $new ) ) {
-				return '';
-			}
-			return $this->makeCondition( $new );
-		} else if ( empty( $new ) ) {
-			return $this->makeCondition( $old );
-		}
-
-		return $this->mergeConditionInstances( $this->makeCondition( $old ), $this->makeCondition( $new ) );
-	}
-
-	/**
-	 * Merge condition instances.
-	 *
-	 * @param  ConditionInterface $old
-	 * @param  ConditionInterface $new
-	 * @return ConditionInterface
-	 */
-	protected function mergeConditionInstances( ConditionInterface $old, ConditionInterface $new ) {
-		if ( $old instanceof UrlCondition && $new instanceof UrlCondition ) {
-			$concatenated = $old->concatenateUrl( $new->getUrl() );
-
-			$concatenated->setUrlWhere( array_merge(
-				$old->getUrlWhere(),
-				$new->getUrlWhere()
-			) );
-
-			return $concatenated;
-		}
-
-		return $this->makeCondition( ['multiple', [$old, $new]] );
-	}
-
-	/**
-	 * Merge group where attribute.
-	 *
-	 * @param array<string,string> $old
-	 * @param array<string,string> $new
-	 * @return array
-	 */
-	protected function mergeWhere( $old, $new ) {
-		return array_merge( $old, $new );
-	}
-
-	/**
-	 * Merge group middleware attribute.
-	 *
-	 * @param array $old
-	 * @param array $new
-	 * @return array
-	 */
-	protected function mergeMiddleware( $old, $new ) {
-		return array_merge( $old, $new );
+	public function setCurrentRoute( RouteInterface $current_route ) {
+		$this->current_route = $current_route;
 	}
 
 	/**
 	 * Add a group to the group stack, mergin all previous attributes.
 	 *
-	 * @param array<string,mixed> $attributes
+	 * @param array<string, mixed> $attributes
 	 * @return void
 	 */
 	protected function addGroupToStack( $attributes ) {
-		$last_group = Arr::last( $this->group_stack, null, [] );
+		$previous = Arr::last( $this->group_stack, null, [] );
+
+		$condition = $this->condition_factory->merge(
+			Arr::get( $previous, 'condition', '' ),
+			Arr::get( $attributes, 'condition', '' )
+		);
 
 		$attributes = array(
-			'condition' => $this->mergeCondition(
-				Arr::get( $last_group, 'condition', '' ),
-				Arr::get( $attributes, 'condition', '' )
-			),
-			'where' => $this->mergeWhere(
-				Arr::get( $last_group, 'where', [] ),
+			'condition' => $condition !== null ? $condition : '',
+			'where' => array_merge(
+				Arr::get( $previous, 'where', [] ),
 				Arr::get( $attributes, 'where', [] )
 			),
-			'middleware' => $this->mergeMiddleware(
-				(array) Arr::get( $last_group, 'middleware', [] ),
+			'middleware' => array_merge(
+				(array) Arr::get( $previous, 'middleware', [] ),
 				(array) Arr::get( $attributes, 'middleware', [] )
 			),
 		);
@@ -273,7 +214,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Create a new route group.
 	 *
-	 * @param array<string,mixed> $attributes
+	 * @param array<string, mixed> $attributes
 	 * @param \Closure            $routes
 	 * @return void
 	 */
@@ -292,29 +233,23 @@ class Router implements HasRoutesInterface {
 		$group = Arr::last( $this->group_stack, null, [] );
 		$condition = $route->getCondition();
 
-		if ( $condition === '' ) {
-			$condition = $this->makeCondition( $condition );
-		}
-
-		if ( $condition instanceof HasUrlInterface ) {
-			$condition->setUrlWhere( $this->mergeWhere(
+		if ( $condition instanceof HasUrlWhereInterface ) {
+			$condition->setUrlWhere( array_merge(
 				Arr::get( $group, 'where', [] ),
 				$condition->getUrlWhere()
 			) );
 		}
 
-		$condition = $this->mergeCondition(
+		$condition = $this->condition_factory->merge(
 			Arr::get( $group, 'condition', '' ),
 			$condition
 		);
 
 		$route->setCondition( $condition );
 
-		$route->setMiddleware( $this->mergeMiddleware(
-			array_merge(
-				$this->middleware,
-				Arr::get( $group, 'middleware', [] )
-			),
+		$route->setMiddleware( array_merge(
+			$this->middleware,
+			Arr::get( $group, 'middleware', [] ),
 			$route->getMiddleware()
 		) );
 
@@ -364,25 +299,6 @@ class Router implements HasRoutesInterface {
 		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
 
 		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
-	}
-
-	/**
-	 * Get the current route.
-	 *
-	 * @return RouteInterface
-	 */
-	public function getCurrentRoute() {
-		return $this->current_route;
-	}
-
-	/**
-	 * Set the current route.
-	 *
-	 * @param  RouteInterface
-	 * @return void
-	 */
-	public function setCurrentRoute( RouteInterface $current_route ) {
-		$this->current_route = $current_route;
 	}
 
 	/**

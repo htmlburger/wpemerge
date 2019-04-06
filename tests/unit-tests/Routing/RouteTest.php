@@ -6,7 +6,7 @@ use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\UrlWhereCondition;
 use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -67,7 +67,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::where
 	 */
 	public function testWhere_UrlCondition_Appended() {
-		$condition = Mockery::mock( UrlCondition::class );
+		$condition = Mockery::mock( UrlWhereCondition::class );
 		$subject = new Route( [], $condition, function() {} );
 		$expected1 = ['foo' => '/^foo$/i'];
 		$expected2 = ['foo' => '/^foo$/i', 'bar' => '/^bar$/i'];
@@ -162,7 +162,7 @@ class RouteTest extends WP_UnitTestCase {
 	 * @covers ::applyQueryFilter
 	 */
 	public function testApplyQueryFilter_UnsatisfiedUrlCondition_NoChange() {
-		$condition = Mockery::mock( UrlCondition::class );
+		$condition = Mockery::mock( UrlWhereCondition::class );
 		$subject = new Route( [], $condition, function() {} );
 		$subject->query( function() {} );
 
@@ -177,7 +177,7 @@ class RouteTest extends WP_UnitTestCase {
 	 */
 	public function testApplyQueryFilter_SatisfiedUrlCondition_ArrayFiltered() {
 		$arguments = ['arg1', 'arg2'];
-		$condition = Mockery::mock( UrlCondition::class );
+		$condition = Mockery::mock( UrlWhereCondition::class );
 		$subject = new Route( [], $condition, function() {} );
 		$subject->query( function( $query_vars, $arg1, $arg2 ) {
 			return array_merge( $query_vars, [$arg1, $arg2] );

@@ -2,15 +2,17 @@
 
 namespace WPEmergeTests\Routing\Conditions;
 
+use Mockery;
+use stdClass;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;
-use WPEmerge\Routing\Conditions\UrlCondition;
-use stdClass;
+use WPEmerge\Routing\Conditions\UrlWhereCondition;
 use WP_UnitTestCase;
 
 /**
@@ -26,6 +28,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 
 	public function tearDown() {
 		parent::tearDown();
+		Mockery::close();
 
 		$this->request = null;
 	}
@@ -36,7 +39,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Url_UrlCondition() {
 		$expected_param = '/foo/bar/';
-		$expected_class = UrlCondition::class;
+		$expected_class = UrlWhereCondition::class;
 
 		$condition = $this->subject->make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -207,7 +210,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Callable_UrlCondition() {
 		$expected_param = 'phpinfo';
-		$expected_class = UrlCondition::class;
+		$expected_class = UrlWhereCondition::class;
 
 		$condition = $this->subject->make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -221,5 +224,52 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Object_Exception() {
 		$this->subject->make( new stdClass() );
+	}
+
+	/**
+	 * @covers ::condition
+	 */
+	public function testCondition() {
+		$condition = Mockery::mock( ConditionInterface::class );
+		$subject = Mockery::mock( ConditionFactory::class )->makePartial();
+
+		$this->assertSame( $condition, $subject->condition( $condition ) );
+
+		$subject->shouldReceive( 'make' )
+			->with( '' );
+
+		$subject->condition( '' );
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::merge
+	 */
+	public function testMerge() {
+		$condition1 = Mockery::mock( ConditionInterface::class );
+		$condition2 = Mockery::mock( ConditionInterface::class );
+
+		$this->assertEquals( null, $this->subject->merge( '', '' ) );
+		$this->assertSame( $condition1, $this->subject->merge( $condition1, '' ) );
+		$this->assertInstanceOf( MultipleCondition::class, $this->subject->merge( $condition1, $condition2 ) );
+	}
+
+	/**
+	 * @covers ::mergeConditions
+	 */
+	public function testMergeConditions() {
+		$this->assertInstanceOf( MultipleCondition::class, $this->subject->mergeConditions(
+			Mockery::mock( ConditionInterface::class ),
+			Mockery::mock( ConditionInterface::class )
+		) );
+
+		$url1 = Mockery::mock( UrlWhereCondition::class );
+		$url2 = Mockery::mock( UrlWhereCondition::class )->shouldIgnoreMissing();
+		$expected = Mockery::mock( ConditionInterface::class );
+
+		$url1->shouldReceive( 'concatenate' )
+			->andReturn( $expected );
+
+		$this->assertSame( $expected, $this->subject->mergeConditions( $url1, $url2 ) );
 	}
 }

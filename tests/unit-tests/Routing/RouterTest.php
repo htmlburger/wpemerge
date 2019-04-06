@@ -13,7 +13,7 @@ use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\MultipleCondition;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\UrlWhereCondition;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Support\Facade;
@@ -28,7 +28,7 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
 		$this->condition_factory = new ConditionFactory( [
-			'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
+			'url' => \WPEmerge\Routing\Conditions\UrlWhereCondition::class,
 			'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
 			'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
 			'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
@@ -96,7 +96,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testGroup() {
 		$condition1 = Mockery::mock( ConditionInterface::class );
-		$condition2 = Mockery::mock( UrlCondition::class );
+		$condition2 = Mockery::mock( UrlWhereCondition::class );
 		$middleware1 = function () {};
 		$middleware2 = function () {};
 		$middleware3 = function () {};

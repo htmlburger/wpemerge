@@ -16,7 +16,7 @@ use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\UrlWhereCondition;
 
 /**
  * Represent a route
@@ -122,7 +122,7 @@ class Route implements RouteInterface {
 	public function where( $parameter, $regex ) {
 		$condition = $this->getCondition();
 
-		if ( ! $condition instanceof UrlCondition ) {
+		if ( ! $condition instanceof UrlWhereCondition ) {
 			throw new Exception( 'Only routes with URL conditions can specify parameter regex matching.' );
 		}
 
@@ -194,7 +194,7 @@ class Route implements RouteInterface {
 			return $query_vars;
 		}
 
-		if ( ! $condition instanceof UrlCondition ) {
+		if ( ! $condition instanceof UrlWhereCondition ) {
 			throw new Exception(
 				'Routes with queries can only use URL conditions. ' .
 				'Is the route in a non-URL route group?'
