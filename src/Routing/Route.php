@@ -60,20 +60,13 @@ class Route implements RouteInterface {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @throws Exception
-	 * @param  string[]        $methods
-	 * @param  mixed           $condition
-	 * @param  string|\Closure $handler
+	 * @param  string[]           $methods
+	 * @param  ConditionInterface $condition
+	 * @param  string|\Closure    $handler
 	 */
 	public function __construct( $methods, $condition, $handler ) {
-		if ( ! $condition instanceof ConditionInterface ) {
-			try {
-				$condition = RouteCondition::make( $condition );
-			} catch ( InvalidRouteConditionException $e ) {
-				throw new Exception( 'Route condition is not a valid route string or condition.' );
-			}
-		}
-
 		$this->methods = $methods;
 		$this->setCondition( $condition );
 		$this->pipeline = new Pipeline( $handler );
@@ -82,6 +75,7 @@ class Route implements RouteInterface {
 	/**
 	 * Get allowed methods.
 	 *
+	 * @codeCoverageIgnore
 	 * @return string[]
 	 */
 	public function getMethods() {
@@ -90,6 +84,7 @@ class Route implements RouteInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * @codeCoverageIgnore
 	 */
 	public function getCondition() {
 		return $this->condition;
@@ -106,6 +101,7 @@ class Route implements RouteInterface {
 	/**
 	 * Get pipeline.
 	 *
+	 * @codeCoverageIgnore
 	 * @return Pipeline
 	 */
 	public function getPipeline() {

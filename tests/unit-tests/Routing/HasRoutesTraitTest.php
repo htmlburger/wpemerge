@@ -5,6 +5,7 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasRoutesTrait;
+use WPEmerge\Routing\Route;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Controllers\WordPressController;
 use WP_UnitTestCase;
@@ -17,6 +18,12 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->subject = $this->getMockForTrait( HasRoutesTrait::class );
+
+		$this->subject->expects( $this->any() )
+			->method( 'makeRoute' )
+			->will( $this->returnCallback( function ( $methods, $condition, $handler ) {
+				return new Route( $methods, $condition, $handler );
+			} ) );
 	}
 
 	public function tearDown() {

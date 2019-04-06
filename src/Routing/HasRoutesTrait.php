@@ -24,6 +24,16 @@ trait HasRoutesTrait {
 	protected $routes = [];
 
 	/**
+	 * Create a route instance.
+	 *
+	 * @param  string[]       $methods
+	 * @param  mixed          $condition
+	 * @param  string|Closure $handler
+	 * @return RouteInterface
+	 */
+	public abstract function makeRoute( $methods, $condition, $handler );
+
+	/**
 	 * Get registered routes
 	 *
 	 * @return RouteInterface[]
@@ -57,7 +67,8 @@ trait HasRoutesTrait {
 			$handler = WordPressController::class . '@handle';
 		}
 
-		$route = new Route( $methods, $condition, $handler );
+		$route = $this->makeRoute( $methods, $condition, $handler );
+
 		return $this->addRoute( $route );
 	}
 

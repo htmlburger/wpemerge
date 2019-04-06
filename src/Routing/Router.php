@@ -14,7 +14,9 @@ use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\HasUrlWhereInterface;
+use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
 use WPEmerge\Support\Arr;
 
 /**
@@ -224,6 +226,21 @@ class Router implements HasRoutesInterface {
 		$routes();
 
 		$this->removeLastGroupFromStack();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function makeRoute( $methods, $condition, $handler ) {
+		if ( ! $condition instanceof ConditionInterface ) {
+			try {
+				$condition = $this->condition_factory->make( $condition );
+			} catch ( InvalidRouteConditionException $e ) {
+				throw new InvalidRouteConditionException( 'Route condition is not a valid route string or condition.' );
+			}
+		}
+
+		return new Route( $methods, $condition, $handler );
 	}
 
 	/**

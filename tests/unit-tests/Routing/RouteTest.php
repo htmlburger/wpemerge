@@ -27,43 +27,6 @@ class RouteTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::__construct
-	 * @covers ::getMethods
-	 * @covers ::getCondition
-	 * @covers ::getPipeline
-	 */
-	public function testConstruct_ConditionInterface() {
-		$expected_methods = ['FOO'];
-		$expected_condition = Mockery::mock( ConditionInterface::class );
-		$handler = function() {};
-		$expected_pipeline = new Pipeline( $handler );
-
-		$subject = new Route( $expected_methods, $expected_condition, $handler );
-		$this->assertEquals( $expected_methods, $subject->getMethods() );
-		$this->assertSame( $expected_condition, $subject->getCondition() );
-		$this->assertEquals( $expected_pipeline, $subject->getPipeline() );
-	}
-
-	/**
-	 * @covers ::__construct
-	 */
-	public function testConstruct_Closure() {
-		$expected = function() {};
-
-		$subject = new Route( [], $expected, function() {} );
-		$this->assertEquals( $expected, $subject->getCondition()->getCallable() );
-	}
-
-	/**
-	 * @covers ::__construct
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Route condition is not a valid
-	 */
-	public function testConstruct_Invalid() {
-		$subject = new Route( [], new stdClass(), function() {} );
-	}
-
-	/**
 	 * @covers ::where
 	 */
 	public function testWhere_UrlCondition_Appended() {
