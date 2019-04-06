@@ -251,6 +251,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 
 		$this->assertEquals( null, $this->subject->merge( '', '' ) );
 		$this->assertSame( $condition1, $this->subject->merge( $condition1, '' ) );
+		$this->assertSame( $condition1, $this->subject->merge( '', $condition1 ) );
 		$this->assertInstanceOf( MultipleCondition::class, $this->subject->merge( $condition1, $condition2 ) );
 	}
 
