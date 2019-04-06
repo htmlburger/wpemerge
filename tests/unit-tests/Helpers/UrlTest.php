@@ -73,9 +73,9 @@ class UrlTest extends WP_UnitTestCase {
 	 * @covers ::addTrailingSlash
 	 */
 	public function testAddTrailingSlash() {
-		$this->assertEquals( '', Url::addLeadingSlash( '', true ) );
-		$this->assertEquals( '/', Url::addLeadingSlash( '' ) );
-		$this->assertEquals( '/', Url::addLeadingSlash( '/' ) );
+		$this->assertEquals( '', Url::addTrailingSlash( '', true ) );
+		$this->assertEquals( '/', Url::addTrailingSlash( '' ) );
+		$this->assertEquals( '/', Url::addTrailingSlash( '/' ) );
 		$this->assertEquals( 'example/', Url::addTrailingSlash( 'example') );
 		$this->assertEquals( 'example/', Url::addTrailingSlash( 'example/') );
 	}
