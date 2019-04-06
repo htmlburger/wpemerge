@@ -25,6 +25,7 @@ class PostIdCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param string $post_id
 	 */
 	public function __construct( $post_id ) {

@@ -32,6 +32,7 @@ class CustomCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param callable $callable
 	 * @param mixed    ...$arguments
 	 */

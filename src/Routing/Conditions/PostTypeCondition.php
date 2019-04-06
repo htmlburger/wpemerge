@@ -25,6 +25,7 @@ class PostTypeCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param string $post_type
 	 */
 	public function __construct( $post_type ) {

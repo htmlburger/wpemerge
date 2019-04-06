@@ -32,6 +32,7 @@ class PostTemplateCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param string          $post_template
 	 * @param string|string[] $post_types
 	 */

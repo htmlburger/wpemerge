@@ -25,6 +25,7 @@ class PostSlugCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param string $post_slug
 	 */
 	public function __construct( $post_slug ) {

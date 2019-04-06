@@ -32,6 +32,7 @@ class QueryVarCondition implements ConditionInterface {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param string      $query_var
 	 * @param string|null $value
 	 */

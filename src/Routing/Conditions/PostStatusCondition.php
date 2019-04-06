@@ -25,6 +25,7 @@ class PostStatusCondition implements ConditionInterface {
 	/**
 	 * Constructor
 	 *
+	 * @codeCoverageIgnore
 	 * @param string $post_status
 	 */
 	public function __construct( $post_status ) {
