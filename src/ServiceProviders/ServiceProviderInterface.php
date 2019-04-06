@@ -11,8 +11,6 @@ namespace WPEmerge\ServiceProviders;
 
 /**
  * Interface that service providers must implement
- *
- * @codeCoverageIgnore
  */
 interface ServiceProviderInterface {
 	/**

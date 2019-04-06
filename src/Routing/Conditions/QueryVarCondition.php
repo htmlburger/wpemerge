@@ -13,8 +13,6 @@ use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against a query var value.
- *
- * @codeCoverageIgnore
  */
 class QueryVarCondition implements ConditionInterface {
 	/**

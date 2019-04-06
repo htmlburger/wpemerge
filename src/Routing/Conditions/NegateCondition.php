@@ -14,8 +14,6 @@ use WPEmerge\Requests\RequestInterface;
 
 /**
  * Negate another condition's result.
- *
- * @codeCoverageIgnore
  */
 class NegateCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**

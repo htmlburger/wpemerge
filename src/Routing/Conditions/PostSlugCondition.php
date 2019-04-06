@@ -13,8 +13,6 @@ use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current post's slug
- *
- * @codeCoverageIgnore
  */
 class PostSlugCondition implements ConditionInterface {
 	/**
