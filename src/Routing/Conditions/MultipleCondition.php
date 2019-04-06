@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -26,15 +25,11 @@ class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @param array $conditions
+	 * @codeCoverageIgnore
+	 * @param array<ConditionInterface> $conditions
 	 */
 	public function __construct( $conditions ) {
-		$this->conditions = array_map( function ( $condition ) {
-			if ( $condition instanceof ConditionInterface ) {
-				return $condition;
-			}
-			return RouteCondition::make( $condition );
-		}, $conditions );
+		$this->conditions = $conditions;
 	}
 
 	/**
@@ -65,6 +60,7 @@ class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**
 	 * Get all assigned conditions
 	 *
+	 * @codeCoverageIgnore
 	 * @return \WPEmerge\Routing\Conditions\ConditionInterface[]
 	 */
 	public function getConditions() {

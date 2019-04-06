@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Facades\RouteCondition;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -26,14 +25,11 @@ class NegateCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed $condition
+	 * @codeCoverageIgnore
+	 * @param ConditionInterface $condition
 	 */
 	public function __construct( $condition ) {
-		if ( $condition instanceof ConditionInterface ) {
-			$this->condition = $condition;
-		} else {
-			$this->condition = call_user_func( [RouteCondition::class, 'make'], func_get_args() );
-		}
+		$this->condition = $condition;
 	}
 
 	/**
@@ -58,6 +54,8 @@ class NegateCondition implements ConditionInterface, HasUrlWhereInterface {
 		if ( $this->condition instanceof HasUrlWhereInterface ) {
 			$this->condition->getUrlWhere();
 		}
+
+		return [];
 	}
 
 	/**

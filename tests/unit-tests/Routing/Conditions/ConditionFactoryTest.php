@@ -31,6 +31,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		$this->request = null;
+		$this->subject = null;
 	}
 
 	/**

@@ -127,9 +127,11 @@ class ConditionFactory {
 	protected function parseNegatedCondition( $type, $arguments ) {
 		$negated_type = substr( $type, strlen( static::NEGATE_CONDITION_PREFIX ) );
 		$arguments = array_merge( [ $negated_type ], $arguments );
-		$type = 'negate';
 
-		return ['type' => $type, 'arguments' => $arguments];
+		$type = 'negate';
+		$condition = call_user_func( [$this, 'make'], $arguments );
+
+		return ['type' => $type, 'arguments' => [$condition]];
 	}
 
 	/**
@@ -202,7 +204,14 @@ class ConditionFactory {
 	 * @return ConditionInterface
 	 */
 	protected function makeFromArrayOfConditions( $options ) {
-		return new MultipleCondition( $options );
+		$conditions = array_map( function ( $condition ) {
+			if ( $condition instanceof ConditionInterface ) {
+				return $condition;
+			}
+			return $this->make( $condition );
+		}, $options );
+
+		return new MultipleCondition( $conditions );
 	}
 
 	/**

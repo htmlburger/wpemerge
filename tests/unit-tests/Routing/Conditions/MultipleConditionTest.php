@@ -13,20 +13,6 @@ use WP_UnitTestCase;
  */
 class MultipleConditionTest extends WP_UnitTestCase {
 	/**
-	 * @covers ::__construct
-	 * @covers ::getConditions
-	 */
-	public function testConstruct() {
-		$condition1 = new CustomCondition( '__return_true' );
-		$condition2 = function() { return false; };
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-
-		$subject = new MultipleCondition( [$condition1, $condition2] );
-
-		$this->assertEquals( [$condition1, new CustomCondition( $condition2 )], $subject->getConditions() );
-	}
-
-	/**
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied() {
@@ -49,7 +35,7 @@ class MultipleConditionTest extends WP_UnitTestCase {
 	 */
 	public function testGetArguments() {
 		$condition1 = new CustomCondition( '__return_true', 'custom_arg_1', 'custom_arg_2' );
-		$condition2 = [function() { return false; }, 'custom_arg_3'];
+		$condition2 = new CustomCondition( function() { return false; }, 'custom_arg_3' );
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$subject = new MultipleCondition( [$condition1, $condition2] );

@@ -10,7 +10,6 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Facades\Framework;
-use WPEmerge\Facades\RouteCondition as RouteConditionFacade;
 use WPEmerge\Facades\Router as RouterFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
@@ -105,7 +104,6 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 */
 	protected function registerFacades() {
 		Framework::facade( 'Router', RouterFacade::class );
-		Framework::facade( 'RouteCondition', RouteConditionFacade::class );
 	}
 
 	/**
