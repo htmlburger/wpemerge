@@ -165,7 +165,7 @@ class ConditionFactory {
 	 * @return ConditionInterface
 	 */
 	protected function makeFromUrl( $url ) {
-		return new UrlWhereCondition( $url );
+		return new UrlCondition( $url );
 	}
 
 	/**
@@ -243,7 +243,7 @@ class ConditionFactory {
 	 * @return ConditionInterface
 	 */
 	public function mergeConditions( ConditionInterface $old, ConditionInterface $new ) {
-		if ( $old instanceof UrlWhereCondition && $new instanceof UrlWhereCondition ) {
+		if ( $old instanceof UrlCondition && $new instanceof UrlCondition ) {
 			return $old->concatenate( $new->getUrl(), $new->getUrlWhere() );
 		}
 

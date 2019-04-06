@@ -12,7 +12,7 @@ use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;
-use WPEmerge\Routing\Conditions\UrlWhereCondition;
+use WPEmerge\Routing\Conditions\UrlCondition;
 use WP_UnitTestCase;
 
 /**
@@ -39,7 +39,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Url_UrlCondition() {
 		$expected_param = '/foo/bar/';
-		$expected_class = UrlWhereCondition::class;
+		$expected_class = UrlCondition::class;
 
 		$condition = $this->subject->make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -210,7 +210,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_Callable_UrlCondition() {
 		$expected_param = 'phpinfo';
-		$expected_class = UrlWhereCondition::class;
+		$expected_class = UrlCondition::class;
 
 		$condition = $this->subject->make( $expected_param );
 		$this->assertInstanceOf( $expected_class, $condition );
@@ -264,8 +264,8 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 			Mockery::mock( ConditionInterface::class )
 		) );
 
-		$url1 = Mockery::mock( UrlWhereCondition::class );
-		$url2 = Mockery::mock( UrlWhereCondition::class )->shouldIgnoreMissing();
+		$url1 = Mockery::mock( UrlCondition::class );
+		$url2 = Mockery::mock( UrlCondition::class )->shouldIgnoreMissing();
 		$expected = Mockery::mock( ConditionInterface::class );
 
 		$url1->shouldReceive( 'concatenate' )
