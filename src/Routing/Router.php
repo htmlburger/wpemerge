@@ -176,7 +176,7 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Add a group to the group stack, mergin all previous attributes.
+	 * Add a group to the group stack, merging all previous attributes.
 	 *
 	 * @param array<string, mixed> $attributes
 	 * @return void

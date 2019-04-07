@@ -63,7 +63,7 @@ class ConditionFactory {
 	/**
 	 * Ensure value is a condition.
 	 *
-	 * @param  string|array|Closure|ConditionInterface $options
+	 * @param  string|array|Closure|ConditionInterface $value
 	 * @return ConditionInterface
 	 */
 	public function condition( $value ) {

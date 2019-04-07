@@ -240,13 +240,13 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 			return $this->replaceRegexParameterWithPlaceholder( $matches, $parameters );
 		}, $url );
 
-		// quote the remaining string so that it does not get evaluated as regex
+		// Quote the remaining string so that it does not get evaluated as regex.
 		$validation_regex = preg_quote( $validation_regex, '~' );
 
-		// replace the placeholders with the real parameter regexes
+		// Replace the placeholders with the real parameter regexes.
 		$validation_regex = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_regex );
 
-		// match the entire url; make trailing slash optional
+		// Match the entire url; make trailing slash optional.
 		$validation_regex = '^' . $validation_regex . '?$';
 
 		if ( $wrap ) {
