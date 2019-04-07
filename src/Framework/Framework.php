@@ -13,7 +13,7 @@ use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
@@ -96,12 +96,12 @@ class Framework {
 	/**
 	 * Throw an exception if the framework has not been booted
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @return void
 	 */
 	protected function verifyBoot() {
 		if ( ! $this->isBooted() ) {
-			throw new Exception( static::class . ' must be booted first.' );
+			throw new ConfigurationException( static::class . ' must be booted first.' );
 		}
 	}
 
@@ -118,13 +118,13 @@ class Framework {
 	 * Boot the framework.
 	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
+	 * @throws ConfigurationException
 	 * @param  array     $config
-	 * @throws Exception
 	 * @return void
 	 */
 	public function boot( $config = [] ) {
 		if ( $this->isBooted() ) {
-			throw new Exception( static::class . ' already booted.' );
+			throw new ConfigurationException( static::class . ' already booted.' );
 		}
 
 		do_action( 'wpemerge.booting' );
@@ -215,7 +215,6 @@ class Framework {
 	 *
 	 * @param  string $key
 	 * @return mixed|null
-	 * @throws Exception
 	 */
 	public function resolve( $key ) {
 		$this->verifyBoot();
@@ -230,10 +229,9 @@ class Framework {
 	/**
 	 * Create and return a class instance.
 	 *
+	 * @throws ClassNotFoundException
 	 * @param  string $class
 	 * @return object
-	 * @throws Exception
-	 * @throws ClassNotFoundException
 	 */
 	public function instantiate( $class ) {
 		$this->verifyBoot();
@@ -257,7 +255,6 @@ class Framework {
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
 	 * @return void
-	 * @throws Exception
 	 */
 	public function respond( ResponseInterface $response ) {
 		$this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY )->respond( $response );

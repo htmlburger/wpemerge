@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Exceptions\Exception;
 use WPEmerge\Middleware\HasMiddlewareInterface;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
@@ -30,7 +29,6 @@ class Pipeline implements HasMiddlewareInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @throws Exception
 	 * @param  string|\Closure $handler
 	 */
 	public function __construct( $handler ) {

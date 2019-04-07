@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing;
 
 use Closure;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -59,7 +59,6 @@ class Route implements RouteInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @throws Exception
 	 * @param  string[]           $methods
 	 * @param  ConditionInterface $condition
 	 * @param  string|\Closure    $handler
@@ -109,6 +108,7 @@ class Route implements RouteInterface {
 	/**
 	 * Set custom partial regex matching for the specified parameter.
 	 *
+	 * @throws ConfigurationException
 	 * @param  string $parameter
 	 * @param  string $regex
 	 * @return static $this
@@ -117,7 +117,7 @@ class Route implements RouteInterface {
 		$condition = $this->getCondition();
 
 		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception( 'Only routes with URL conditions can specify parameter regex matching.' );
+			throw new ConfigurationException( 'Only routes with URL conditions can specify parameter regex matching.' );
 		}
 
 		$condition->setUrlWhere( array_merge(
@@ -176,7 +176,7 @@ class Route implements RouteInterface {
 	/**
 	 * Apply the query filter, if any.
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param  array<string, mixed> $query_vars
 	 * @return array<string, mixed>
 	 */
@@ -189,7 +189,7 @@ class Route implements RouteInterface {
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
-			throw new Exception(
+			throw new ConfigurationException(
 				'Routes with queries can only use URL conditions. ' .
 				'Is the route in a non-URL route group?'
 			);
@@ -261,7 +261,6 @@ class Route implements RouteInterface {
 	/**
 	 * {@inheritDoc}
 	 * @codeCoverageIgnore
-	 * @throws Exception
 	 */
 	public function addMiddleware( $middleware ) {
 		$this->getPipeline()->addMiddleware( $middleware );

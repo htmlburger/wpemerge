@@ -9,8 +9,8 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 
-class InvalidRouteConditionException extends Exception {
+class InvalidRouteConditionException extends ConfigurationException {
 
 }

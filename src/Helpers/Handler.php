@@ -10,7 +10,7 @@
 namespace WPEmerge\Helpers;
 
 use Closure;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Framework\ClassNotFoundException;
 
@@ -28,7 +28,7 @@ class Handler {
 	/**
 	 * Constructor
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param string|Closure $raw_handler
 	 * @param string         $default_method
 	 * @param string         $class_prefix
@@ -37,7 +37,7 @@ class Handler {
 		$handler = $this->parse( $raw_handler, $default_method, $class_prefix );
 
 		if ( $handler === null ) {
-			throw new Exception( 'No or invalid handler provided.' );
+			throw new ConfigurationException( 'No or invalid handler provided.' );
 		}
 
 		$this->handler = $handler;

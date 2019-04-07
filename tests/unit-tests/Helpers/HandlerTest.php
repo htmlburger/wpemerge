@@ -65,7 +65,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromString
-	 * @expectedException \WPEmerge\Exceptions\Exception
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testSet_ClassWithoutMethodWithoutDefault_Exception() {

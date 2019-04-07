@@ -60,7 +60,7 @@ class RouteTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::where
-	 * @expectedException \WPEmerge\Exceptions\Exception
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage Only routes with URL conditions
 	 */
 	public function testWhere_NonUrlCondition_Exception() {
@@ -110,7 +110,7 @@ class RouteTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::applyQueryFilter
-	 * @expectedException \WPEmerge\Exceptions\Exception
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage Routes with queries can only use URL conditions
 	 */
 	public function testApplyQueryFilter_NonUrlCondition_Exception() {

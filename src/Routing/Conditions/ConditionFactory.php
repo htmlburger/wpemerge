@@ -12,7 +12,7 @@ namespace WPEmerge\Routing\Conditions;
 use Closure;
 use ReflectionClass;
 use ReflectionException;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 
 /**
  * Check against the current url
@@ -40,7 +40,6 @@ class ConditionFactory {
 	/**
 	 * Create a new condition.
 	 *
-	 * @throws Exception
 	 * @throws InvalidRouteConditionException
 	 * @param  string|array|Closure           $options
 	 * @return ConditionInterface
@@ -137,7 +136,7 @@ class ConditionFactory {
 	/**
 	 * Parse the condition type and its arguments from an options array.
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param  array $options
 	 * @return array
 	 */
@@ -154,7 +153,7 @@ class ConditionFactory {
 				return ['type' => 'custom', 'arguments' => $options];
 			}
 
-			throw new Exception( 'Unknown condition type specified: ' . $type );
+			throw new ConfigurationException( 'Unknown condition type specified: ' . $type );
 		}
 
 		return ['type' => $type, 'arguments' => $arguments ];
@@ -173,13 +172,13 @@ class ConditionFactory {
 	/**
 	 * Create a new condition from an array.
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param  array               $options
 	 * @return ConditionInterface
 	 */
 	protected function makeFromArray( $options ) {
 		if ( count( $options ) === 0 ) {
-			throw new Exception( 'No condition type specified.' );
+			throw new ConfigurationException( 'No condition type specified.' );
 		}
 
 		if ( is_array( $options[0] ) ) {
@@ -193,7 +192,7 @@ class ConditionFactory {
 			$reflection = new ReflectionClass( $condition_class );
 			return $reflection->newInstanceArgs( $condition_options['arguments'] );
 		} catch ( ReflectionException $e ) {
-			throw new Exception( 'Condition class "' . $condition_class . '" does not exist.' );
+			throw new ConfigurationException( 'Condition class "' . $condition_class . '" does not exist.' );
 		}
 	}
 

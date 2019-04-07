@@ -10,7 +10,7 @@
 namespace WPEmerge\Middleware;
 
 use Closure;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Facades\Framework;
 use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\MixedType;
@@ -54,7 +54,7 @@ trait HasMiddlewareTrait {
 	 * Set registered middleware.
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return void
 	 */
@@ -63,7 +63,7 @@ trait HasMiddlewareTrait {
 
 		foreach ( $middleware as $item ) {
 			if ( ! $this->isMiddleware( $item ) ) {
-				throw new Exception(
+				throw new ConfigurationException(
 					'Passed middleware must be a closure or the name or instance of a class which ' .
 					'implements the ' . MiddlewareInterface::class . ' interface.'
 				);
@@ -78,7 +78,6 @@ trait HasMiddlewareTrait {
 	 * Add middleware.
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
-	 * @throws Exception
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */

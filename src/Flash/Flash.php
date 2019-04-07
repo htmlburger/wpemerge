@@ -10,7 +10,7 @@
 namespace WPEmerge\Flash;
 
 use ArrayAccess;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\Support\Arr;
 
@@ -70,12 +70,12 @@ class Flash {
 	/**
 	 * Throw an exception if store is not valid.
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @return void
 	 */
 	protected function validateStore() {
 		if ( ! $this->isValidStore( $this->store ) ) {
-			throw new Exception(
+			throw new ConfigurationException(
 				'Attempted to use Flash without an active session. ' .
 				'Did you forget to call session_start()?'
 			);

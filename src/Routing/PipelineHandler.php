@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing;
 
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Exceptions\Exception;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Facades\Response;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ResponsableInterface;
@@ -30,7 +30,6 @@ class PipelineHandler {
 	 * Constructor
 	 *
 	 * @param string|\Closure $handler
-	 * @throws Exception
 	 */
 	public function __construct( $handler ) {
 		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\' );
@@ -71,7 +70,7 @@ class PipelineHandler {
 	/**
 	 * Execute the handler
 	 *
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 * @param  mixed             ...$arguments
 	 * @return ResponseInterface
 	 */
@@ -80,7 +79,7 @@ class PipelineHandler {
 		$response = $this->getResponse( $response );
 
 		if ( ! $response instanceof ResponseInterface ) {
-			throw new Exception(
+			throw new ConfigurationException(
 				'Response returned by controller is not valid ' .
 				'(expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').'
 			);
