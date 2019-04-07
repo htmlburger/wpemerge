@@ -153,7 +153,7 @@ class Router implements HasRoutesInterface {
 	public function getMiddlewarePriority( $middleware ) {
 		$increasing_priority = array_reverse( $this->middleware_priority );
 		$priority = array_search( $middleware, $increasing_priority );
-		return $priority !== false ? $priority : -1;
+		return $priority !== false ? (int) $priority : -1;
 	}
 
 	/**

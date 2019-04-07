@@ -19,7 +19,7 @@ class WordPressHttpKernel implements HttpKernel {
 	/**
 	 * Router.
 	 *
-	 * @var Router|null
+	 * @var Router
 	 */
 	protected $router = null;
 
