@@ -21,17 +21,6 @@ class PipelineTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::__construct
-	 * @covers ::getHandler
-	 */
-	public function testConstruct() {
-		$expected = function() {};
-		$subject = ( new Pipeline() )->to( $expected );
-
-		$this->assertSame( $expected, $subject->getHandler()->get()->get() );
-	}
-
-	/**
 	 * @covers ::run
 	 */
 	public function testRun() {

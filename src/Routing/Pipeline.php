@@ -31,6 +31,7 @@ class Pipeline implements HasMiddlewareInterface {
 	/**
 	 * Get handler.
 	 *
+	 * @codeCoverageIgnore
 	 * @return PipelineHandler
 	 */
 	public function getHandler() {
@@ -40,6 +41,7 @@ class Pipeline implements HasMiddlewareInterface {
 	/**
 	 * Set handler.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string|\Closure $handler
 	 * @return void
 	 */
@@ -50,6 +52,7 @@ class Pipeline implements HasMiddlewareInterface {
 	/**
 	 * Fluent alias for setHandler().
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string|\Closure $handler
 	 * @return self  $this
 	 */
