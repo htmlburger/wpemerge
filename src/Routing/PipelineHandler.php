@@ -16,7 +16,7 @@ use WPEmerge\Helpers\Handler;
 use WPEmerge\Responses\ResponsableInterface;
 
 /**
- * Represent a Closure or a controller method to be executed in response to a request
+ * Represent a Closure or a controller method to be executed in response to a request.
  */
 class PipelineHandler {
 	/**

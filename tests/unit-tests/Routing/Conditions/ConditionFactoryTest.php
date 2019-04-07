@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
 use stdClass;
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\Requests\Request;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -23,7 +23,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->request = new Request( [], [], [], [], [], [] );
-		$this->subject = new ConditionFactory( Framework::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY ) );
+		$this->subject = new ConditionFactory( Application::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY ) );
 	}
 
 	public function tearDown() {

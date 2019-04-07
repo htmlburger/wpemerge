@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\Facades\Router as RouterFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
@@ -57,6 +57,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerConfiguration( $container ) {
+		// TODO remove this config; see how Flash and OldInput will hook in to add their global middleware.
 		$this->extendConfig( $container, 'middleware_default_priority', 100 );
 		$this->extendConfig( $container, 'middleware_priority', [] );
 		$this->extendConfig( $container, 'global_middleware', [] );
@@ -83,11 +84,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	protected function registerDependencies( $container ) {
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function ( $c ) {
 			return new Router(
-				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ],
-				$c[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ],
-				$c[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ],
-				$c[ WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY ],
 				$c[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ]
 			);
 		};
@@ -103,13 +100,13 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerFacades() {
-		Framework::facade( 'Router', RouterFacade::class );
+		Application::facade( 'Router', RouterFacade::class );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function bootstrap( $container ) {
-		RouterFacade::bootstrap();
+		// Nothing to bootstrap.
 	}
 }

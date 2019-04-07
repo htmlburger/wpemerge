@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Flash;
 
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -73,7 +73,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	protected function registerFacades() {
-		Framework::facade( 'Flash', \WPEmerge\Facades\Flash::class );
+		Application::facade( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
 
 	/**

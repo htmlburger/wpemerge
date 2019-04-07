@@ -9,10 +9,6 @@
 
 namespace WPEmerge\Middleware;
 
-use Closure;
-use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Requests\RequestInterface;
-
 /**
  * Interface for HasMiddlewareTrait.
  */
@@ -41,21 +37,11 @@ interface HasMiddlewareInterface {
 	public function addMiddleware( $middleware );
 
 	/**
-	 * Alias for addMiddleware.
+	 * Fluent alias for addMiddleware().
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return object                                                         $this
 	 */
 	public function middleware( $middleware );
-
-	/**
-	 * Execute an array of middleware recursively (last in, first out).
-	 *
-	 * @param  array             $middleware
-	 * @param  RequestInterface  $request
-	 * @param  Closure           $next
-	 * @return ResponseInterface
-	 */
-	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next );
 }

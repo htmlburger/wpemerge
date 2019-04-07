@@ -171,7 +171,7 @@ class HandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
-	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedException \WPEmerge\Application\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found
 	 */
 	public function testExecute_NonexistantClassWithPrefix_Exception() {
@@ -181,7 +181,7 @@ class HandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
-	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedException \WPEmerge\Application\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found - tried
 	 */
 	public function testExecute_ClassWithoutPrefix_Exception() {

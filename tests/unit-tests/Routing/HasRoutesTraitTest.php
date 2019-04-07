@@ -56,7 +56,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 
 		$this->assertSame( $methods, $route->getMethods() );
 		$this->assertSame( $condition, $route->getCondition() );
-		$this->assertSame( $handler, $route->getPipeline()->getHandler()->get()->get() );
+		$this->assertSame( $handler, $route->getHandler()->get() );
 		$this->assertSame( [$route], $this->subject->getRoutes() );
 	}
 
@@ -69,7 +69,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 
 		$route = $this->subject->route( $methods, $condition );
 
-		$this->assertEquals( WordPressController::class, $route->getPipeline()->getHandler()->get()->get()['class'] );
+		$this->assertEquals( WordPressController::class, $route->getHandler()->get()['class'] );
 	}
 
 	/**

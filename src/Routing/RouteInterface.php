@@ -25,6 +25,14 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	public function isSatisfied( RequestInterface $request );
 
 	/**
+	 * Get arguments.
+	 *
+	 * @param  RequestInterface $request
+	 * @return array
+	 */
+	public function getArguments( RequestInterface $request );
+
+	/**
 	 * Get a response for the given request.
 	 *
 	 * @param  RequestInterface                    $request
@@ -32,12 +40,4 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function handle( RequestInterface $request, $view );
-
-	/**
-	 * Get arguments.
-	 *
-	 * @param  RequestInterface $request
-	 * @return array
-	 */
-	public function getArguments( RequestInterface $request );
 }

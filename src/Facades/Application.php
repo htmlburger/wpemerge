@@ -12,13 +12,13 @@ namespace WPEmerge\Facades;
 use WPEmerge\Support\Facade;
 
 /**
- * Provide access to the framework instance
+ * Provide access to the application instance.
  *
  * @codeCoverageIgnore
- * @see \WPEmerge\Framework\Framework
+ * @see \WPEmerge\Application\Application
  */
-class Framework extends Facade {
+class Application extends Facade {
 	protected static function getFacadeAccessor() {
-		return WPEMERGE_FRAMEWORK_KEY;
+		return WPEMERGE_APPLICATION_KEY;
 	}
 }

@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Csrf;
 
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -26,7 +26,7 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 			return new Csrf();
 		};
 
-		Framework::facade( 'Csrf', \WPEmerge\Facades\Csrf::class );
+		Application::facade( 'Csrf', \WPEmerge\Facades\Csrf::class );
 	}
 
 	/**

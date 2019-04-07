@@ -10,8 +10,8 @@
 namespace WPEmerge\Routing;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
-use WPEmerge\Facades\Framework;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -20,19 +20,12 @@ use WPEmerge\Routing\Conditions\InvalidRouteConditionException;
 use WPEmerge\Support\Arr;
 
 /**
- * Provide routing for site requests (i.e. all non-api requests)
+ * Provide routing for site requests (i.e. all non-api requests).
  */
 class Router implements HasRoutesInterface {
 	use HasRoutesTrait {
 		addRoute as traitAddRoute;
 	}
-
-	/**
-	 * Current request.
-	 *
-	 * @var RequestInterface
-	 */
-	protected $request = null;
 
 	/**
 	 * Condition factory.
@@ -42,25 +35,32 @@ class Router implements HasRoutesInterface {
 	protected $condition_factory = null;
 
 	/**
-	 * Global middleware.
+	 * Middleware available to the application.
 	 *
 	 * @var array
 	 */
 	protected $middleware = [];
 
 	/**
-	 * Global middleware priority.
+	 * Middleware groups.
+	 *
+	 * @var array<string, array>
+	 */
+	protected $middleware_groups = [];
+
+	/**
+	 * Global middleware that will be applied to all routes.
 	 *
 	 * @var array
 	 */
-	protected $middleware_priority = [];
+	protected $global_middleware = [];
 
 	/**
-	 * Default global middleware priority.
+	 * Middleware sorted in order of execution.
 	 *
-	 * @var integer
+	 * @var array<string>
 	 */
-	protected $default_middleware_priority = 0;
+	protected $middleware_priority = [];
 
 	/**
 	 * Exception handler.
@@ -87,52 +87,73 @@ class Router implements HasRoutesInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 *
-	 * @param RequestInterface      $request
 	 * @param ConditionFactory      $condition_factory
-	 * @param array                 $middleware
-	 * @param array                 $middleware_priority
-	 * @param integer               $default_middleware_priority
 	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
-		RequestInterface $request,
 		ConditionFactory $condition_factory,
-		$middleware,
-		$middleware_priority,
-		$default_middleware_priority,
 		ErrorHandlerInterface $error_handler
 	) {
-		$this->request = $request;
 		$this->condition_factory = $condition_factory;
-		$this->middleware_priority = $middleware_priority;
-		$this->default_middleware_priority = $default_middleware_priority;
-		$this->middleware = $this->sortMiddleware( $middleware );
 		$this->error_handler = $error_handler;
 	}
 
 	/**
-	 * Hook into WordPress actions.
+	 * Register middleware.
 	 *
 	 * @codeCoverageIgnore
+	 * @param  array $middleware
 	 * @return void
 	 */
-	public function bootstrap() {
-		add_action( 'template_include', [$this, 'execute'], 1000 );
+	public function setMiddleware( $middleware ) {
+		$this->middleware = $middleware;
+	}
+
+	/**
+	 * Register middleware groups.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  array $middleware_groups
+	 * @return void
+	 */
+	public function setMiddlewareGroups( $middleware_groups ) {
+		$this->middleware_groups = $middleware_groups;
+	}
+
+	/**
+	 * Register global middleware.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  array $middleware
+	 * @return void
+	 */
+	public function setGlobalMiddleware( $middleware ) {
+		$this->global_middleware = $middleware;
+	}
+
+	/**
+	 * Register middleware execution priority.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  array $middleware_priority
+	 * @return void
+	 */
+	public function setMiddlewarePriority( $middleware_priority ) {
+		$this->middleware_priority = $middleware_priority;
 	}
 
 	/**
 	 * Get middleware priority.
+	 * This is in reverse compared to definition order.
+	 * Middleware with unspecified priority will yield -1.
 	 *
 	 * @param  mixed   $middleware
 	 * @return integer
 	 */
 	public function getMiddlewarePriority( $middleware ) {
-		if ( is_string( $middleware ) && isset( $this->middleware_priority[ $middleware ] ) ) {
-			return $this->middleware_priority[ $middleware ];
-		}
-
-		return $this->default_middleware_priority;
+		$increasing_priority = array_reverse( $this->middleware_priority );
+		$priority = array_search( $middleware, $increasing_priority );
+		return $priority !== false ? $priority : -1;
 	}
 
 	/**
@@ -142,18 +163,20 @@ class Router implements HasRoutesInterface {
 	 * @return array
 	 */
 	public function sortMiddleware( $middleware ) {
-		usort( $middleware, function ( $a, $b ) use ( $middleware ) {
-			$priority = $this->getMiddlewarePriority( $a ) - $this->getMiddlewarePriority( $b );
+		$sorted = $middleware;
+
+		usort( $sorted, function ( $a, $b ) use ( $middleware ) {
+			$priority = $this->getMiddlewarePriority( $b ) - $this->getMiddlewarePriority( $a );
 
 			if ( $priority !== 0 ) {
 				return $priority;
 			}
 
-			// Keep original array order.
+			// Keep relative order from original array.
 			return array_search( $a, $middleware ) - array_search( $b, $middleware );
 		} );
 
-		return array_values( $middleware );
+		return array_values( $sorted );
 	}
 
 	/**
@@ -265,57 +288,12 @@ class Router implements HasRoutesInterface {
 		$route->setCondition( $condition );
 
 		$route->setMiddleware( array_merge(
-			$this->middleware,
+			$this->global_middleware,
 			Arr::get( $group, 'middleware', [] ),
 			$route->getMiddleware()
 		) );
 
 		return $this->traitAddRoute( $route );
-	}
-
-	/**
-	 * Execute the first satisfied route, if any.
-	 *
-	 * @internal
-	 * @param  string $view
-	 * @return string
-	 * @throws Exception
-	 */
-	public function execute( $view ) {
-		$routes = $this->getRoutes();
-
-		foreach ( $routes as $route ) {
-			if ( $route->isSatisfied( $this->request ) ) {
-				$this->setCurrentRoute( $route );
-				return $this->handle( $this->request, $route, $view );
-			}
-		}
-
-		return $view;
-	}
-
-	/**
-	 * Execute a route.
-	 *
-	 * @throws Exception
-	 * @param  RequestInterface $request
-	 * @param  RouteInterface   $route
-	 * @param  string           $view
-	 * @return string
-	 */
-	protected function handle( RequestInterface $request, RouteInterface $route, $view ) {
-		try {
-			$this->error_handler->register();
-			$response = $route->handle( $request, $view );
-			$this->error_handler->unregister();
-		} catch ( Exception $e ) {
-			$response = $this->error_handler->getResponse( $e );
-		}
-
-		$container = Framework::getContainer();
-		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
-
-		return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 	}
 
 	/**
@@ -325,9 +303,59 @@ class Router implements HasRoutesInterface {
 	 * @return RouteInterface
 	 */
 	public function handleAll( $handler = null ) {
-		// match ANY request method
-		// match ANY url
-		// by default, use built-in WordPress controller
+		// Match ANY request method.
+		// Match ANY url.
+		// By default, use built-in WordPress controller.
 		return $this->any( '*', $handler );
+	}
+
+	/**
+	 * Execute a route.
+	 *
+	 * @param  RequestInterface  $request
+	 * @param  RouteInterface    $route
+	 * @param  string            $view
+	 * @return ResponseInterface
+	 */
+	protected function handle( RequestInterface $request, RouteInterface $route, $view ) {
+		try {
+			$this->error_handler->register();
+
+			$handler = function ( $request, $view ) use ( $route ) {
+				return $route->handle( $request, $view );
+			};
+
+			$response = ( new Pipeline() )
+				->middleware( $this->global_middleware )
+				->middleware( $this->sortMiddleware( $route->getMiddleware() ) )
+				->to( $handler )
+				->run( $request, [$request, $view] );
+
+			$this->error_handler->unregister();
+		} catch ( Exception $exception ) {
+			$response = $this->error_handler->getResponse( $exception );
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Execute the first satisfied route, if any.
+	 *
+	 * @param  RequestInterface       $request
+	 * @param  string                 $view
+	 * @return ResponseInterface|null
+	 */
+	public function execute( $request, $view ) {
+		$routes = $this->getRoutes();
+
+		foreach ( $routes as $route ) {
+			if ( $route->isSatisfied( $request ) ) {
+				$this->setCurrentRoute( $route );
+				return $this->handle( $request, $route, $view );
+			}
+		}
+
+		return null;
 	}
 }

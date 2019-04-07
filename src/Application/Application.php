@@ -7,7 +7,7 @@
  * @link      https://wpemerge.com/
  */
 
-namespace WPEmerge\Framework;
+namespace WPEmerge\Application;
 
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
@@ -17,6 +17,7 @@ use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
+use WPEmerge\Kernels\KernelsServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
@@ -24,11 +25,11 @@ use WPEmerge\Support\AliasLoader;
 use WPEmerge\View\ViewServiceProvider;
 
 /**
- * Main communication channel with the framework
+ * Main communication channel with the application.
  */
-class Framework {
+class Application {
 	/**
-	 * Flag whether the framework has been bootstrapped.
+	 * Flag whether the application has been bootstrapped.
 	 *
 	 * @var boolean
 	 */
@@ -42,11 +43,12 @@ class Framework {
 	protected $container = null;
 
 	/**
-	 * Array of framework service providers.
+	 * Array of application service providers.
 	 *
 	 * @var string[]
 	 */
 	protected $service_providers = [
+		KernelsServiceProvider::class,
 		ExceptionsServiceProvider::class,
 		RequestsServiceProvider::class,
 		ResponsesServiceProvider::class,
@@ -85,7 +87,7 @@ class Framework {
 	}
 
 	/**
-	 * Get whether the framework has been bootstrapped.
+	 * Get whether the application has been bootstrapped.
 	 *
 	 * @return boolean
 	 */
@@ -94,7 +96,7 @@ class Framework {
 	}
 
 	/**
-	 * Throw an exception if the framework has not been bootstrapped.
+	 * Throw an exception if the application has not been bootstrapped.
 	 *
 	 * @throws ConfigurationException
 	 * @return void
@@ -115,7 +117,7 @@ class Framework {
 	}
 
 	/**
-	 * Bootstrap the framework.
+	 * Bootstrap the application.
 	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
 	 * @throws ConfigurationException
@@ -130,6 +132,10 @@ class Framework {
 		$container = $this->getContainer();
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
+
+		require_once WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'wordpress.php';
+		/*require_once WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'wordpress-admin.php';*/
+
 		$this->bootstrapped = true;
 	}
 

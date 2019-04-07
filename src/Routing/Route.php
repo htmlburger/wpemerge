@@ -9,9 +9,10 @@
 
 namespace WPEmerge\Routing;
 
-use Closure;
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
+use WPEmerge\Helpers\Handler;
+use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
@@ -20,6 +21,8 @@ use WPEmerge\Routing\Conditions\UrlCondition;
  * Represent a route
  */
 class Route implements RouteInterface {
+	use HasMiddlewareTrait;
+
 	/**
 	 * Allowed methods.
 	 *
@@ -35,11 +38,11 @@ class Route implements RouteInterface {
 	protected $condition = null;
 
 	/**
-	 * Route pipeline.
+	 * Route handler.
 	 *
-	 * @var Pipeline
+	 * @var Handler
 	 */
-	protected $pipeline = null;
+	protected $handler = null;
 
 	/**
 	 * Query filter.
@@ -66,7 +69,7 @@ class Route implements RouteInterface {
 	public function __construct( $methods, $condition, $handler ) {
 		$this->methods = $methods;
 		$this->setCondition( $condition );
-		$this->pipeline = new Pipeline( $handler );
+		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\' );
 	}
 
 	/**
@@ -96,13 +99,13 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Get pipeline.
+	 * Get handler.
 	 *
 	 * @codeCoverageIgnore
-	 * @return Pipeline
+	 * @return Handler
 	 */
-	public function getPipeline() {
-		return $this->pipeline;
+	public function getHandler() {
+		return $this->handler;
 	}
 
 	/**
@@ -181,7 +184,7 @@ class Route implements RouteInterface {
 	 * @return array<string, mixed>
 	 */
 	public function applyQueryFilter( $query_vars ) {
-		$request = Framework::resolve( WPEMERGE_REQUEST_KEY );
+		$request = Application::resolve( WPEMERGE_REQUEST_KEY );
 		$condition = $this->getCondition();
 
 		if ( ! is_callable( $this->getQueryFilter() ) ) {
@@ -237,52 +240,11 @@ class Route implements RouteInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $view ) {
-		$arguments = array_merge( [$request, $view], array_values( $this->condition->getArguments( $request ) ) );
+		$arguments = array_merge(
+			[$request, $view],
+			array_values( $this->condition->getArguments( $request ) )
+		);
 
-		return $this->getPipeline()->run( $request, $arguments );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function getMiddleware() {
-		return $this->getPipeline()->getMiddleware();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function setMiddleware( $middleware ) {
-		$this->getPipeline()->setMiddleware( $middleware );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function addMiddleware( $middleware ) {
-		$this->getPipeline()->addMiddleware( $middleware );
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function middleware( $middleware ) {
-		$this->getPipeline()->middleware( $middleware );
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
-		return $this->getPipeline()->executeMiddleware( $middleware, $request, $next );
+		return call_user_func_array( [$this->getHandler(), 'execute'], $arguments );
 	}
 }

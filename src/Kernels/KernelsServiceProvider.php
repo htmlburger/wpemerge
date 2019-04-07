@@ -7,27 +7,23 @@
  * @link      https://wpemerge.com/
  */
 
-namespace WPEmerge\Responses;
+namespace WPEmerge\Kernels;
 
-use WPEmerge\Facades\Application;
-use WPEmerge\Facades\Response as ResponseFacade;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
- * Provide responses dependencies.
+ * Provide old input dependencies.
  *
  * @codeCoverageIgnore
  */
-class ResponsesServiceProvider implements ServiceProviderInterface {
+class KernelsServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$container[ WPEMERGE_RESPONSE_SERVICE_KEY ] = function ( $c ) {
-			return new ResponseService( $c[ WPEMERGE_REQUEST_KEY ] );
+		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = function ( $c ) {
+			return new WordPressHttpKernel( $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
 		};
-
-		Application::facade( 'Response', ResponseFacade::class );
 	}
 
 	/**

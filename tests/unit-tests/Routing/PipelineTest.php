@@ -26,7 +26,7 @@ class PipelineTest extends WP_UnitTestCase {
 	 */
 	public function testConstruct() {
 		$expected = function() {};
-		$subject = new Pipeline( $expected );
+		$subject = ( new Pipeline() )->to( $expected );
 
 		$this->assertSame( $expected, $subject->getHandler()->get()->get() );
 	}
@@ -49,7 +49,7 @@ class PipelineTest extends WP_UnitTestCase {
 
 			return $expected;
 		};
-		$subject = new Pipeline( $handler );
+		$subject = ( new Pipeline() )->to( $handler );
 
 		$this->assertSame( $expected, $subject->run( $request, [$request, $view] )->getBody()->read( 100 ) );
 	}

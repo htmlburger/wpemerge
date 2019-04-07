@@ -7,7 +7,7 @@
  * @link      https://wpemerge.com/
  */
 
-namespace WPEmerge\Framework;
+namespace WPEmerge\Application;
 
 use WPEmerge\Exceptions\ConfigurationException;
 

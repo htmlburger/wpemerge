@@ -8,7 +8,7 @@
  */
 
 /**
- * Absolute path to framework's directory.
+ * Absolute path to application's directory.
  */
 if ( ! defined( 'WPEMERGE_DIR' ) ) {
 	define( 'WPEMERGE_DIR', __DIR__ );
@@ -17,8 +17,12 @@ if ( ! defined( 'WPEMERGE_DIR' ) ) {
 /**
  * Service container keys.
  */
-if ( ! defined( 'WPEMERGE_FRAMEWORK_KEY' ) ) {
-	define( 'WPEMERGE_FRAMEWORK_KEY', 'wpemerge.framework.framework' );
+if ( ! defined( 'WPEMERGE_APPLICATION_KEY' ) ) {
+	define( 'WPEMERGE_APPLICATION_KEY', 'wpemerge.application.application' );
+}
+
+if ( ! defined( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY' ) ) {
+	define( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY', 'wpemerge.kernels.wordpress_http_kernel' );
 }
 
 if ( ! defined( 'WPEMERGE_CONFIG_KEY' ) ) {

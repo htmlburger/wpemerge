@@ -11,13 +11,10 @@ namespace WPEmerge\Middleware;
 
 use Closure;
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Framework;
-use WPEmerge\Facades\Router;
 use WPEmerge\Helpers\MixedType;
-use WPEmerge\Requests\RequestInterface;
 
 /**
- * Allow objects to have middleware
+ * Allow objects to have middleware.
  */
 trait HasMiddlewareTrait {
 	/**
@@ -70,8 +67,7 @@ trait HasMiddlewareTrait {
 			}
 		}
 
-		// TODO this router dependency should be avoided.
-		$this->middleware = Router::sortMiddleware( $middleware );
+		$this->middleware = $middleware;
 	}
 
 	/**
@@ -79,46 +75,24 @@ trait HasMiddlewareTrait {
 	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
-	 * @return static                                                         $this
+	 * @return void
 	 */
 	public function addMiddleware( $middleware ) {
 		$middleware = MixedType::toArray( $middleware );
 
 		$this->setMiddleware( array_merge( $this->getMiddleware(), $middleware ) );
-
-		return $this;
 	}
 
 	/**
-	 * Alias for addMiddleware.
+	 * Fluent alias for addMiddleware().
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
 	 * @return static                                                         $this
 	 */
 	public function middleware( $middleware ) {
-		return call_user_func_array( [$this, 'addMiddleware'], func_get_args() );
-	}
+		call_user_func_array( [$this, 'addMiddleware'], func_get_args() );
 
-	/**
-	 * Execute an array of middleware recursively (last in, first out).
-	 *
-	 * @param  array                               $middleware
-	 * @param  RequestInterface                    $request
-	 * @param  Closure                             $next
-	 * @return \Psr\Http\Message\ResponseInterface
-	 */
-	public function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
-		$top_middleware = array_shift( $middleware );
-
-		if ( $top_middleware === null ) {
-			return $next( $request );
-		}
-
-		$top_middleware_next = function ( $request ) use ( $middleware, $next ) {
-			return $this->executeMiddleware( $middleware, $request, $next );
-		};
-
-		return MixedType::value( $top_middleware, [$request, $top_middleware_next], 'handle', [Framework::class, 'instantiate'] );
+		return $this;
 	}
 }

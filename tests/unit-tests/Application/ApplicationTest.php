@@ -1,23 +1,23 @@
 <?php
 
-namespace WPEmergeTests\Framework;
+namespace WPEmergeTests\Application;
 
 use Mockery;
-use WPEmerge\Framework\Framework;
+use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\Facade;
 use Pimple\Container;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Framework\Framework
+ * @coversDefaultClass \WPEmerge\Application\Application
  */
-class FrameworkTest extends WP_UnitTestCase {
+class ApplicationTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
 		$this->container = new Container();
-		$this->subject = new Framework( $this->container );
+		$this->subject = new Application( $this->container );
 		$this->facade_application = Facade::getFacadeApplication();
 		Facade::setFacadeApplication( $this->container );
 	}
@@ -36,7 +36,7 @@ class FrameworkTest extends WP_UnitTestCase {
 	 */
 	public function testConstruct() {
 		$container = new Container();
-		$subject = new Framework( $container );
+		$subject = new Application( $container );
 		$this->assertSame( $container, $subject->getContainer() );
 	}
 
@@ -94,7 +94,7 @@ class FrameworkTest extends WP_UnitTestCase {
 	public function testBootstrap_RegisterServiceProviders() {
 		$this->subject->bootstrap( [
 			'providers' => [
-				FrameworkTestServiceProviderMock::class,
+				ApplicationTestServiceProviderMock::class,
 			]
 		] );
 
@@ -163,7 +163,7 @@ class FrameworkTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::instantiate
-	 * @expectedException \WPEmerge\Framework\ClassNotFoundException
+	 * @expectedException \WPEmerge\Application\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found
 	 */
 	public function testInstantiate_UnknownNonexistantClass_Exception() {
@@ -195,7 +195,7 @@ class FrameworkTest extends WP_UnitTestCase {
 	}
 }
 
-class FrameworkTestServiceProviderMock implements ServiceProviderInterface {
+class ApplicationTestServiceProviderMock implements ServiceProviderInterface {
 	public function __construct() {
 		$this->mock = Mockery::mock( ServiceProviderInterface::class );
 		$this->mock->shouldReceive( 'register' )

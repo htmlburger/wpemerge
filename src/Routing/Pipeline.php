@@ -9,15 +9,17 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Middleware\ExecutesMiddlewareTrait;
 use WPEmerge\Middleware\HasMiddlewareInterface;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Represent a route
+ * Represent middleware that envelops a handler.
  */
 class Pipeline implements HasMiddlewareInterface {
 	use HasMiddlewareTrait;
+	use ExecutesMiddlewareTrait;
 
 	/**
 	 * Pipeline handler.
@@ -27,21 +29,34 @@ class Pipeline implements HasMiddlewareInterface {
 	protected $handler = null;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param  string|\Closure $handler
-	 */
-	public function __construct( $handler ) {
-		$this->handler = new PipelineHandler( $handler );
-	}
-
-	/**
 	 * Get handler.
 	 *
 	 * @return PipelineHandler
 	 */
 	public function getHandler() {
 		return $this->handler;
+	}
+
+	/**
+	 * Set handler.
+	 *
+	 * @param  string|\Closure $handler
+	 * @return void
+	 */
+	public function setHandler( $handler ) {
+		$this->handler = new PipelineHandler( $handler );
+	}
+
+	/**
+	 * Fluent alias for setHandler().
+	 *
+	 * @param  string|\Closure $handler
+	 * @return self  $this
+	 */
+	public function to( $handler ) {
+		call_user_func_array( [$this, 'setHandler'], func_get_args() );
+
+		return $this;
 	}
 
 	/**

@@ -11,8 +11,8 @@ namespace WPEmerge\Helpers;
 
 use Closure;
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Framework;
-use WPEmerge\Framework\ClassNotFoundException;
+use WPEmerge\Facades\Application;
+use WPEmerge\Application\ClassNotFoundException;
 
 /**
  * Represent a generic handler - a Closure or a class method to be resolved from the service container
@@ -112,10 +112,10 @@ class Handler {
 		$method = $this->handler['method'];
 
 		try {
-			$instance = Framework::instantiate( $class );
+			$instance = Application::instantiate( $class );
 		} catch ( ClassNotFoundException $e ) {
 			try {
-				$instance = Framework::instantiate( $class_prefix . $class );
+				$instance = Application::instantiate( $class_prefix . $class );
 			} catch ( ClassNotFoundException $e ) {
 				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $class_prefix . $class );
 			}

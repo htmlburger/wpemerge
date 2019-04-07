@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Input;
 
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -40,7 +40,7 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 			return new \WPEmerge\Input\OldInput( $c[ WPEMERGE_FLASH_KEY ] );
 		};
 
-		Framework::facade( 'OldInput', \WPEmerge\Facades\OldInput::class );
+		Application::facade( 'OldInput', \WPEmerge\Facades\OldInput::class );
 	}
 
 	/**

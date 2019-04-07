@@ -11,7 +11,7 @@ namespace WPEmerge\Exceptions;
 
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
-use WPEmerge\Facades\Framework;
+use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
@@ -44,7 +44,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 
 		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) {
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
-			return new ErrorHandler( $whoops, Framework::debugging() );
+			return new ErrorHandler( $whoops, Application::debugging() );
 		};
 	}
 
