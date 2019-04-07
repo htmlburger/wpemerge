@@ -14,7 +14,7 @@ namespace WPEmerge\ServiceProviders;
  */
 interface ServiceProviderInterface {
 	/**
-	 * Register all dependencies in the IoC container
+	 * Register all dependencies in the IoC container.
 	 *
 	 * @param  \Pimple\Container $container
 	 * @return void
@@ -22,10 +22,10 @@ interface ServiceProviderInterface {
 	public function register( $container );
 
 	/**
-	 * Bootstrap any services if needed
+	 * Bootstrap any services if needed.
 	 *
 	 * @param  \Pimple\Container $container
 	 * @return void
 	 */
-	public function boot( $container );
+	public function bootstrap( $container );
 }

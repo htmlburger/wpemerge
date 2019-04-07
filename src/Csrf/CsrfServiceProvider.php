@@ -32,7 +32,7 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function boot( $container ) {
-		// nothing to boot
+	public function bootstrap( $container ) {
+		// Nothing to bootstrap.
 	}
 }

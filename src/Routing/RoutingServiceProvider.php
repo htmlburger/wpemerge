@@ -109,7 +109,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function boot( $container ) {
-		RouterFacade::boot();
+	public function bootstrap( $container ) {
+		RouterFacade::bootstrap();
 	}
 }

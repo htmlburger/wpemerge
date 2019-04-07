@@ -62,7 +62,7 @@ class WPEmerge_Tests_Bootstrap {
 			$wp->query_vars = [];
 		}
 
-		WPEmerge\Facades\Framework::boot();
+		WPEmerge\Facades\Framework::bootstrap();
 	}
 
 	/**

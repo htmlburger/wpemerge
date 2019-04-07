@@ -117,7 +117,7 @@ class Router implements HasRoutesInterface {
 	 * @codeCoverageIgnore
 	 * @return void
 	 */
-	public function boot() {
+	public function bootstrap() {
 		add_action( 'template_include', [$this, 'execute'], 1000 );
 	}
 

@@ -50,13 +50,13 @@ class FrameworkTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::isBooted
-	 * @covers ::boot
+	 * @covers ::isBootstrapped
+	 * @covers ::bootstrap
 	 */
-	public function testIsBooted() {
-		$this->assertEquals( false, $this->subject->isBooted() );
-		$this->subject->boot();
-		$this->assertEquals( true, $this->subject->isBooted() );
+	public function testIsBootstrapped() {
+		$this->assertEquals( false, $this->subject->isBootstrapped() );
+		$this->subject->bootstrap();
+		$this->assertEquals( true, $this->subject->isBootstrapped() );
 	}
 
 	/**
@@ -68,37 +68,36 @@ class FrameworkTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::verifyBoot
+	 * @covers ::verifyBootstrap
 	 * @expectedException \Exception
-	 * @expectedExceptionMessage must be booted first
+	 * @expectedExceptionMessage must be bootstrapped first
 	 */
-	public function testVerifyBoot() {
+	public function testVerifyBootstrap() {
 		$this->subject->resolve( 'foobar' );
 	}
 
 	/**
-	 * @covers ::boot
+	 * @covers ::bootstrap
 	 * @expectedException \Exception
-	 * @expectedExceptionMessage already booted
+	 * @expectedExceptionMessage already bootstrapped
 	 */
-	public function testBoot_CalledMultipleTimes_ThrowException() {
-		$this->subject->boot();
-		$this->subject->boot();
+	public function testBootstrap_CalledMultipleTimes_ThrowException() {
+		$this->subject->bootstrap();
+		$this->subject->bootstrap();
 	}
 
 	/**
-	 * @covers ::boot
+	 * @covers ::bootstrap
 	 * @covers ::registerServiceProviders
-	 * @covers ::bootServiceProviders
+	 * @covers ::bootstrapServiceProviders
 	 */
-	public function testBoot_RegisterServiceProviders() {
-		$container = $this->subject->getContainer();
-
-		$this->subject->boot( [
+	public function testBootstrap_RegisterServiceProviders() {
+		$this->subject->bootstrap( [
 			'providers' => [
 				FrameworkTestServiceProviderMock::class,
 			]
 		] );
+
 		$this->assertTrue( true );
 	}
 
@@ -120,19 +119,19 @@ class FrameworkTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::resolve
-	 * @covers ::verifyBoot
+	 * @covers ::verifyBootstrap
 	 */
 	public function testResolve_NonexistantKey_ReturnNull() {
 		$expected = null;
 		$container_key = 'nonexistantcontainerkey';
 
-		$this->subject->boot();
+		$this->subject->bootstrap();
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
 	}
 
 	/**
 	 * @covers ::resolve
-	 * @covers ::verifyBoot
+	 * @covers ::verifyBootstrap
 	 */
 	public function testResolve_ExistingKey_IsResolved() {
 		$expected = 'foobar';
@@ -142,18 +141,18 @@ class FrameworkTest extends WP_UnitTestCase {
 		$container = $this->subject->getContainer();
 		$container[ $container_key ] = $expected;
 
-		$this->subject->boot();
+		$this->subject->bootstrap();
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
 	}
 
 	/**
 	 * @covers ::instantiate
-	 * @covers ::verifyBoot
+	 * @covers ::verifyBootstrap
 	 */
 	public function testInstantiate_UnknownClass_CreateFreshInstance() {
 		$class = \WPEmergeTestTools\TestService::class;
 
-		$this->subject->boot();
+		$this->subject->bootstrap();
 		$instance1 = $this->subject->instantiate( $class );
 		$instance2 = $this->subject->instantiate( $class );
 
@@ -170,13 +169,13 @@ class FrameworkTest extends WP_UnitTestCase {
 	public function testInstantiate_UnknownNonexistantClass_Exception() {
 		$class = \WPEmergeTestTools\NonExistantClass::class;
 
-		$this->subject->boot();
+		$this->subject->bootstrap();
 		$this->subject->instantiate( $class );
 	}
 
 	/**
 	 * @covers ::instantiate
-	 * @covers ::verifyBoot
+	 * @covers ::verifyBootstrap
 	 */
 	public function testInstantiate_KnownClass_ResolveInstanceFromContainer() {
 		$expected = rand(1, 999999);
@@ -189,7 +188,7 @@ class FrameworkTest extends WP_UnitTestCase {
 			return $instance;
 		};
 
-		$this->subject->boot();
+		$this->subject->bootstrap();
 		$instance = $this->subject->instantiate( $class );
 
 		$this->assertEquals( $expected, $instance->getTest() );
@@ -201,7 +200,7 @@ class FrameworkTestServiceProviderMock implements ServiceProviderInterface {
 		$this->mock = Mockery::mock( ServiceProviderInterface::class );
 		$this->mock->shouldReceive( 'register' )
 			->once();
-		$this->mock->shouldReceive( 'boot' )
+		$this->mock->shouldReceive( 'bootstrap' )
 			->once();
 	}
 
@@ -209,7 +208,7 @@ class FrameworkTestServiceProviderMock implements ServiceProviderInterface {
 		call_user_func_array( [$this->mock, 'register'], func_get_args() );
 	}
 
-	public function boot( $container ) {
-		call_user_func_array( [$this->mock, 'boot'], func_get_args() );
+	public function bootstrap( $container ) {
+		call_user_func_array( [$this->mock, 'bootstrap'], func_get_args() );
 	}
 }

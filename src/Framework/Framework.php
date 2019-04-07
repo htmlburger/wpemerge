@@ -28,21 +28,21 @@ use WPEmerge\View\ViewServiceProvider;
  */
 class Framework {
 	/**
-	 * Flag whether the framework has been booted
+	 * Flag whether the framework has been bootstrapped.
 	 *
 	 * @var boolean
 	 */
-	protected $booted = false;
+	protected $bootstrapped = false;
 
 	/**
-	 * IoC container
+	 * IoC container.
 	 *
 	 * @var Container
 	 */
 	protected $container = null;
 
 	/**
-	 * Array of framework service providers
+	 * Array of framework service providers.
 	 *
 	 * @var string[]
 	 */
@@ -59,7 +59,7 @@ class Framework {
 	];
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param Container $container
 	 */
@@ -74,7 +74,7 @@ class Framework {
 	}
 
 	/**
-	 * Get whether WordPress is in debug mode
+	 * Get whether WordPress is in debug mode.
 	 *
 	 * @return boolean
 	 */
@@ -85,28 +85,28 @@ class Framework {
 	}
 
 	/**
-	 * Get whether the framework has been booted
+	 * Get whether the framework has been bootstrapped.
 	 *
 	 * @return boolean
 	 */
-	public function isBooted() {
-		return $this->booted;
+	public function isBootstrapped() {
+		return $this->bootstrapped;
 	}
 
 	/**
-	 * Throw an exception if the framework has not been booted
+	 * Throw an exception if the framework has not been bootstrapped.
 	 *
 	 * @throws ConfigurationException
 	 * @return void
 	 */
-	protected function verifyBoot() {
-		if ( ! $this->isBooted() ) {
-			throw new ConfigurationException( static::class . ' must be booted first.' );
+	protected function verifyBootstrap() {
+		if ( ! $this->isBootstrapped() ) {
+			throw new ConfigurationException( static::class . ' must be bootstrapped first.' );
 		}
 	}
 
 	/**
-	 * Get the IoC container instance
+	 * Get the IoC container instance.
 	 *
 	 * @return Container
 	 */
@@ -115,30 +115,26 @@ class Framework {
 	}
 
 	/**
-	 * Boot the framework.
+	 * Bootstrap the framework.
 	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
 	 * @throws ConfigurationException
-	 * @param  array     $config
+	 * @param  array $config
 	 * @return void
 	 */
-	public function boot( $config = [] ) {
-		if ( $this->isBooted() ) {
-			throw new ConfigurationException( static::class . ' already booted.' );
+	public function bootstrap( $config = [] ) {
+		if ( $this->isBootstrapped() ) {
+			throw new ConfigurationException( static::class . ' already bootstrapped.' );
 		}
-
-		do_action( 'wpemerge.booting' );
 
 		$container = $this->getContainer();
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
-		$this->booted = true;
-
-		do_action( 'wpemerge.booted' );
+		$this->bootstrapped = true;
 	}
 
 	/**
-	 * Load config into the service container
+	 * Load config into the service container.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Container $container
@@ -153,7 +149,7 @@ class Framework {
 	}
 
 	/**
-	 * Register and boot all service providers
+	 * Register and bootstrap all service providers.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Container $container
@@ -170,11 +166,11 @@ class Framework {
 		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
 
 		$this->registerServiceProviders( $service_providers, $container );
-		$this->bootServiceProviders( $service_providers, $container );
+		$this->bootstrapServiceProviders( $service_providers, $container );
 	}
 
 	/**
-	 * Register all service providers
+	 * Register all service providers.
 	 *
 	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
@@ -187,20 +183,20 @@ class Framework {
 	}
 
 	/**
-	 * Boot all service providers
+	 * Bootstrap all service providers.
 	 *
 	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
 	 * @param  Container                                             $container
 	 * @return void
 	 */
-	protected function bootServiceProviders( $service_providers, Container $container ) {
+	protected function bootstrapServiceProviders( $service_providers, Container $container ) {
 		foreach ( $service_providers as $provider ) {
-			$provider->boot( $container );
+			$provider->bootstrap( $container );
 		}
 	}
 
 	/**
-	 * Register a facade class
+	 * Register a facade class.
 	 *
 	 * @param  string $alias
 	 * @param  string $facade_class
@@ -211,13 +207,13 @@ class Framework {
 	}
 
 	/**
-	 * Resolve a dependency from the IoC container
+	 * Resolve a dependency from the IoC container.
 	 *
-	 * @param  string $key
+	 * @param  string     $key
 	 * @return mixed|null
 	 */
 	public function resolve( $key ) {
-		$this->verifyBoot();
+		$this->verifyBootstrap();
 
 		if ( ! isset( $this->getContainer()[ $key ] ) ) {
 			return null;
@@ -234,7 +230,7 @@ class Framework {
 	 * @return object
 	 */
 	public function instantiate( $class ) {
-		$this->verifyBoot();
+		$this->verifyBootstrap();
 
 		$instance = $this->resolve( $class );
 
@@ -250,7 +246,7 @@ class Framework {
 	}
 
 	/**
-	 * Send output based on a response object
+	 * Send output based on a response object.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  ResponseInterface $response
