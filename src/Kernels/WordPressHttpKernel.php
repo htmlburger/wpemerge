@@ -89,15 +89,15 @@ class WordPressHttpKernel implements HttpKernel {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $view ) {
+		$this->error_handler->register();
+
 		try {
-			$this->error_handler->register();
-
 			$response = $this->router->execute( $request, $view );
-
-			$this->error_handler->unregister();
 		} catch ( Exception $exception ) {
 			$response = $this->error_handler->getResponse( $exception );
 		}
+
+		$this->error_handler->unregister();
 
 		return $response;
 	}
