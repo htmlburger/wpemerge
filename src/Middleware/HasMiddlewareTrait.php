@@ -55,6 +55,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Fluent alias for addMiddleware().
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string|array $middleware
 	 * @return static       $this
 	 */

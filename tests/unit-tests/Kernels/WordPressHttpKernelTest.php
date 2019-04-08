@@ -35,6 +35,7 @@ class WordPressHttpKernelTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Test exception handled
 	 */
 	public function testHandle_Exception_UseErrorHandler() {
+		// TODO test error handler unregister
 		$exception = new Exception();
 		$request = Mockery::mock( RequestInterface::class );
 		$subject = new WordPressHttpKernel( $this->router, $this->error_handler );
