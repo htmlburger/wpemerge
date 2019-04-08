@@ -21,6 +21,7 @@ use WPEmerge\Kernels\KernelsServiceProvider;
 use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
+use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\AliasLoader;
 use WPEmerge\View\ViewServiceProvider;
 
@@ -168,6 +169,10 @@ class Application {
 		);
 
 		$service_providers = array_map( function ( $service_provider ) {
+			if ( ! is_subclass_of( $service_provider, ServiceProviderInterface::class ) ) {
+				throw new ConfigurationException( 'The following class does not implement ServiceProviderInterface: ' . $service_provider );
+			}
+
 			return new $service_provider();
 		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
 

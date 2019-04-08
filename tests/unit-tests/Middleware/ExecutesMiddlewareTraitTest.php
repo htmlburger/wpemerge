@@ -9,7 +9,6 @@ use WPEmergeTestTools\TestMiddleware;
 use WP_UnitTestCase;
 
 /**
- * TODO review.
  * @coversDefaultClass \WPEmerge\Middleware\ExecutesMiddlewareTrait
  */
 class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {

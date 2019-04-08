@@ -47,7 +47,7 @@ class Route implements RouteInterface {
 	/**
 	 * Query filter.
 	 *
-	 * @var callable
+	 * @var callable|null
 	 */
 	protected $query_filter = null;
 
@@ -134,6 +134,7 @@ class Route implements RouteInterface {
 	/**
 	 * Get the main WordPress query vars filter, if any.
 	 *
+	 * @codeCoverageIgnore
 	 * @return callable|null
 	 */
 	public function getQueryFilter() {
@@ -141,8 +142,9 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Set the main WordPress query vars filter and add it to the appropriate WordPress action.
+	 * Set the main WordPress query vars filter.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  callable|null $query_filter
 	 * @return void
 	 */
@@ -151,71 +153,47 @@ class Route implements RouteInterface {
 	}
 
 	/**
-	 * Add the query filter to the appropriate WordPress action.
-	 *
-	 * @return void
-	 */
-	public function addQueryFilter() {
-		$filter = [$this, 'applyQueryFilter'];
-
-		if ( ! has_action( 'request', $filter ) ) {
-			add_action( 'request', $filter, $this->query_filter_priority );
-		}
-	}
-
-	/**
-	 * Remove the query filter from the appropriate WordPress action.
-	 *
-	 * @return void
-	 */
-	public function removeQueryFilter() {
-		$filter = [$this, 'applyQueryFilter'];
-
-		if ( has_action( 'request', $filter ) ) {
-			remove_action( 'request', $filter, $this->query_filter_priority );
-		}
-	}
-
-	/**
 	 * Apply the query filter, if any.
 	 *
+	 * @internal
 	 * @throws ConfigurationException
-	 * @param  array<string, mixed> $query_vars
-	 * @return array<string, mixed>
+	 * @param RequestInterface            $request
+	 * @param  array<string, mixed>       $query_vars
+	 * @return array<string, mixed>|false
 	 */
-	public function applyQueryFilter( $query_vars ) {
-		$request = Application::resolve( WPEMERGE_REQUEST_KEY );
+	public function applyQueryFilter( $request, $query_vars ) {
 		$condition = $this->getCondition();
 
-		if ( ! is_callable( $this->getQueryFilter() ) ) {
-			return $query_vars;
+		if ( $this->getQueryFilter() === null ) {
+			return false;
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
 			throw new ConfigurationException(
-				'Routes with queries can only use URL conditions. ' .
-				'Is the route in a non-URL route group?'
+				'Only routes with URL condition can use queries. ' .
+				'Make sure your route has a URL condition and it is not in a non-URL route group.'
 			);
 		}
 
-		if ( $this->getCondition()->isSatisfied( $request ) ) {
-			$arguments = $this->getCondition()->getArguments( $request );
-			$query_vars = call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
+		if ( ! $this->getCondition()->isSatisfied( $request ) ) {
+			return false;
 		}
 
-		return $query_vars;
+		$arguments = $this->getCondition()->getArguments( $request );
+
+		return call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
 	}
 
 	/**
-	 * Set the main WordPress query vars filter.
+	 * Fluent alias of setQueryFilter().
 	 *
 	 * @codeCoverageIgnore
 	 * @param  callable $query_filter
-	 * @return self     $this
+	 * @return static   $this
 	 */
 	public function query( $query_filter ) {
 		$this->setQueryFilter( $query_filter );
-		$this->addQueryFilter();
+
 		return $this;
 	}
 
@@ -226,6 +204,7 @@ class Route implements RouteInterface {
 		if ( ! in_array( $request->getMethod(), $this->methods ) ) {
 			return false;
 		}
+
 		return $this->condition->isSatisfied( $request );
 	}
 

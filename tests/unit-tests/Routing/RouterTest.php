@@ -2,13 +2,12 @@
 
 namespace WPEmergeTests\Routing;
 
-use ArrayAccess;
-use Exception;
+use Closure;
+use GuzzleHttp\Psr7;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Exceptions\ErrorHandlerInterface;
-use WPEmerge\Facades\Application;
 use WPEmerge\Middleware\MiddlewareInterface;
+use WPEmerge\Requests\Request;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -16,7 +15,6 @@ use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
-use WPEmerge\Support\Facade;
 use WP_UnitTestCase;
 
 /**
@@ -26,24 +24,19 @@ class RouterTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
 		$this->condition_factory = new ConditionFactory( [
 			'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
 			'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
 			'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
 			'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
 		] );
-		$this->subject = new Router( $this->condition_factory, $this->error_handler );
+		$this->subject = new Router( $this->condition_factory );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		Facade::clearResolvedInstance( WPEMERGE_RESPONSE_KEY );
-		Facade::clearResolvedInstance( WPEMERGE_APPLICATION_KEY );
-
-		unset( $this->error_handler );
 		unset( $this->condition_factory );
 		unset( $this->subject );
 	}
@@ -57,7 +50,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware3 = 'baz';
 		$middleware4 = function() {};
 
-		$subject = new Router( $this->condition_factory, $this->error_handler );
+		$subject = new Router( $this->condition_factory );
 		$subject->setMiddlewarePriority( [
 			$middleware1,
 			$middleware2,
@@ -77,7 +70,7 @@ class RouterTest extends WP_UnitTestCase {
 		$middleware2 = 'bar';
 		$middleware3 = 'baz';
 
-		$subject = new Router( $this->condition_factory, $this->error_handler );
+		$subject = new Router( $this->condition_factory );
 		$subject->setMiddlewarePriority( [
 			$middleware2,
 		] );
@@ -98,18 +91,19 @@ class RouterTest extends WP_UnitTestCase {
 	public function testGroup() {
 		$condition1 = Mockery::mock( ConditionInterface::class );
 		$condition2 = Mockery::mock( UrlCondition::class );
-		$middleware1 = function () {};
-		$middleware2 = function () {};
-		$middleware3 = function () {};
 		$where1 = ['foo' => 'foo'];
 		$where2 = ['bar' => 'bar'];
 
-		$subject = new Router( $this->condition_factory, $this->error_handler );
-		$subject->setGlobalMiddleware( [$middleware1] );
+		$subject = new Router( $this->condition_factory );
 
-		$mock = Mockery::mock( RouteInterface::class );
+		$subject->setMiddleware( [
+			'middleware1' => RouterTestMiddlewareStub1::class,
+			'middleware2' => RouterTestMiddlewareStub2::class,
+		] );
 
-		$mock->shouldReceive( 'getCondition' )
+		$route = Mockery::mock( RouteInterface::class );
+
+		$route->shouldReceive( 'getCondition' )
 			->andReturn( $condition2 );
 
 		$condition2->shouldReceive( 'getUrlWhere' )
@@ -118,7 +112,7 @@ class RouterTest extends WP_UnitTestCase {
 		$condition2->shouldReceive( 'setUrlWhere' )
 			->with( array_merge( $where1, $where2 ) );
 
-		$mock->shouldReceive( 'setCondition' )
+		$route->shouldReceive( 'setCondition' )
 			->with( Mockery::on( function ( $condition ) use ( $condition1, $condition2 ) {
 				$is_multiple = $condition instanceof MultipleCondition;
 				$conditions = $condition->getConditions();
@@ -128,18 +122,18 @@ class RouterTest extends WP_UnitTestCase {
 				return $is_multiple && $condition1_matches && $condition2_matches;
 			} ) );
 
-		$mock->shouldReceive( 'getMiddleware' )
-			->andReturn( [$middleware3] );
+		$route->shouldReceive( 'getMiddleware' )
+			->andReturn( ['middleware2'] );
 
-		$mock->shouldReceive( 'setMiddleware' )
-			->with( [$middleware1, $middleware2, $middleware3] );
+		$route->shouldReceive( 'setMiddleware' )
+			->with( ['middleware1', 'middleware2'] );
 
 		$subject->group( [
 			'condition' => $condition1,
 			'where' => $where1,
-			'middleware' => $middleware2,
-		], function () use ( $subject, $mock ) {
-			$subject->addRoute( $mock );
+			'middleware' => 'middleware1',
+		], function () use ( $subject, $route ) {
+			$subject->addRoute( $route );
 		} );
 
 		$this->assertTrue( true );
@@ -150,40 +144,9 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testAddRoute() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$subject = new Router( $this->condition_factory, $this->error_handler );
+		$subject = new Router( $this->condition_factory );
 
 		$this->assertSame( $route, $subject->addRoute( $route ) );
-	}
-
-	/**
-	 * @covers ::addRoute
-	 */
-	public function testAddRoute_GlobalMiddleware_PrependToRoute() {
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
-		$route_middleware = Mockery::mock( MiddlewareInterface::class );
-		$global_middleware = Mockery::mock( MiddlewareInterface::class );
-		$expected = [$global_middleware, $route_middleware];
-
-		$subject = new Router( $this->condition_factory, $this->error_handler );
-		$subject->setGlobalMiddleware( [$global_middleware] );
-
-		$route->shouldReceive( 'getMiddleware' )
-			  ->andReturn( [$route_middleware] )
-			  ->once();
-
-		$success = false;
-
-		$route->shouldReceive( 'setMiddleware' )
-			->andReturnUsing( function ( $middleware ) use ( $expected, &$success ) {
-				// Do all of this because Mockery does not support passing a custom closure in with() to validate received arguments
-				// and we need to do that because Mockery matches an array even if the values are out of order.
-				$success = $middleware[0] === $expected[0];
-			} )
-			->once();
-
-		$subject->addRoute( $route );
-
-		$this->assertTrue( $success );
 	}
 
 	/**
@@ -249,32 +212,66 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::execute
 	 * @covers ::handle
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Test exception handled
 	 */
-	public function testExecute_Exception_UseErrorHandler() {
-		$request = Mockery::mock( RequestInterface::class );
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$exception = new Exception();
+	public function testHandle_Middleware_ExecutedInOrder() {
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+
+		$subject = new Router( $this->condition_factory );
+		$subject->setMiddleware( [
+			'middleware2' => RouterTestMiddlewareStub2::class,
+			'middleware3' => RouterTestMiddlewareStub3::class,
+		] );
+		$subject->setGlobalMiddleware( [
+			RouterTestMiddlewareStub1::class,
+		] );
+		$subject->setMiddlewarePriority( [
+			RouterTestMiddlewareStub2::class,
+			RouterTestMiddlewareStub3::class,
+		] );
 
 		$route->shouldReceive( 'isSatisfied' )
 			->andReturn( true );
 
+		$route->shouldReceive( 'getMiddleware' )
+			->andReturn( [
+				'middleware3',
+				'middleware2',
+			] );
+
 		$route->shouldReceive( 'handle' )
-			->andReturnUsing( function() use ( $exception ) {
-				throw $exception;
+			->andReturnUsing( function ( $middleware ) {
+				return (new Psr7\Response())->withBody( Psr7\stream_for( 'Handler' ) );
 			} );
 
-		$this->error_handler->shouldReceive( 'getResponse' )
-			->with( $exception )
-			->andReturnUsing( function() {
-				throw new Exception( 'Test exception handled' );
-			} );
+		$subject->addRoute( $route );
 
-		$this->subject->addRoute( $route );
+		$response = $subject->execute( Mockery::mock( RequestInterface::class ), '' );
 
-		$this->subject->execute( $request, '' );
+		$this->assertEquals( 'FooBarBazHandler', $response->getBody()->read( 999 ) );
+	}
+}
+
+class RouterTestMiddlewareStub1 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Foo' . $response->getBody()->read( 999 ) ) );
+	}
+}
+
+class RouterTestMiddlewareStub2 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Bar' . $response->getBody()->read( 999 ) ) );
+	}
+}
+
+class RouterTestMiddlewareStub3 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Baz' . $response->getBody()->read( 999 ) ) );
 	}
 }

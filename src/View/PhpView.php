@@ -65,7 +65,7 @@ class PhpView implements ViewInterface {
 	 * Set filepath.
 	 *
 	 * @param  string $filepath
-	 * @return self   $this
+	 * @return static $this
 	 */
 	public function setFilepath( $filepath ) {
 		$this->filepath = $filepath;
@@ -85,7 +85,7 @@ class PhpView implements ViewInterface {
 	 * Set layout.
 	 *
 	 * @param  ViewInterface|null $layout
-	 * @return self               $this
+	 * @return static             $this
 	 */
 	public function setLayout( ViewInterface $layout ) {
 		$this->layout = $layout;
@@ -118,7 +118,7 @@ class PhpView implements ViewInterface {
 	/**
 	 * Compose the context.
 	 *
-	 * @return self $this
+	 * @return static $this
 	 */
 	protected function compose() {
 		$context = $this->getContext();

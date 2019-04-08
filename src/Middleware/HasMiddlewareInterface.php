@@ -16,14 +16,14 @@ interface HasMiddlewareInterface {
 	/**
 	 * Get registered middleware.
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	public function getMiddleware();
 
 	/**
 	 * Set registered middleware.
 	 *
-	 * @param  array $middleware
+	 * @param  array<string> $middleware
 	 * @return void
 	 */
 	public function setMiddleware( $middleware );
@@ -31,17 +31,16 @@ interface HasMiddlewareInterface {
 	/**
 	 * Add middleware.
 	 *
-	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @param  string|array<string> $middleware
+	 * @return void
 	 */
 	public function addMiddleware( $middleware );
 
 	/**
 	 * Fluent alias for addMiddleware().
-	 * Accepts: a class name, an instance of a class, a Closure or an array of any of the previous.
 	 *
-	 * @param  string|\Closure|\WPEmerge\Middleware\MiddlewareInterface|array $middleware
-	 * @return object                                                         $this
+	 * @param  string|array $middleware
+	 * @return static       $this
 	 */
 	public function middleware( $middleware );
 }

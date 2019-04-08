@@ -45,61 +45,17 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$this->registerConfiguration( $container );
-		$this->registerDependencies( $container );
-		$this->registerFacades();
-	}
-
-	/**
-	 * Register configuration options.
-	 *
-	 * @param  \Pimple\Container $container
-	 * @return void
-	 */
-	protected function registerConfiguration( $container ) {
-		// TODO remove this config; see how Flash and OldInput will hook in to add their global middleware.
-		$this->extendConfig( $container, 'middleware_default_priority', 100 );
-		$this->extendConfig( $container, 'middleware_priority', [] );
-		$this->extendConfig( $container, 'global_middleware', [] );
-
-		$container[ WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY ] =
-			$container[ WPEMERGE_CONFIG_KEY ]['middleware_default_priority'];
-
-		$container[ WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY ] =
-			$container[ WPEMERGE_CONFIG_KEY ]['middleware_priority'];
-
-		$container[ WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY ] =
-			$container[ WPEMERGE_CONFIG_KEY ]['global_middleware'];
-
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] =
 			static::$condition_types;
-	}
 
-	/**
-	 * Register dependencies.
-	 *
-	 * @param  \Pimple\Container $container
-	 * @return void
-	 */
-	protected function registerDependencies( $container ) {
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function ( $c ) {
-			return new Router(
-				$c[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ],
-				$c[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ]
-			);
+			return new Router( $c[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] );
 		};
 
 		$container[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ] = function ( $c ) {
 			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
 		};
-	}
 
-	/**
-	 * Register facades.
-	 *
-	 * @return void
-	 */
-	protected function registerFacades() {
 		Application::facade( 'Router', RouterFacade::class );
 	}
 

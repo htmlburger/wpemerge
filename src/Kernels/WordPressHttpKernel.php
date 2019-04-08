@@ -9,6 +9,8 @@
 
 namespace WPEmerge\Kernels;
 
+use Exception;
+use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Router;
 
@@ -16,6 +18,13 @@ use WPEmerge\Routing\Router;
  * Describes how a request is handled.
  */
 class WordPressHttpKernel implements HttpKernel {
+	/**
+	 * Error handler.
+	 *
+	 * @var ErrorHandlerInterface
+	 */
+	protected $error_handler = null;
+
 	/**
 	 * Router.
 	 *
@@ -25,7 +34,6 @@ class WordPressHttpKernel implements HttpKernel {
 
 	/**
 	 * Middleware available to the application.
-	 * TODO: implement.
 	 *
 	 * @var array<string, string>
 	 */
@@ -33,9 +41,8 @@ class WordPressHttpKernel implements HttpKernel {
 
 	/**
 	 * Middleware groups.
-	 * TODO: implement.
 	 *
-	 * @var array<string, array>
+	 * @var array<string, array<string>>
 	 */
 	protected $middleware_groups = [];
 
@@ -44,7 +51,10 @@ class WordPressHttpKernel implements HttpKernel {
 	 *
 	 * @var array
 	 */
-	protected $global_middleware = [];
+	protected $global_middleware = [
+		\WPEmerge\Flash\FlashMiddleware::class,
+		\WPEmerge\Input\OldInputMiddleware::class,
+	];
 
 	/**
 	 * Middleware sorted in order of execution.
@@ -58,9 +68,11 @@ class WordPressHttpKernel implements HttpKernel {
 	 *
 	 * @codeCoverageIgnore
 	 * @param Router $router
+	 * @param ErrorHandlerInterface $error_handler
 	 */
-	public function __construct( $router ) {
+	public function __construct( $router, ErrorHandlerInterface $error_handler ) {
 		$this->router = $router;
+		$this->error_handler = $error_handler;
 	}
 
 	/**
@@ -75,9 +87,18 @@ class WordPressHttpKernel implements HttpKernel {
 
 	/**
 	 * {@inheritDoc}
-	 * @codeCoverageIgnore
 	 */
 	public function handle( RequestInterface $request, $view ) {
-		return $this->router->execute( $request, $view );
+		try {
+			$this->error_handler->register();
+
+			$response = $this->router->execute( $request, $view );
+
+			$this->error_handler->unregister();
+		} catch ( Exception $exception ) {
+			$response = $this->error_handler->getResponse( $exception );
+		}
+
+		return $response;
 	}
 }

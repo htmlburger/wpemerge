@@ -9,9 +9,9 @@
 
 namespace WPEmerge\Routing;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Exceptions\ErrorHandlerInterface;
+use WPEmerge\Exceptions\ConfigurationException;
+use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -63,13 +63,6 @@ class Router implements HasRoutesInterface {
 	protected $middleware_priority = [];
 
 	/**
-	 * Exception handler.
-	 *
-	 * @var ErrorHandlerInterface
-	 */
-	protected $error_handler = null;
-
-	/**
 	 * Current active route.
 	 *
 	 * @var RouteInterface
@@ -88,14 +81,11 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param ConditionFactory      $condition_factory
-	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
-		ConditionFactory $condition_factory,
-		ErrorHandlerInterface $error_handler
+		ConditionFactory $condition_factory
 	) {
 		$this->condition_factory = $condition_factory;
-		$this->error_handler = $error_handler;
 	}
 
 	/**
@@ -147,6 +137,7 @@ class Router implements HasRoutesInterface {
 	 * This is in reverse compared to definition order.
 	 * Middleware with unspecified priority will yield -1.
 	 *
+	 * @internal
 	 * @param  mixed   $middleware
 	 * @return integer
 	 */
@@ -157,8 +148,9 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Sort middleware by priority in ascending order.
+	 * Sort array of fully qualified middleware class names by priority in ascending order.
 	 *
+	 * @internal
 	 * @param  array $middleware
 	 * @return array
 	 */
@@ -177,6 +169,65 @@ class Router implements HasRoutesInterface {
 		} );
 
 		return array_values( $sorted );
+	}
+
+	/**
+	 * Expand array of middleware into an array of fully qualified class names.
+	 *
+	 * @internal
+	 * @param  array<string> $middleware
+	 * @return array<string>
+	 */
+	public function expandMiddleware( $middleware ) {
+		$classes = [];
+
+		foreach ( $middleware as $item ) {
+			if ( isset( $this->middleware_groups[ $item ] ) ) {
+				$classes = array_merge(
+					$classes,
+					$this->expandMiddlewareGroup( $item )
+				);
+				continue;
+			}
+
+			$classes[] = $this->expandMiddlewareItem( $item );
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Expand a middleware group into an array of fully qualified class names.
+	 *
+	 * @internal
+	 * @param  string        $group
+	 * @return array<string>
+	 */
+	public function expandMiddlewareGroup( $group ) {
+		if ( ! isset( $this->middleware_groups[ $group ] ) ) {
+			throw new ConfigurationException( 'Unknown middleware group "' . $group . '" used.' );
+		}
+
+		return array_map( [$this, 'expandMiddlewareItem'], $this->middleware_groups[ $group ] );
+	}
+
+	/**
+	 * Expand a middleware into a fully qualified class name.
+	 *
+	 * @internal
+	 * @param  string $middleware
+	 * @return string
+	 */
+	public function expandMiddlewareItem( $middleware ) {
+		if ( is_subclass_of( $middleware, MiddlewareInterface::class ) ) {
+			return $middleware;
+		}
+
+		if ( ! isset( $this->middleware[ $middleware ] ) ) {
+			throw new ConfigurationException( 'Unknown middleware "' . $middleware . '" used.' );
+		}
+
+		return $this->middleware[ $middleware ];
 	}
 
 	/**
@@ -288,7 +339,6 @@ class Router implements HasRoutesInterface {
 		$route->setCondition( $condition );
 
 		$route->setMiddleware( array_merge(
-			$this->global_middleware,
 			Arr::get( $group, 'middleware', [] ),
 			$route->getMiddleware()
 		) );
@@ -318,23 +368,18 @@ class Router implements HasRoutesInterface {
 	 * @return ResponseInterface
 	 */
 	protected function handle( RequestInterface $request, RouteInterface $route, $view ) {
-		try {
-			$this->error_handler->register();
+		$handler = function ( $request, $view ) use ( $route ) {
+			return $route->handle( $request, $view );
+		};
 
-			$handler = function ( $request, $view ) use ( $route ) {
-				return $route->handle( $request, $view );
-			};
+		$global_middleware = $this->expandMiddleware( $this->global_middleware );
+		$route_middleware = $this->sortMiddleware( $this->expandMiddleware( $route->getMiddleware() ) );
 
-			$response = ( new Pipeline() )
-				->middleware( $this->global_middleware )
-				->middleware( $this->sortMiddleware( $route->getMiddleware() ) )
-				->to( $handler )
-				->run( $request, [$request, $view] );
-
-			$this->error_handler->unregister();
-		} catch ( Exception $exception ) {
-			$response = $this->error_handler->getResponse( $exception );
-		}
+		$response = ( new Pipeline() )
+			->middleware( $global_middleware )
+			->middleware( $route_middleware )
+			->to( $handler )
+			->run( $request, [$request, $view] );
 
 		return $response;
 	}

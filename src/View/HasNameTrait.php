@@ -30,7 +30,7 @@ trait HasNameTrait {
 	 * Set name.
 	 *
 	 * @param  string $name
-	 * @return self   $this
+	 * @return static $this
 	 */
 	public function setName( $name ) {
 		$this->name = $name;

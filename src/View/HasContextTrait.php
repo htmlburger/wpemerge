@@ -39,7 +39,7 @@ trait HasContextTrait {
 	 *
 	 * @param  string|array $key
 	 * @param  mixed        $value
-	 * @return self         $this
+	 * @return static       $this
 	 */
 	public function with( $key, $value = null ) {
 		if ( is_array( $key ) ) {

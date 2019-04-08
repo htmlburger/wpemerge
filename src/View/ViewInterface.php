@@ -26,7 +26,7 @@ interface ViewInterface extends HasContextInterface, ResponsableInterface {
 	 * Set name.
 	 *
 	 * @param  string $name
-	 * @return self   $this
+	 * @return static $this
 	 */
 	public function setName( $name );
 

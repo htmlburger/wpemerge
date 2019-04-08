@@ -7,15 +7,38 @@
  * @link      https://wpemerge.com/
  */
 
+use WPEmerge\Exceptions\ConfigurationException;
+use WPEmerge\Facades\Application;
+use WPEmerge\Facades\Router;
+use WPEmerge\Routing\Conditions\UrlCondition;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$container = \WPEmerge\Facades\Application::getContainer();
+$container = Application::getContainer();
 $kernel = $container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ];
 
 $kernel->bootstrap();
 
+// Enable Route query filtering.
+add_action( 'request', function ( $query_vars ) use ( $container ) {
+	$request = $container[ WPEMERGE_REQUEST_KEY ];
+	$routes = Router::getRoutes();
+
+	foreach ( $routes as $route ) {
+		$filtered = $route->applyQueryFilter( $request, $query_vars );
+
+		if ( $filtered !== false ) {
+			$query_vars = $filtered;
+			break;
+		}
+	}
+
+	return $query_vars;
+}, 1000 );
+
+// Enable kernel.
 add_action( 'template_include', function ( $view ) use ( $container, $kernel ) {
 	$request = $container[ WPEMERGE_REQUEST_KEY ];
 

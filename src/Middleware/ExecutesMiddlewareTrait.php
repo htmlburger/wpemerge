@@ -21,7 +21,7 @@ trait ExecutesMiddlewareTrait {
 	/**
 	 * Execute an array of middleware recursively (last in, first out).
 	 *
-	 * @param  array                               $middleware
+	 * @param  array<string>                       $middleware
 	 * @param  RequestInterface                    $request
 	 * @param  Closure                             $next
 	 * @return \Psr\Http\Message\ResponseInterface

@@ -54,7 +54,7 @@ class Pipeline implements HasMiddlewareInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string|\Closure $handler
-	 * @return self  $this
+	 * @return static          $this
 	 */
 	public function to( $handler ) {
 		call_user_func_array( [$this, 'setHandler'], func_get_args() );
