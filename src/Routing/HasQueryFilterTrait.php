@@ -50,17 +50,16 @@ trait HasQueryFilterTrait {
 	/**
 	 * Apply the query filter, if any.
 	 *
-	 * @internal
 	 * @throws ConfigurationException
-	 * @param RequestInterface            $request
-	 * @param  array<string, mixed>       $query_vars
-	 * @return array<string, mixed>|false
+	 * @param  RequestInterface $request
+	 * @param  array            $query_vars
+	 * @return array
 	 */
 	public function applyQueryFilter( $request, $query_vars ) {
 		$condition = $this->getCondition();
 
 		if ( $this->getQueryFilter() === null ) {
-			return false;
+			return $query_vars;
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
@@ -68,10 +67,6 @@ trait HasQueryFilterTrait {
 				'Only routes with URL condition can use queries. ' .
 				'Make sure your route has a URL condition and it is not in a non-URL route group.'
 			);
-		}
-
-		if ( ! $this->getCondition()->isSatisfied( $request ) ) {
-			return false;
 		}
 
 		$arguments = $this->getCondition()->getArguments( $request );

@@ -30,45 +30,17 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::applyQueryFilter
 	 */
-	public function testApplyQueryFilter_NoFilter_False() {
+	public function testApplyQueryFilter_NoFilter_Unfiltered() {
+		$expected = ['unfiltered'];
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
-		$this->assertEquals( false, $this->subject->applyQueryFilter( $request, [] ) );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Only routes with URL condition can use queries
-	 */
-	public function testApplyQueryFilter_NonUrlCondition_Exception() {
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-
-		$this->subject->query( function() {} );
-		$this->subject->applyQueryFilter( $request, [] );
+		$this->assertEquals( $expected, $this->subject->applyQueryFilter( $request, $expected ) );
 	}
 
 	/**
 	 * @covers ::applyQueryFilter
 	 */
-	public function testApplyQueryFilter_UnsatisfiedUrlCondition_False() {
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( UrlCondition::class );
-
-		$this->subject->shouldReceive( 'getCondition' )
-			->andReturn( $condition );
-
-		$condition->shouldReceive( 'isSatisfied' )
-			->andReturn( false );
-
-		$this->subject->query( function() {} );
-		$this->assertEquals( false, $this->subject->applyQueryFilter( $request, [] ) );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 */
-	public function testApplyQueryFilter_SatisfiedUrlCondition_FilteredArray() {
+	public function testApplyQueryFilter_UrlCondition_FilteredArray() {
 		$arguments = ['arg1', 'arg2'];
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 		$condition = Mockery::mock( UrlCondition::class );
@@ -84,6 +56,18 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 			  ->andReturn( $arguments );
 
 		$this->assertEquals( ['arg0', 'arg1', 'arg2'], $subject->applyQueryFilter( $request, ['arg0'] ) );
+	}
+
+	/**
+	 * @covers ::applyQueryFilter
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Only routes with URL condition can use queries
+	 */
+	public function testApplyQueryFilter_NonUrlCondition_Exception() {
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
+
+		$this->subject->query( function() {} );
+		$this->subject->applyQueryFilter( $request, [] );
 	}
 }
 

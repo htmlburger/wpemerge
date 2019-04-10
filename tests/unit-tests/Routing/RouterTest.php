@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Middleware\MiddlewareInterface;
-use WPEmerge\Requests\Request;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -39,47 +38,6 @@ class RouterTest extends WP_UnitTestCase {
 
 		unset( $this->condition_factory );
 		unset( $this->subject );
-	}
-
-	/**
-	 * @covers ::getMiddlewarePriority
-	 */
-	public function testGetMiddlewarePriority() {
-		$middleware1 = 'foo';
-		$middleware2 = 'bar';
-		$middleware3 = 'baz';
-		$middleware4 = function() {};
-
-		$subject = new Router( $this->condition_factory );
-		$subject->setMiddlewarePriority( [
-			$middleware1,
-			$middleware2,
-		] );
-
-		$this->assertEquals( 1, $subject->getMiddlewarePriority( $middleware1 ) );
-		$this->assertEquals( 0, $subject->getMiddlewarePriority( $middleware2 ) );
-		$this->assertEquals( -1, $subject->getMiddlewarePriority( $middleware3 ) );
-		$this->assertEquals( -1, $subject->getMiddlewarePriority( $middleware4 ) );
-	}
-
-	/**
-	 * @covers ::sortMiddleware
-	 */
-	public function testSortMiddleware() {
-		$middleware1 = 'foo';
-		$middleware2 = 'bar';
-		$middleware3 = 'baz';
-
-		$subject = new Router( $this->condition_factory );
-		$subject->setMiddlewarePriority( [
-			$middleware2,
-		] );
-
-		$result = $subject->sortMiddleware( [$middleware1, $middleware3, $middleware2] );
-
-		$this->assertEquals( $middleware2, $result[0] );
-		$this->assertEquals( $middleware1, $result[1] );
-		$this->assertEquals( $middleware3, $result[2] );
 	}
 
 	/**
@@ -137,6 +95,38 @@ class RouterTest extends WP_UnitTestCase {
 		} );
 
 		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::makeRoute
+	 */
+	public function testMakeRoute_ConditionInterface_Route() {
+		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = function () {};
+
+		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
+	}
+
+	/**
+	 * @covers ::makeRoute
+	 */
+	public function testMakeRoute_Condition_Route() {
+		$condition = function () {};
+		$handler = function () {};
+
+		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
+	}
+
+	/**
+	 * @covers ::makeRoute
+	 * @expectedException \WPEmerge\Routing\Conditions\InvalidRouteConditionException
+	 * @expectedExceptionMessage Route condition is not a valid
+	 */
+	public function testMakeRoute_InvalidCondition_Exception() {
+		$condition = new \stdClass();
+		$handler = function () {};
+
+		$this->subject->makeRoute( [], $condition, $handler );
 	}
 
 	/**

@@ -34,11 +34,10 @@ interface HasQueryFilterInterface {
 	/**
 	 * Apply the query filter, if any.
 	 *
-	 * @internal
 	 * @throws ConfigurationException
-	 * @param RequestInterface            $request
-	 * @param  array<string, mixed>       $query_vars
-	 * @return array<string, mixed>|false
+	 * @param  RequestInterface $request
+	 * @param  array            $query_vars
+	 * @return array
 	 */
 	public function applyQueryFilter( $request, $query_vars );
 

@@ -10,8 +10,6 @@
 namespace WPEmerge\Routing;
 
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -26,6 +24,8 @@ class Router implements HasRoutesInterface {
 	use HasRoutesTrait {
 		addRoute as traitAddRoute;
 	}
+	use HasMiddlewareDefinitionsTrait;
+	use SortsMiddlewareTrait;
 
 	/**
 	 * Condition factory.
@@ -33,34 +33,6 @@ class Router implements HasRoutesInterface {
 	 * @var ConditionFactory
 	 */
 	protected $condition_factory = null;
-
-	/**
-	 * Middleware available to the application.
-	 *
-	 * @var array
-	 */
-	protected $middleware = [];
-
-	/**
-	 * Middleware groups.
-	 *
-	 * @var array<string, array>
-	 */
-	protected $middleware_groups = [];
-
-	/**
-	 * Global middleware that will be applied to all routes.
-	 *
-	 * @var array
-	 */
-	protected $global_middleware = [];
-
-	/**
-	 * Middleware sorted in order of execution.
-	 *
-	 * @var array<string>
-	 */
-	protected $middleware_priority = [];
 
 	/**
 	 * Current active route.
@@ -86,148 +58,6 @@ class Router implements HasRoutesInterface {
 		ConditionFactory $condition_factory
 	) {
 		$this->condition_factory = $condition_factory;
-	}
-
-	/**
-	 * Register middleware.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array $middleware
-	 * @return void
-	 */
-	public function setMiddleware( $middleware ) {
-		$this->middleware = $middleware;
-	}
-
-	/**
-	 * Register middleware groups.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array $middleware_groups
-	 * @return void
-	 */
-	public function setMiddlewareGroups( $middleware_groups ) {
-		$this->middleware_groups = $middleware_groups;
-	}
-
-	/**
-	 * Register global middleware.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array $middleware
-	 * @return void
-	 */
-	public function setGlobalMiddleware( $middleware ) {
-		$this->global_middleware = $middleware;
-	}
-
-	/**
-	 * Register middleware execution priority.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array $middleware_priority
-	 * @return void
-	 */
-	public function setMiddlewarePriority( $middleware_priority ) {
-		$this->middleware_priority = $middleware_priority;
-	}
-
-	/**
-	 * Get middleware priority.
-	 * This is in reverse compared to definition order.
-	 * Middleware with unspecified priority will yield -1.
-	 *
-	 * @internal
-	 * @param  mixed   $middleware
-	 * @return integer
-	 */
-	public function getMiddlewarePriority( $middleware ) {
-		$increasing_priority = array_reverse( $this->middleware_priority );
-		$priority = array_search( $middleware, $increasing_priority );
-		return $priority !== false ? (int) $priority : -1;
-	}
-
-	/**
-	 * Sort array of fully qualified middleware class names by priority in ascending order.
-	 *
-	 * @internal
-	 * @param  array $middleware
-	 * @return array
-	 */
-	public function sortMiddleware( $middleware ) {
-		$sorted = $middleware;
-
-		usort( $sorted, function ( $a, $b ) use ( $middleware ) {
-			$priority = $this->getMiddlewarePriority( $b ) - $this->getMiddlewarePriority( $a );
-
-			if ( $priority !== 0 ) {
-				return $priority;
-			}
-
-			// Keep relative order from original array.
-			return array_search( $a, $middleware ) - array_search( $b, $middleware );
-		} );
-
-		return array_values( $sorted );
-	}
-
-	/**
-	 * Expand array of middleware into an array of fully qualified class names.
-	 *
-	 * @internal
-	 * @param  array<string> $middleware
-	 * @return array<string>
-	 */
-	public function expandMiddleware( $middleware ) {
-		$classes = [];
-
-		foreach ( $middleware as $item ) {
-			if ( isset( $this->middleware_groups[ $item ] ) ) {
-				$classes = array_merge(
-					$classes,
-					$this->expandMiddlewareGroup( $item )
-				);
-				continue;
-			}
-
-			$classes[] = $this->expandMiddlewareItem( $item );
-		}
-
-		return $classes;
-	}
-
-	/**
-	 * Expand a middleware group into an array of fully qualified class names.
-	 *
-	 * @internal
-	 * @param  string        $group
-	 * @return array<string>
-	 */
-	public function expandMiddlewareGroup( $group ) {
-		if ( ! isset( $this->middleware_groups[ $group ] ) ) {
-			throw new ConfigurationException( 'Unknown middleware group "' . $group . '" used.' );
-		}
-
-		return array_map( [$this, 'expandMiddlewareItem'], $this->middleware_groups[ $group ] );
-	}
-
-	/**
-	 * Expand a middleware into a fully qualified class name.
-	 *
-	 * @internal
-	 * @param  string $middleware
-	 * @return string
-	 */
-	public function expandMiddlewareItem( $middleware ) {
-		if ( is_subclass_of( $middleware, MiddlewareInterface::class ) ) {
-			return $middleware;
-		}
-
-		if ( ! isset( $this->middleware[ $middleware ] ) ) {
-			throw new ConfigurationException( 'Unknown middleware "' . $middleware . '" used.' );
-		}
-
-		return $this->middleware[ $middleware ];
 	}
 
 	/**
