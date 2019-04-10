@@ -19,6 +19,7 @@
 		<whitelist processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">./src</directory>
 			<exclude>
+				<directory suffix=".php">./src/Exceptions/Whoops</directory>
 				<directory suffix=".php">./src/Support</directory>
 				<file>./src/view.php</file>
 			</exclude>
