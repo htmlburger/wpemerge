@@ -143,8 +143,12 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::addRoute
 	 */
 	public function testAddRoute() {
+		$condition = Mockery::mock( ConditionInterface::class );
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$subject = new Router( $this->condition_factory );
+
+		$route->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
 
 		$this->assertSame( $route, $subject->addRoute( $route ) );
 	}
@@ -176,8 +180,15 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testExecute_UnsatisfiedRoutes_Null() {
 		$request = Mockery::mock( RequestInterface::class );
+		$condition = Mockery::mock( ConditionInterface::class );
 		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+
+		$route1->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
+
+		$route2->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
 
 		$route1->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
@@ -197,8 +208,12 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testExecute_SatisfiedRoute_Response() {
 		$request = Mockery::mock( RequestInterface::class );
+		$condition = Mockery::mock( ConditionInterface::class );
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
+
+		$route->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
 
 		$route->shouldReceive( 'isSatisfied' )
 			->andReturn( true );
@@ -215,6 +230,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_Middleware_ExecutedInOrder() {
+		$condition = Mockery::mock( ConditionInterface::class );
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$subject = new Router( $this->condition_factory );
@@ -229,6 +245,9 @@ class RouterTest extends WP_UnitTestCase {
 			RouterTestMiddlewareStub2::class,
 			RouterTestMiddlewareStub3::class,
 		] );
+
+		$route->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
 
 		$route->shouldReceive( 'isSatisfied' )
 			->andReturn( true );

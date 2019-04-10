@@ -134,10 +134,10 @@ class Application {
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 
+		$this->bootstrapped = true;
+
 		require_once WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'wordpress.php';
 		/*require_once WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'wordpress-admin.php';*/
-
-		$this->bootstrapped = true;
 	}
 
 	/**

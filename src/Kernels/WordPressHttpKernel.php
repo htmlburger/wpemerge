@@ -10,8 +10,10 @@
 namespace WPEmerge\Kernels;
 
 use Exception;
+use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\Router;
 
 /**
@@ -19,11 +21,18 @@ use WPEmerge\Routing\Router;
  */
 class WordPressHttpKernel implements HttpKernel {
 	/**
-	 * Error handler.
+	 * Application.
 	 *
-	 * @var ErrorHandlerInterface
+	 * @var Application
 	 */
-	protected $error_handler = null;
+	protected $app = null;
+
+	/**
+	 * Request.
+	 *
+	 * @var RequestInterface
+	 */
+	protected $request = null;
 
 	/**
 	 * Router.
@@ -31,6 +40,13 @@ class WordPressHttpKernel implements HttpKernel {
 	 * @var Router
 	 */
 	protected $router = null;
+
+	/**
+	 * Error handler.
+	 *
+	 * @var ErrorHandlerInterface
+	 */
+	protected $error_handler = null;
 
 	/**
 	 * Middleware available to the application.
@@ -67,10 +83,13 @@ class WordPressHttpKernel implements HttpKernel {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Router $router
+	 * @param RequestInterface      $request
+	 * @param Router                $router
 	 * @param ErrorHandlerInterface $error_handler
 	 */
-	public function __construct( $router, ErrorHandlerInterface $error_handler ) {
+	public function __construct( Application $app, RequestInterface $request, Router $router, ErrorHandlerInterface $error_handler ) {
+		$this->app = $app;
+		$this->request = $request;
 		$this->router = $router;
 		$this->error_handler = $error_handler;
 	}
@@ -83,6 +102,9 @@ class WordPressHttpKernel implements HttpKernel {
 		$this->router->setMiddlewareGroups( $this->middleware_groups );
 		$this->router->setGlobalMiddleware( $this->global_middleware );
 		$this->router->setMiddlewarePriority( $this->middleware_priority );
+
+		add_action( 'request', [$this, 'filterRequest'], 1000 );
+		add_action( 'template_include', [$this, 'filterTemplateInclude'], 1000 );
 	}
 
 	/**
@@ -100,5 +122,49 @@ class WordPressHttpKernel implements HttpKernel {
 		$this->error_handler->unregister();
 
 		return $response;
+	}
+
+	/**
+	 * Filter the main query vars.
+	 *
+	 * @param  array $query_vars
+	 * @return array
+	 */
+	public function filterRequest( $query_vars ) {
+		$routes = $this->router->getRoutes();
+
+		foreach ( $routes as $route ) {
+			if ( ! $route instanceof HasQueryFilterInterface ) {
+				continue;
+			}
+
+			$filtered = $route->applyQueryFilter( $this->request, $query_vars );
+
+			if ( $filtered !== false ) {
+				$query_vars = $filtered;
+				break;
+			}
+		}
+
+		return $query_vars;
+	}
+
+	/**
+	 * Filter the main template file.
+	 *
+	 * @param  string $view
+	 * @return string
+	 */
+	public function filterTemplateInclude( $view ) {
+		$response = $this->handle( $this->request, $view );
+
+		if ( $response instanceof \Psr\Http\Message\ResponseInterface ) {
+			$container = $this->app->getContainer();
+			$container[ WPEMERGE_RESPONSE_KEY ] = $response;
+
+			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
+		}
+
+		return $view;
 	}
 }

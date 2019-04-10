@@ -14,19 +14,32 @@ use WPEmerge\Routing\Conditions\ConditionInterface;
 /**
  * Represent an object which has a route condition.
  */
-interface HasConditionInterface {
+trait HasConditionTrait {
+	/**
+	 * Route condition.
+	 *
+	 * @var ConditionInterface
+	 */
+	protected $condition = null;
+
 	/**
 	 * Get condition.
 	 *
+	 * @codeCoverageIgnore
 	 * @return ConditionInterface
 	 */
-	public function getCondition();
+	public function getCondition() {
+		return $this->condition;
+	}
 
 	/**
-	 * set condition.
+	 * Set condition.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  ConditionInterface $condition
 	 * @return void
 	 */
-	public function setCondition( ConditionInterface $condition );
+	public function setCondition( ConditionInterface $condition ) {
+		$this->condition = $condition;
+	}
 }

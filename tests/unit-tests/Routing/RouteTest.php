@@ -7,10 +7,8 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use stdClass;
 use WP_UnitTestCase;
 
 /**
@@ -68,83 +66,6 @@ class RouteTest extends WP_UnitTestCase {
 		$subject = new Route( [], $condition, function() {} );
 
 		$subject->where( 'foo', '/^foo$/i' );
-	}
-
-	/**
-	 * @covers ::getQueryFilter
-	 * @covers ::setQueryFilter
-	 */
-	public function testGetQueryFilter() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$subject = new Route( [], $condition, function() {} );
-		$filter = function() {};
-
-		$subject->setQueryFilter( $filter );
-		$this->assertSame( $filter, $subject->getQueryFilter() );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 */
-	public function testApplyQueryFilter_NoFilter_False() {
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( ConditionInterface::class );
-		$subject = new Route( [], $condition, function() {} );
-
-		$condition->shouldReceive( 'isSatisfied' )
-			->andReturn( false );
-
-		$this->assertEquals( false, $subject->applyQueryFilter( $request, [] ) );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Only routes with URL condition can use queries
-	 */
-	public function testApplyQueryFilter_NonUrlCondition_Exception() {
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( ConditionInterface::class );
-		$subject = new Route( [], $condition, function() {} );
-		$subject->query( function() {} );
-
-		$subject->applyQueryFilter( $request, [] );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 */
-	public function testApplyQueryFilter_UnsatisfiedUrlCondition_False() {
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( UrlCondition::class );
-		$subject = new Route( [], $condition, function() {} );
-		$subject->query( function() {} );
-
-		$condition->shouldReceive( 'isSatisfied' )
-			  ->andReturn( false );
-
-		$this->assertEquals( false, $subject->applyQueryFilter( $request, [] ) );
-	}
-
-	/**
-	 * @covers ::applyQueryFilter
-	 */
-	public function testApplyQueryFilter_SatisfiedUrlCondition_FilteredArray() {
-		$arguments = ['arg1', 'arg2'];
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( UrlCondition::class );
-		$subject = new Route( [], $condition, function() {} );
-		$subject->query( function( $query_vars, $arg1, $arg2 ) {
-			return array_merge( $query_vars, [$arg1, $arg2] );
-		} );
-
-		$condition->shouldReceive( 'isSatisfied' )
-			  ->andReturn( true );
-
-		$condition->shouldReceive( 'getArguments' )
-			  ->andReturn( $arguments );
-
-		$this->assertEquals( ['arg0', 'arg1', 'arg2'], $subject->applyQueryFilter( $request, ['arg0'] ) );
 	}
 
 	/**

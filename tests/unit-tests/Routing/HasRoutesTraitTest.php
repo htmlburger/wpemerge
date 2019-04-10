@@ -3,6 +3,8 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\Route;
@@ -17,11 +19,20 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		$this->condition_factory = new ConditionFactory( [
+			'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
+			'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
+			'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
+			'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
+		] );
 		$this->subject = $this->getMockForTrait( HasRoutesTrait::class );
 
 		$this->subject->expects( $this->any() )
 			->method( 'makeRoute' )
 			->will( $this->returnCallback( function ( $methods, $condition, $handler ) {
+				if ( ! $condition instanceof ConditionInterface ) {
+					$condition = $this->condition_factory->make( $condition );
+				}
 				return new Route( $methods, $condition, $handler );
 			} ) );
 	}
@@ -29,6 +40,7 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 
+		unset( $this->condition_factory );
 		unset( $this->subject );
 	}
 

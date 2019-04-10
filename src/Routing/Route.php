@@ -10,7 +10,6 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Application;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
@@ -20,8 +19,9 @@ use WPEmerge\Routing\Conditions\UrlCondition;
 /**
  * Represent a route
  */
-class Route implements RouteInterface {
+class Route implements RouteInterface, HasQueryFilterInterface {
 	use HasMiddlewareTrait;
+	use HasQueryFilterTrait;
 
 	/**
 	 * Allowed methods.
@@ -31,32 +31,11 @@ class Route implements RouteInterface {
 	protected $methods = [];
 
 	/**
-	 * Route condition.
-	 *
-	 * @var ConditionInterface
-	 */
-	protected $condition = null;
-
-	/**
 	 * Route handler.
 	 *
 	 * @var Handler
 	 */
 	protected $handler = null;
-
-	/**
-	 * Query filter.
-	 *
-	 * @var callable|null
-	 */
-	protected $query_filter = null;
-
-	/**
-	 * Query filter action priority.
-	 *
-	 * @var integer
-	 */
-	protected $query_filter_priority = 1000;
 
 	/**
 	 * Constructor.
@@ -80,22 +59,6 @@ class Route implements RouteInterface {
 	 */
 	public function getMethods() {
 		return $this->methods;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function getCondition() {
-		return $this->condition;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function setCondition( $condition ) {
-		$this->condition = $condition;
 	}
 
 	/**
@@ -127,72 +90,6 @@ class Route implements RouteInterface {
 			$condition->getUrlWhere(),
 			[$parameter => $regex]
 		) );
-
-		return $this;
-	}
-
-	/**
-	 * Get the main WordPress query vars filter, if any.
-	 *
-	 * @codeCoverageIgnore
-	 * @return callable|null
-	 */
-	public function getQueryFilter() {
-		return $this->query_filter;
-	}
-
-	/**
-	 * Set the main WordPress query vars filter.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  callable|null $query_filter
-	 * @return void
-	 */
-	public function setQueryFilter( $query_filter ) {
-		$this->query_filter = $query_filter;
-	}
-
-	/**
-	 * Apply the query filter, if any.
-	 *
-	 * @internal
-	 * @throws ConfigurationException
-	 * @param RequestInterface            $request
-	 * @param  array<string, mixed>       $query_vars
-	 * @return array<string, mixed>|false
-	 */
-	public function applyQueryFilter( $request, $query_vars ) {
-		$condition = $this->getCondition();
-
-		if ( $this->getQueryFilter() === null ) {
-			return false;
-		}
-
-		if ( ! $condition instanceof UrlCondition ) {
-			throw new ConfigurationException(
-				'Only routes with URL condition can use queries. ' .
-				'Make sure your route has a URL condition and it is not in a non-URL route group.'
-			);
-		}
-
-		if ( ! $this->getCondition()->isSatisfied( $request ) ) {
-			return false;
-		}
-
-		$arguments = $this->getCondition()->getArguments( $request );
-
-		return call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
-	}
-
-	/**
-	 * Fluent alias of setQueryFilter().
-	 *
-	 * @codeCoverageIgnore
-	 * @param  callable $query_filter
-	 * @return static   $this
-	 */
-	public function query( $query_filter ) {
-		$this->setQueryFilter( $query_filter );
 
 		return $this;
 	}

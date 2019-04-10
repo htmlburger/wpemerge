@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Exception;
 use Mockery;
+use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Kernels\WordPressHttpKernel;
 use WPEmerge\Requests\RequestInterface;
@@ -17,6 +18,7 @@ class WordPressHttpKernelTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		$this->app = Mockery::mock( Application::class )->shouldIgnoreMissing();
 		$this->router = Mockery::mock( Router::class )->shouldIgnoreMissing();
 		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
 	}
@@ -25,6 +27,7 @@ class WordPressHttpKernelTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
+		unset( $this->app );
 		unset( $this->router );
 		unset( $this->error_handler );
 	}
@@ -38,7 +41,7 @@ class WordPressHttpKernelTest extends WP_UnitTestCase {
 		// TODO test error handler unregister
 		$exception = new Exception();
 		$request = Mockery::mock( RequestInterface::class );
-		$subject = new WordPressHttpKernel( $this->router, $this->error_handler );
+		$subject = new WordPressHttpKernel( $this->app, $request, $this->router, $this->error_handler );
 
 		$this->router->shouldReceive( 'execute' )
 			->andReturnUsing( function() use ( $exception ) {
