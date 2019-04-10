@@ -29,8 +29,10 @@ class WordPressController {
 	 */
 	public function handle( RequestInterface $request, $view = '' ) {
 		if ( empty( $view ) ) {
-			throw new ConfigurationException( 'No view loaded for default WordPress controller. ' .
-				'Did you miss to specify a custom handler for an ajax or admin route?' );
+			throw new ConfigurationException(
+				'No view loaded for default WordPress controller. ' .
+				'Did you miss to specify a custom handler for an ajax or admin route?'
+			);
 		}
 
 		return Response::view( $view )

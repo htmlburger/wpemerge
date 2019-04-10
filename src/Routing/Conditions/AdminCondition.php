@@ -42,14 +42,29 @@ class AdminCondition implements ConditionInterface {
 	}
 
 	/**
+	 * Check if the admin page requirement matches.
+	 *
+	 * @return boolean
+	 */
+	protected function isAdminPage() {
+		return is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
-		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		if ( ! $this->isAdminPage() ) {
 			return false;
 		}
 
-		return get_current_screen()->id === get_plugin_page_hookname( $this->menu, $this->parent_menu );
+		$screen = get_current_screen();
+
+		if ( ! $screen ) {
+			return false;
+		}
+
+		return $screen->id === get_plugin_page_hookname( $this->menu, $this->parent_menu );
 	}
 
 	/**

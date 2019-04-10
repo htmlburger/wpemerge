@@ -219,16 +219,14 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
-	 * Register admin action to hook into current one.
+	 * Get page hook.
+	 * Slightly modified version of code from wp-admin/admin.php.
 	 *
-	 * @return void
+	 * @param  string $page_hook
+	 * @return string
 	 */
-	public function registerAdminAction() {
+	protected function getAdminPageHook() {
 		global $pagenow, $typenow, $plugin_page;
-
-		if ( $pagenow !== 'admin.php' ) {
-			return;
-		}
 
 		$page_hook = '';
 		if ( isset( $plugin_page ) ) {
@@ -241,14 +239,45 @@ class HttpKernel implements HttpKernelInterface {
 			$page_hook = get_plugin_page_hook( $plugin_page, $the_parent );
 		}
 
+		return $page_hook;
+	}
+
+	/**
+	 * Get admin page hook.
+	 * Slightly modified version of code from wp-admin/admin.php.
+	 *
+	 * @param  string $page_hook
+	 * @return string
+	 */
+	protected function getAdminHook( $page_hook ) {
+		global $pagenow, $plugin_page;
+
 		$hook_suffix = '';
-		if ( isset( $page_hook ) ) {
+		if ( ! empty( $page_hook ) ) {
 			$hook_suffix = $page_hook;
-		} elseif ( isset( $plugin_page ) ) {
+		} else if ( isset( $plugin_page ) ) {
 			$hook_suffix = $plugin_page;
-		} elseif ( isset( $pagenow ) ) {
+		} else if ( isset( $pagenow ) ) {
 			$hook_suffix = $pagenow;
 		}
+
+		return $hook_suffix;
+	}
+
+	/**
+	 * Register admin action to hook into current one.
+	 *
+	 * @return void
+	 */
+	public function registerAdminAction() {
+		global $pagenow;
+
+		if ( $pagenow !== 'admin.php' ) {
+			return;
+		}
+
+		$page_hook = $this->getAdminPageHook();
+		$hook_suffix = $this->getAdminHook( $page_hook );
 
 		add_action( "load-{$hook_suffix}", [$this, 'actionAdminLoad'] );
 		add_action( $hook_suffix, [$this, 'actionAdmin'] );

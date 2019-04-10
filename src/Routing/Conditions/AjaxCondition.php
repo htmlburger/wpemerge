@@ -51,6 +51,34 @@ class AjaxCondition implements ConditionInterface {
 	}
 
 	/**
+	 * Check if the private authentication requirement matches.
+	 *
+	 * @return boolean
+	 */
+	protected function matchesPrivateRequirement() {
+		return $this->private && is_user_logged_in();
+	}
+
+	/**
+	 * Check if the public authentication requirement matches.
+	 *
+	 * @return boolean
+	 */
+	protected function matchesPublicRequirement() {
+		return $this->public && ! is_user_logged_in();
+	}
+
+	/**
+	 * Check if the ajax action matches the requirement.
+	 *
+	 * @param  RequestInterface $request
+	 * @return boolean
+	 */
+	protected function matchesActionRequirement( RequestInterface $request ) {
+		return $this->action === $request->post( 'action', $request->get( 'action' ) );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
@@ -58,12 +86,7 @@ class AjaxCondition implements ConditionInterface {
 			return false;
 		}
 
-		$authenticated = is_user_logged_in();
-		$private_match = $this->private && $authenticated;
-		$public_match = $this->public && !$authenticated;
-		$action_match = $this->action === $request->post( 'action', $request->get( 'action' ) );
-
-		return ($private_match || $public_match) && $action_match;
+		return ( $this->matchesPrivateRequirement() || $this->matchesPublicRequirement() ) && $this->matchesActionRequirement( $request );
 	}
 
 	/**

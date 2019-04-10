@@ -2,13 +2,13 @@
 	<style><?php echo $stylesheet ?></style>
 
 	<div class="Whoops container">
-	  <div class="stack-container">
+		<div class="stack-container">
 
-		<?php $tpl->render($panel_left_outer) ?>
+			<?php $tpl->render( $panel_left_outer ) ?>
 
-		<?php $tpl->render($panel_details_outer) ?>
+			<?php $tpl->render( $panel_details_outer ) ?>
 
-	  </div>
+		</div>
 	</div>
 
 	<script><?php echo $prettify ?></script>
