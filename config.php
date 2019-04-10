@@ -61,18 +61,6 @@ if ( ! defined( 'WPEMERGE_ROUTING_CONDITION_TYPES_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_CONDITION_TYPES_KEY', 'wpemerge.routing.conditions.condition_types' );
 }
 
-if ( ! defined( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_GLOBAL_MIDDLEWARE_KEY', 'wpemerge.routing.global_middleware' );
-}
-
-if ( ! defined( 'WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_MIDDLEWARE_PRIORITY_KEY', 'wpemerge.routing.middleware.priority' );
-}
-
-if ( ! defined( 'WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY' ) ) {
-	define( 'WPEMERGE_ROUTING_MIDDLEWARE_DEFAULT_PRIORITY_KEY', 'wpemerge.routing.middleware.priority.default' );
-}
-
 if ( ! defined( 'WPEMERGE_VIEW_SERVICE_KEY' ) ) {
 	define( 'WPEMERGE_VIEW_SERVICE_KEY', 'wpemerge.view.view_service' );
 }

@@ -31,13 +31,6 @@ trait HasMiddlewareDefinitionsTrait {
 	protected $middleware_groups = [];
 
 	/**
-	 * Global middleware that will be applied to all routes.
-	 *
-	 * @var array<string>
-	 */
-	protected $global_middleware = [];
-
-	/**
 	 * Register middleware.
 	 *
 	 * @codeCoverageIgnore
@@ -60,14 +53,13 @@ trait HasMiddlewareDefinitionsTrait {
 	}
 
 	/**
-	 * Register global middleware.
+	 * Filter array of middleware into a unique set.
 	 *
-	 * @codeCoverageIgnore
 	 * @param  array<string> $middleware
-	 * @return void
+	 * @return array<string>
 	 */
-	public function setGlobalMiddleware( $middleware ) {
-		$this->global_middleware = $middleware;
+	public function uniqueMiddleware( $middleware ) {
+		return array_values( array_unique( $middleware, SORT_REGULAR ) );
 	}
 
 	/**
@@ -80,15 +72,10 @@ trait HasMiddlewareDefinitionsTrait {
 		$classes = [];
 
 		foreach ( $middleware as $item ) {
-			if ( isset( $this->middleware_groups[ $item ] ) ) {
-				$classes = array_merge(
-					$classes,
-					$this->expandMiddlewareGroup( $item )
-				);
-				continue;
-			}
-
-			$classes[] = $this->expandMiddlewareItem( $item );
+			$classes = array_merge(
+				$classes,
+				$this->expandMiddlewareItem( $item )
+			);
 		}
 
 		return $classes;
@@ -105,24 +92,28 @@ trait HasMiddlewareDefinitionsTrait {
 			throw new ConfigurationException( 'Unknown middleware group "' . $group . '" used.' );
 		}
 
-		return array_map( [$this, 'expandMiddlewareItem'], $this->middleware_groups[ $group ] );
+		return $this->expandMiddleware( $this->middleware_groups[ $group ] );
 	}
 
 	/**
 	 * Expand a middleware into a fully qualified class name.
 	 *
-	 * @param  string $middleware
-	 * @return string
+	 * @param  string        $middleware
+	 * @return array<string>
 	 */
 	public function expandMiddlewareItem( $middleware ) {
 		if ( is_subclass_of( $middleware, MiddlewareInterface::class ) ) {
-			return $middleware;
+			return [$middleware];
+		}
+
+		if ( isset( $this->middleware_groups[ $middleware ] ) ) {
+			return $this->expandMiddlewareGroup( $middleware );
 		}
 
 		if ( ! isset( $this->middleware[ $middleware ] ) ) {
 			throw new ConfigurationException( 'Unknown middleware "' . $middleware . '" used.' );
 		}
 
-		return $this->middleware[ $middleware ];
+		return [$this->middleware[ $middleware ]];
 	}
 }

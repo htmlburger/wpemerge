@@ -202,12 +202,13 @@ class Router implements HasRoutesInterface {
 			return call_user_func_array( [$route, 'handle'], func_get_args() );
 		};
 
-		$global_middleware = $this->expandMiddleware( $this->global_middleware );
-		$route_middleware = $this->sortMiddleware( $this->expandMiddleware( $route->getMiddleware() ) );
+		$middleware = $route->getMiddleware();
+		$middleware = $this->expandMiddleware( $middleware );
+		$middleware = $this->uniqueMiddleware( $middleware );
+		$middleware = $this->sortMiddleware( $middleware );
 
 		$response = ( new Pipeline() )
-			->middleware( $global_middleware )
-			->middleware( $route_middleware )
+			->middleware( $middleware )
 			->to( $handler )
 			->run( $request, [$request, $arguments] );
 

@@ -23,6 +23,30 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::uniqueMiddleware
+	 */
+	public function testUniqueMiddleware() {
+		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
+
+		// While this nested syntax is not yet supported we don't want its
+		// introduction to cause backwards compatibility problems.
+		$this->assertEquals(
+			[
+				'foo',
+				['foo', 1],
+				['foo', 2]
+			],
+			$subject->uniqueMiddleware( [
+				'foo',
+				['foo', 1],
+				'foo',
+				['foo', 1],
+				['foo', 2]
+			] )
+		);
+	}
+
+	/**
 	 * @covers ::expandMiddleware
 	 */
 	public function testExpandMiddleware() {
@@ -48,22 +72,18 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::expandMiddlewareGroup
 	 */
-	public function testExpandMiddlewareGroup_Valid_ExpandedGroup() {
+	public function testExpandMiddlewareGroup_Nested_RecursivelyExpandedGroup() {
 		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
 		$subject->setMiddleware( [
 			'short' => 'long',
 		] );
 		$subject->setMiddlewareGroups( [
-			'group' => [
-				'short',
-				HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
-			],
+			'group1' => ['short'],
+			'group2' => ['group1'],
+			'group3' => ['group2'],
 		] );
 
-		$this->assertEquals( [
-			'long',
-			HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
-		], $subject->expandMiddlewareGroup( 'group' ) );
+		$this->assertEquals( ['long'], $subject->expandMiddlewareGroup( 'group3' ) );
 	}
 
 	/**
@@ -85,7 +105,7 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 			'short' => 'long',
 		] );
 
-		$this->assertEquals( 'long', $subject->expandMiddlewareItem( 'short' ) );
+		$this->assertEquals( ['long'], $subject->expandMiddlewareItem( 'short' ) );
 	}
 
 	/**
@@ -94,7 +114,28 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 	public function testExpandMiddlewareItem_Class_Unmodified() {
 		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
 
-		$this->assertEquals( HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class, $subject->expandMiddlewareItem( HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class ) );
+		$this->assertEquals( [HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class], $subject->expandMiddlewareItem( HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class ) );
+	}
+
+	/**
+	 * @covers ::expandMiddlewareItem
+	 */
+	public function testExpandMiddlewareItem_Group_Expanded() {
+		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
+		$subject->setMiddleware( [
+			'short' => 'long',
+		] );
+		$subject->setMiddlewareGroups( [
+			'group' => [
+				'short',
+				HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
+			],
+		] );
+
+		$this->assertEquals( [
+			'long',
+			HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
+		], $subject->expandMiddlewareItem( 'group' ) );
 	}
 
 	/**

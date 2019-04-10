@@ -229,12 +229,12 @@ class RouterTest extends WP_UnitTestCase {
 			'middleware2' => RouterTestMiddlewareStub2::class,
 			'middleware3' => RouterTestMiddlewareStub3::class,
 		] );
-		$subject->setGlobalMiddleware( [
-			RouterTestMiddlewareStub1::class,
+		$subject->setMiddlewareGroups( [
+			'global' => [RouterTestMiddlewareStub1::class],
 		] );
 		$subject->setMiddlewarePriority( [
+			RouterTestMiddlewareStub1::class,
 			RouterTestMiddlewareStub2::class,
-			RouterTestMiddlewareStub3::class,
 		] );
 
 		$route->shouldReceive( 'getCondition' )
@@ -247,6 +247,7 @@ class RouterTest extends WP_UnitTestCase {
 			->andReturn( [
 				'middleware3',
 				'middleware2',
+				'global',
 			] );
 
 		$route->shouldReceive( 'handle' )

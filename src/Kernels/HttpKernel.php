@@ -60,16 +60,19 @@ class HttpKernel implements HttpKernelInterface {
 	 *
 	 * @var array<string, array<string>>
 	 */
-	protected $middleware_groups = [];
+	protected $middleware_groups = [
+		'global' => [
+			\WPEmerge\Flash\FlashMiddleware::class,
+			\WPEmerge\Input\OldInputMiddleware::class,
+		],
 
-	/**
-	 * Global middleware that will be applied to all routes.
-	 *
-	 * @var array
-	 */
-	protected $global_middleware = [
-		\WPEmerge\Flash\FlashMiddleware::class,
-		\WPEmerge\Input\OldInputMiddleware::class,
+		'web' => [
+			'global',
+		],
+
+		'ajax' => [
+			'global',
+		],
 	];
 
 	/**
@@ -101,7 +104,6 @@ class HttpKernel implements HttpKernelInterface {
 	public function bootstrap() {
 		$this->router->setMiddleware( $this->middleware );
 		$this->router->setMiddlewareGroups( $this->middleware_groups );
-		$this->router->setGlobalMiddleware( $this->global_middleware );
 		$this->router->setMiddlewarePriority( $this->middleware_priority );
 
 		// Web.

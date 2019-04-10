@@ -167,6 +167,34 @@ class HttpKernelTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::filterTemplateInclude
 	 */
+	public function testFilterTemplateInclude_404_ForcesWPQuery404() {
+		global $wp_query;
+
+		$request = Mockery::mock( RequestInterface::class );
+		$response = Mockery::mock( ResponseInterface::class );
+		$container = Mockery::mock( ArrayAccess::class );
+		$subject = Mockery::mock( HttpKernel::class, [$this->app, $request, $this->router, $this->error_handler] )->makePartial();
+
+		$response->shouldReceive( 'getStatusCode' )
+			->andReturn( 404 );
+
+		$subject->shouldReceive( 'handle' )
+			->andReturn( $response );
+
+		$this->app->shouldReceive( 'getContainer' )
+			->andReturn( $container );
+
+		$container->shouldReceive( 'offsetSet' )
+			->with( WPEMERGE_RESPONSE_KEY, $response );
+
+		$this->assertFalse( $wp_query->is_404() );
+		$subject->filterTemplateInclude( '' );
+		$this->assertTrue( $wp_query->is_404() );
+	}
+
+	/**
+	 * @covers ::filterTemplateInclude
+	 */
 	public function testFilterTemplateInclude_NoResponse_Passthrough() {
 		$request = Mockery::mock( RequestInterface::class );
 		$subject = Mockery::mock( HttpKernel::class, [$this->app, $request, $this->router, $this->error_handler] )->makePartial();
