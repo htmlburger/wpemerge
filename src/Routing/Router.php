@@ -93,7 +93,7 @@ class Router implements HasRoutesInterface {
 			Arr::get( $attributes, 'condition', '' )
 		);
 
-		$attributes = array(
+		$attributes = [
 			'condition' => $condition !== null ? $condition : '',
 			'where' => array_merge(
 				Arr::get( $previous, 'where', [] ),
@@ -103,7 +103,7 @@ class Router implements HasRoutesInterface {
 				(array) Arr::get( $previous, 'middleware', [] ),
 				(array) Arr::get( $attributes, 'middleware', [] )
 			),
-		);
+		];
 
 		$this->group_stack[] = $attributes;
 	}
@@ -194,12 +194,12 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @param  RequestInterface  $request
 	 * @param  RouteInterface    $route
-	 * @param  string            $view
+	 * @param  array             $arguments
 	 * @return ResponseInterface
 	 */
-	protected function handle( RequestInterface $request, RouteInterface $route, $view ) {
-		$handler = function ( $request, $view ) use ( $route ) {
-			return $route->handle( $request, $view );
+	protected function handle( RequestInterface $request, RouteInterface $route, $arguments = [] ) {
+		$handler = function () use ( $route ) {
+			return call_user_func_array( [$route, 'handle'], func_get_args() );
 		};
 
 		$global_middleware = $this->expandMiddleware( $this->global_middleware );
@@ -209,7 +209,7 @@ class Router implements HasRoutesInterface {
 			->middleware( $global_middleware )
 			->middleware( $route_middleware )
 			->to( $handler )
-			->run( $request, [$request, $view] );
+			->run( $request, [$request, $arguments] );
 
 		return $response;
 	}
@@ -218,16 +218,16 @@ class Router implements HasRoutesInterface {
 	 * Execute the first satisfied route, if any.
 	 *
 	 * @param  RequestInterface       $request
-	 * @param  string                 $view
+	 * @param  array                  $arguments
 	 * @return ResponseInterface|null
 	 */
-	public function execute( $request, $view ) {
+	public function execute( $request, $arguments = [] ) {
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {
 			if ( $route->isSatisfied( $request ) ) {
 				$this->setCurrentRoute( $route );
-				return $this->handle( $request, $route, $view );
+				return $this->handle( $request, $route, $arguments );
 			}
 		}
 

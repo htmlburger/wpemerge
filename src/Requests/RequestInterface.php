@@ -84,6 +84,13 @@ interface RequestInterface {
 	public function isReadVerb();
 
 	/**
+	 * Check if the request is an ajax request.
+	 *
+	 * @return boolean
+	 */
+	public function isAjax();
+
+	/**
 	 * Get the request url.
 	 *
 	 * @return string

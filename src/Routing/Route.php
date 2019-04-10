@@ -115,9 +115,10 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( RequestInterface $request, $view ) {
+	public function handle( RequestInterface $request, $arguments = [] ) {
 		$arguments = array_merge(
-			[$request, $view],
+			[$request],
+			$arguments,
 			array_values( $this->condition->getArguments( $request ) )
 		);
 

@@ -240,11 +240,6 @@ class ResponseService {
 	 * @return ResponseInterface
 	 */
 	public function error( $status ) {
-		global $wp_query;
-		if ( $status === 404 ) {
-			$wp_query->set_404();
-		}
-
 		return $this->view( [$status, 'error', 'index'] )
 			->toResponse()
 			->withStatus( $status );

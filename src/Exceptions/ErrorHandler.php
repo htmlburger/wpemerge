@@ -14,7 +14,9 @@ use Psr\Http\Message\ResponseInterface;
 use Whoops\RunInterface;
 use WPEmerge\Csrf\InvalidCsrfTokenException;
 use WPEmerge\Facades\Response;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\NotFoundException;
+use WPEmerge\Support\Arr;
 
 class ErrorHandler implements ErrorHandlerInterface {
 	/**
@@ -84,6 +86,34 @@ class ErrorHandler implements ErrorHandlerInterface {
 	}
 
 	/**
+	 * Convert an exception to a debug ResponseInterface instance if possible.
+	 *
+	 * @throws PhpException
+	 * @param  RequestInterface  $request
+	 * @param  PhpException      $exception
+	 * @return ResponseInterface
+	 */
+	protected function toDebugResponse( RequestInterface $request, PhpException $exception ) {
+		if ( $request->isAjax() ) {
+			return Response::json( [
+				'message' => $exception->getMessage(),
+				'exception' => get_class( $exception ),
+				'file' => $exception->getFile(),
+				'line' => $exception->getLine(),
+				'trace' => array_map( function ( $trace ) {
+					return Arr::except( $trace, ['args'] );
+				}, $exception->getTrace() ),
+			] )->withStatus( 500 );
+		}
+
+		if ( $this->whoops !== null ) {
+			return $this->toPrettyErrorResponse( $exception );
+		}
+
+		throw $exception;
+	}
+
+	/**
 	 * Convert an exception to a pretty error response.
 	 *
 	 * @codeCoverageIgnore
@@ -102,7 +132,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * {@inheritDoc}
 	 * @throws PhpException
 	 */
-	public function getResponse( PhpException $exception ) {
+	public function getResponse( RequestInterface $request, PhpException $exception ) {
 		$response = $this->toResponse( $exception );
 
 		if ( $response !== false ) {
@@ -113,10 +143,6 @@ class ErrorHandler implements ErrorHandlerInterface {
 			return Response::error( 500 );
 		}
 
-		if ( $this->whoops !== null ) {
-			return $this->toPrettyErrorResponse( $exception );
-		}
-
-		throw $exception;
+		return $this->toDebugResponse( $request, $exception );
 	}
 }

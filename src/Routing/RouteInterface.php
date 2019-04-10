@@ -36,8 +36,8 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	 * Get a response for the given request.
 	 *
 	 * @param  RequestInterface                    $request
-	 * @param  string                              $view
+	 * @param  array                               $arguments
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( RequestInterface $request, $view );
+	public function handle( RequestInterface $request, $arguments = [] );
 }

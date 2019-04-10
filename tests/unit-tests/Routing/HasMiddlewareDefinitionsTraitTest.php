@@ -32,10 +32,10 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 			'short2' => 'long2',
 		] );
 		$subject->setMiddlewareGroups( [
-			'group' => array(
+			'group' => [
 				'short1',
 				HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
-			),
+			],
 		] );
 
 		$this->assertEquals( [
@@ -54,10 +54,10 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 			'short' => 'long',
 		] );
 		$subject->setMiddlewareGroups( [
-			'group' => array(
+			'group' => [
 				'short',
 				HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
-			),
+			],
 		] );
 
 		$this->assertEquals( [

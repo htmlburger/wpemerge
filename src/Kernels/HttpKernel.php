@@ -104,20 +104,26 @@ class HttpKernel implements HttpKernelInterface {
 		$this->router->setGlobalMiddleware( $this->global_middleware );
 		$this->router->setMiddlewarePriority( $this->middleware_priority );
 
+		// Web.
 		add_action( 'request', [$this, 'filterRequest'], 1000 );
 		add_action( 'template_include', [$this, 'filterTemplateInclude'], 1000 );
+
+		// Ajax.
+		add_action( 'admin_init', [$this, 'registerAjaxAction'] );
+
+		// Admin.
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handle( RequestInterface $request, $view ) {
+	public function handle( RequestInterface $request, $arguments = [] ) {
 		$this->error_handler->register();
 
 		try {
-			$response = $this->router->execute( $request, $view );
+			$response = $this->router->execute( $request, $arguments );
 		} catch ( Exception $exception ) {
-			$response = $this->error_handler->getResponse( $exception );
+			$response = $this->error_handler->getResponse( $request, $exception );
 		}
 
 		$this->error_handler->unregister();
@@ -157,15 +163,52 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return string
 	 */
 	public function filterTemplateInclude( $view ) {
-		$response = $this->handle( $this->request, $view );
+		global $wp_query;
+
+		$response = $this->handle( $this->request, [$view] );
 
 		if ( $response instanceof \Psr\Http\Message\ResponseInterface ) {
 			$container = $this->app->getContainer();
 			$container[ WPEMERGE_RESPONSE_KEY ] = $response;
 
+			if ( $response->getStatusCode() === 404 ) {
+				$wp_query->set_404();
+			}
+
 			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 		}
 
 		return $view;
+	}
+
+	/**
+	 * Register ajax action to hook into current one.
+	 *
+	 * @return void
+	 */
+	public function registerAjaxAction() {
+		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+			return;
+		}
+
+		$action = $this->request->post( 'action', $this->request->get( 'action' ) );
+		$action = sanitize_text_field( $action );
+
+		add_action( "wp_ajax_{$action}", [$this, 'actionAjax'] );
+		add_action( "wp_ajax_nopriv_{$action}", [$this, 'actionAjax'] );
+	}
+
+	/**
+	 * Act on ajax action.
+	 *
+	 * @return void
+	 */
+	public function actionAjax() {
+		$response = $this->handle( $this->request, [''] );
+
+		if ( $response instanceof \Psr\Http\Message\ResponseInterface ) {
+			$this->app->respond( $response );
+			wp_die( '', '', ['response' => null] );
+		}
 	}
 }

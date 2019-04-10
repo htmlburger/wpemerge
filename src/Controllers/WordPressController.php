@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Controllers;
 
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Facades\Response;
 use WPEmerge\Requests\RequestInterface;
 
@@ -26,7 +27,12 @@ class WordPressController {
 	 * @param  string                              $view
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function handle( RequestInterface $request, $view ) {
+	public function handle( RequestInterface $request, $view = '' ) {
+		if ( empty( $view ) ) {
+			throw new ConfigurationException( 'No view loaded for default WordPress controller. ' .
+				'Did you miss to specify a custom handler for an ajax or admin route?' );
+		}
+
 		return Response::view( $view )
 			->toResponse()
 			->withStatus( http_response_code() );

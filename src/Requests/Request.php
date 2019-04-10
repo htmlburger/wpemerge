@@ -169,6 +169,13 @@ class Request implements RequestInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function isAjax() {
+		return $this->headers( 'X-Requested-With' ) === 'XMLHttpRequest';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getUrl() {
 		$https = $this->server( 'HTTPS' );
 
@@ -198,7 +205,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function get() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['get'], func_get_args() ) );
@@ -206,7 +213,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function post() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['post'], func_get_args() ) );
@@ -214,7 +221,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function cookie() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['cookie'], func_get_args() ) );
@@ -222,7 +229,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function files() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['files'], func_get_args() ) );
@@ -230,7 +237,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function server() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['server'], func_get_args() ) );
@@ -238,7 +245,7 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * @see ::input()
 	 */
 	public function headers() {
 		return call_user_func_array( [$this, 'input'], array_merge( ['headers'], func_get_args() ) );

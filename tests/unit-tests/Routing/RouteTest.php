@@ -141,6 +141,6 @@ class RouteTest extends WP_UnitTestCase {
 			->with( $request )
 			->andReturn( ['foo', 'bar'] );
 
-		$this->assertSame( $expected, $subject->handle( $request, $view ) );
+		$this->assertSame( $expected, $subject->handle( $request, [$view] ) );
 	}
 }

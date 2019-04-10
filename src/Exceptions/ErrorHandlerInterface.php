@@ -11,6 +11,7 @@ namespace WPEmerge\Exceptions;
 
 use Exception as PhpException;
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Requests\RequestInterface;
 
 interface ErrorHandlerInterface {
 	/**
@@ -33,5 +34,5 @@ interface ErrorHandlerInterface {
 	 * @param  PhpException $exception
 	 * @return ResponseInterface
 	 */
-	public function getResponse( PhpException $exception );
+	public function getResponse( RequestInterface $request, PhpException $exception );
 }

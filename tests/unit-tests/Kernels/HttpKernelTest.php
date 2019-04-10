@@ -66,7 +66,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 			} );
 
 		$this->error_handler->shouldReceive( 'getResponse' )
-			->with( $exception )
+			->with( $request, $exception )
 			->andReturnUsing( function() {
 				throw new Exception( 'Test exception handled' );
 			} );
@@ -148,7 +148,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 */
 	public function testFilterTemplateInclude_Response_Override() {
 		$request = Mockery::mock( RequestInterface::class );
-		$response = Mockery::mock( ResponseInterface::class );
+		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
 		$container = Mockery::mock( ArrayAccess::class );
 		$subject = Mockery::mock( HttpKernel::class, [$this->app, $request, $this->router, $this->error_handler] )->makePartial();
 

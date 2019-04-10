@@ -27,8 +27,8 @@ interface HttpKernelInterface {
 	 * Return a response for a given request.
 	 *
 	 * @param  RequestInterface       $request
-	 * @param  string                 $view
+	 * @param  array                  $arguments
 	 * @return ResponseInterface|null
 	 */
-	public function handle( RequestInterface $request, $view );
+	public function handle( RequestInterface $request, $arguments = [] );
 }

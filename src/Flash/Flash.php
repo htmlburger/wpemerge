@@ -77,7 +77,7 @@ class Flash {
 		if ( ! $this->isValidStore( $this->store ) ) {
 			throw new ConfigurationException(
 				'Attempted to use Flash without an active session. ' .
-				'Did you forget to call session_start()?'
+				'Did you miss to call session_start()?'
 			);
 		}
 	}
