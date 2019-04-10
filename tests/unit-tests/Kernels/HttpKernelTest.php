@@ -81,6 +81,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route1 = Mockery::mock( RouteInterface::class );
 		$route2 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$route3 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
+		$route4 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$request = Mockery::mock( RequestInterface::class );
 		$query_vars = ['unfiltered'];
 		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
@@ -94,14 +95,19 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route1->shouldNotReceive( 'applyQueryFilter' );
 
 		$route2->shouldReceive( 'isSatisfied' )
+			->andReturn( false );
+
+		$route2->shouldNotReceive( 'applyQueryFilter' );
+
+		$route3->shouldReceive( 'isSatisfied' )
 			->andReturn( true )
 			->once();
 
-		$route2->shouldReceive( 'applyQueryFilter' )
+		$route3->shouldReceive( 'applyQueryFilter' )
 			->with( $request, $query_vars )
 			->andReturn( $query_vars );
 
-		$route3->shouldNotReceive( 'isSatisfied' );
+		$route4->shouldNotReceive( 'isSatisfied' );
 
 		$this->assertEquals( ['unfiltered'], $subject->filterRequest( $query_vars ) );
 	}
