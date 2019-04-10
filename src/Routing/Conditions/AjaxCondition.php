@@ -9,9 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
-use WPEmerge\Helpers\Url as UrlUtility;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Support\Arr;
 
 /**
  * Check against the current ajax action.

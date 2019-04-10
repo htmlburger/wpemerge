@@ -40,6 +40,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		'post_type' => \WPEmerge\Routing\Conditions\PostTypeCondition::class,
 		'query_var' => \WPEmerge\Routing\Conditions\QueryVarCondition::class,
 		'ajax' => \WPEmerge\Routing\Conditions\AjaxCondition::class,
+		'admin' => \WPEmerge\Routing\Conditions\AdminCondition::class,
 	];
 
 	/**

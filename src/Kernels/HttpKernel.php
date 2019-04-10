@@ -12,6 +12,7 @@ namespace WPEmerge\Kernels;
 use Exception;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
+use WPEmerge\Facades\Response;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\Router;
@@ -114,6 +115,7 @@ class HttpKernel implements HttpKernelInterface {
 		add_action( 'admin_init', [$this, 'registerAjaxAction'] );
 
 		// Admin.
+		add_action( 'admin_init', [$this, 'registerAdminAction'] );
 	}
 
 	/**
@@ -208,9 +210,83 @@ class HttpKernel implements HttpKernelInterface {
 	public function actionAjax() {
 		$response = $this->handle( $this->request, [''] );
 
-		if ( $response instanceof \Psr\Http\Message\ResponseInterface ) {
-			$this->app->respond( $response );
-			wp_die( '', '', ['response' => null] );
+		if ( ! $response instanceof \Psr\Http\Message\ResponseInterface ) {
+			return;
 		}
+
+		$this->app->respond( $response );
+		wp_die( '', '', ['response' => null] );
+	}
+
+	/**
+	 * Register admin action to hook into current one.
+	 *
+	 * @return void
+	 */
+	public function registerAdminAction() {
+		global $pagenow, $typenow, $plugin_page;
+
+		if ( $pagenow !== 'admin.php' ) {
+			return;
+		}
+
+		$page_hook = '';
+		if ( isset( $plugin_page ) ) {
+			if ( ! empty( $typenow ) ) {
+				$the_parent = $pagenow . '?post_type=' . $typenow;
+			} else {
+				$the_parent = $pagenow;
+			}
+
+			$page_hook = get_plugin_page_hook( $plugin_page, $the_parent );
+		}
+
+		$hook_suffix = '';
+		if ( isset( $page_hook ) ) {
+			$hook_suffix = $page_hook;
+		} elseif ( isset( $plugin_page ) ) {
+			$hook_suffix = $plugin_page;
+		} elseif ( isset( $pagenow ) ) {
+			$hook_suffix = $pagenow;
+		}
+
+		add_action( "load-{$hook_suffix}", [$this, 'actionAdminLoad'] );
+		add_action( $hook_suffix, [$this, 'actionAdmin'] );
+	}
+
+	/**
+	 * Act on admin action load.
+	 *
+	 * @return void
+	 */
+	public function actionAdminLoad() {
+		$response = $this->handle( $this->request, [''] );
+
+		if ( ! $response instanceof \Psr\Http\Message\ResponseInterface ) {
+			return;
+		}
+
+		if ( ! headers_sent() ) {
+			Response::sendHeaders( $response );
+		}
+
+		add_filter( 'wpemerge.admin.response', function () use ( $response ) {
+			return $response;
+		} );
+	}
+
+	/**
+	 * Act on admin action.
+	 *
+	 * @return void
+	 */
+	public function actionAdmin() {
+		$response = apply_filters( 'wpemerge.admin.response', null );
+
+		if ( $response === null ) {
+			return;
+		}
+
+		Response::sendBody( $response );
 	}
 }

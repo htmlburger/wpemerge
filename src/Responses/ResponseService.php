@@ -60,7 +60,7 @@ class ResponseService {
 	 * @param  ResponseInterface $response
 	 * @return void
 	 */
-	protected function sendHeaders( ResponseInterface $response ) {
+	public function sendHeaders( ResponseInterface $response ) {
 		// Status
 		header( sprintf(
 			'HTTP/%s %s %s',
@@ -122,7 +122,7 @@ class ResponseService {
 	 * @param  integer           $chunk_size
 	 * @return void
 	 */
-	protected function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
+	public function sendBody( ResponseInterface $response, $chunk_size = 4096 ) {
 		$body = $this->getBody( $response );
 		$content_length = $this->getBodyContentLength( $response );
 
