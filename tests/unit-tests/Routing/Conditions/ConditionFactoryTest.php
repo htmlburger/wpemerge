@@ -130,15 +130,15 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testMake_ArrayOfConditionsInArray_MultipleCondition() {
 		$expected_param1 = function() {};
-		$expected_param2 = function() {};
+		$expected_param2 = Mockery::mock( PostIdCondition::class );
 		$expected_class = MultipleCondition::class;
 
-		$condition = $this->subject->make( [ [ $expected_param1 ], [ $expected_param2 ] ] );
+		$condition = $this->subject->make( [ [ $expected_param1 ], $expected_param2 ] );
 		$this->assertInstanceOf( $expected_class, $condition );
 
 		$condition_conditions = $condition->getConditions();
 		$this->assertSame( $expected_param1, $condition_conditions[0]->getCallable() );
-		$this->assertSame( $expected_param2, $condition_conditions[1]->getCallable() );
+		$this->assertSame( $expected_param2, $condition_conditions[1] );
 	}
 
 	/**

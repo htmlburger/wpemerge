@@ -75,7 +75,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handle
+	 * @covers ::filterRequest
 	 */
 	public function testFilterRequest_NoFilter_Unfiltered() {
 		$route1 = Mockery::mock( RouteInterface::class );
@@ -107,7 +107,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handle
+	 * @covers ::filterRequest
 	 */
 	public function testFilterRequest_Filter_Filtered() {
 		$route1 = Mockery::mock( RouteInterface::class );
@@ -138,7 +138,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handle
+	 * @covers ::filterTemplateInclude
 	 */
 	public function testFilterTemplateInclude_Response_Override() {
 		$request = Mockery::mock( RequestInterface::class );
@@ -159,7 +159,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handle
+	 * @covers ::filterTemplateInclude
 	 */
 	public function testFilterTemplateInclude_NoResponse_Passthrough() {
 		$request = Mockery::mock( RequestInterface::class );

@@ -45,6 +45,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * Better and more extensive tests are needed.
 	 *
 	 * @covers ::group
+	 * @covers ::addRoute
 	 */
 	public function testGroup() {
 		$condition1 = Mockery::mock( ConditionInterface::class );
