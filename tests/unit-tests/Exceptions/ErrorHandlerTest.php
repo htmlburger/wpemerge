@@ -52,6 +52,32 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getResponse
+	 * @covers ::toDebugResponse
+	 */
+	public function testGetResponse_AjaxException_JsonResponse() {
+		$exception = new Exception();
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'isAjax')
+			->andReturn( true );
+
+		$subject = new ErrorHandler( null, true );
+		$response = $subject->getResponse( $request, $exception );
+		$response_body = $response->getBody();
+
+		$response_text = '';
+		while ( ! $response_body->eof() ) {
+			$response_text .= $response_body->read( 4096 );
+		}
+		$response_json = json_decode( $response_text, true );
+
+		$this->assertArrayHasKey( 'exception', $response_json );
+		$this->assertEquals( 500, $response->getStatusCode() );
+	}
+
+	/**
+	 * @covers ::getResponse
+	 * @covers ::toDebugResponse
 	 */
 	public function testGetResponse_DebugException_PrettyErrorResponse() {
 		$expected = 'foobar';
