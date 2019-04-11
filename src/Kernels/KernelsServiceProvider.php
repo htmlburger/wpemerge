@@ -22,7 +22,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = function ( $c ) {
-			return new HttpKernel(
+			return new WordPressHttpKernel(
 				$c[ WPEMERGE_APPLICATION_KEY ],
 				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_ROUTER_KEY ],

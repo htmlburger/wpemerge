@@ -10,17 +10,24 @@
 namespace WPEmerge\Kernels;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Response;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Routing\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Routing\HasQueryFilterInterface;
+use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Router;
+use WPEmerge\Routing\SortsMiddlewareTrait;
 
 /**
  * Describes how a request is handled.
  */
 class HttpKernel implements HttpKernelInterface {
+	use HasMiddlewareDefinitionsTrait;
+	use SortsMiddlewareTrait;
+
 	/**
 	 * Application.
 	 *
@@ -48,40 +55,6 @@ class HttpKernel implements HttpKernelInterface {
 	 * @var ErrorHandlerInterface
 	 */
 	protected $error_handler = null;
-
-	/**
-	 * Middleware available to the application.
-	 *
-	 * @var array<string, string>
-	 */
-	protected $middleware = [];
-
-	/**
-	 * Middleware groups.
-	 *
-	 * @var array<string, array<string>>
-	 */
-	protected $middleware_groups = [
-		'global' => [
-			\WPEmerge\Flash\FlashMiddleware::class,
-			\WPEmerge\Input\OldInputMiddleware::class,
-		],
-
-		'web' => [
-			'global',
-		],
-
-		'ajax' => [
-			'global',
-		],
-	];
-
-	/**
-	 * Middleware sorted in order of execution.
-	 *
-	 * @var array<string>
-	 */
-	protected $middleware_priority = [];
 
 	/**
 	 * Constructor.
@@ -122,10 +95,39 @@ class HttpKernel implements HttpKernelInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $arguments = [] ) {
+		$route = $this->router->execute( $request, $arguments );
+
+		if ( $route === null ) {
+			return null;
+		}
+
+		$handler = function () use ( $route ) {
+			return call_user_func_array( [$route, 'handle'], func_get_args() );
+		};
+
+		$response = $this->run( $request, $route->getMiddleware(), $handler, $arguments );
+
+		$container = $this->app->getContainer();
+		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
+
+		return $response;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {
 		$this->error_handler->register();
 
 		try {
-			$response = $this->router->execute( $request, $arguments );
+			$middleware = $this->expandMiddleware( $middleware );
+			$middleware = $this->uniqueMiddleware( $middleware );
+			$middleware = $this->sortMiddleware( $middleware );
+
+			$response = ( new Pipeline() )
+				->middleware( $middleware )
+				->to( $handler )
+				->run( $request, [$request, $arguments] );
 		} catch ( Exception $exception ) {
 			$response = $this->error_handler->getResponse( $request, $exception );
 		}
@@ -171,10 +173,7 @@ class HttpKernel implements HttpKernelInterface {
 
 		$response = $this->handle( $this->request, [$view] );
 
-		if ( $response instanceof \Psr\Http\Message\ResponseInterface ) {
-			$container = $this->app->getContainer();
-			$container[ WPEMERGE_RESPONSE_KEY ] = $response;
-
+		if ( $response instanceof ResponseInterface ) {
 			if ( $response->getStatusCode() === 404 ) {
 				$wp_query->set_404();
 			}
@@ -210,7 +209,7 @@ class HttpKernel implements HttpKernelInterface {
 	public function actionAjax() {
 		$response = $this->handle( $this->request, [''] );
 
-		if ( ! $response instanceof \Psr\Http\Message\ResponseInterface ) {
+		if ( ! $response instanceof ResponseInterface ) {
 			return;
 		}
 
@@ -291,17 +290,13 @@ class HttpKernel implements HttpKernelInterface {
 	public function actionAdminLoad() {
 		$response = $this->handle( $this->request, [''] );
 
-		if ( ! $response instanceof \Psr\Http\Message\ResponseInterface ) {
+		if ( ! $response instanceof ResponseInterface ) {
 			return;
 		}
 
 		if ( ! headers_sent() ) {
 			Response::sendHeaders( $response );
 		}
-
-		add_filter( 'wpemerge.admin.response', function () use ( $response ) {
-			return $response;
-		} );
 	}
 
 	/**
@@ -310,7 +305,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return void
 	 */
 	public function actionAdmin() {
-		$response = apply_filters( 'wpemerge.admin.response', null );
+		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
 
 		if ( $response === null ) {
 			return;

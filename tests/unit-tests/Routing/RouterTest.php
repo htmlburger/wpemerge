@@ -2,11 +2,7 @@
 
 namespace WPEmergeTests\Routing;
 
-use Closure;
-use GuzzleHttp\Psr7;
 use Mockery;
-use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -168,6 +164,27 @@ class RouterTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
+	 * @covers ::handle
+	 */
+	public function testExecute_SatisfiedRoute_Route() {
+		$request = Mockery::mock( RequestInterface::class );
+		$condition = Mockery::mock( ConditionInterface::class );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+
+		$route->shouldReceive( 'getCondition' )
+			->andReturn( $condition );
+
+		$route->shouldReceive( 'isSatisfied' )
+			->andReturn( true );
+
+		$this->subject->addRoute( $route );
+
+		$this->assertSame( $route, $this->subject->execute( $request, '' ) );
+		$this->assertSame( $route, $this->subject->getCurrentRoute() );
+	}
+
+	/**
+	 * @covers ::execute
 	 */
 	public function testExecute_UnsatisfiedRoutes_Null() {
 		$request = Mockery::mock( RequestInterface::class );
@@ -187,102 +204,11 @@ class RouterTest extends WP_UnitTestCase {
 		$route2->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
 
+		$this->assertEquals( null, $this->subject->execute( $request, '' ) );
+
 		$this->subject->addRoute( $route1 );
 		$this->subject->addRoute( $route2 );
 
 		$this->assertEquals( null, $this->subject->execute( $request, '' ) );
-	}
-
-	/**
-	 * @covers ::execute
-	 * @covers ::handle
-	 */
-	public function testExecute_SatisfiedRoute_Response() {
-		$request = Mockery::mock( RequestInterface::class );
-		$condition = Mockery::mock( ConditionInterface::class );
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
-
-		$route->shouldReceive( 'getCondition' )
-			->andReturn( $condition );
-
-		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true );
-
-		$route->shouldReceive( 'handle' )
-			->andReturn( $response );
-
-		$this->subject->addRoute( $route );
-
-		$this->assertSame( $response, $this->subject->execute( $request, '' ) );
-	}
-
-	/**
-	 * @covers ::handle
-	 */
-	public function testHandle_Middleware_ExecutedInOrder() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
-
-		$subject = new Router( $this->condition_factory );
-		$subject->setMiddleware( [
-			'middleware2' => RouterTestMiddlewareStub2::class,
-			'middleware3' => RouterTestMiddlewareStub3::class,
-		] );
-		$subject->setMiddlewareGroups( [
-			'global' => [RouterTestMiddlewareStub1::class],
-		] );
-		$subject->setMiddlewarePriority( [
-			RouterTestMiddlewareStub1::class,
-			RouterTestMiddlewareStub2::class,
-		] );
-
-		$route->shouldReceive( 'getCondition' )
-			->andReturn( $condition );
-
-		$route->shouldReceive( 'isSatisfied' )
-			->andReturn( true );
-
-		$route->shouldReceive( 'getMiddleware' )
-			->andReturn( [
-				'middleware3',
-				'middleware2',
-				'global',
-			] );
-
-		$route->shouldReceive( 'handle' )
-			->andReturnUsing( function ( $middleware ) {
-				return (new Psr7\Response())->withBody( Psr7\stream_for( 'Handler' ) );
-			} );
-
-		$subject->addRoute( $route );
-
-		$response = $subject->execute( Mockery::mock( RequestInterface::class ), '' );
-
-		$this->assertEquals( 'FooBarBazHandler', $response->getBody()->read( 999 ) );
-	}
-}
-
-class RouterTestMiddlewareStub1 implements MiddlewareInterface {
-	public function handle( RequestInterface $request, Closure $next ) {
-		$response = $next( $request );
-
-		return $response->withBody( Psr7\stream_for(  'Foo' . $response->getBody()->read( 999 ) ) );
-	}
-}
-
-class RouterTestMiddlewareStub2 implements MiddlewareInterface {
-	public function handle( RequestInterface $request, Closure $next ) {
-		$response = $next( $request );
-
-		return $response->withBody( Psr7\stream_for(  'Bar' . $response->getBody()->read( 999 ) ) );
-	}
-}
-
-class RouterTestMiddlewareStub3 implements MiddlewareInterface {
-	public function handle( RequestInterface $request, Closure $next ) {
-		$response = $next( $request );
-
-		return $response->withBody( Psr7\stream_for(  'Baz' . $response->getBody()->read( 999 ) ) );
 	}
 }

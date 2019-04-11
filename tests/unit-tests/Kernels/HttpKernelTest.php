@@ -3,12 +3,15 @@
 namespace WPEmergeTests\Routing;
 
 use ArrayAccess;
+use Closure;
 use Exception;
+use GuzzleHttp\Psr7;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Kernels\HttpKernel;
+use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\RouteInterface;
@@ -39,31 +42,76 @@ class HttpKernelTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::handle
 	 */
-	public function testHandle_ValidRequest_Response() {
+	public function testHandle_SatisfiedRequest_Response() {
 		$request = Mockery::mock( RequestInterface::class );
+		$route = Mockery::mock( RouteInterface::class );
 		$response = Mockery::mock( ResponseInterface::class );
 		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
 
+		$route->shouldReceive( 'getMiddleware' )
+			->andReturn( [] );
+
 		$this->router->shouldReceive( 'execute' )
-			->andReturn($response);
+			->andReturn( $route );
+
+		$route->shouldReceive( 'handle' )
+			->andReturn( $response );
 
 		$this->assertSame( $response, $subject->handle( $request, '' ) );
 	}
 
 	/**
 	 * @covers ::handle
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Test exception handled
 	 */
-	public function testHandle_Exception_UseErrorHandler() {
-		$exception = new Exception();
+	public function testHandle_UnsatisfiedRequest_Null() {
 		$request = Mockery::mock( RequestInterface::class );
 		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
 
 		$this->router->shouldReceive( 'execute' )
-			->andReturnUsing( function() use ( $exception ) {
-				throw $exception;
-			} );
+			->andReturn( null );
+
+		$this->assertNull( $subject->handle( $request, '' ) );
+	}
+
+	/**
+	 * @covers ::run
+	 */
+	public function testRun_Middleware_ExecutedInOrder() {
+		$request = Mockery::mock( RequestInterface::class );
+
+		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
+		$subject->setMiddleware( [
+			'middleware2' => HttpKernelTestMiddlewareStub2::class,
+			'middleware3' => HttpKernelTestMiddlewareStub3::class,
+		] );
+		$subject->setMiddlewareGroups( [
+			'global' => [HttpKernelTestMiddlewareStub1::class],
+		] );
+		$subject->setMiddlewarePriority( [
+			HttpKernelTestMiddlewareStub1::class,
+			HttpKernelTestMiddlewareStub2::class,
+		] );
+
+		$response = $subject->run( $request, [
+			'middleware3',
+			'middleware2',
+			'global',
+		], function () {
+			return ( new Psr7\Response() )->withBody( Psr7\stream_for( 'Handler' ) );
+		} );
+
+		$this->assertEquals( 'FooBarBazHandler', $response->getBody()->read( 999 ) );
+	}
+
+	/**
+	 * @covers ::run
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage Test exception handled
+	 */
+	public function testRun_Exception_UseErrorHandler() {
+		$exception = new Exception();
+		$request = Mockery::mock( RequestInterface::class );
+		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
 
 		$this->error_handler->shouldReceive( 'getResponse' )
 			->with( $request, $exception )
@@ -71,7 +119,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 				throw new Exception( 'Test exception handled' );
 			} );
 
-		$subject->handle( $request, '' );
+		$subject->run( $request, [], function () use ( $exception ) {
+			throw $exception;
+		} );
 	}
 
 	/**
@@ -203,5 +253,29 @@ class HttpKernelTest extends WP_UnitTestCase {
 			->andReturn( null );
 
 		$this->assertEquals( 'foo', $subject->filterTemplateInclude( 'foo' ) );
+	}
+}
+
+class HttpKernelTestMiddlewareStub1 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Foo' . $response->getBody()->read( 999 ) ) );
+	}
+}
+
+class HttpKernelTestMiddlewareStub2 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Bar' . $response->getBody()->read( 999 ) ) );
+	}
+}
+
+class HttpKernelTestMiddlewareStub3 implements MiddlewareInterface {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
+
+		return $response->withBody( Psr7\stream_for(  'Baz' . $response->getBody()->read( 999 ) ) );
 	}
 }

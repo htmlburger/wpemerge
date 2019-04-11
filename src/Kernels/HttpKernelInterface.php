@@ -24,11 +24,22 @@ interface HttpKernelInterface {
 	public function bootstrap();
 
 	/**
-	 * Return a response for a given request.
+	 * Return a response for the given request.
 	 *
 	 * @param  RequestInterface       $request
 	 * @param  array                  $arguments
 	 * @return ResponseInterface|null
 	 */
 	public function handle( RequestInterface $request, $arguments = [] );
+
+	/**
+	 * Run a response pipeline for the given request.
+	 *
+	 * @param  RequestInterface $request
+	 * @param  array<string>    $middleware
+	 * @param  string|\Closure  $handler
+	 * @param  array            $arguments
+	 * @return ResponseInterface
+	 */
+	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] );
 }
