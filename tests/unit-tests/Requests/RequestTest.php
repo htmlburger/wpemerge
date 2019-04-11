@@ -108,6 +108,17 @@ class RequestTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::isAjax
+	 */
+	public function testIsAjax() {
+		$subject = new Request( [], [], [], [], [], [] );
+		$this->assertFalse( $subject->isAjax() );
+
+		$subject = new Request( [], [], [], [], [], ['X-Requested-With' => 'XMLHttpRequest'] );
+		$this->assertTrue( $subject->isAjax() );
+	}
+
+	/**
 	 * @covers ::getUrl
 	 */
 	public function testGetUrl() {

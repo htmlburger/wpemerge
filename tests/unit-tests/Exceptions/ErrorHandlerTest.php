@@ -101,7 +101,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getResponse
-	 * @covers ::toResponse
+	 * @covers ::toDebugResponse
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Rethrown exception
 	 */

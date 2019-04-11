@@ -86,7 +86,11 @@ class AjaxCondition implements ConditionInterface {
 			return false;
 		}
 
-		return ( $this->matchesPrivateRequirement() || $this->matchesPublicRequirement() ) && $this->matchesActionRequirement( $request );
+		if ( ! $this->matchesActionRequirement( $request ) ) {
+			return false;
+		}
+
+		return $this->matchesPrivateRequirement() || $this->matchesPublicRequirement();
 	}
 
 	/**

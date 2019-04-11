@@ -190,32 +190,6 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
-	 * Execute a route.
-	 *
-	 * @param  RequestInterface  $request
-	 * @param  RouteInterface    $route
-	 * @param  array             $arguments
-	 * @return ResponseInterface
-	 */
-	protected function handle( RequestInterface $request, RouteInterface $route, $arguments = [] ) {
-		$handler = function () use ( $route ) {
-			return call_user_func_array( [$route, 'handle'], func_get_args() );
-		};
-
-		$middleware = $route->getMiddleware();
-		$middleware = $this->expandMiddleware( $middleware );
-		$middleware = $this->uniqueMiddleware( $middleware );
-		$middleware = $this->sortMiddleware( $middleware );
-
-		$response = ( new Pipeline() )
-			->middleware( $middleware )
-			->to( $handler )
-			->run( $request, [$request, $arguments] );
-
-		return $response;
-	}
-
-	/**
 	 * Assign and return the first satisfied route (if any) as the current one for the given request.
 	 *
 	 * @param  RequestInterface $request

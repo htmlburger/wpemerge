@@ -164,7 +164,6 @@ class RouterTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::execute
-	 * @covers ::handle
 	 */
 	public function testExecute_SatisfiedRoute_Route() {
 		$request = Mockery::mock( RequestInterface::class );
