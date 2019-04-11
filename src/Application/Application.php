@@ -268,6 +268,24 @@ class Application {
 	}
 
 	/**
+	 * Load a route definition file, applying middleware to all routes defined within.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string        $file
+	 * @param  array<string> $middleware
+	 * @return void
+	 */
+	protected function loadRoutes( $file, $middleware = [] ) {
+		if ( empty( $file ) ) {
+			return;
+		}
+
+		Router::group( [
+			'middleware' => $middleware,
+		], $file );
+	}
+
+	/**
 	 * Load route definition files according to the current request.
 	 *
 	 * @codeCoverageIgnore
@@ -278,27 +296,15 @@ class Application {
 	 */
 	public function routes( $web = '', $admin = '', $ajax = '' ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( ! empty( $ajax ) ) {
-				Router::group( [
-					'middleware' => 'ajax',
-				], $ajax );
-			}
+			$this->loadRoutes( $ajax, ['ajax'] );
 			return;
 		}
 
 		if ( is_admin() ) {
-			if ( ! empty( $admin ) ) {
-				Router::group( [
-					'middleware' => 'admin',
-				], $admin );
-			}
+			$this->loadRoutes( $admin, ['admin'] );
 			return;
 		}
 
-		if ( ! empty( $web ) ) {
-			Router::group( [
-				'middleware' => 'web',
-			], $web );
-		}
+		$this->loadRoutes( $web, ['web'] );
 	}
 }
