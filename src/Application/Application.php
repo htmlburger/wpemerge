@@ -15,6 +15,7 @@ use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
+use WPEmerge\Facades\Router;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
@@ -264,5 +265,40 @@ class Application {
 	 */
 	public function respond( ResponseInterface $response ) {
 		$this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY )->respond( $response );
+	}
+
+	/**
+	 * Load route definition files according to the current request.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string $web
+	 * @param  string $admin
+	 * @param  string $ajax
+	 * @return void
+	 */
+	public function routes( $web = '', $admin = '', $ajax = '' ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( ! empty( $ajax ) ) {
+				Router::group( [
+					'middleware' => 'ajax',
+				], $ajax );
+			}
+			return;
+		}
+
+		if ( is_admin() ) {
+			if ( ! empty( $admin ) ) {
+				Router::group( [
+					'middleware' => 'admin',
+				], $admin );
+			}
+			return;
+		}
+
+		if ( ! empty( $web ) ) {
+			Router::group( [
+				'middleware' => 'web',
+			], $web );
+		}
 	}
 }

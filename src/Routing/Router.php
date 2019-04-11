@@ -121,13 +121,17 @@ class Router implements HasRoutesInterface {
 	 * Create a new route group.
 	 *
 	 * @param array<string, mixed> $attributes
-	 * @param \Closure            $routes
+	 * @param \Closure|string      $routes Closure or path to file.
 	 * @return void
 	 */
 	public function group( $attributes, $routes ) {
 		$this->addGroupToStack( $attributes );
 
-		$routes();
+		if ( is_string( $routes ) ) {
+			require_once $routes;
+		} else {
+			$routes();
+		}
 
 		$this->removeLastGroupFromStack();
 	}

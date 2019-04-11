@@ -34,6 +34,10 @@ class WordPressHttpKernel extends HttpKernel {
 		'ajax' => [
 			'global',
 		],
+
+		'admin' => [
+			'global',
+		],
 	];
 
 	/**

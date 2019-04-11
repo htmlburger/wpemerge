@@ -41,6 +41,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::getResponse
+	 * @covers ::toResponse
 	 */
 	public function testGetResponse_ProductionException_500Response() {
 		$expected = 500;
