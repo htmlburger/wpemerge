@@ -10,12 +10,13 @@
 namespace WPEmerge\Kernels;
 
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Middleware\HasMiddlewareDefinitionsInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
  * Describes how a request is handled.
  */
-interface HttpKernelInterface {
+interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	/**
 	 * Bootstrap the kernel.
 	 *

@@ -98,4 +98,52 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $container[ WPEMERGE_CONFIG_KEY ][ $key ] );
 	}
+
+	/**
+	 * @covers ::extendConfig
+	 */
+	public function testExtendConfig_IndexedArray_Replace() {
+		$container = new Container( [
+			WPEMERGE_CONFIG_KEY => [
+				'foo' => [
+					'bar',
+				],
+				'foobar' => [
+					'foobar' => [
+						'barfoo',
+					]
+				],
+				'foobarbaz' => [
+				],
+			],
+		] );
+
+		$key = 'foo';
+		$default = [
+			'foo',
+		];
+		$expected = [
+			'bar',
+		];
+
+		$this->subject->extendConfig( $container, $key, $default );
+
+		$this->assertEquals( $expected, $container[ WPEMERGE_CONFIG_KEY ][ $key ] );
+
+		$key = 'foobar';
+		$default = [
+			'foobar' => [
+				'foobar',
+			],
+		];
+		$expected = [
+			'foobar' => [
+				'barfoo',
+			],
+		];
+
+		$this->subject->extendConfig( $container, $key, $default );
+
+		$this->assertEquals( $expected, $container[ WPEMERGE_CONFIG_KEY ][ $key ] );
+	}
 }

@@ -6,11 +6,11 @@ use Closure;
 use Mockery;
 use WP_UnitTestCase;
 use WPEmerge\Middleware\MiddlewareInterface;
+use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\HasMiddlewareDefinitionsTrait;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\HasMiddlewareDefinitionsTrait
+ * @coversDefaultClass \WPEmerge\Middleware\HasMiddlewareDefinitionsTrait
  */
 class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 	public function setUp() {
@@ -67,6 +67,27 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 			'long1',
 			HasMiddlewareDefinitionsTraitTestMiddlewareStub1::class,
 		], $subject->expandMiddleware( ['short2', 'group'] ) );
+	}
+
+	/**
+	 * @covers ::expandMiddlewareGroup
+	 */
+	public function testExpandMiddlewareGroup_Predefined_HasGlobalPrepended() {
+		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
+		$subject->setMiddleware( [
+			'short' => 'long',
+			'global-short' => 'global-long',
+		] );
+		$subject->setMiddlewareGroups( [
+			'global' => ['global-short'],
+			'web' => [],
+			'admin' => ['short'],
+			'ajax' => ['admin'],
+		] );
+
+		$this->assertEquals( ['global-long'], $subject->expandMiddlewareGroup( 'web' ) );
+		$this->assertEquals( ['global-long', 'long'], $subject->expandMiddlewareGroup( 'admin' ) );
+		$this->assertEquals( ['global-long', 'global-long', 'long'], $subject->expandMiddlewareGroup( 'ajax' ) );
 	}
 
 	/**

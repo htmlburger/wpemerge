@@ -46,6 +46,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$request = Mockery::mock( RequestInterface::class );
 		$route = Mockery::mock( RouteInterface::class );
 		$response = Mockery::mock( ResponseInterface::class );
+		$arguments = ['foo', 'bar'];
 		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
 
 		$route->shouldReceive( 'getMiddleware' )
@@ -55,9 +56,10 @@ class HttpKernelTest extends WP_UnitTestCase {
 			->andReturn( $route );
 
 		$route->shouldReceive( 'handle' )
+			->with( $request, $arguments )
 			->andReturn( $response );
 
-		$this->assertSame( $response, $subject->handle( $request, '' ) );
+		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
 	}
 
 	/**
@@ -70,7 +72,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$this->router->shouldReceive( 'execute' )
 			->andReturn( null );
 
-		$this->assertNull( $subject->handle( $request, '' ) );
+		$this->assertNull( $subject->handle( $request, [] ) );
 	}
 
 	/**

@@ -100,3 +100,15 @@ if ( ! function_exists( 'app_layout_content' ) ) {
 		echo \WPEmerge\View\PhpView::getLayoutContent();
 	}
 }
+
+if ( ! function_exists( 'app_pipeline' ) ) {
+	/**
+	 * @codeCoverageIgnore
+	 * @see \WPEmerge\Kernels\HttpKernel::run()
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	function app_pipeline() {
+		$kernel = \WPEmerge\Facades\Application::resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
+		return call_user_func_array( [$kernel, 'run'], func_get_args() );
+	}
+}

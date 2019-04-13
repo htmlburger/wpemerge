@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Kernels;
 
+use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -17,17 +18,41 @@ use WPEmerge\ServiceProviders\ServiceProviderInterface;
  * @codeCoverageIgnore
  */
 class KernelsServiceProvider implements ServiceProviderInterface {
+	use ExtendsConfigTrait;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$this->extendConfig( $container, 'middleware', [
+			'flash' => \WPEmerge\Flash\FlashMiddleware::class,
+			'oldinput' => \WPEmerge\Input\OldInputMiddleware::class,
+		] );
+		$this->extendConfig( $container, 'middleware_groups', [
+			'global' => [
+				'flash',
+				'oldinput',
+			],
+
+			'web' => [],
+			'ajax' => [],
+			'admin' => [],
+		] );
+		$this->extendConfig( $container, 'middleware_priority', [] );
+
 		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = function ( $c ) {
-			return new WordPressHttpKernel(
+			$kernel = new HttpKernel(
 				$c[ WPEMERGE_APPLICATION_KEY ],
 				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_ROUTER_KEY ],
 				$c[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ]
 			);
+
+			$kernel->setMiddleware( $c[ WPEMERGE_CONFIG_KEY ]['middleware'] );
+			$kernel->setMiddlewareGroups( $c[ WPEMERGE_CONFIG_KEY ]['middleware_groups'] );
+			$kernel->setMiddlewarePriority( $c[ WPEMERGE_CONFIG_KEY ]['middleware_priority'] );
+
+			return $kernel;
 		};
 	}
 

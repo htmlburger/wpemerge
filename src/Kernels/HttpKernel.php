@@ -14,8 +14,8 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Facades\Response;
+use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Router;
@@ -98,7 +98,9 @@ class HttpKernel implements HttpKernelInterface {
 		}
 
 		$handler = function () use ( $route ) {
-			return call_user_func_array( [$route, 'handle'], func_get_args() );
+			$arguments = func_get_args();
+			$request = array_shift( $arguments );
+			return call_user_func( [$route, 'handle'], $request, $arguments );
 		};
 
 		$response = $this->run( $request, $route->getMiddleware(), $handler, $arguments );
@@ -123,7 +125,7 @@ class HttpKernel implements HttpKernelInterface {
 			$response = ( new Pipeline() )
 				->middleware( $middleware )
 				->to( $handler )
-				->run( $request, [$request, $arguments] );
+				->run( $request, array_merge( [$request], $arguments ) );
 		} catch ( Exception $exception ) {
 			$response = $this->error_handler->getResponse( $request, $exception );
 		}

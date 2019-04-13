@@ -7,13 +7,12 @@
  * @link      https://wpemerge.com/
  */
 
-namespace WPEmerge\Routing;
+namespace WPEmerge\Middleware;
 
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Middleware\MiddlewareInterface;
 
 /**
- * Provide middleware sorting.
+ * Provide middleware definitions.
  */
 trait HasMiddlewareDefinitionsTrait {
 	/**
@@ -29,6 +28,17 @@ trait HasMiddlewareDefinitionsTrait {
 	 * @var array<string, array<string>>
 	 */
 	protected $middleware_groups = [];
+
+	/**
+	 * Middleware groups that should have the 'global' group prepended to them.
+	 *
+	 * @var array<string, string>
+	 */
+	protected $middleware_groups_with_global = [
+		'web',
+		'admin',
+		'ajax',
+	];
 
 	/**
 	 * Register middleware.
@@ -92,7 +102,13 @@ trait HasMiddlewareDefinitionsTrait {
 			throw new ConfigurationException( 'Unknown middleware group "' . $group . '" used.' );
 		}
 
-		return $this->expandMiddleware( $this->middleware_groups[ $group ] );
+		$middleware = $this->middleware_groups[ $group ];
+
+		if ( in_array( $group, $this->middleware_groups_with_global, true ) ) {
+			$middleware = array_merge( ['global'], $middleware );
+		}
+
+		return $this->expandMiddleware( $middleware );
 	}
 
 	/**
