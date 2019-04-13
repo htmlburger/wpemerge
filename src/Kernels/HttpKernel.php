@@ -76,10 +76,6 @@ class HttpKernel implements HttpKernelInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function bootstrap() {
-		$this->router->setMiddleware( $this->middleware );
-		$this->router->setMiddlewareGroups( $this->middleware_groups );
-		$this->router->setMiddlewarePriority( $this->middleware_priority );
-
 		// Web.
 		add_action( 'request', [$this, 'filterRequest'], 1000 );
 		add_action( 'template_include', [$this, 'filterTemplateInclude'], 1000 );

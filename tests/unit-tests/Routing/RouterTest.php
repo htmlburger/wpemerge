@@ -51,11 +51,6 @@ class RouterTest extends WP_UnitTestCase {
 
 		$subject = new Router( $this->condition_factory );
 
-		$subject->setMiddleware( [
-			'middleware1' => RouterTestMiddlewareStub1::class,
-			'middleware2' => RouterTestMiddlewareStub2::class,
-		] );
-
 		$route = Mockery::mock( RouteInterface::class );
 
 		$route->shouldReceive( 'getCondition' )

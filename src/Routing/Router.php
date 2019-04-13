@@ -24,8 +24,6 @@ class Router implements HasRoutesInterface {
 	use HasRoutesTrait {
 		addRoute as traitAddRoute;
 	}
-	use HasMiddlewareDefinitionsTrait;
-	use SortsMiddlewareTrait;
 
 	/**
 	 * Condition factory.
