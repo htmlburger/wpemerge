@@ -114,6 +114,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a new route.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string[]             $methods
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
@@ -126,6 +127,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the GET and HEAD methods.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -137,6 +139,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the POST method.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -148,6 +151,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the PUT method.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -159,6 +163,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the PATCH method.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -170,6 +175,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the DELETE method.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -181,6 +187,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for the OPTIONS method.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -192,6 +199,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route for all supported methods.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
@@ -203,6 +211,7 @@ class RouteRegistrar {
 	/**
 	 * Create and add a route that will always be satisfied.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
 	 */
