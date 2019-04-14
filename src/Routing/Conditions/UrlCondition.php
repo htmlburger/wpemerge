@@ -34,11 +34,11 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	protected $url_where = [];
 
 	/**
-	 * Regex to detect parameters in urls.
+	 * Pattern to detect parameters in urls.
 	 *
 	 * @var string
 	 */
-	protected $url_regex = '~
+	protected $url_pattern = '~
 		(?:/)                     # match leading slash
 		(?:\{)                    # opening curly brace
 			(?P<name>[a-z]\w*)    # string starting with a-z and followed by word characters for the parameter name
@@ -48,11 +48,11 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	~ix';
 
 	/**
-	 * Regex to detect valid parameters in url segments.
+	 * Pattern to detect valid parameters in url segments.
 	 *
 	 * @var string
 	 */
-	protected $parameter_regex = '[^/]+';
+	protected $parameter_pattern = '[^/]+';
 
 	/**
 	 * Constructor.
@@ -73,10 +73,10 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 		$where = $this->getUrlWhere();
 		$arguments = $this->getArguments( $request );
 
-		foreach ( $where as $parameter => $regex ) {
+		foreach ( $where as $parameter => $pattern ) {
 			$value = Arr::get( $arguments, $parameter, '' );
 
-			if ( ! preg_match( $regex, $value ) ) {
+			if ( ! preg_match( $pattern, $value ) ) {
 				return false;
 			}
 		}
@@ -92,9 +92,9 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 			return true;
 		}
 
-		$validation_regex = $this->getValidationRegex( $this->getUrl() );
+		$validation_pattern = $this->getValidationPattern( $this->getUrl() );
 		$url = UrlUtility::getPath( $request );
-		$match = (bool) preg_match( $validation_regex, $url );
+		$match = (bool) preg_match( $validation_pattern, $url );
 
 		if ( ! $match || empty( $this->getUrlWhere() ) ) {
 			return $match;
@@ -107,10 +107,10 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		$validation_regex = $this->getValidationRegex( $this->getUrl() );
+		$validation_pattern = $this->getValidationPattern( $this->getUrl() );
 		$url = UrlUtility::getPath( $request );
 		$matches = [];
-		$success = preg_match( $validation_regex, $url, $matches );
+		$success = preg_match( $validation_pattern, $url, $matches );
 
 		if ( ! $success ) {
 			return []; // this should not normally happen
@@ -193,22 +193,22 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	 */
 	protected function getParameterNames( $url ) {
 		$matches = [];
-		preg_match_all( $this->url_regex, $url, $matches );
+		preg_match_all( $this->url_pattern, $url, $matches );
 		return $matches['name'];
 	}
 
 	/**
-	 * Validation regex replace callback.
+	 * Validation pattern replace callback.
 	 *
 	 * @param  array  $matches
 	 * @param  array  $parameters
 	 * @return string
 	 */
-	protected function replaceRegexParameterWithPlaceholder( $matches, &$parameters ) {
+	protected function replacePatternParameterWithPlaceholder( $matches, &$parameters ) {
 		$name = $matches['name'];
 		$optional = ! empty( $matches['optional'] );
 
-		$replacement = '/(?P<' . $name . '>' . $this->parameter_regex . ')';
+		$replacement = '/(?P<' . $name . '>' . $this->parameter_pattern . ')';
 
 		if ( $optional ) {
 			$replacement = '(?:' . $replacement . ')?';
@@ -226,33 +226,33 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	}
 
 	/**
-	 * Get regex to test whether normal urls match the parameter-based one.
+	 * Get pattern to test whether normal urls match the parameter-based one.
 	 *
 	 * @param  string  $url
 	 * @param  boolean $wrap
 	 * @return string
 	 */
-	public function getValidationRegex( $url, $wrap = true ) {
+	public function getValidationPattern( $url, $wrap = true ) {
 		$parameters = [];
 
 		// Replace all parameters with placeholders
-		$validation_regex = preg_replace_callback( $this->url_regex, function ( $matches ) use ( &$parameters ) {
-			return $this->replaceRegexParameterWithPlaceholder( $matches, $parameters );
+		$validation_pattern = preg_replace_callback( $this->url_pattern, function ( $matches ) use ( &$parameters ) {
+			return $this->replacePatternParameterWithPlaceholder( $matches, $parameters );
 		}, $url );
 
-		// Quote the remaining string so that it does not get evaluated as regex.
-		$validation_regex = preg_quote( $validation_regex, '~' );
+		// Quote the remaining string so that it does not get evaluated as a pattern.
+		$validation_pattern = preg_quote( $validation_pattern, '~' );
 
-		// Replace the placeholders with the real parameter regexes.
-		$validation_regex = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_regex );
+		// Replace the placeholders with the real parameter patterns.
+		$validation_pattern = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_pattern );
 
 		// Match the entire url; make trailing slash optional.
-		$validation_regex = '^' . $validation_regex . '?$';
+		$validation_pattern = '^' . $validation_pattern . '?$';
 
 		if ( $wrap ) {
-			$validation_regex = '~' . $validation_regex . '~';
+			$validation_pattern = '~' . $validation_pattern . '~';
 		}
 
-		return $validation_regex;
+		return $validation_pattern;
 	}
 }

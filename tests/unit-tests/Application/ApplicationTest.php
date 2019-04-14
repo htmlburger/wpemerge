@@ -55,7 +55,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	 */
 	public function testIsBootstrapped() {
 		$this->assertEquals( false, $this->subject->isBootstrapped() );
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$this->assertEquals( true, $this->subject->isBootstrapped() );
 	}
 
@@ -82,8 +82,8 @@ class ApplicationTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage already bootstrapped
 	 */
 	public function testBootstrap_CalledMultipleTimes_ThrowException() {
-		$this->subject->bootstrap();
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
+		$this->subject->bootstrap( [], false );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class ApplicationTest extends WP_UnitTestCase {
 			'providers' => [
 				ApplicationTestServiceProviderMock::class,
 			]
-		] );
+		], false );
 
 		$this->assertTrue( true );
 	}
@@ -125,7 +125,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		$expected = null;
 		$container_key = 'nonexistantcontainerkey';
 
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
 	}
 
@@ -136,12 +136,11 @@ class ApplicationTest extends WP_UnitTestCase {
 	public function testResolve_ExistingKey_IsResolved() {
 		$expected = 'foobar';
 		$container_key = 'test';
-		$container_key_nonexistant = 'nonexistantcontainerkey';
 
 		$container = $this->subject->getContainer();
 		$container[ $container_key ] = $expected;
 
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
 	}
 
@@ -152,7 +151,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	public function testInstantiate_UnknownClass_CreateFreshInstance() {
 		$class = \WPEmergeTestTools\TestService::class;
 
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$instance1 = $this->subject->instantiate( $class );
 		$instance2 = $this->subject->instantiate( $class );
 
@@ -169,7 +168,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	public function testInstantiate_UnknownNonexistantClass_Exception() {
 		$class = \WPEmergeTestTools\NonExistantClass::class;
 
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$this->subject->instantiate( $class );
 	}
 
@@ -188,7 +187,7 @@ class ApplicationTest extends WP_UnitTestCase {
 			return $instance;
 		};
 
-		$this->subject->bootstrap();
+		$this->subject->bootstrap( [], false );
 		$instance = $this->subject->instantiate( $class );
 
 		$this->assertEquals( $expected, $instance->getTest() );

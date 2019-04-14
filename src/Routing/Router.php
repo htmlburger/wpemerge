@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -52,9 +51,7 @@ class Router implements HasRoutesInterface {
 	 * @codeCoverageIgnore
 	 * @param ConditionFactory      $condition_factory
 	 */
-	public function __construct(
-		ConditionFactory $condition_factory
-	) {
+	public function __construct( ConditionFactory $condition_factory ) {
 		$this->condition_factory = $condition_factory;
 	}
 
@@ -184,7 +181,7 @@ class Router implements HasRoutesInterface {
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface
 	 */
-	public function handleAll( $handler = null ) {
+	public function all( $handler = null ) {
 		// Match ANY request method.
 		// Match ANY url.
 		// By default, use built-in WordPress controller.

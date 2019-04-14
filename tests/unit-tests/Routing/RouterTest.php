@@ -136,12 +136,12 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handleAll
+	 * @covers ::all
 	 */
-	public function testHandleAll() {
+	public function testAll() {
 		$expected = $this->subject->any( '*' );
 
-		$result = $this->subject->handleAll();
+		$result = $this->subject->all();
 
 		$this->assertEquals( $expected, $result );
 	}

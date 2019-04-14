@@ -15,7 +15,7 @@ use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
-use WPEmerge\Facades\Router;
+use WPEmerge\Facades\Route;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
@@ -123,10 +123,11 @@ class Application {
 	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
 	 * @throws ConfigurationException
-	 * @param  array $config
+	 * @param  array   $config
+	 * @param  boolean $run
 	 * @return void
 	 */
-	public function bootstrap( $config = [] ) {
+	public function bootstrap( $config = [], $run = true ) {
 		if ( $this->isBootstrapped() ) {
 			throw new ConfigurationException( static::class . ' already bootstrapped.' );
 		}
@@ -137,7 +138,10 @@ class Application {
 
 		$this->bootstrapped = true;
 
-		require_once WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'run.php';
+		if ( $run ) {
+			$kernel = $this->resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
+			$kernel->bootstrap();
+		}
 	}
 
 	/**
@@ -280,9 +284,7 @@ class Application {
 			return;
 		}
 
-		Router::group( [
-			'middleware' => $middleware,
-		], $file );
+		Route::middleware( $middleware )->group( $file );
 	}
 
 	/**

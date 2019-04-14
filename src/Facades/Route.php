@@ -12,13 +12,13 @@ namespace WPEmerge\Facades;
 use WPEmerge\Support\Facade;
 
 /**
- * Provide access to the router service
+ * Provide access to the route registrar.
  *
  * @codeCoverageIgnore
- * @see \WPEmerge\Routing\Router
+ * @see \WPEmerge\Routing\RouteRegistrar
  */
-class Router extends Facade {
+class Route extends Facade {
 	protected static function getFacadeAccessor() {
-		return WPEMERGE_ROUTING_ROUTER_KEY;
+		return static::getFacadeApplication()[ WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY ];
 	}
 }

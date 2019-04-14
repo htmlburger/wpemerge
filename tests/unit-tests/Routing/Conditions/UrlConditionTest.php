@@ -252,27 +252,27 @@ class UrlConditionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getValidationRegex
-	 * @covers ::replaceRegexParameterWithPlaceholder
+	 * @covers ::getValidationPattern
+	 * @covers ::replacePatternParameterWithPlaceholder
 	 */
-	public function testGetValidationRegex() {
+	public function testGetValidationPattern() {
 		$subject1 = new UrlCondition( '/foo/bar/baz/1/2/3/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2/3/?$~', $subject1->getValidationRegex( $subject1->getUrl() ) );
+		$this->assertEquals( '~^/foo/bar/baz/1/2/3/?$~', $subject1->getValidationPattern( $subject1->getUrl() ) );
 
 		$subject2 = new UrlCondition( '/foo/bar/baz/1/2/3/' );
-		$this->assertEquals( '^/foo/bar/baz/1/2/3/?$', $subject2->getValidationRegex( $subject2->getUrl(), false ) );
+		$this->assertEquals( '^/foo/bar/baz/1/2/3/?$', $subject2->getValidationPattern( $subject2->getUrl(), false ) );
 
 		$subject3 = new UrlCondition( '/foo/{param1}/baz/1/2/3/' );
-		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/1/2/3/?$~', $subject3->getValidationRegex( $subject3->getUrl() ) );
+		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/1/2/3/?$~', $subject3->getValidationPattern( $subject3->getUrl() ) );
 
 		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?}/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
+		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?/?$~', $subject4->getValidationPattern( $subject4->getUrl() ) );
 
 		$subject4 = new UrlCondition( '/foo/bar/baz/1/2/{param1?}/{param2?}/' );
-		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?(?:/(?P<param2>[^/]+))?/?$~', $subject4->getValidationRegex( $subject4->getUrl() ) );
+		$this->assertEquals( '~^/foo/bar/baz/1/2(?:/(?P<param1>[^/]+))?(?:/(?P<param2>[^/]+))?/?$~', $subject4->getValidationPattern( $subject4->getUrl() ) );
 
 		$subject5 = new UrlCondition( '/foo/{param1}/baz/{param2}/2/{param3?}/' );
-		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/(?P<param2>[^/]+)/2(?:/(?P<param3>[^/]+))?/?$~', $subject5->getValidationRegex( $subject5->getUrl() ) );
+		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/(?P<param2>[^/]+)/2(?:/(?P<param3>[^/]+))?/?$~', $subject5->getValidationPattern( $subject5->getUrl() ) );
 
 	}
 }

@@ -10,7 +10,7 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Facades\Application;
-use WPEmerge\Facades\Router as RouterFacade;
+use WPEmerge\Facades\Route as RouteFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
@@ -56,7 +56,11 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
 		};
 
-		Application::facade( 'Router', RouterFacade::class );
+		$container[ WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY ] = $container->factory( function ( $c ) {
+			return new RouteRegistrar( $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
+		} );
+
+		Application::facade( 'Route', RouteFacade::class );
 	}
 
 	/**

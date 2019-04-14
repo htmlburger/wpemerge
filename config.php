@@ -53,6 +53,10 @@ if ( ! defined( 'WPEMERGE_ROUTING_ROUTER_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_ROUTER_KEY', 'wpemerge.routing.router' );
 }
 
+if ( ! defined( 'WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY' ) ) {
+	define( 'WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY', 'wpemerge.routing.route_registrar' );
+}
+
 if ( ! defined( 'WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY' ) ) {
 	define( 'WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY', 'wpemerge.routing.conditions.condition_factory' );
 }

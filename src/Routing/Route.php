@@ -72,23 +72,23 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	}
 
 	/**
-	 * Set custom partial regex matching for the specified parameter.
+	 * Set custom regular expression matching for the specified parameter.
 	 *
 	 * @throws ConfigurationException
 	 * @param  string $parameter
-	 * @param  string $regex
+	 * @param  string $pattern
 	 * @return static $this
 	 */
-	public function where( $parameter, $regex ) {
+	public function where( $parameter, $pattern ) {
 		$condition = $this->getCondition();
 
 		if ( ! $condition instanceof UrlCondition ) {
-			throw new ConfigurationException( 'Only routes with URL conditions can specify parameter regex matching.' );
+			throw new ConfigurationException( 'Only routes with URL conditions can specify parameter regular expression matching.' );
 		}
 
 		$condition->setUrlWhere( array_merge(
 			$condition->getUrlWhere(),
-			[$parameter => $regex]
+			[$parameter => $pattern]
 		) );
 
 		return $this;
