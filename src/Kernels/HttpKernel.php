@@ -123,7 +123,7 @@ class HttpKernel implements HttpKernelInterface {
 			$middleware = $this->sortMiddleware( $middleware );
 
 			$response = ( new Pipeline() )
-				->middleware( $middleware )
+				->pipe( $middleware )
 				->to( $handler )
 				->run( $request, array_merge( [$request], $arguments ) );
 		} catch ( Exception $exception ) {

@@ -10,15 +10,12 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Middleware\ExecutesMiddlewareTrait;
-use WPEmerge\Middleware\HasMiddlewareInterface;
-use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 
 /**
  * Represent middleware that envelops a handler.
  */
-class Pipeline implements HasMiddlewareInterface {
-	use HasMiddlewareTrait;
+class Pipeline {
 	use ExecutesMiddlewareTrait;
 
 	/**
@@ -27,6 +24,13 @@ class Pipeline implements HasMiddlewareInterface {
 	 * @var PipelineHandler
 	 */
 	protected $handler = null;
+
+	/**
+	 * Middleware.
+	 *
+	 * @var array<array>
+	 */
+	protected $middleware = [];
 
 	/**
 	 * Get handler.
@@ -63,6 +67,19 @@ class Pipeline implements HasMiddlewareInterface {
 	}
 
 	/**
+	 * Add middleware to the pipeline.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  array<array> $middleware
+	 * @return static       $this
+	 */
+	public function pipe( $middleware ) {
+		$this->middleware = array_merge( $this->middleware, $middleware );
+
+		return $this;
+	}
+
+	/**
 	 * Get a response for the given request.
 	 *
 	 * @param  RequestInterface                    $request
@@ -70,7 +87,7 @@ class Pipeline implements HasMiddlewareInterface {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function run( RequestInterface $request, $arguments ) {
-		return $this->executeMiddleware( $this->getMiddleware(), $request, function () use ( $arguments ) {
+		return $this->executeMiddleware( $this->middleware, $request, function () use ( $arguments ) {
 			return call_user_func_array( [$this->getHandler(), 'execute'], $arguments );
 		} );
 	}
