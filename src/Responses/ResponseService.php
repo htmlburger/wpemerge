@@ -226,7 +226,7 @@ class ResponseService {
 	/**
 	 * Get a view file representation.
 	 *
-	 * @param  string|string[] $views
+	 * @param  string|array<string> $views
 	 * @return ViewInterface
 	 */
 	public function view( $views ) {

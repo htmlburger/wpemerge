@@ -115,7 +115,7 @@ class RouteRegistrar {
 	 * Create and add a new route.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string[]             $methods
+	 * @param  array<string>        $methods
 	 * @param  mixed                $condition
 	 * @param  string|\Closure|null $handler
 	 * @return RouteInterface

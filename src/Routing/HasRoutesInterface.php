@@ -18,7 +18,7 @@ interface HasRoutesInterface {
 	/**
 	 * Get registered routes
 	 *
-	 * @return RouteInterface[]
+	 * @return array<RouteInterface>
 	 */
 	public function getRoutes();
 
@@ -33,7 +33,7 @@ interface HasRoutesInterface {
 	/**
 	 * Create and add a new route
 	 *
-	 * @param  string[]       $methods
+	 * @param  array<string>  $methods
 	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface

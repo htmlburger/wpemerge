@@ -60,7 +60,7 @@ if ( ! function_exists( 'app_view' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see    \WPEmerge\Responses\ResponseService::view()
-	 * @param  string|string[]              $views
+	 * @param  string|array<string>         $views
 	 * @return \WPEmerge\View\ViewInterface
 	 */
 	function app_view( $views ) {
@@ -85,7 +85,7 @@ if ( ! function_exists( 'app_render' ) ) {
 	 * @codeCoverageIgnore
 	 * @see    \WPEmerge\View\ViewService::make()
 	 * @see    \WPEmerge\View\ViewInterface::toString()
-	 * @param  string|string[]      $views
+	 * @param  string|array<string> $views
 	 * @param  array<string, mixed> $context
 	 * @return void
 	 */

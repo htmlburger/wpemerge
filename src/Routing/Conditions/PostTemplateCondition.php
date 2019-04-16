@@ -33,8 +33,8 @@ class PostTemplateCondition implements ConditionInterface {
 	 * Constructor
 	 *
 	 * @codeCoverageIgnore
-	 * @param string          $post_template
-	 * @param string|string[] $post_types
+	 * @param string               $post_template
+	 * @param string|array<string> $post_types
 	 */
 	public function __construct( $post_template, $post_types = [] ) {
 		$this->post_template = $post_template;

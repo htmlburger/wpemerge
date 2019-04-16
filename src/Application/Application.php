@@ -188,8 +188,8 @@ class Application {
 	/**
 	 * Register all service providers.
 	 *
-	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
-	 * @param  Container                                             $container
+	 * @param  array<\WPEmerge\ServiceProviders\ServiceProviderInterface> $service_providers
+	 * @param  Container                                                  $container
 	 * @return void
 	 */
 	protected function registerServiceProviders( $service_providers, Container $container ) {
@@ -201,8 +201,8 @@ class Application {
 	/**
 	 * Bootstrap all service providers.
 	 *
-	 * @param  \WPEmerge\ServiceProviders\ServiceProviderInterface[] $service_providers
-	 * @param  Container                                             $container
+	 * @param  array<\WPEmerge\ServiceProviders\ServiceProviderInterface> $service_providers
+	 * @param  Container                                                  $container
 	 * @return void
 	 */
 	protected function bootstrapServiceProviders( $service_providers, Container $container ) {

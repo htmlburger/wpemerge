@@ -32,7 +32,7 @@ interface ViewEngineInterface {
 	/**
 	 * Create a view instance from the first view name that exists.
 	 *
-	 * @param  string[]      $views
+	 * @param  array<string> $views
 	 * @return ViewInterface
 	 */
 	public function make( $views );

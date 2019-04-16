@@ -68,8 +68,8 @@ class ViewService {
 	/**
 	 * Get view composer.
 	 *
-	 * @param  string    $view
-	 * @return Handler[]
+	 * @param  string         $view
+	 * @return array<Handler>
 	 */
 	public function getComposersForView( $view ) {
 		$view = ViewEngine::canonical( $view );
@@ -88,8 +88,8 @@ class ViewService {
 	/**
 	 * Add view composer.
 	 *
-	 * @param  string|string[] $views
-	 * @param  string|Closure  $composer
+	 * @param  string|array<string> $views
+	 * @param  string|Closure       $composer
 	 * @return void
 	 * @throws \Exception
 	 */
@@ -124,7 +124,7 @@ class ViewService {
 	/**
 	 * Create a view instance.
 	 *
-	 * @param  string|string[] $views
+	 * @param  string|array<string> $views
 	 * @return ViewInterface
 	 */
 	public function make( $views ) {

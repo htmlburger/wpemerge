@@ -26,7 +26,7 @@ trait HasRoutesTrait {
 	/**
 	 * Create a route instance.
 	 *
-	 * @param  string[]       $methods
+	 * @param  array<string>  $methods
 	 * @param  mixed          $condition
 	 * @param  string|Closure $handler
 	 * @return RouteInterface
@@ -36,7 +36,7 @@ trait HasRoutesTrait {
 	/**
 	 * Get registered routes
 	 *
-	 * @return RouteInterface[]
+	 * @return array<RouteInterface>
 	 */
 	public function getRoutes() {
 		return $this->routes;
@@ -56,8 +56,8 @@ trait HasRoutesTrait {
 	/**
 	 * Create and add a new route
 	 *
-	 * @param  string[] $methods
-	 * @param  mixed $condition
+	 * @param  array<string>       $methods
+	 * @param  mixed               $condition
 	 * @param  string|Closure|null $handler
 	 * @return RouteInterface
 	 */

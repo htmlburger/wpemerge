@@ -61,7 +61,7 @@ class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 	 * Get all assigned conditions
 	 *
 	 * @codeCoverageIgnore
-	 * @return \WPEmerge\Routing\Conditions\ConditionInterface[]
+	 * @return array<\WPEmerge\Routing\Conditions\ConditionInterface>
 	 */
 	public function getConditions() {
 		return $this->conditions;

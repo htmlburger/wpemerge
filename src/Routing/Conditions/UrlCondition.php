@@ -188,8 +188,8 @@ class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
 	/**
 	 * Get parameter names as defined in the url.
 	 *
-	 * @param  string   $url
-	 * @return string[]
+	 * @param  string        $url
+	 * @return array<string>
 	 */
 	protected function getParameterNames( $url ) {
 		$matches = [];
