@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Interface for ExecutesMiddlewareInterface.
+ * Interface for ExecutesMiddlewareTrait.
  */
 interface ExecutesMiddlewareInterface {
 	/**

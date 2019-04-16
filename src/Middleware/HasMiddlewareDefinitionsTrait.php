@@ -75,8 +75,8 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Expand array of middleware into an array of fully qualified class names.
 	 *
-	 * @param  array<string> $middleware
-	 * @return array<string>
+	 * @param  array<array> $middleware
+	 * @return array<array>
 	 */
 	public function expandMiddleware( $middleware ) {
 		$classes = [];
@@ -84,7 +84,7 @@ trait HasMiddlewareDefinitionsTrait {
 		foreach ( $middleware as $item ) {
 			$classes = array_merge(
 				$classes,
-				$this->expandMiddlewareItem( $item )
+				$this->expandMiddlewareMolecule( $item )
 			);
 		}
 
@@ -95,7 +95,7 @@ trait HasMiddlewareDefinitionsTrait {
 	 * Expand a middleware group into an array of fully qualified class names.
 	 *
 	 * @param  string        $group
-	 * @return array<string>
+	 * @return array<array>
 	 */
 	public function expandMiddlewareGroup( $group ) {
 		if ( ! isset( $this->middleware_groups[ $group ] ) ) {
@@ -112,24 +112,40 @@ trait HasMiddlewareDefinitionsTrait {
 	}
 
 	/**
-	 * Expand a middleware into a fully qualified class name.
+	 * Expand middleware into an array of fully qualified class names and any companion arguments.
 	 *
-	 * @param  string        $middleware
-	 * @return array<string>
+	 * @param  string       $middleware
+	 * @return array<array>
 	 */
-	public function expandMiddlewareItem( $middleware ) {
-		if ( is_subclass_of( $middleware, MiddlewareInterface::class ) ) {
-			return [$middleware];
+	public function expandMiddlewareMolecule( $middleware ) {
+		$pieces = explode( ':', $middleware, 2 );
+
+		if ( count( $pieces ) > 1 ) {
+			return [array_merge( [$this->expandMiddlewareAtom( $pieces[0] )], explode( ',', $pieces[1] ) )];
 		}
 
 		if ( isset( $this->middleware_groups[ $middleware ] ) ) {
 			return $this->expandMiddlewareGroup( $middleware );
 		}
 
-		if ( ! isset( $this->middleware[ $middleware ] ) ) {
-			throw new ConfigurationException( 'Unknown middleware "' . $middleware . '" used.' );
+		return [[$this->expandMiddlewareAtom( $middleware )]];
+	}
+
+	/**
+	 * Expand a single middleware a fully qualified class name.
+	 *
+	 * @param  string $middleware
+	 * @return string
+	 */
+	public function expandMiddlewareAtom( $middleware ) {
+		if ( isset( $this->middleware[ $middleware ] ) ) {
+			return $this->middleware[ $middleware ];
 		}
 
-		return [$this->middleware[ $middleware ]];
+		if ( class_exists( $middleware ) ) {
+			return $middleware;
+		}
+
+		throw new ConfigurationException( 'Unknown middleware "' . $middleware . '" used.' );
 	}
 }

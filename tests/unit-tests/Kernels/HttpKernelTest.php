@@ -11,7 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Kernels\HttpKernel;
-use WPEmerge\Middleware\MiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\RouteInterface;
@@ -258,26 +257,26 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 }
 
-class HttpKernelTestMiddlewareStub1 implements MiddlewareInterface {
+class HttpKernelTestMiddlewareStub1 {
 	public function handle( RequestInterface $request, Closure $next ) {
 		$response = $next( $request );
 
-		return $response->withBody( Psr7\stream_for(  'Foo' . $response->getBody()->read( 999 ) ) );
+		return $response->withBody( Psr7\stream_for( 'Foo' . $response->getBody()->read( 999 ) ) );
 	}
 }
 
-class HttpKernelTestMiddlewareStub2 implements MiddlewareInterface {
+class HttpKernelTestMiddlewareStub2 {
 	public function handle( RequestInterface $request, Closure $next ) {
 		$response = $next( $request );
 
-		return $response->withBody( Psr7\stream_for(  'Bar' . $response->getBody()->read( 999 ) ) );
+		return $response->withBody( Psr7\stream_for( 'Bar' . $response->getBody()->read( 999 ) ) );
 	}
 }
 
-class HttpKernelTestMiddlewareStub3 implements MiddlewareInterface {
+class HttpKernelTestMiddlewareStub3 {
 	public function handle( RequestInterface $request, Closure $next ) {
 		$response = $next( $request );
 
-		return $response->withBody( Psr7\stream_for(  'Baz' . $response->getBody()->read( 999 ) ) );
+		return $response->withBody( Psr7\stream_for( 'Baz' . $response->getBody()->read( 999 ) ) );
 	}
 }

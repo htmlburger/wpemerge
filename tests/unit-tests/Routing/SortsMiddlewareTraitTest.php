@@ -32,6 +32,7 @@ class SortsMiddlewareTraitTest extends WP_UnitTestCase {
 		$this->assertEquals( -1, $subject->getMiddlewarePriorityForMiddleware( 'middleware2' ) );
 		$this->assertEquals( 0, $subject->getMiddlewarePriorityForMiddleware( 'middleware1' ) );
 		$this->assertEquals( 1, $subject->getMiddlewarePriorityForMiddleware( 'middleware3' ) );
+		$this->assertEquals( 1, $subject->getMiddlewarePriorityForMiddleware( ['middleware3', 'foo'] ) );
 	}
 
 	/**

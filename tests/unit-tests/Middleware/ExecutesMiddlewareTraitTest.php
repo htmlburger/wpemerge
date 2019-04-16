@@ -2,10 +2,12 @@
 
 namespace WPEmergeTests\Middleware;
 
+use Closure;
+use GuzzleHttp\Psr7;
 use Mockery;
 use WPEmerge\Requests\Request;
 use WPEmerge\Middleware\ExecutesMiddlewareTrait;
-use WPEmergeTestTools\TestMiddleware;
+use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
 
 /**
@@ -15,7 +17,7 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = $this->getMockForTrait( ExecutesMiddlewareTrait::class );
+		$this->subject = new ExecutesMiddlewareTraitTestImplementation();
 		$this->request = new Request( [], [], [], [], [], [] );
 	}
 
@@ -24,119 +26,86 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 		Mockery::close();
 	}
 
-	public function getClosureMock( $mock, $mock_method ) {
-		return function() use ( $mock, $mock_method ) {
-			return call_user_func_array( [$mock, $mock_method], func_get_args() );
-		};
-	}
-
 	/**
 	 * @covers ::executeMiddleware
 	 */
 	public function testExecuteMiddleware_EmptyList_CallsClosureOnce() {
-		$mock = Mockery::mock();
-		$method = 'foo';
-		$closure = $this->getClosureMock( $mock, $method );
+		$response = $this->subject->executeMiddleware( [], $this->request, function () {
+			return ( new Psr7\Response() )->withBody( Psr7\stream_for( 'Test complete' ) );
+		} );
 
-		$mock->shouldReceive( $method )->once();
-
-		$this->subject->executeMiddleware( [], $this->request, $closure );
-		$this->assertTrue( true );
+		$this->assertEquals( 'Test complete', $response->getBody()->read( 999 ) );
 	}
 
 	/**
 	 * @covers ::executeMiddleware
 	 */
-	public function testExecuteMiddleware_OneClosure_CallsClosureFirstThenClosure() {
-		$mock = Mockery::mock();
-		$middleware = function( $request, $next ) use ( $mock ) {
-			call_user_func( $this->getClosureMock( $mock, 'foo' ) );
-			return $next( $request );
-		};
-		$closure = $this->getClosureMock( $mock, 'bar' );
+	public function testExecuteMiddleware_ClassNames_CallsClassNamesFirstThenClosure() {
+		$response = $this->subject->executeMiddleware(
+			[
+				[ExecutesMiddlewareTraitTestMiddlewareStub1::class],
+				[ExecutesMiddlewareTraitTestMiddlewareStub2::class],
+				[ExecutesMiddlewareTraitTestMiddlewareStub3::class],
+			],
+			$this->request,
+			function () {
+				return ( new Psr7\Response() )->withBody( Psr7\stream_for( 'Handler' ) );
+			}
+		);
 
-		$mock->shouldReceive( 'foo' )
-			->once()
-			->ordered();
-
-		$mock->shouldReceive( 'bar' )
-			->with( $this->request )
-			->once()
-			->ordered();
-
-		$this->subject->executeMiddleware( [$middleware], $this->request, $closure );
-		$this->assertTrue( true );
+		$this->assertEquals( 'Stub1Stub2Stub3Handler', $response->getBody()->read( 999 ) );
 	}
 
 	/**
 	 * @covers ::executeMiddleware
 	 */
-	public function testExecuteMiddleware_OneMiddlewareInterfaceClassName_CallsClassInstanceFirstThenClosure() {
-		$mock = Mockery::mock();
-		$closure = $this->getClosureMock( $mock, 'foo' );
+	public function testExecuteMiddleware_ClassNameWithParameters_PassParameters() {
+		$response = $this->subject->executeMiddleware(
+			[
+				[ExecutesMiddlewareTraitTestMiddlewareStubWithParameters::class, 'Foo', 'Bar'],
+			],
+			$this->request,
+			function () {
+				return new Psr7\Response();
+			}
+		);
 
-		$mock->shouldReceive( 'foo' )
-			->with( $this->request )
-			->once()
-			->ordered();
-
-		$this->subject->executeMiddleware( [TestMiddleware::class], $this->request, $closure );
-		$this->assertTrue( true );
+		$this->assertEquals( 'FooBar', $response->getBody()->read( 999 ) );
 	}
+}
 
-	/**
-	 * @covers ::executeMiddleware
-	 */
-	public function testExecuteMiddleware_OneMiddlewareInterfaceInstance_CallsInstanceFirstThenClosure() {
-		$mock = Mockery::mock();
-		$closure = $this->getClosureMock( $mock, 'foo' );
+class ExecutesMiddlewareTraitTestImplementation {
+	use ExecutesMiddlewareTrait;
+}
 
-		$mock->shouldReceive( 'foo' )
-			->with( $this->request )
-			->once()
-			->ordered();
+class ExecutesMiddlewareTraitTestMiddlewareStub1 {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
 
-		$this->subject->executeMiddleware( [new TestMiddleware()], $this->request, $closure );
-		$this->assertTrue( true );
+		return $response->withBody( Psr7\stream_for( 'Stub1' . $response->getBody()->read( 999 ) ) );
 	}
+}
 
-	/**
-	 * @covers ::executeMiddleware
-	 */
-	public function testExecuteMiddleware_ThreeClosures_CallsClosuresLastInFirstOutThenClosure() {
-		$mock = Mockery::mock();
-		$middleware1 = function( $request, $next ) use ( $mock ) {
-			call_user_func( $this->getClosureMock( $mock, 'foo' ) );
-			return $next( $request );
-		};
-		$middleware2 = function( $request, $next ) use ( $mock ) {
-			call_user_func( $this->getClosureMock( $mock, 'bar' ) );
-			return $next( $request );
-		};
-		$middleware3 = function( $request, $next ) use ( $mock ) {
-			call_user_func( $this->getClosureMock( $mock, 'baz' ) );
-			return $next( $request );
-		};
-		$closure = $this->getClosureMock( $mock, 'foobarbaz' );
+class ExecutesMiddlewareTraitTestMiddlewareStub2 {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
 
-		$mock->shouldReceive( 'foo' )
-			->once()
-			->ordered();
+		return $response->withBody( Psr7\stream_for( 'Stub2' . $response->getBody()->read( 999 ) ) );
+	}
+}
 
-		$mock->shouldReceive( 'bar' )
-			->once()
-			->ordered();
+class ExecutesMiddlewareTraitTestMiddlewareStub3 {
+	public function handle( RequestInterface $request, Closure $next ) {
+		$response = $next( $request );
 
-		$mock->shouldReceive( 'baz' )
-			->once()
-			->ordered();
+		return $response->withBody( Psr7\stream_for( 'Stub3' . $response->getBody()->read( 999 ) ) );
+	}
+}
 
-		$mock->shouldReceive( 'foobarbaz' )
-			->with( $this->request )
-			->once()
-			->ordered();
+class ExecutesMiddlewareTraitTestMiddlewareStubWithParameters {
+	public function handle( RequestInterface $request, Closure $next, $param1, $param2 ) {
+		$response = $next( $request );
 
-		$this->subject->executeMiddleware( [$middleware1, $middleware2, $middleware3], $this->request, $closure );
-		$this->assertTrue( true );
+		return $response->withBody( Psr7\stream_for( $param1 . $param2 . $response->getBody()->read( 999 ) ) );
 	}
 }

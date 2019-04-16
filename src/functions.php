@@ -101,13 +101,13 @@ if ( ! function_exists( 'app_layout_content' ) ) {
 	}
 }
 
-if ( ! function_exists( 'app_pipeline' ) ) {
+if ( ! function_exists( 'app_run' ) ) {
 	/**
 	 * @codeCoverageIgnore
 	 * @see \WPEmerge\Kernels\HttpKernel::run()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function app_pipeline() {
+	function app_run() {
 		$kernel = \WPEmerge\Facades\Application::resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
 		return call_user_func_array( [$kernel, 'run'], func_get_args() );
 	}

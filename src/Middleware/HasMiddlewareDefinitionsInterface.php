@@ -61,5 +61,5 @@ interface HasMiddlewareDefinitionsInterface {
 	 * @param  string        $middleware
 	 * @return array<string>
 	 */
-	public function expandMiddlewareItem( $middleware );
+	public function expandMiddlewareMolecule( $middleware );
 }
