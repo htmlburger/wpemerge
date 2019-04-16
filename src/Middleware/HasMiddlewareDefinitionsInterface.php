@@ -34,7 +34,7 @@ interface HasMiddlewareDefinitionsInterface {
 	/**
 	 * Filter array of middleware into a unique set.
 	 *
-	 * @param  array<string> $middleware
+	 * @param  array<array>  $middleware
 	 * @return array<string>
 	 */
 	public function uniqueMiddleware( $middleware );
@@ -43,7 +43,7 @@ interface HasMiddlewareDefinitionsInterface {
 	 * Expand array of middleware into an array of fully qualified class names.
 	 *
 	 * @param  array<string> $middleware
-	 * @return array<string>
+	 * @return array<array>
 	 */
 	public function expandMiddleware( $middleware );
 
@@ -51,15 +51,23 @@ interface HasMiddlewareDefinitionsInterface {
 	 * Expand a middleware group into an array of fully qualified class names.
 	 *
 	 * @param  string        $group
-	 * @return array<string>
+	 * @return array<array>
 	 */
 	public function expandMiddlewareGroup( $group );
 
 	/**
-	 * Expand a middleware into a fully qualified class name.
+	 * Expand middleware into an array of fully qualified class names and any companion arguments.
 	 *
-	 * @param  string        $middleware
-	 * @return array<string>
+	 * @param  string       $middleware
+	 * @return array<array>
 	 */
 	public function expandMiddlewareMolecule( $middleware );
+
+	/**
+	 * Expand a single middleware a fully qualified class name.
+	 *
+	 * @param  string $middleware
+	 * @return string
+	 */
+	public function expandMiddlewareAtom( $middleware );
 }

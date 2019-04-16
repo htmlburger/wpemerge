@@ -65,7 +65,7 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Filter array of middleware into a unique set.
 	 *
-	 * @param  array<string> $middleware
+	 * @param  array<array>  $middleware
 	 * @return array<string>
 	 */
 	public function uniqueMiddleware( $middleware ) {
@@ -75,7 +75,7 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Expand array of middleware into an array of fully qualified class names.
 	 *
-	 * @param  array<array> $middleware
+	 * @param  array<string> $middleware
 	 * @return array<array>
 	 */
 	public function expandMiddleware( $middleware ) {
