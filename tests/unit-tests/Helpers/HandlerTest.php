@@ -124,8 +124,8 @@ class HandlerTest extends WP_UnitTestCase {
 		$stub = new stdClass();
 		$mock = Mockery::mock();
 		$mock->shouldReceive( 'execute' )
-		   ->once()
-		   ->with( $mock, $stub );
+			->with( $mock, $stub )
+			->once();
 
 		$closure = function( $mock, $stub ) {
 			$mock->execute( $mock, $stub );

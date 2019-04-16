@@ -54,13 +54,16 @@ class RouterTest extends WP_UnitTestCase {
 		$route = Mockery::mock( RouteInterface::class );
 
 		$route->shouldReceive( 'getCondition' )
-			->andReturn( $condition2 );
+			->andReturn( $condition2 )
+			->once();
 
 		$condition2->shouldReceive( 'getUrlWhere' )
-			->andReturn( $where2 );
+			->andReturn( $where2 )
+			->once();
 
 		$condition2->shouldReceive( 'setUrlWhere' )
-			->with( array_merge( $where1, $where2 ) );
+			->with( array_merge( $where1, $where2 ) )
+			->once();
 
 		$route->shouldReceive( 'setCondition' )
 			->with( Mockery::on( function ( $condition ) use ( $condition1, $condition2 ) {
@@ -70,13 +73,16 @@ class RouterTest extends WP_UnitTestCase {
 				$condition2_matches = $conditions[1] === $condition2;
 
 				return $is_multiple && $condition1_matches && $condition2_matches;
-			} ) );
+			} ) )
+			->once();
 
 		$route->shouldReceive( 'getMiddleware' )
-			->andReturn( ['middleware2'] );
+			->andReturn( ['middleware2'] )
+			->once();
 
 		$route->shouldReceive( 'setMiddleware' )
-			->with( ['middleware1', 'middleware2'] );
+			->with( ['middleware1', 'middleware2'] )
+			->once();
 
 		$subject->group( [
 			'condition' => $condition1,

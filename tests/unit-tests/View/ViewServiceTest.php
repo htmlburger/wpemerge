@@ -77,7 +77,8 @@ class ViewServiceTest extends WP_UnitTestCase {
 
 		$mock = Mockery::mock();
 		$mock->shouldReceive( 'foobar' )
-			->with( $view );
+			->with( $view )
+			->once();
 
 		$composer = function( $view ) use ( $mock ) {
 			$mock->foobar( $view );

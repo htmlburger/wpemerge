@@ -63,7 +63,8 @@ class OldInputTest extends WP_UnitTestCase {
 	 */
 	public function testSet() {
 		$this->flash->shouldReceive( 'add' )
-			->with( $this->flash_key, ['foo' => 'foobar'] );
+			->with( $this->flash_key, ['foo' => 'foobar'] )
+			->once();
 
 		$this->subject->set( ['foo' => 'foobar'] );
 
@@ -75,7 +76,8 @@ class OldInputTest extends WP_UnitTestCase {
 	 */
 	public function testClear() {
 		$this->flash->shouldReceive( 'clear' )
-			->with( $this->flash_key );
+			->with( $this->flash_key )
+			->once();
 
 		$this->subject->clear();
 

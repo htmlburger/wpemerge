@@ -237,7 +237,8 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		$this->assertSame( $condition, $subject->condition( $condition ) );
 
 		$subject->shouldReceive( 'make' )
-			->with( '' );
+			->with( '' )
+			->once();
 
 		$subject->condition( '' );
 		$this->assertTrue( true );
