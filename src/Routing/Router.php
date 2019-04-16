@@ -192,10 +192,9 @@ class Router implements HasRoutesInterface {
 	 * Assign and return the first satisfied route (if any) as the current one for the given request.
 	 *
 	 * @param  RequestInterface $request
-	 * @param  array            $arguments
 	 * @return RouteInterface
 	 */
-	public function execute( $request, $arguments = [] ) {
+	public function execute( $request ) {
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {

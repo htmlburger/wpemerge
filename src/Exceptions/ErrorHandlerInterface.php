@@ -31,7 +31,8 @@ interface ErrorHandlerInterface {
 	/**
 	 * Get a response representing the specified exception.
 	 *
-	 * @param  PhpException $exception
+	 * @param  RequestInterface  $request
+	 * @param  PhpException      $exception
 	 * @return ResponseInterface
 	 */
 	public function getResponse( RequestInterface $request, PhpException $exception );

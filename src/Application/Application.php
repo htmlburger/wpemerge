@@ -10,12 +10,10 @@
 namespace WPEmerge\Application;
 
 use Pimple\Container;
-use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
-use WPEmerge\Facades\Response;
 use WPEmerge\Facades\Route;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;

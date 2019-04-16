@@ -27,18 +27,18 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * @var array<string, string>
 	 */
 	protected static $condition_types = [
-		'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
-		'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
-		'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
-		'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
-		'post_id' => \WPEmerge\Routing\Conditions\PostIdCondition::class,
-		'post_slug' => \WPEmerge\Routing\Conditions\PostSlugCondition::class,
-		'post_status' => \WPEmerge\Routing\Conditions\PostStatusCondition::class,
-		'post_template' => \WPEmerge\Routing\Conditions\PostTemplateCondition::class,
-		'post_type' => \WPEmerge\Routing\Conditions\PostTypeCondition::class,
-		'query_var' => \WPEmerge\Routing\Conditions\QueryVarCondition::class,
-		'ajax' => \WPEmerge\Routing\Conditions\AjaxCondition::class,
-		'admin' => \WPEmerge\Routing\Conditions\AdminCondition::class,
+		'url' => Conditions\UrlCondition::class,
+		'custom' => Conditions\CustomCondition::class,
+		'multiple' => Conditions\MultipleCondition::class,
+		'negate' => Conditions\NegateCondition::class,
+		'post_id' => Conditions\PostIdCondition::class,
+		'post_slug' => Conditions\PostSlugCondition::class,
+		'post_status' => Conditions\PostStatusCondition::class,
+		'post_template' => Conditions\PostTemplateCondition::class,
+		'post_type' => Conditions\PostTypeCondition::class,
+		'query_var' => Conditions\QueryVarCondition::class,
+		'ajax' => Conditions\AjaxCondition::class,
+		'admin' => Conditions\AdminCondition::class,
 	];
 
 	/**

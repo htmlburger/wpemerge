@@ -60,6 +60,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
+	 * @param Application           $app
 	 * @param RequestInterface      $request
 	 * @param Router                $router
 	 * @param ErrorHandlerInterface $error_handler
@@ -91,7 +92,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $arguments = [] ) {
-		$route = $this->router->execute( $request, $arguments );
+		$route = $this->router->execute( $request );
 
 		if ( $route === null ) {
 			return null;
@@ -219,7 +220,6 @@ class HttpKernel implements HttpKernelInterface {
 	 * Get page hook.
 	 * Slightly modified version of code from wp-admin/admin.php.
 	 *
-	 * @param  string $page_hook
 	 * @return string
 	 */
 	protected function getAdminPageHook() {

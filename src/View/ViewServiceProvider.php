@@ -28,11 +28,11 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		$this->extendConfig( $container, 'views', '' );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function () {
-			return new \WPEmerge\View\ViewService();
+			return new ViewService();
 		};
 
 		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function ( $c ) {
-			return new \WPEmerge\View\PhpViewEngine( $c[ WPEMERGE_CONFIG_KEY ]['views'] );
+			return new PhpViewEngine( $c[ WPEMERGE_CONFIG_KEY ]['views'] );
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );

@@ -29,7 +29,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			} else if ( isset( $_SESSION ) ) {
 				$session = &$_SESSION;
 			}
-			return new \WPEmerge\Flash\Flash( $session );
+			return new Flash( $session );
 		};
 
 		Application::facade( 'Flash', \WPEmerge\Facades\Flash::class );
