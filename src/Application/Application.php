@@ -15,6 +15,7 @@ use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
+use WPEmerge\Facades\Response;
 use WPEmerge\Facades\Route;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
@@ -258,17 +259,6 @@ class Application {
 		}
 
 		return $instance;
-	}
-
-	/**
-	 * Send output based on a response object.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  ResponseInterface $response
-	 * @return void
-	 */
-	public function respond( ResponseInterface $response ) {
-		$this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY )->respond( $response );
 	}
 
 	/**

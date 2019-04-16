@@ -211,7 +211,7 @@ class HttpKernel implements HttpKernelInterface {
 			return;
 		}
 
-		$this->app->respond( $response );
+		Response::respond( $response );
 		wp_die( '', '', ['response' => null] );
 	}
 

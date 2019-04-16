@@ -16,5 +16,5 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 $response = \WPEmerge\Facades\Application::resolve( WPEMERGE_RESPONSE_KEY );
 if ( $response !== null ) {
-	\WPEmerge\Facades\Application::respond( $response );
+	\WPEmerge\Facades\Response::respond( $response );
 }
