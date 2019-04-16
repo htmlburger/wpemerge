@@ -13,7 +13,7 @@ use WPEmerge\Facades\View;
 if ( ! function_exists( 'app_response' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::response()
+	 * @see    \WPEmerge\Responses\ResponseService::response()
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_response() {
@@ -24,7 +24,8 @@ if ( ! function_exists( 'app_response' ) ) {
 if ( ! function_exists( 'app_output' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::output()
+	 * @see    \WPEmerge\Responses\ResponseService::output()
+	 * @param  string                              $output
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_output( $output ) {
@@ -35,7 +36,8 @@ if ( ! function_exists( 'app_output' ) ) {
 if ( ! function_exists( 'app_json' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::json()
+	 * @see    \WPEmerge\Responses\ResponseService::json()
+	 * @param  mixed                               $data
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	function app_json( $data ) {
@@ -46,8 +48,8 @@ if ( ! function_exists( 'app_json' ) ) {
 if ( ! function_exists( 'app_redirect' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::redirect()
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @see    \WPEmerge\Responses\ResponseService::redirect()
+	 * @return \WPEmerge\Responses\RedirectResponse
 	 */
 	function app_redirect() {
 		return call_user_func_array( [Response::class, 'redirect'], func_get_args() );
@@ -57,7 +59,8 @@ if ( ! function_exists( 'app_redirect' ) ) {
 if ( ! function_exists( 'app_view' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::view()
+	 * @see    \WPEmerge\Responses\ResponseService::view()
+	 * @param  string|string[]              $views
 	 * @return \WPEmerge\View\ViewInterface
 	 */
 	function app_view( $views ) {
@@ -68,10 +71,11 @@ if ( ! function_exists( 'app_view' ) ) {
 if ( ! function_exists( 'app_error' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Responses\ResponseService::error()
+	 * @see    \WPEmerge\Responses\ResponseService::error()
+	 * @param  integer                             $status
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function app_error( $code ) {
+	function app_error( $status ) {
 		return call_user_func_array( [Response::class, 'error'], func_get_args() );
 	}
 }
@@ -79,8 +83,10 @@ if ( ! function_exists( 'app_error' ) ) {
 if ( ! function_exists( 'app_render' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\View\ViewService::make()
-	 * @see \WPEmerge\View\ViewInterface::toString()
+	 * @see    \WPEmerge\View\ViewService::make()
+	 * @see    \WPEmerge\View\ViewInterface::toString()
+	 * @param  string|string[]      $views
+	 * @param  array<string, mixed> $context
 	 * @return void
 	 */
 	function app_render( $views, $context = [] ) {
@@ -93,7 +99,7 @@ if ( ! function_exists( 'app_render' ) ) {
 if ( ! function_exists( 'app_layout_content' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\View\PhpView::getLayoutContent()
+	 * @see    \WPEmerge\View\PhpView::getLayoutContent()
 	 * @return void
 	 */
 	function app_layout_content() {
@@ -104,10 +110,14 @@ if ( ! function_exists( 'app_layout_content' ) ) {
 if ( ! function_exists( 'app_run' ) ) {
 	/**
 	 * @codeCoverageIgnore
-	 * @see \WPEmerge\Kernels\HttpKernel::run()
+	 * @see    \WPEmerge\Kernels\HttpKernel::run()
+	 * @param  \WPEmerge\Requests\RequestInterface $request
+	 * @param  array<string>                       $middleware
+	 * @param  string|\Closure                     $handler
+	 * @param  array                               $arguments
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	function app_run() {
+	function app_run( \WPEmerge\Requests\RequestInterface $request, $middleware, $handler, $arguments = [] ) {
 		$kernel = \WPEmerge\Facades\Application::resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
 		return call_user_func_array( [$kernel, 'run'], func_get_args() );
 	}

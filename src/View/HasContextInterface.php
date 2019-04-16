@@ -22,9 +22,9 @@ interface HasContextInterface {
 	/**
 	 * Add context values.
 	 *
-	 * @param  string|array $key
-	 * @param  mixed        $value
-	 * @return static       $this
+	 * @param  string|array<string, mixed> $key
+	 * @param  mixed                       $value
+	 * @return static                      $this
 	 */
 	public function with( $key, $value = null );
 }
