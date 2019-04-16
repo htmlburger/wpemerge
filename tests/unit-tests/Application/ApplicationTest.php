@@ -27,8 +27,9 @@ class ApplicationTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		Facade::setFacadeApplication( $this->facade_application );
+		unset( $this->container );
 		unset( $this->subject );
-		unset($this->facade_application);
+		unset( $this->facade_application );
 	}
 
 	/**
@@ -97,6 +98,19 @@ class ApplicationTest extends WP_UnitTestCase {
 				ApplicationTestServiceProviderMock::class,
 			]
 		], false );
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::bootstrap
+	 */
+	public function testBootstrap_RunKernel() {
+		$this->subject->bootstrap( [
+			'providers' => [
+				ApplicationTestKernelServiceProviderMock::class,
+			],
+		], true );
 
 		$this->assertTrue( true );
 	}
@@ -209,5 +223,20 @@ class ApplicationTestServiceProviderMock implements ServiceProviderInterface {
 
 	public function bootstrap( $container ) {
 		call_user_func_array( [$this->mock, 'bootstrap'], func_get_args() );
+	}
+}
+
+class ApplicationTestKernelServiceProviderMock implements ServiceProviderInterface {
+	public function register( $container ) {
+		$mock = Mockery::mock();
+
+		$mock->shouldReceive( 'bootstrap' )
+			->once();
+
+		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = $mock;
+	}
+
+	public function bootstrap( $container ) {
+		// Do nothing.
 	}
 }
