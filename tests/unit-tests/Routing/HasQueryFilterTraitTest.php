@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasQueryFilterTrait;
@@ -44,7 +45,7 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 		$arguments = ['arg1', 'arg2'];
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 		$condition = Mockery::mock( UrlCondition::class );
-		$subject = new Route( [], $condition, function() {} );
+		$subject = new Route( [], $condition, Mockery::mock( Handler::class ) );
 		$subject->query( function( $query_vars, $arg1, $arg2 ) {
 			return array_merge( $query_vars, [$arg1, $arg2] );
 		} );

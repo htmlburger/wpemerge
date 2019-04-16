@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -98,6 +99,7 @@ class Router implements HasRoutesInterface {
 				(array) Arr::get( $previous, 'middleware', [] ),
 				(array) Arr::get( $attributes, 'middleware', [] )
 			),
+			'namespace' => Arr::get( $attributes, 'namespace', Arr::get( $previous, 'namespace', '' ) ),
 		];
 
 		$this->group_stack[] = $attributes;
@@ -178,10 +180,10 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Handle ALL requests.
 	 *
-	 * @param  string|\Closure|null $handler
+	 * @param  Handler        $handler
 	 * @return RouteInterface
 	 */
-	public function all( $handler = null ) {
+	public function all( Handler $handler ) {
 		// Match ANY request method.
 		// Match ANY url.
 		// By default, use built-in WordPress controller.

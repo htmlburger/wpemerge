@@ -3,13 +3,13 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\RouteInterface;
-use WPEmerge\Controllers\WordPressController;
 use WP_UnitTestCase;
 
 /**
@@ -62,26 +62,14 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	public function testRoute() {
 		$methods = ['GET', 'POST'];
 		$condition = new UrlCondition( '/foo/bar/' );
-		$handler = function() {};
+		$handler = Mockery::mock( Handler::class );
 
 		$route = $this->subject->route( $methods, $condition, $handler );
 
 		$this->assertSame( $methods, $route->getMethods() );
 		$this->assertSame( $condition, $route->getCondition() );
-		$this->assertSame( $handler, $route->getHandler()->get() );
+		$this->assertSame( $handler, $route->getHandler() );
 		$this->assertSame( [$route], $this->subject->getRoutes() );
-	}
-
-	/**
-	 * @covers ::route
-	 */
-	public function testRoute_NoHandler_WordPressHandler() {
-		$methods = ['GET', 'POST'];
-		$condition = new UrlCondition( '/foo/bar/' );
-
-		$route = $this->subject->route( $methods, $condition );
-
-		$this->assertEquals( WordPressController::class, $route->getHandler()->get()['class'] );
 	}
 
 	/**
@@ -96,25 +84,25 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	public function testMethods() {
 		$condition = '/foo/';
 
-		$route1 = $this->subject->get( $condition );
-		$this->assertEquals( ['GET', 'HEAD'], $route1->getMethods() );
+		$route = $this->subject->get( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['GET', 'HEAD'], $route->getMethods() );
 
-		$route2 = $this->subject->post( $condition );
-		$this->assertEquals( ['POST'], $route2->getMethods() );
+		$route = $this->subject->post( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['POST'], $route->getMethods() );
 
-		$route3 = $this->subject->put( $condition );
-		$this->assertEquals( ['PUT'], $route3->getMethods() );
+		$route = $this->subject->put( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['PUT'], $route->getMethods() );
 
-		$route4 = $this->subject->patch( $condition );
-		$this->assertEquals( ['PATCH'], $route4->getMethods() );
+		$route = $this->subject->patch( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['PATCH'], $route->getMethods() );
 
-		$route5 = $this->subject->delete( $condition );
-		$this->assertEquals( ['DELETE'], $route5->getMethods() );
+		$route = $this->subject->delete( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['DELETE'], $route->getMethods() );
 
-		$route6 = $this->subject->options( $condition );
-		$this->assertEquals( ['OPTIONS'], $route6->getMethods() );
+		$route = $this->subject->options( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['OPTIONS'], $route->getMethods() );
 
-		$route7 = $this->subject->any( $condition );
-		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route7->getMethods() );
+		$route = $this->subject->any( $condition, Mockery::mock( Handler::class ) );
+		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route->getMethods() );
 	}
 }

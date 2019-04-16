@@ -53,7 +53,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'defaultMethod',
-			'class_prefix' => '',
+			'namespace' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService', 'defaultMethod' );
@@ -81,7 +81,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'getTest',
-			'class_prefix' => '',
+			'namespace' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService@getTest' );
@@ -98,7 +98,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$expected = [
 			'class' => '\WPEmergeTestTools\TestService',
 			'method' => 'getTest',
-			'class_prefix' => '',
+			'namespace' => '',
 		];
 
 		$subject = new Handler( '\WPEmergeTestTools\TestService::getTest' );

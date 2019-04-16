@@ -19,6 +19,6 @@ use WPEmerge\Support\Facade;
  */
 class Route extends Facade {
 	protected static function getFacadeAccessor() {
-		return static::getFacadeApplication()[ WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY ];
+		return WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY;
 	}
 }

@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -100,7 +101,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testMakeRoute_ConditionInterface_Route() {
 		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = function () {};
+		$handler = Mockery::mock( Handler::class );
 
 		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
 	}
@@ -110,7 +111,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testMakeRoute_Condition_Route() {
 		$condition = function () {};
-		$handler = function () {};
+		$handler = Mockery::mock( Handler::class );
 
 		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
 	}
@@ -122,7 +123,7 @@ class RouterTest extends WP_UnitTestCase {
 	 */
 	public function testMakeRoute_InvalidCondition_Exception() {
 		$condition = new \stdClass();
-		$handler = function () {};
+		$handler = Mockery::mock( Handler::class );
 
 		$this->subject->makeRoute( [], $condition, $handler );
 	}
@@ -145,9 +146,10 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::all
 	 */
 	public function testAll() {
-		$expected = $this->subject->any( '*' );
+		$handler = Mockery::mock( Handler::class );
+		$expected = $this->subject->any( '*', $handler );
 
-		$result = $this->subject->all();
+		$result = $this->subject->all( $handler );
 
 		$this->assertEquals( $expected, $result );
 	}

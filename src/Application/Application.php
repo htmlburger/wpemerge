@@ -9,15 +9,18 @@
 
 namespace WPEmerge\Application;
 
+use Closure;
 use Pimple\Container;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
+use WPEmerge\Facades\Response;
 use WPEmerge\Facades\Route;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
+use WPEmerge\Requests\Request;
 use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
@@ -30,18 +33,25 @@ use WPEmerge\View\ViewServiceProvider;
  */
 class Application {
 	/**
-	 * Flag whether the application has been bootstrapped.
-	 *
-	 * @var boolean
-	 */
-	protected $bootstrapped = false;
-
-	/**
 	 * IoC container.
 	 *
 	 * @var Container
 	 */
 	protected $container = null;
+
+	/**
+	 * Flag whether to intercept and render configuration exceptions.
+	 *
+	 * @var boolean
+	 */
+	protected $render_configuration_exceptions = true;
+
+	/**
+	 * Flag whether the application has been bootstrapped.
+	 *
+	 * @var boolean
+	 */
+	protected $bootstrapped = false;
 
 	/**
 	 * Array of application service providers.
@@ -65,9 +75,11 @@ class Application {
 	 * Constructor.
 	 *
 	 * @param Container $container
+	 * @param boolean   $render_configuration_exceptions
 	 */
-	public function __construct( Container $container ) {
+	public function __construct( Container $container, $render_configuration_exceptions = true ) {
 		$this->container = $container;
+		$this->render_configuration_exceptions = $render_configuration_exceptions;
 
 		$config = isset( $container[ WPEMERGE_CONFIG_KEY ] ) ? $container[ WPEMERGE_CONFIG_KEY ] : [];
 		$config = array_merge( [
@@ -127,20 +139,22 @@ class Application {
 	 * @return void
 	 */
 	public function bootstrap( $config = [], $run = true ) {
-		if ( $this->isBootstrapped() ) {
-			throw new ConfigurationException( static::class . ' already bootstrapped.' );
-		}
+		$this->renderConfigurationExceptions( function () use ( $config, $run ) {
+			if ( $this->isBootstrapped() ) {
+				throw new ConfigurationException( static::class . ' already bootstrapped.' );
+			}
 
-		$container = $this->getContainer();
-		$this->loadConfig( $container, $config );
-		$this->loadServiceProviders( $container );
+			$container = $this->getContainer();
+			$this->loadConfig( $container, $config );
+			$this->loadServiceProviders( $container );
 
-		$this->bootstrapped = true;
+			$this->bootstrapped = true;
 
-		if ( $run ) {
-			$kernel = $this->resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
-			$kernel->bootstrap();
-		}
+			if ( $run ) {
+				$kernel = $this->resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
+				$kernel->bootstrap();
+			}
+		} );
 	}
 
 	/**
@@ -263,16 +277,18 @@ class Application {
 	 * Load a route definition file, applying middleware to all routes defined within.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string        $file
-	 * @param  array<string> $middleware
+	 * @param  string               $file
+	 * @param  array<string, mixed> $attributes
 	 * @return void
 	 */
-	protected function loadRoutes( $file, $middleware = [] ) {
+	protected function loadRoutes( $file, $attributes ) {
 		if ( empty( $file ) ) {
 			return;
 		}
 
-		Route::middleware( $middleware )->group( $file );
+		$this->renderConfigurationExceptions( function () use ( $attributes, $file ) {
+			Route::defaults( $attributes )->reset()->group( $file );
+		} );
 	}
 
 	/**
@@ -286,15 +302,48 @@ class Application {
 	 */
 	public function routes( $web = '', $admin = '', $ajax = '' ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$this->loadRoutes( $ajax, ['ajax'] );
+			$this->loadRoutes( $ajax, [
+				'middleware' => ['ajax'],
+				'namespace' => '\\App\\Controllers\\Ajax\\',
+			] );
 			return;
 		}
 
 		if ( is_admin() ) {
-			$this->loadRoutes( $admin, ['admin'] );
+			$this->loadRoutes( $admin, [
+				'middleware' => ['admin'],
+				'namespace' => '\\App\\Controllers\\Admin\\',
+			] );
 			return;
 		}
 
-		$this->loadRoutes( $web, ['web'] );
+		$this->loadRoutes( $web, [
+			'middleware' => ['web'],
+			'namespace' => '\\App\\Controllers\\Web\\',
+			'controller' => '\\WPEmerge\\Controllers\\WordPressController@handle',
+		] );
+	}
+
+	/**
+	 * Catch any configuration exceptions and short-circuit to an error page.
+	 *
+	 * @param  Closure $action
+	 * @return void
+	 */
+	protected function renderConfigurationExceptions( Closure $action ) {
+		try {
+			$action();
+		} catch ( ConfigurationException $exception ) {
+			if ( ! $this->render_configuration_exceptions ) {
+				throw $exception;
+			}
+
+			$request = Request::fromGlobals();
+			$handler = $this->resolve( WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY );
+
+			add_filter( 'wpemerge.pretty_errors.apply_admin_styles', '__return_false' );
+			Response::respond( $handler->getResponse( $request, $exception ) );
+			wp_die();
+		}
 	}
 }

@@ -5,6 +5,7 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\Route;
@@ -29,7 +30,7 @@ class RouteTest extends WP_UnitTestCase {
 	 */
 	public function testWhere_UrlCondition_Appended() {
 		$condition = Mockery::mock( UrlCondition::class );
-		$subject = new Route( [], $condition, function() {} );
+		$subject = new Route( [], $condition, Mockery::mock( Handler::class ) );
 		$expected1 = ['foo' => '/^foo$/i'];
 		$expected2 = ['foo' => '/^foo$/i', 'bar' => '/^bar$/i'];
 
@@ -63,7 +64,7 @@ class RouteTest extends WP_UnitTestCase {
 	 */
 	public function testWhere_NonUrlCondition_Exception() {
 		$condition = Mockery::mock( ConditionInterface::class );
-		$subject = new Route( [], $condition, function() {} );
+		$subject = new Route( [], $condition, Mockery::mock( Handler::class ) );
 
 		$subject->where( 'foo', '/^foo$/i' );
 	}
@@ -74,6 +75,7 @@ class RouteTest extends WP_UnitTestCase {
 	public function testIsSatisfied() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
@@ -81,13 +83,13 @@ class RouteTest extends WP_UnitTestCase {
 		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( true );
 
-		$subject1 = new Route( ['BAR'], $condition, function() {} );
+		$subject1 = new Route( ['BAR'], $condition, $handler );
 		$this->assertFalse( $subject1->isSatisfied( $request ) );
 
-		$subject2 = new Route( ['FOO'], $condition, function() {} );
+		$subject2 = new Route( ['FOO'], $condition, $handler );
 		$this->assertTrue( $subject2->isSatisfied( $request ) );
 
-		$subject3 = new Route( ['FOO', 'BAR'], $condition, function() {} );
+		$subject3 = new Route( ['FOO', 'BAR'], $condition, $handler );
 		$this->assertTrue( $subject3->isSatisfied( $request ) );
 	}
 
@@ -97,6 +99,7 @@ class RouteTest extends WP_UnitTestCase {
 	public function testIsSatisfied_ConditionFalse_False() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
@@ -104,7 +107,7 @@ class RouteTest extends WP_UnitTestCase {
 		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
 
-		$subject = new Route( ['FOO'], $condition, function() {} );
+		$subject = new Route( ['FOO'], $condition, $handler );
 		$this->assertFalse( $subject->isSatisfied( $request ) );
 	}
 
@@ -114,13 +117,14 @@ class RouteTest extends WP_UnitTestCase {
 	public function testGetArguments_PassThroughCondition() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
 		$expected = ['foo'];
 
 		$condition->shouldReceive( 'getArguments' )
 				  ->with( $request )
 				  ->andReturn( $expected );
 
-		$subject = new Route( [], $condition, function() {} );
+		$subject = new Route( [], $condition, $handler );
 		$this->assertSame( $expected, $subject->getArguments( $request ) );
 	}
 
@@ -131,11 +135,15 @@ class RouteTest extends WP_UnitTestCase {
 		$request = Mockery::mock( RequestInterface::class );
 		$view = 'foobar.php';
 		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
 		$expected = Mockery::mock( ResponseInterface::class );
-		$subject = new Route( [], $condition, function( $a, $b, $c, $d ) use ( $request, $view, $expected ) {
-			$this->assertEquals( [$request, $view, 'foo', 'bar'], [$a, $b, $c, $d] );
-			return $expected;
-		} );
+		$subject = new Route( [], $condition, $handler );
+
+		$handler->shouldReceive( 'execute' )
+			->andReturnUsing( function( $a, $b, $c, $d ) use ( $request, $view, $expected ) {
+				$this->assertEquals( [$request, $view, 'foo', 'bar'], [$a, $b, $c, $d] );
+				return $expected;
+			} );
 
 		$condition->shouldReceive( 'getArguments' )
 			->with( $request )

@@ -49,6 +49,11 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
 			return new ErrorHandler( $whoops, Application::debugging() );
 		};
+
+		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) {
+			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
+			return new ErrorHandler( $whoops, Application::debugging() );
+		};
 	}
 
 	/**

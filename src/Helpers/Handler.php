@@ -31,10 +31,10 @@ class Handler {
 	 * @throws ConfigurationException
 	 * @param string|Closure $raw_handler
 	 * @param string         $default_method
-	 * @param string         $class_prefix
+	 * @param string         $namespace
 	 */
-	public function __construct( $raw_handler, $default_method = '', $class_prefix = '' ) {
-		$handler = $this->parse( $raw_handler, $default_method, $class_prefix );
+	public function __construct( $raw_handler, $default_method = '', $namespace = '' ) {
+		$handler = $this->parse( $raw_handler, $default_method, $namespace );
 
 		if ( $handler === null ) {
 			throw new ConfigurationException( 'No or invalid handler provided.' );
@@ -48,15 +48,15 @@ class Handler {
 	 *
 	 * @param  string|Closure     $raw_handler
 	 * @param  string             $default_method
-	 * @param  string             $class_prefix
+	 * @param  string             $namespace
 	 * @return array|Closure|null
 	 */
-	protected function parse( $raw_handler, $default_method, $class_prefix ) {
+	protected function parse( $raw_handler, $default_method, $namespace ) {
 		if ( $raw_handler instanceof Closure ) {
 			return $raw_handler;
 		}
 
-		return $this->parseFromString( $raw_handler, $default_method, $class_prefix );
+		return $this->parseFromString( $raw_handler, $default_method, $namespace );
 	}
 
 	/**
@@ -64,10 +64,10 @@ class Handler {
 	 *
 	 * @param  string     $raw_handler
 	 * @param  string     $default_method
-	 * @param  string     $class_prefix
+	 * @param  string     $namespace
 	 * @return array|null
 	 */
-	protected function parseFromString( $raw_handler, $default_method, $class_prefix ) {
+	protected function parseFromString( $raw_handler, $default_method, $namespace ) {
 		list( $class, $method ) = array_pad( preg_split( '/@|::/', $raw_handler, 2 ), 2, '' );
 
 		if ( empty( $method ) ) {
@@ -78,7 +78,7 @@ class Handler {
 			return [
 				'class' => $class,
 				'method' => $method,
-				'class_prefix' => $class_prefix,
+				'namespace' => $namespace,
 			];
 		}
 
@@ -107,7 +107,7 @@ class Handler {
 			return call_user_func_array( $this->handler, $arguments );
 		}
 
-		$class_prefix = $this->handler['class_prefix'];
+		$namespace = $this->handler['namespace'];
 		$class = $this->handler['class'];
 		$method = $this->handler['method'];
 
@@ -115,9 +115,9 @@ class Handler {
 			$instance = Application::instantiate( $class );
 		} catch ( ClassNotFoundException $e ) {
 			try {
-				$instance = Application::instantiate( $class_prefix . $class );
+				$instance = Application::instantiate( $namespace . $class );
 			} catch ( ClassNotFoundException $e ) {
-				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $class_prefix . $class );
+				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $namespace . $class );
 			}
 		}
 

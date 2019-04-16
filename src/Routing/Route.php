@@ -43,12 +43,12 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	 * @codeCoverageIgnore
 	 * @param  array<string>      $methods
 	 * @param  ConditionInterface $condition
-	 * @param  string|\Closure    $handler
+	 * @param  Handler            $handler
 	 */
-	public function __construct( $methods, $condition, $handler ) {
+	public function __construct( $methods, $condition, Handler $handler ) {
 		$this->methods = $methods;
 		$this->setCondition( $condition );
-		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\' );
+		$this->handler = $handler;
 	}
 
 	/**

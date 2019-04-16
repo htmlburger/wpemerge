@@ -17,7 +17,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->container = new Container();
-		$this->subject = new Application( $this->container );
+		$this->subject = new Application( $this->container, false );
 		$this->facade_application = Facade::getFacadeApplication();
 		Facade::setFacadeApplication( $this->container );
 	}

@@ -45,6 +45,10 @@ if ( ! defined( 'WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY' ) ) {
 	define( 'WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY', 'wpemerge.exceptions.error_handler' );
 }
 
+if ( ! defined( 'WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY' ) ) {
+	define( 'WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY', 'wpemerge.exceptions.configuration_error_handler' );
+}
+
 if ( ! defined( 'WPEMERGE_RESPONSE_SERVICE_KEY' ) ) {
 	define( 'WPEMERGE_RESPONSE_SERVICE_KEY', 'wpemerge.responses.response_service' );
 }

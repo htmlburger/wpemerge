@@ -9,6 +9,9 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Helpers\Handler;
+use WPEmerge\Support\Arr;
+
 /**
  * Provide a fluent interface for registering routes with the router.
  */
@@ -19,6 +22,13 @@ class RouteRegistrar {
 	 * @var Router
 	 */
 	protected $router = null;
+
+	/**
+	 * Default attributes.
+	 *
+	 * @var array<string, mixed>
+	 */
+	protected $default_attributes = [];
 
 	/**
 	 * Attributes.
@@ -35,6 +45,34 @@ class RouteRegistrar {
 	 */
 	public function __construct( Router $router ) {
 		$this->router = $router;
+		$this->reset();
+	}
+
+	/**
+	 * Set the default attributes.
+	 *
+	 * @param  array<string, mixed> $attributes
+	 * @return static               $this
+	 */
+	public function defaults( $attributes ) {
+		$this->default_attributes = $attributes;
+
+		return $this;
+	}
+
+	public function getAttributes() {
+		return $this->attributes;
+	}
+
+	/**
+	 * Reset attributes to their default values.
+	 *
+	 * @return static $this
+	 */
+	public function reset() {
+		$this->attributes = $this->default_attributes;
+
+		return $this;
 	}
 
 	/**
@@ -79,6 +117,20 @@ class RouteRegistrar {
 	}
 
 	/**
+	 * Set the namespace attribute.
+	 * This should be renamed to namespace for consistency once minimum PHP
+	 * version is increased to 7+.
+	 *
+	 * @param  string $namespace
+	 * @return static $this
+	 */
+	public function controllerNamespace( $namespace ) {
+		$this->attributes['namespace'] = $namespace;
+
+		return $this;
+	}
+
+	/**
 	 * Create a new route group.
 	 *
 	 * @param \Closure|string $routes Closure or path to file.
@@ -86,6 +138,24 @@ class RouteRegistrar {
 	 */
 	public function group( $routes ) {
 		$this->router->group( $this->attributes, $routes );
+		$this->reset();
+	}
+
+	/**
+	 * Create a new route handler.
+	 *
+	 * @param  string|\Closure|null $handler
+	 * @param  string               $namespace
+	 * @return Handler
+	 */
+	protected function makeRouteHandler( $handler, $namespace ) {
+		if ( $handler === null ) {
+			$handler = Arr::get( $this->attributes, 'controller', null );
+		}
+
+		$handler = new Handler( $handler, '', $namespace );
+
+		return $handler;
 	}
 
 	/**
@@ -108,6 +178,8 @@ class RouteRegistrar {
 			$route->middleware( $this->attributes['middleware'] );
 		}
 
+		$this->reset();
+
 		return $route;
 	}
 
@@ -121,7 +193,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function route( $methods, $condition, $handler = null ) {
-		return $this->makeRoute( 'route', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'route', [$methods, $condition, $handler] );
 	}
 
 	/**
@@ -133,7 +206,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function get( $condition, $handler = null ) {
-		return $this->makeRoute( 'get', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'get', [$condition, $handler] );
 	}
 
 	/**
@@ -145,7 +219,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function post( $condition, $handler = null ) {
-		return $this->makeRoute( 'post', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'post', [$condition, $handler] );
 	}
 
 	/**
@@ -157,7 +232,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function put( $condition, $handler = null ) {
-		return $this->makeRoute( 'put', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'put', [$condition, $handler] );
 	}
 
 	/**
@@ -169,7 +245,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function patch( $condition, $handler = null ) {
-		return $this->makeRoute( 'patch', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'patch', [$condition, $handler] );
 	}
 
 	/**
@@ -181,7 +258,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function delete( $condition, $handler = null ) {
-		return $this->makeRoute( 'delete', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'delete', [$condition, $handler] );
 	}
 
 	/**
@@ -193,7 +271,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function options( $condition, $handler = null ) {
-		return $this->makeRoute( 'options', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'options', [$condition, $handler] );
 	}
 
 	/**
@@ -205,7 +284,8 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function any( $condition, $handler = null ) {
-		return $this->makeRoute( 'any', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'any', [$condition, $handler] );
 	}
 
 	/**
@@ -216,6 +296,7 @@ class RouteRegistrar {
 	 * @return RouteInterface
 	 */
 	public function all( $handler = null ) {
-		return $this->makeRoute( 'all', func_get_args() );
+		$handler = $this->makeRouteHandler( $handler, Arr::get( $this->attributes, 'namespace', '' ) );
+		return $this->makeRoute( 'all', [$handler] );
 	}
 }
