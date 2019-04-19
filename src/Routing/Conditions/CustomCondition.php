@@ -34,7 +34,7 @@ class CustomCondition implements ConditionInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param callable $callable
-	 * @param mixed    ...$arguments
+	 * @param mixed    ,...$arguments
 	 */
 	public function __construct( $callable ) {
 		$this->callable = $callable;

@@ -71,7 +71,7 @@ class PipelineHandler {
 	 * Execute the handler
 	 *
 	 * @throws ConfigurationException
-	 * @param  mixed             ...$arguments
+	 * @param  mixed             ,...$arguments
 	 * @return ResponseInterface
 	 */
 	public function execute() {

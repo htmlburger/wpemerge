@@ -118,7 +118,7 @@ class RouterTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::makeRoute
-	 * @expectedException \WPEmerge\Routing\Conditions\InvalidRouteConditionException
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage Route condition is not a valid
 	 */
 	public function testMakeRoute_InvalidCondition_Exception() {

@@ -40,7 +40,7 @@ class ConditionFactory {
 	/**
 	 * Create a new condition.
 	 *
-	 * @throws InvalidRouteConditionException
+	 * @throws ConfigurationException
 	 * @param  string|array|Closure           $options
 	 * @return ConditionInterface
 	 */
@@ -57,7 +57,7 @@ class ConditionFactory {
 			return $this->makeFromClosure( $options );
 		}
 
-		throw new InvalidRouteConditionException( 'Invalid condition options supplied.' );
+		throw new ConfigurationException( 'Invalid condition options supplied.' );
 	}
 
 	/**

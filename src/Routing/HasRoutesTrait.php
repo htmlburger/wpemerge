@@ -9,8 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Helpers\Handler;
-
 /**
  * Allow objects to have routes
  */
@@ -23,17 +21,7 @@ trait HasRoutesTrait {
 	protected $routes = [];
 
 	/**
-	 * Create a route instance.
-	 *
-	 * @param  array<string>  $methods
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public abstract function makeRoute( $methods, $condition, Handler $handler );
-
-	/**
-	 * Get registered routes
+	 * Get routes.
 	 *
 	 * @return array<RouteInterface>
 	 */
@@ -42,104 +30,22 @@ trait HasRoutesTrait {
 	}
 
 	/**
-	 * Add a route
+	 * Set routes.
+	 *
+	 * @param  array<RouteInterface> $routes
+	 * @return void
+	 */
+	public function setRoutes( $routes ) {
+		$this->routes = $routes;
+	}
+
+	/**
+	 * Add a route.
 	 *
 	 * @param  RouteInterface $route
-	 * @return RouteInterface
+	 * @return void
 	 */
 	public function addRoute( $route ) {
 		$this->routes[] = $route;
-		return $route;
-	}
-
-	/**
-	 * Create and add a new route
-	 *
-	 * @param  array<string>  $methods
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function route( $methods, $condition, Handler $handler ) {
-		$route = $this->makeRoute( $methods, $condition, $handler );
-
-		return $this->addRoute( $route );
-	}
-
-	/**
-	 * Create and add a route for the GET and HEAD methods
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function get( $condition, Handler $handler ) {
-		return $this->route( ['GET', 'HEAD'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for the POST method
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function post( $condition, Handler $handler ) {
-		return $this->route( ['POST'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for the PUT method
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function put( $condition, Handler $handler ) {
-		return $this->route( ['PUT'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for the PATCH method
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function patch( $condition, Handler $handler ) {
-		return $this->route( ['PATCH'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for the DELETE method
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function delete( $condition, Handler $handler ) {
-		return $this->route( ['DELETE'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for the OPTIONS method
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function options( $condition, Handler $handler ) {
-		return $this->route( ['OPTIONS'], $condition, $handler );
-	}
-
-	/**
-	 * Create and add a route for all supported methods
-	 *
-	 * @param  mixed          $condition
-	 * @param  Handler        $handler
-	 * @return RouteInterface
-	 */
-	public function any( $condition, Handler $handler = null ) {
-		return $this->route( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $condition, $handler );
 	}
 }

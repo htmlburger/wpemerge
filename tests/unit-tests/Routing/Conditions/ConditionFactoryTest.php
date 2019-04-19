@@ -220,7 +220,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \WPEmerge\Routing\Conditions\InvalidRouteConditionException
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage Invalid condition options
 	 */
 	public function testMake_Object_Exception() {

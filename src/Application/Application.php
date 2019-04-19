@@ -278,6 +278,7 @@ class Application {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string               $file
+	 * @param  array<string, mixed> $default_attributes
 	 * @param  array<string, mixed> $attributes
 	 * @return void
 	 */
@@ -287,7 +288,7 @@ class Application {
 		}
 
 		$this->renderConfigurationExceptions( function () use ( $attributes, $file ) {
-			Route::defaults( $attributes )->reset()->group( $file );
+			Route::attributes( $attributes )->group( $file );
 		} );
 	}
 
@@ -303,24 +304,24 @@ class Application {
 	public function routes( $web = '', $admin = '', $ajax = '' ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			$this->loadRoutes( $ajax, [
-				'middleware' => ['ajax'],
 				'namespace' => '\\App\\Controllers\\Ajax\\',
+				'middleware' => ['ajax'],
 			] );
 			return;
 		}
 
 		if ( is_admin() ) {
 			$this->loadRoutes( $admin, [
-				'middleware' => ['admin'],
 				'namespace' => '\\App\\Controllers\\Admin\\',
+				'middleware' => ['admin'],
 			] );
 			return;
 		}
 
 		$this->loadRoutes( $web, [
-			'middleware' => ['web'],
 			'namespace' => '\\App\\Controllers\\Web\\',
 			'controller' => '\\WPEmerge\\Controllers\\WordPressController@handle',
+			'middleware' => ['web'],
 		] );
 	}
 
