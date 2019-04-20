@@ -70,7 +70,6 @@ class Flash {
 	/**
 	 * Throw an exception if store is not valid.
 	 *
-	 * @throws ConfigurationException
 	 * @return void
 	 */
 	protected function validateStore() {

@@ -15,10 +15,10 @@ use WPEmerge\Support\Facade;
  * Provide access to the route registrar.
  *
  * @codeCoverageIgnore
- * @see \WPEmerge\Routing\RouteRegistrar
+ * @see \WPEmerge\Routing\RouteBlueprint
  */
 class Route extends Facade {
 	protected static function getFacadeAccessor() {
-		return WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY;
+		return static::getFacadeApplication()[ WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY ];
 	}
 }

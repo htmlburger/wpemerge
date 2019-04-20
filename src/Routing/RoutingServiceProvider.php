@@ -56,9 +56,9 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			return new ConditionFactory( $c[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] );
 		};
 
-		$container[ WPEMERGE_ROUTING_ROUTE_REGISTRAR_KEY ] = function ( $c ) {
-			return new RouteRegistrar( $c[ WPEMERGE_ROUTING_CONDITIONS_CONDITION_FACTORY_KEY ], $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
-		};
+		$container[ WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY ] = $container->factory( function ( $c ) {
+			return new RouteBlueprint( $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
+		} );
 
 		Application::facade( 'Route', RouteFacade::class );
 	}

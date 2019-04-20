@@ -40,8 +40,7 @@ class ConditionFactory {
 	/**
 	 * Create a new condition.
 	 *
-	 * @throws ConfigurationException
-	 * @param  string|array|Closure           $options
+	 * @param  string|array|Closure $options
 	 * @return ConditionInterface
 	 */
 	public function make( $options ) {
@@ -136,7 +135,6 @@ class ConditionFactory {
 	/**
 	 * Parse the condition type and its arguments from an options array.
 	 *
-	 * @throws ConfigurationException
 	 * @param  array $options
 	 * @return array
 	 */
@@ -172,8 +170,7 @@ class ConditionFactory {
 	/**
 	 * Create a new condition from an array.
 	 *
-	 * @throws ConfigurationException
-	 * @param  array               $options
+	 * @param  array              $options
 	 * @return ConditionInterface
 	 */
 	protected function makeFromArray( $options ) {

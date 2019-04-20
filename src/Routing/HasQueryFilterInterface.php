@@ -34,7 +34,6 @@ interface HasQueryFilterInterface {
 	/**
 	 * Apply the query filter, if any.
 	 *
-	 * @throws ConfigurationException
 	 * @param  RequestInterface $request
 	 * @param  array            $query_vars
 	 * @return array

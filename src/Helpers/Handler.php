@@ -28,7 +28,6 @@ class Handler {
 	/**
 	 * Constructor
 	 *
-	 * @throws ConfigurationException
 	 * @param string|Closure $raw_handler
 	 * @param string         $default_method
 	 * @param string         $namespace

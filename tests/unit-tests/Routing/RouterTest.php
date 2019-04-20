@@ -38,123 +38,6 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Quick and dirty test to cover basic group functionality.
-	 * Better and more extensive tests are needed.
-	 *
-	 * @covers ::group
-	 * @covers ::addRoute
-	 */
-	public function testGroup() {
-		$condition1 = Mockery::mock( ConditionInterface::class );
-		$condition2 = Mockery::mock( UrlCondition::class );
-		$where1 = ['foo' => 'foo'];
-		$where2 = ['bar' => 'bar'];
-
-		$subject = new Router( $this->condition_factory );
-
-		$route = Mockery::mock( RouteInterface::class );
-
-		$route->shouldReceive( 'getCondition' )
-			->andReturn( $condition2 )
-			->once();
-
-		$condition2->shouldReceive( 'getUrlWhere' )
-			->andReturn( $where2 )
-			->once();
-
-		$condition2->shouldReceive( 'setUrlWhere' )
-			->with( array_merge( $where1, $where2 ) )
-			->once();
-
-		$route->shouldReceive( 'setCondition' )
-			->with( Mockery::on( function ( $condition ) use ( $condition1, $condition2 ) {
-				$is_multiple = $condition instanceof MultipleCondition;
-				$conditions = $condition->getConditions();
-				$condition1_matches = $conditions[0] === $condition1;
-				$condition2_matches = $conditions[1] === $condition2;
-
-				return $is_multiple && $condition1_matches && $condition2_matches;
-			} ) )
-			->once();
-
-		$route->shouldReceive( 'getMiddleware' )
-			->andReturn( ['middleware2'] )
-			->once();
-
-		$route->shouldReceive( 'setMiddleware' )
-			->with( ['middleware1', 'middleware2'] )
-			->once();
-
-		$subject->group( [
-			'condition' => $condition1,
-			'where' => $where1,
-			'middleware' => 'middleware1',
-		], function () use ( $subject, $route ) {
-			$subject->addRoute( $route );
-		} );
-
-		$this->assertTrue( true );
-	}
-
-	/**
-	 * @covers ::makeRoute
-	 */
-	public function testMakeRoute_ConditionInterface_Route() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
-
-		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
-	}
-
-	/**
-	 * @covers ::makeRoute
-	 */
-	public function testMakeRoute_Condition_Route() {
-		$condition = function () {};
-		$handler = Mockery::mock( Handler::class );
-
-		$this->assertInstanceOf( RouteInterface::class, $this->subject->makeRoute( [], $condition, $handler ) );
-	}
-
-	/**
-	 * @covers ::makeRoute
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route condition is not a valid
-	 */
-	public function testMakeRoute_InvalidCondition_Exception() {
-		$condition = new \stdClass();
-		$handler = Mockery::mock( Handler::class );
-
-		$this->subject->makeRoute( [], $condition, $handler );
-	}
-
-	/**
-	 * @covers ::addRoute
-	 */
-	public function testAddRoute() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$subject = new Router( $this->condition_factory );
-
-		$route->shouldReceive( 'getCondition' )
-			->andReturn( $condition );
-
-		$this->assertSame( $route, $subject->addRoute( $route ) );
-	}
-
-	/**
-	 * @covers ::all
-	 */
-	public function testAll() {
-		$handler = Mockery::mock( Handler::class );
-		$expected = $this->subject->any( '*', $handler );
-
-		$result = $this->subject->all( $handler );
-
-		$this->assertEquals( $expected, $result );
-	}
-
-	/**
 	 * @covers ::getCurrentRoute
 	 * @covers ::setCurrentRoute
 	 */
@@ -163,6 +46,167 @@ class RouterTest extends WP_UnitTestCase {
 
 		$this->subject->setCurrentRoute( $expected );
 		$this->assertSame( $expected, $this->subject->getCurrentRoute() );
+	}
+
+	/**
+	 * @covers ::mergeMethodsAttribute
+	 */
+	public function testMergeMethodsAttribute() {
+		$this->assertEquals( ['foo', 'bar'], $this->subject->mergeMethodsAttribute( ['foo'], ['bar'] ) );
+	}
+
+	/**
+	 * @covers ::mergeConditionAttribute
+	 */
+	public function testMergeConditionAttribute_Valid_ConditionInterface() {
+		$this->assertInstanceOf(
+			ConditionInterface::class,
+			$this->subject->mergeConditionAttribute( '', function () {} )
+		);
+	}
+
+	/**
+	 * @covers ::mergeConditionAttribute
+	 */
+	public function testMergeConditionAttribute_Empty_EmptyString() {
+		$this->assertEquals(
+			'',
+			$this->subject->mergeConditionAttribute( '', '' )
+		);
+	}
+
+	/**
+	 * @covers ::mergeConditionAttribute
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route condition is not a valid
+	 */
+	public function testMergeConditionAttribute_Invalid_Exception() {
+		$this->subject->mergeConditionAttribute( '', new \stdClass() );
+	}
+
+	/**
+	 * @covers ::mergeMiddlewareAttribute
+	 */
+	public function testMergeMiddlewareAttribute() {
+		$this->assertEquals( ['foo', 'bar'], $this->subject->mergeMiddlewareAttribute( ['foo'], ['bar'] ) );
+	}
+
+	/**
+	 * @covers ::mergeNamespaceAttribute
+	 */
+	public function testMergeNamespaceAttribute() {
+		$this->assertEquals( 'foo', $this->subject->mergeNamespaceAttribute( 'foo', '' ) );
+		$this->assertEquals( 'bar', $this->subject->mergeNamespaceAttribute( 'foo', 'bar' ) );
+	}
+
+	/**
+	 * @covers ::mergeHandlerAttribute
+	 */
+	public function testMergeHandlerAttribute() {
+		$this->assertEquals( 'foo', $this->subject->mergeHandlerAttribute( 'foo', '' ) );
+		$this->assertEquals( 'bar', $this->subject->mergeHandlerAttribute( 'foo', 'bar' ) );
+	}
+
+	/**
+	 * @covers ::mergeAttributes
+	 */
+	public function testMergeAttributes() {
+		$this->assertEquals(
+			[
+				'methods' => [],
+				'condition' => '',
+				'middleware' => [],
+				'namespace' => '',
+				'handler' => '',
+			],
+			$this->subject->mergeAttributes( [], [] )
+		);
+	}
+
+	/**
+	 * @covers ::routeCondition
+	 */
+	public function testRouteCondition_Condition_Route() {
+		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
+			'condition' => '/',
+			'handler' => function () {},
+		] ) );
+
+		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
+			'condition' => function () {},
+			'handler' => function () {},
+		] ) );
+	}
+
+	/**
+	 * @covers ::routeCondition
+	 */
+	public function testRouteCondition_ConditionInterface_Route() {
+		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
+			'condition' => Mockery::mock( ConditionInterface::class ),
+			'handler' => function () {},
+		] ) );
+	}
+
+	/**
+	 * @covers ::routeCondition
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No route condition specified
+	 */
+	public function testRouteCondition_NoCondition_Exception() {
+		$this->subject->route( [
+			'condition' => '',
+			'handler' => function () {},
+		] );
+	}
+
+	/**
+	 * @covers ::routeCondition
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route condition is not a valid
+	 */
+	public function testRouteCondition_InvalidCondition_Exception() {
+		$this->subject->route( [
+			'condition' => new \stdClass(),
+			'handler' => function () {},
+		] );
+	}
+
+	/**
+	 * Quick and dirty test to cover basic group functionality.
+	 * Better and more extensive tests are needed.
+	 *
+	 * @covers ::route
+	 */
+	public function testRoute_Group_MergedAttributes() {
+		$group_attributes = [
+			'methods' => ['GET'],
+			'condition' => ['url', 'foo/{foo}', ['foo' => '/^foo$/']],
+			'middleware' => ['foo'],
+			'namespace' => 'foo',
+			'handler' => 'foo',
+		];
+
+		$route_attributes = [
+			'methods' => ['POST'],
+			'condition' => ['url', 'bar/{bar}', ['bar' => '/^bar$/']],
+			'middleware' => ['bar'],
+			'namespace' => 'bar',
+			'handler' => function () {},
+		];
+
+		$route = null;
+		$this->subject->group( $group_attributes, function () use ( $route_attributes, &$route ) {
+			$route = $this->subject->route( $route_attributes );
+		} );
+
+		$this->assertInstanceOf( RouteInterface::class, $route );
+		$this->assertEquals( ['GET', 'POST'], $route->getMethods() );
+		$this->assertEquals( '/foo/{foo}/bar/{bar}/', $route->getCondition()->getUrl() );
+		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getCondition()->getUrlWhere() );
+		$this->assertEquals( ['foo', 'bar'], $route->getMiddleware() );
+		// TODO test 'namespace'.
+		$this->assertSame( $route_attributes['handler'], $route->getHandler()->get() );
 	}
 
 	/**

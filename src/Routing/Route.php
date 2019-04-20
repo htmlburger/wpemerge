@@ -74,7 +74,6 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	/**
 	 * Set custom regular expression matching for the specified parameter.
 	 *
-	 * @throws ConfigurationException
 	 * @param  string $parameter
 	 * @param  string $pattern
 	 * @return static $this

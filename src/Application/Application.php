@@ -111,7 +111,6 @@ class Application {
 	/**
 	 * Throw an exception if the application has not been bootstrapped.
 	 *
-	 * @throws ConfigurationException
 	 * @return void
 	 */
 	protected function verifyBootstrap() {
@@ -133,7 +132,6 @@ class Application {
 	 * Bootstrap the application.
 	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
-	 * @throws ConfigurationException
 	 * @param  array   $config
 	 * @param  boolean $run
 	 * @return void
@@ -320,7 +318,7 @@ class Application {
 
 		$this->loadRoutes( $web, [
 			'namespace' => '\\App\\Controllers\\Web\\',
-			'controller' => '\\WPEmerge\\Controllers\\WordPressController@handle',
+			'handler' => '\\WPEmerge\\Controllers\\WordPressController@handle',
 			'middleware' => ['web'],
 		] );
 	}

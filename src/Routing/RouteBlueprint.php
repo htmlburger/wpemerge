@@ -9,8 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Helpers\Handler;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
@@ -18,14 +16,7 @@ use WPEmerge\Support\Arr;
 /**
  * Provide a fluent interface for registering routes with the router.
  */
-class RouteRegistrar {
-	/**
-	 * Condition factory.
-	 *
-	 * @var ConditionFactory
-	 */
-	protected $condition_factory = null;
-
+class RouteBlueprint {
 	/**
 	 * Router.
 	 *
@@ -41,21 +32,12 @@ class RouteRegistrar {
 	protected $attributes = [];
 
 	/**
-	 * Group stack.
-	 *
-	 * @var array<array<string, mixed>>
-	 */
-	protected $group_stack = [];
-
-	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param ConditionFactory $condition_factory
 	 * @param Router           $router
 	 */
-	public function __construct( ConditionFactory $condition_factory, Router $router ) {
-		$this->condition_factory = $condition_factory;
+	public function __construct( Router $router ) {
 		$this->router = $router;
 	}
 
@@ -79,17 +61,9 @@ class RouteRegistrar {
 	}
 
 	/**
-	 * Reset attributes.
-	 *
-	 * @return void
-	 */
-	public function resetAttributes() {
-		$this->setAttributes( [] );
-	}
-
-	/**
 	 * Fluent alias for setAttributes().
 	 *
+	 * @codeCoverageIgnore
 	 * @param  array<string, mixed> $attributes
 	 * @return static               $this
 	 */
@@ -126,6 +100,7 @@ class RouteRegistrar {
 	/**
 	 * Set attribute.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string $key
 	 * @param  mixed  $value
 	 * @return static $this
@@ -171,16 +146,15 @@ class RouteRegistrar {
 	 */
 	public function where( $condition ) {
 		if ( ! $condition instanceof ConditionInterface ) {
-			$arguments = array_slice( func_get_args(), 1 );
-			$condition = array_merge( [$condition], $arguments );
+			$condition = func_get_args();
 		}
 
-		$condition = $this->condition_factory->merge(
+		$condition = $this->router->mergeConditionAttribute(
 			$this->getAttribute( 'condition' ),
 			$condition
 		);
 
-		return $this->attribute( 'condition', $condition !== null ? $condition : '' );
+		return $this->attribute( 'condition', $condition );
 	}
 
 	/**
@@ -211,157 +185,27 @@ class RouteRegistrar {
 	}
 
 	/**
-	 * Make a route condition.
-	 *
-	 * @param  mixed              $condition
-	 * @return ConditionInterface
-	 */
-	public function makeRouteCondition( $condition ) {
-		if ( ! $condition instanceof ConditionInterface ) {
-			try {
-				$condition = $this->condition_factory->make( $condition );
-			} catch ( ConfigurationException $e ) {
-				throw new ConfigurationException( 'Route condition is not a valid route string or condition.' );
-			}
-		}
-
-		return $condition;
-	}
-
-	/**
-	 * Make a route handler.
-	 *
-	 * @param  string|\Closure|null $handler
-	 * @param  string               $namespace
-	 * @return Handler
-	 */
-	public function makeRouteHandler( $handler, $namespace ) {
-		if ( $handler === null ) {
-			$handler = $this->getAttribute( 'controller', '' );
-		}
-
-		$handler = new Handler( $handler, '', $namespace );
-
-		return $handler;
-	}
-
-	/**
-	 * Make a route.
-	 *
-	 * @param  string|\Closure|null $handler
-	 * @param  array<string, mixed> $attributes
-	 * @return RouteInterface
-	 */
-	public function makeRoute( $handler, $attributes ) {
-		$methods = Arr::get( $attributes, 'methods', [] );
-		$condition = Arr::get( $attributes, 'condition', null );
-		$namespace = Arr::get( $attributes, 'namespace', '' );
-		$middleware = Arr::get( $attributes, 'middleware', [] );
-
-		$condition = $this->makeRouteCondition( $condition );
-		$handler = $this->makeRouteHandler( $handler, $namespace );
-
-		$route = new Route( $methods, $condition, $handler );
-
-		if ( ! empty( $middleware ) ) {
-			$route->middleware( $middleware );
-		}
-
-		return $route;
-	}
-
-	/**
-	 * Merge attributes into route.
-	 *
-	 * @param  array<string, mixed> $old
-	 * @param  array<string, mixed> $new
-	 * @return array<string, mixed>
-	 */
-	public function mergeAttributes( $old, $new ) {
-		$condition = $this->condition_factory->merge(
-			Arr::get( $old, 'condition', '' ),
-			Arr::get( $new, 'condition', '' )
-		);
-
-		$attributes = [
-			'methods' => array_merge(
-				(array) Arr::get( $old, 'methods', [] ),
-				(array) Arr::get( $new, 'methods', [] )
-			),
-			'condition' => $condition !== null ? $condition : '',
-			'middleware' => array_merge(
-				(array) Arr::get( $old, 'middleware', [] ),
-				(array) Arr::get( $new, 'middleware', [] )
-			),
-			'namespace' => Arr::get( $new, 'namespace', Arr::get( $old, 'namespace', '' ) ),
-			'controller' => Arr::get( $new, 'controller', Arr::get( $old, 'controller', '' ) ),
-		];
-
-		return $attributes;
-	}
-
-	/**
-	 * Get the top group from the stack.
-	 *
-	 * @return array<string, mixed>
-	 */
-	protected function getGroup() {
-		return Arr::last( $this->group_stack, null, [] );
-	}
-
-	/**
-	 * Add a group to the group stack, merging all previous attributes.
-	 *
-	 * @param array<string, mixed> $group
-	 * @return void
-	 */
-	protected function pushGroup( $group ) {
-		$this->group_stack[] = $this->mergeAttributes( $this->getGroup(), $group );
-	}
-
-	/**
-	 * Remove last group from the group stack.
-	 *
-	 * @return void
-	 */
-	protected function popGroup() {
-		array_pop( $this->group_stack );
-	}
-
-	/**
 	 * Create a route group.
 	 *
 	 * @param \Closure|string $routes Closure or path to file.
 	 * @return void
 	 */
 	public function group( $routes ) {
-		$this->pushGroup( $this->getAttributes() );
-
-		$this->resetAttributes();
-
-		if ( is_string( $routes ) ) {
-			require_once $routes;
-		} else {
-			$routes();
-		}
-
-		$this->popGroup();
-
-		$this->resetAttributes();
+		$this->router->group( $this->getAttributes(), $routes );
 	}
 
 	/**
 	 * Create a route.
 	 *
-	 * @param  string|\Closure|null $handler
+	 * @param  string|\Closure $handler
 	 * @return void
 	 */
-	public function to( $handler ) {
-		$attributes = $this->mergeAttributes( $this->getGroup(), $this->getAttributes() );
-		$route = $this->makeRoute( $handler, $attributes );
-		$this->router->addRoute( $route );
+	public function handle( $handler = '' ) {
+		if ( ! empty( $handler ) ) {
+			$this->attribute( 'handler', $handler );
+		}
 
-		$this->resetAttributes();
+		$this->router->addRoute( $this->router->route( $this->getAttributes() ) );
 	}
 
 	/**
@@ -430,9 +274,10 @@ class RouteRegistrar {
 	/**
 	 * Match ALL requests.
 	 *
-	 * @return static $this
+	 * @param  string|\Closure $handler
+	 * @return void
 	 */
-	public function all() {
-		return $this->any()->url( '*' );
+	public function all( $handler = '' ) {
+		$this->any()->url( '*' )->handle( $handler );
 	}
 }

@@ -70,7 +70,6 @@ class PipelineHandler {
 	/**
 	 * Execute the handler
 	 *
-	 * @throws ConfigurationException
 	 * @param  mixed             ,...$arguments
 	 * @return ResponseInterface
 	 */
