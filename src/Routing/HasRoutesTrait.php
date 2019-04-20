@@ -45,7 +45,7 @@ trait HasRoutesTrait {
 	 * @param  RouteInterface $route
 	 * @return void
 	 */
-	public function addRoute( $route ) {
+	public function addRoute( RouteInterface $route ) {
 		$this->routes[] = $route;
 	}
 }

@@ -155,7 +155,8 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_Handler_SetHandlerAttribute() {
-		$this->router->shouldReceive( 'route' );
+		$this->router->shouldReceive( 'route' )
+			->andReturn( Mockery::mock( RouteInterface::class ) );
 		$this->router->shouldReceive( 'addRoute' );
 
 		$this->subject->handle( 'foo' );
@@ -171,6 +172,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 
 		$this->router->shouldReceive( 'route' )
 			->with( $attributes )
+			->andReturn( Mockery::mock( RouteInterface::class ) )
 			->once();
 
 		$this->router->shouldReceive( 'addRoute' );

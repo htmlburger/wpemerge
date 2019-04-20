@@ -86,8 +86,8 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the condition attribute.
 	 *
-	 * @param  string|ConditionInterface $old
-	 * @param  string|ConditionInterface $new
+	 * @param  string|array|\Closure|ConditionInterface $old
+	 * @param  string|array|\Closure|ConditionInterface $new
 	 * @return ConditionInterface|string
 	 */
 	public function mergeConditionAttribute( $old, $new ) {
