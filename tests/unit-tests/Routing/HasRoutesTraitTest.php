@@ -3,12 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge\Helpers\Handler;
-use WPEmerge\Routing\Conditions\ConditionFactory;
-use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\HasRoutesTrait;
-use WPEmerge\Routing\Route;
 use WPEmerge\Routing\RouteInterface;
 use WP_UnitTestCase;
 

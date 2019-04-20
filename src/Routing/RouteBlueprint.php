@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
 

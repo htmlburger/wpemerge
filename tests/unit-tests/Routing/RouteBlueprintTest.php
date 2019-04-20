@@ -3,14 +3,13 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\RouteBlueprint;
 use WPEmerge\Routing\RouteInterface;
 use WP_UnitTestCase;
 use WPEmerge\Routing\Router;
 
 /**
- * @coversDefaultClass \WPEmerge\Routing\HasRoutesTrait
+ * @coversDefaultClass \WPEmerge\Routing\RouteBlueprint
  */
 class RouteBlueprintTest extends WP_UnitTestCase {
 	public function setUp() {
