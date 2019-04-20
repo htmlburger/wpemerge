@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 
 /**

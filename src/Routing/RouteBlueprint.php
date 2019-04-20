@@ -76,6 +76,7 @@ class RouteBlueprint {
 	 * Get attribute.
 	 *
 	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
 	public function getAttribute( $key, $default = '' ) {

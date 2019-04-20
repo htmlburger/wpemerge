@@ -16,6 +16,11 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\Input\OldInput
+ *
+ * @method static boolean enabled()
+ * @method static mixed get( string $key, $default = null )
+ * @method static void set( array $input )
+ * @method static void clear()
  */
 class OldInput extends Facade {
 	protected static function getFacadeAccessor() {

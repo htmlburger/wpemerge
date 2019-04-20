@@ -16,6 +16,18 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\Flash\Flash
+ *
+ * @method static array|\ArrayAccess getStore()
+ * @method static void setStore( array|\ArrayAccess &$store )
+ * @method static boolean enabled()
+ * @method static void add( string $key, $new_items )
+ * @method static void addNow( string $key, $new_items )
+ * @method static mixed get( string|null $key, $default = [] )
+ * @method static mixed getNext( string|null $key, $default = [] )
+ * @method static void clear( string|null $key )
+ * @method static void clearNext( string|null $key )
+ * @method static void shift()
+ * @method static void save()
  */
 class Flash extends Facade {
 	protected static function getFacadeAccessor() {

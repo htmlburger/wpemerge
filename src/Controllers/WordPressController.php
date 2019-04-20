@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnusedParameterInspection */
 /**
  * @package   WPEmerge
  * @author    Atanas Angelov <atanas.angelov.dev@gmail.com>

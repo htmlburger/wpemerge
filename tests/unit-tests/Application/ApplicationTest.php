@@ -116,9 +116,9 @@ class ApplicationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::facade
+	 * @covers ::alias
 	 */
-	public function testFacade() {
+	public function testAlias() {
 		$expected = 'foobar';
 
 		$container = $this->subject->getContainer();
@@ -127,7 +127,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		};
 		$alias = 'TestServiceAlias';
 
-		$this->subject->facade( $alias, \WPEmergeTestTools\TestServiceFacade::class );
+		$this->subject->alias( $alias, \WPEmergeTestTools\TestServiceFacade::class );
 		$this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
 	}
 

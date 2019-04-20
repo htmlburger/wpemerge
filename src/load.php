@@ -8,7 +8,6 @@
  */
 
 use WPEmerge\Application\Application;
-use WPEmerge\Facades\Application as ApplicationFacade;
 use WPEmerge\Support\Facade;
 use WPEmerge\Support\AliasLoader;
 use Pimple\Container;
@@ -25,5 +24,4 @@ $container[ WPEMERGE_APPLICATION_KEY ] = function ( $container ) {
 
 Facade::setFacadeApplication( $container );
 AliasLoader::getInstance()->register();
-AliasLoader::getInstance()->alias( 'WPEmerge', ApplicationFacade::class );
 // @codeCoverageIgnoreEnd

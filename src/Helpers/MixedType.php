@@ -31,6 +31,7 @@ class MixedType {
 	 * Class:    instantiate; call method; return result
 	 * Other:    return value without taking any action
 	 *
+	 * @noinspection PhpDocSignatureInspection
 	 * @param  mixed    $entity
 	 * @param  array    $arguments
 	 * @param  string   $method

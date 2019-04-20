@@ -188,66 +188,68 @@ class Request implements RequestInterface {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * @see \WPEmerge\Support\Arr
+	 * Get all values or a single one from an input type.
+	 *
+	 * @param  string $source
+	 * @param  string $key
+	 * @param  mixed  $default
+	 * @return mixed
 	 */
-	protected function input() {
-		$args = func_get_args();
-		$source = $this->{$args[0]};
+	protected function input( $source, $key = '', $default = null ) {
+		$source = isset( $this->{$source} ) && is_array( $this->{$source} ) ? $this->{$source} : [];
 
-		if ( count( $args ) === 1 ) {
+		if ( empty( $key ) ) {
 			return $source;
 		}
 
-		$args[0] = $source;
-		return call_user_func_array( [Arr::class, 'get'], $args );
+		return Arr::get( $source, $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function get() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['get'], func_get_args() ) );
+	public function get( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'get', $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function post() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['post'], func_get_args() ) );
+	public function post( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'post', $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function cookie() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['cookie'], func_get_args() ) );
+	public function cookie( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'cookie', $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function files() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['files'], func_get_args() ) );
+	public function files( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'files', $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function server() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['server'], func_get_args() ) );
+	public function server( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'server', $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see ::input()
 	 */
-	public function headers() {
-		return call_user_func_array( [$this, 'input'], array_merge( ['headers'], func_get_args() ) );
+	public function headers( $key = '', $default = null ) {
+		return call_user_func( [$this, 'input'], 'headers', $key, $default );
 	}
 }

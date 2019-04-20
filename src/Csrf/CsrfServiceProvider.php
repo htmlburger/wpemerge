@@ -26,7 +26,7 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 			return new Csrf();
 		};
 
-		Application::facade( 'Csrf', \WPEmerge\Facades\Csrf::class );
+		Application::alias( 'Csrf', \WPEmerge\Facades\Csrf::class );
 	}
 
 	/**

@@ -16,6 +16,15 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\View\ViewService
+ *
+ * @method static array getGlobals()
+ * @method static void addGlobal( string $key, $value )
+ * @method static void addGlobals( array $globals )
+ * @method static array getComposersForView( string $view )
+ * @method static void addComposer( string|array $views, string|\Closure $composer )
+ * @method static void compose( \WPEmerge\View\ViewInterface $view )
+ * @method static \WPEmerge\View\ViewInterface make( string|array $views )
+ * @method static void triggerPartialHooks( string $name )
  */
 class View extends Facade {
 	protected static function getFacadeAccessor() {

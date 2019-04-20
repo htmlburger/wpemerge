@@ -36,6 +36,7 @@ class UrlCondition implements ConditionInterface {
 	/**
 	 * Pattern to detect parameters in urls.
 	 *
+	 * @suppress HtmlUnknownTag
 	 * @var string
 	 */
 	protected $url_pattern = '~

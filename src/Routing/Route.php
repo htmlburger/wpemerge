@@ -9,12 +9,10 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
 
 /**
  * Represent a route

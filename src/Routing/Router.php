@@ -214,7 +214,8 @@ class Router implements HasRoutesInterface {
 		$this->pushGroup( $attributes );
 
 		if ( is_string( $routes ) ) {
-			// @codeCoverageIgnore
+			/** @noinspection PhpIncludeInspection */
+			/** @codeCoverageIgnore */
 			require_once $routes;
 		} else {
 			$routes();
@@ -285,6 +286,7 @@ class Router implements HasRoutesInterface {
 	 * @return RouteInterface
 	 */
 	public function execute( $request ) {
+		/** @var $routes \WPEmerge\Routing\RouteInterface[] */
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {

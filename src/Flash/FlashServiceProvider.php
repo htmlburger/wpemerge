@@ -32,7 +32,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			return new Flash( $session );
 		};
 
-		Application::facade( 'Flash', \WPEmerge\Facades\Flash::class );
+		Application::alias( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
 
 	/**

@@ -54,8 +54,8 @@ class OldInput {
 	/**
 	 * Get request value for key from the previous request.
 	 *
-	 * @param  string     $key
-	 * @param  mixed      $default
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
 	public function get( $key, $default = null ) {

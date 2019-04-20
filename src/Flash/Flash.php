@@ -186,8 +186,9 @@ class Flash {
 	/**
 	 * Add values for a key for the current request.
 	 *
-	 * @param string $key
-	 * @param mixed $new_items
+	 * @param  string $key
+	 * @param  mixed $new_items
+	 * @return void
 	 */
 	public function addNow( $key, $new_items ) {
 		$this->addToRequest( static::CURRENT_KEY, $key, $new_items );

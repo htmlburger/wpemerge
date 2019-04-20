@@ -228,7 +228,7 @@ class Application {
 	 * @param  string $facade_class
 	 * @return void
 	 */
-	public function facade( $alias, $facade_class ) {
+	public function alias( $alias, $facade_class ) {
 		AliasLoader::getInstance()->alias( $alias, $facade_class );
 	}
 
@@ -276,7 +276,6 @@ class Application {
 	 *
 	 * @codeCoverageIgnore
 	 * @param  string               $file
-	 * @param  array<string, mixed> $default_attributes
 	 * @param  array<string, mixed> $attributes
 	 * @return void
 	 */

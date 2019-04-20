@@ -16,6 +16,16 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\Responses\ResponseService
+ *
+ * @method static void respond( \Psr\Http\Message\ResponseInterface $response )
+ * @method static void sendHeaders( \Psr\Http\Message\ResponseInterface $response )
+ * @method static void sendBody( \Psr\Http\Message\ResponseInterface $response )
+ * @method static \Psr\Http\Message\ResponseInterface response()
+ * @method static \Psr\Http\Message\ResponseInterface output( string $output )
+ * @method static \Psr\Http\Message\ResponseInterface json( $data )
+ * @method static \WPEmerge\Responses\RedirectResponse redirect()
+ * @method static \WPEmerge\View\ViewInterface view( string|array $views )
+ * @method static \Psr\Http\Message\ResponseInterface error( integer $status )
  */
 class Response extends Facade {
 	protected static function getFacadeAccessor() {

@@ -45,6 +45,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		/** @var $container \Pimple\Container */
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] =
 			static::$condition_types;
 
@@ -60,7 +61,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			return new RouteBlueprint( $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
 		} );
 
-		Application::facade( 'Route', RouteFacade::class );
+		Application::alias( 'Route', RouteFacade::class );
 	}
 
 	/**

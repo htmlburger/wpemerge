@@ -187,7 +187,9 @@ class ConditionFactory {
 
 		try {
 			$reflection = new ReflectionClass( $condition_class );
-			return $reflection->newInstanceArgs( $condition_options['arguments'] );
+			/** @var $instance \WPEmerge\Routing\Conditions\ConditionInterface */
+			$instance = $reflection->newInstanceArgs( $condition_options['arguments'] );
+			return $instance;
 		} catch ( ReflectionException $e ) {
 			throw new ConfigurationException( 'Condition class "' . $condition_class . '" does not exist.' );
 		}

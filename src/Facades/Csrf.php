@@ -16,6 +16,13 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\Csrf\Csrf
+ *
+ * @method static string getToken()
+ * @method static string getTokenFromRequest( \WPEmerge\Requests\RequestInterface $request )
+ * @method static string generateToken( int|string $action = -1 )
+ * @method static boolean isValidToken( string $token, int|string $action = -1 )
+ * @method static string url( string $url )
+ * @method static void field()
  */
 class Csrf extends Facade {
 	protected static function getFacadeAccessor() {

@@ -1,3 +1,8 @@
+<?php
+/**
+ * @noinspection ALL
+ */
+?>
 <div class="wpemerge-whoops">
 	<style><?php echo $stylesheet ?></style>
 

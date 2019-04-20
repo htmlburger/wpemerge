@@ -42,7 +42,9 @@ class RedirectResponse extends Psr7Response {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function to( $url, $status = 302 ) {
-		return $this->withHeader( 'Location', $url )->withStatus( $status );
+		return $this
+			->withHeader( 'Location', $url )
+			->withStatus( $status );
 	}
 
 	/**

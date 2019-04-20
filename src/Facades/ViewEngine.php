@@ -17,6 +17,10 @@ use WPEmerge\Support\Facade;
  * @codeCoverageIgnore
  * @see \WPEmerge\View\ViewEngineInterface
  * @see \WPEmerge\View\PhpViewEngine (Default)
+ *
+ * @method static boolean exists( string $view )
+ * @method static string canonical( string $view )
+ * @method static \WPEmerge\View\ViewInterface make( array $views )
  */
 class ViewEngine extends Facade {
 	protected static function getFacadeAccessor() {

@@ -100,42 +100,54 @@ interface RequestInterface {
 	/**
 	 * Get a value from the GET parameters.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function get();
+	public function get( $key = '', $default = null );
 
 	/**
 	 * Get a value from the POST parameters.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function post();
+	public function post( $key = '', $default = null );
 
 	/**
 	 * Get a value from the COOKIE parameters.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function cookie();
+	public function cookie( $key = '', $default = null );
 
 	/**
 	 * Get a value from the FILES parameters.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function files();
+	public function files( $key = '', $default = null );
 
 	/**
 	 * Get a value from the SERVER parameters.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function server();
+	public function server( $key = '', $default = null );
 
 	/**
 	 * Get a value from the headers.
 	 *
+	 * @param  string $key
+	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function headers();
+	public function headers( $key = '', $default = null );
 }

@@ -1,6 +1,8 @@
 <?php
 /**
  * Layout template file for Whoops's pretty error output.
+ *
+ * @noinspection ALL
  */
 
 $is_admin = function_exists( 'is_admin' ) && is_admin();
@@ -12,6 +14,7 @@ if ( ! apply_filters( 'wpemerge.pretty_errors.apply_admin_styles', true ) ) {
 
 if ( $is_admin && ! $is_ajax ) {
 	?>
+	<!--suppress CssUnusedSymbol -->
 	<style>
 		.wpemerge-whoops {
 			position: relative;
@@ -44,6 +47,7 @@ if ( $is_admin && ! $is_ajax ) {
 			}
 		}
 	</style>
+	<!--suppress JSValidateTypes, JSValidateTypes -->
 	<script>
 		jQuery(window).load(function () {
 			jQuery(window).scrollTop(0);
@@ -59,7 +63,7 @@ if ( $is_admin && ! $is_ajax ) {
 }
 ?>
 <!DOCTYPE html><?php echo $preface; ?>
-<html>
+<html lang="en_US">
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex,nofollow"/>

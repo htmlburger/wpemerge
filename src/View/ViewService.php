@@ -46,7 +46,6 @@ class ViewService {
 	 *
 	 * @param  string $key
 	 * @param  mixed  $value
-	 *
 	 * @return void
 	 */
 	public function addGlobal( $key, $value ) {
@@ -91,7 +90,6 @@ class ViewService {
 	 * @param  string|array<string> $views
 	 * @param  string|Closure       $composer
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function addComposer( $views, $composer ) {
 		$views = array_map( function ( $view ) {

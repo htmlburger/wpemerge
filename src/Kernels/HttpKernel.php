@@ -143,6 +143,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return array
 	 */
 	public function filterRequest( $query_vars ) {
+		/** @var $routes \WPEmerge\Routing\RouteInterface[] */
 		$routes = $this->router->getRoutes();
 
 		foreach ( $routes as $route ) {
@@ -168,6 +169,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return string
 	 */
 	public function filterTemplateInclude( $view ) {
+		/** @var $wp_query \WP_Query */
 		global $wp_query;
 
 		$response = $this->handle( $this->request, [$view] );

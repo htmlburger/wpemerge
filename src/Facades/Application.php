@@ -16,6 +16,15 @@ use WPEmerge\Support\Facade;
  *
  * @codeCoverageIgnore
  * @see \WPEmerge\Application\Application
+ *
+ * @method static boolean debugging()
+ * @method static boolean isBootstrapped()
+ * @method static \Pimple\Container getContainer()
+ * @method static void bootstrap( array $config = [], boolean $run = true )
+ * @method static void alias( string $alias, string $facade_class )
+ * @method static mixed|null resolve( string $key )
+ * @method static object instantiate( string $class )
+ * @method static void routes( string $web = '', string $admin = '', string $ajax = '' )
  */
 class Application extends Facade {
 	protected static function getFacadeAccessor() {
