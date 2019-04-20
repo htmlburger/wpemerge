@@ -13,6 +13,8 @@ use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current ajax action.
+ *
+ * @codeCoverageIgnore
  */
 class AdminCondition implements ConditionInterface {
 	/**

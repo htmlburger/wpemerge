@@ -12,22 +12,6 @@ use WP_UnitTestCase;
  */
 class CustomConditionTest extends WP_UnitTestCase {
 	/**
-	 * @covers ::__construct
-	 * @covers ::getCallable
-	 * @covers ::getArguments
-	 */
-	public function testConstruct() {
-		$callable = function() {};
-		$arguments = ['foo', 'bar'];
-		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-
-		$subject = new CustomCondition( $callable, $arguments[0], $arguments[1] );
-
-		$this->assertSame( $callable, $subject->getCallable() );
-		$this->assertEquals( $arguments, $subject->getArguments( $request ) );
-	}
-
-	/**
 	 * @covers ::isSatisfied
 	 */
 	public function testIsSatisfied() {
@@ -38,5 +22,19 @@ class CustomConditionTest extends WP_UnitTestCase {
 
 		$subject2 = new CustomCondition( '__return_false' );
 		$this->assertFalse( $subject2->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::getArguments
+	 */
+	public function testGetArguments() {
+		$callable = function() {};
+		$arguments = ['foo', 'bar'];
+		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
+
+		$subject = new CustomCondition( $callable, $arguments[0], $arguments[1] );
+
+		$this->assertSame( $callable, $subject->getCallable() );
+		$this->assertEquals( $arguments, $subject->getArguments( $request ) );
 	}
 }

@@ -13,6 +13,8 @@ use WPEmerge\Requests\RequestInterface;
 
 /**
  * Check against the current post's status.
+ *
+ * @codeCoverageIgnore
  */
 class PostStatusCondition implements ConditionInterface {
 	/**

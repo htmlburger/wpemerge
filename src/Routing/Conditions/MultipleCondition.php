@@ -14,7 +14,7 @@ use WPEmerge\Requests\RequestInterface;
 /**
  * Check against an array of conditions in an AND logical relationship.
  */
-class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
+class MultipleCondition implements ConditionInterface {
 	/**
 	 * Array of conditions to check.
 	 *
@@ -30,6 +30,16 @@ class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 	 */
 	public function __construct( $conditions ) {
 		$this->conditions = $conditions;
+	}
+
+	/**
+	 * Get all assigned conditions
+	 *
+	 * @codeCoverageIgnore
+	 * @return array<\WPEmerge\Routing\Conditions\ConditionInterface>
+	 */
+	public function getConditions() {
+		return $this->conditions;
 	}
 
 	/**
@@ -55,35 +65,5 @@ class MultipleCondition implements ConditionInterface, HasUrlWhereInterface {
 		}
 
 		return $arguments;
-	}
-
-	/**
-	 * Get all assigned conditions
-	 *
-	 * @codeCoverageIgnore
-	 * @return array<\WPEmerge\Routing\Conditions\ConditionInterface>
-	 */
-	public function getConditions() {
-		return $this->conditions;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function getUrlWhere() {
-		return [];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function setUrlWhere( $where ) {
-		foreach ( $this->conditions as $condition ) {
-			if ( $condition instanceof HasUrlWhereInterface ) {
-				$condition->setUrlWhere( $where );
-			}
-		}
 	}
 }

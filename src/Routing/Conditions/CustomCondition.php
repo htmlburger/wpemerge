@@ -12,7 +12,7 @@ namespace WPEmerge\Routing\Conditions;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Check against a custom callable
+ * Check against a custom callable.
  */
 class CustomCondition implements ConditionInterface {
 	/**
@@ -42,6 +42,16 @@ class CustomCondition implements ConditionInterface {
 	}
 
 	/**
+	 * Get the assigned callable
+	 *
+	 * @codeCoverageIgnore
+	 * @return callable
+	 */
+	public function getCallable() {
+		return $this->callable;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
@@ -53,14 +63,5 @@ class CustomCondition implements ConditionInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return $this->arguments;
-	}
-
-	/**
-	 * Get the assigned callable
-	 *
-	 * @return callable
-	 */
-	public function getCallable() {
-		return $this->callable;
 	}
 }

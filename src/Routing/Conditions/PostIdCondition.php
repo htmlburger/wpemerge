@@ -12,7 +12,9 @@ namespace WPEmerge\Routing\Conditions;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Check against the current post's id
+ * Check against the current post's id.
+ *
+ * @codeCoverageIgnore
  */
 class PostIdCondition implements ConditionInterface {
 	/**

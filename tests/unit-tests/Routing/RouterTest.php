@@ -154,7 +154,7 @@ class RouterTest extends WP_UnitTestCase {
 
 	/**
 	 * Quick and dirty test to cover basic group functionality.
-	 * Better and more extensive tests are needed.
+	 * TODO Better and more extensive tests are needed.
 	 *
 	 * @covers ::route
 	 */

@@ -12,7 +12,9 @@ namespace WPEmerge\Routing\Conditions;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Check against the current post's template
+ * Check against the current post's template.
+ *
+ * @codeCoverageIgnore
  */
 class PostTemplateCondition implements ConditionInterface {
 	/**

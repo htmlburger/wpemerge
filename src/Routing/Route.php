@@ -72,28 +72,6 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	}
 
 	/**
-	 * Set custom regular expression matching for the specified parameter.
-	 *
-	 * @param  string $parameter
-	 * @param  string $pattern
-	 * @return static $this
-	 */
-	public function where( $parameter, $pattern ) {
-		$condition = $this->getCondition();
-
-		if ( ! $condition instanceof UrlCondition ) {
-			throw new ConfigurationException( 'Only routes with URL conditions can specify parameter regular expression matching.' );
-		}
-
-		$condition->setUrlWhere( array_merge(
-			$condition->getUrlWhere(),
-			[$parameter => $pattern]
-		) );
-
-		return $this;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {

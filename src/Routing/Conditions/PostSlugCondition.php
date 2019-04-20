@@ -12,7 +12,9 @@ namespace WPEmerge\Routing\Conditions;
 use WPEmerge\Requests\RequestInterface;
 
 /**
- * Check against the current post's slug
+ * Check against the current post's slug.
+ *
+ * @codeCoverageIgnore
  */
 class PostSlugCondition implements ConditionInterface {
 	/**

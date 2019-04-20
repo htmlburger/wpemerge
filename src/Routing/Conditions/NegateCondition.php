@@ -14,7 +14,7 @@ use WPEmerge\Requests\RequestInterface;
 /**
  * Negate another condition's result.
  */
-class NegateCondition implements ConditionInterface, HasUrlWhereInterface {
+class NegateCondition implements ConditionInterface {
 	/**
 	 * Condition to negate.
 	 *
@@ -44,27 +44,5 @@ class NegateCondition implements ConditionInterface, HasUrlWhereInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return $this->condition->getArguments( $request );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function getUrlWhere() {
-		if ( $this->condition instanceof HasUrlWhereInterface ) {
-			$this->condition->getUrlWhere();
-		}
-
-		return [];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function setUrlWhere( $where ) {
-		if ( $this->condition instanceof HasUrlWhereInterface ) {
-			$this->condition->setUrlWhere( $where );
-		}
 	}
 }

@@ -16,7 +16,7 @@ use WPEmerge\Support\Arr;
 /**
  * Check against the current url
  */
-class UrlCondition implements ConditionInterface, HasUrlWhereInterface {
+class UrlCondition implements ConditionInterface {
 	const WILDCARD = '*';
 
 	/**
