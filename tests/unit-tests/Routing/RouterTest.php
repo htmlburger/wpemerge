@@ -123,26 +123,22 @@ class RouterTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::routeCondition
 	 */
-	public function testRouteCondition_Condition_Route() {
-		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
-			'condition' => '/',
-			'handler' => function () {},
-		] ) );
+	public function testRouteCondition_Condition_ConditionInterface() {
+		$subject = new RouterTestImplementation( $this->condition_factory );
 
-		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
-			'condition' => function () {},
-			'handler' => function () {},
-		] ) );
+		$this->assertInstanceOf( ConditionInterface::class, $subject->publicRouteCondition( '/' ) );
+
+		$this->assertInstanceOf( ConditionInterface::class, $subject->publicRouteCondition( function () {} ) );
 	}
 
 	/**
 	 * @covers ::routeCondition
 	 */
 	public function testRouteCondition_ConditionInterface_Route() {
-		$this->assertInstanceOf( RouteInterface::class, $this->subject->route( [
-			'condition' => Mockery::mock( ConditionInterface::class ),
-			'handler' => function () {},
-		] ) );
+		$subject = new RouterTestImplementation( $this->condition_factory );
+		$condition = Mockery::mock( ConditionInterface::class );
+
+		$this->assertSame( $condition, $subject->publicRouteCondition( $condition ) );
 	}
 
 	/**
@@ -151,22 +147,9 @@ class RouterTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No route condition specified
 	 */
 	public function testRouteCondition_NoCondition_Exception() {
-		$this->subject->route( [
-			'condition' => '',
-			'handler' => function () {},
-		] );
-	}
+		$subject = new RouterTestImplementation( $this->condition_factory );
 
-	/**
-	 * @covers ::routeCondition
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route condition is not a valid
-	 */
-	public function testRouteCondition_InvalidCondition_Exception() {
-		$this->subject->route( [
-			'condition' => new \stdClass(),
-			'handler' => function () {},
-		] );
+		$subject->publicRouteCondition( '' );
 	}
 
 	/**
@@ -253,5 +236,11 @@ class RouterTest extends WP_UnitTestCase {
 		$this->subject->addRoute( $route2 );
 
 		$this->assertEquals( null, $this->subject->execute( $request, '' ) );
+	}
+}
+
+class RouterTestImplementation extends Router {
+	public function publicRouteCondition() {
+		return call_user_func_array( [$this, 'routeCondition'], func_get_args() );
 	}
 }

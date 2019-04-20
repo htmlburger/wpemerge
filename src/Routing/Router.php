@@ -263,7 +263,7 @@ class Router implements HasRoutesInterface {
 		$attributes = $this->mergeAttributes( $this->getGroup(), $attributes );
 
 		$methods = Arr::get( $attributes, 'methods', [] );
-		$condition = Arr::get( $attributes, 'condition', null );
+		$condition = Arr::get( $attributes, 'condition', '' );
 		$handler = Arr::get( $attributes, 'handler', '' );
 		$namespace = Arr::get( $attributes, 'namespace', '' );
 		$middleware = Arr::get( $attributes, 'middleware', [] );

@@ -326,6 +326,7 @@ class Application {
 	/**
 	 * Catch any configuration exceptions and short-circuit to an error page.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  Closure $action
 	 * @return void
 	 */
