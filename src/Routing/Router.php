@@ -86,8 +86,8 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the condition attribute.
 	 *
-	 * @param  string|array|\Closure|ConditionInterface $old
-	 * @param  string|array|\Closure|ConditionInterface $new
+	 * @param  string|array|\Closure|ConditionInterface|null $old
+	 * @param  string|array|\Closure|ConditionInterface|null $new
 	 * @return ConditionInterface|string
 	 */
 	public function mergeConditionAttribute( $old, $new ) {
@@ -97,7 +97,7 @@ class Router implements HasRoutesInterface {
 			throw new ConfigurationException( 'Route condition is not a valid route string or condition.' );
 		}
 
-		return $condition !== null ? $condition : '';
+		return $condition;
 	}
 
 	/**
@@ -169,8 +169,8 @@ class Router implements HasRoutesInterface {
 			),
 
 			'condition' => $this->mergeConditionAttribute(
-				Arr::get( $old, 'condition', '' ),
-				Arr::get( $new, 'condition', '' )
+				Arr::get( $old, 'condition', null ),
+				Arr::get( $new, 'condition', null )
 			),
 
 			'middleware' => $this->mergeMiddlewareAttribute(
@@ -257,7 +257,7 @@ class Router implements HasRoutesInterface {
 	 * @return ConditionInterface
 	 */
 	protected function routeCondition( $condition ) {
-		if ( $condition === '' ) {
+		if ( $condition === null ) {
 			throw new ConfigurationException( 'No route condition specified. Did you miss to call url() or where()?' );
 		}
 
@@ -290,7 +290,7 @@ class Router implements HasRoutesInterface {
 		$attributes = $this->mergeAttributes( $this->getGroup(), $attributes );
 
 		$methods = Arr::get( $attributes, 'methods', [] );
-		$condition = Arr::get( $attributes, 'condition', '' );
+		$condition = Arr::get( $attributes, 'condition', null );
 		$handler = Arr::get( $attributes, 'handler', '' );
 		$namespace = Arr::get( $attributes, 'namespace', '' );
 

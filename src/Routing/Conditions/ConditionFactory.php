@@ -225,8 +225,8 @@ class ConditionFactory {
 	/**
 	 * Merge group condition attribute.
 	 *
-	 * @param  string|array|Closure|ConditionInterface $old
-	 * @param  string|array|Closure|ConditionInterface $new
+	 * @param  string|array|Closure|ConditionInterface|null $old
+	 * @param  string|array|Closure|ConditionInterface|null $new
 	 * @return ConditionInterface|null
 	 */
 	public function merge( $old, $new ) {

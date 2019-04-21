@@ -141,7 +141,7 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals(
 			[
 				'methods' => [],
-				'condition' => '',
+				'condition' => null,
 				'middleware' => [],
 				'namespace' => '',
 				'handler' => '',
@@ -180,7 +180,7 @@ class RouterTest extends WP_UnitTestCase {
 	public function testRouteCondition_NoCondition_Exception() {
 		$subject = new RouterTestImplementation( $this->condition_factory );
 
-		$subject->publicRouteCondition( '' );
+		$subject->publicRouteCondition( null );
 	}
 
 	/**

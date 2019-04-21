@@ -100,14 +100,14 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::where
 	 */
-	public function testWhere_EmptyString_EmptyStringAttribute() {
+	public function testWhere_Null_NullAttribute() {
 		$this->router->shouldReceive( 'mergeConditionAttribute' )
-			->andReturn( '' )
+			->andReturn( null )
 			->once();
 
-		$this->assertSame( $this->subject, $this->subject->where( 'foo' ) );
+		$this->assertSame( $this->subject, $this->subject->where( null ) );
 
-		$this->assertEquals( '', $this->subject->getAttribute( 'condition' ) );
+		$this->assertNull( $this->subject->getAttribute( 'condition' ) );
 	}
 
 	/**
