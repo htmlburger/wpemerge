@@ -185,6 +185,21 @@ class RouteBlueprint {
 	}
 
 	/**
+	 * Set the query attribute.
+	 *
+	 * @param  callable $query
+	 * @return static   $this
+	 */
+	public function query( $query ) {
+ 		$query = $this->router->mergeQueryAttribute(
+			$this->getAttribute( 'query', null ),
+			$query
+		);
+
+		return $this->attribute( 'query', $query );
+	}
+
+	/**
 	 * Create a route group.
 	 *
 	 * @param \Closure|string $routes Closure or path to file.

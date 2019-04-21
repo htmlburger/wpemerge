@@ -104,7 +104,7 @@ class FlashTest extends WP_UnitTestCase {
 		$subject->clear( 'foo' );
 
 		$this->assertEquals( [], $subject->get( 'foo' ) );
-		$this->assertEquals( null, $subject->get( 'foo', null ) );
+		$this->assertNull( $subject->get( 'foo', null ) );
 		$this->assertEquals( [ 'bar' => ['barbaz', 'bazfoo']], $subject->get() );
 
 		$subject->clear();
@@ -125,7 +125,7 @@ class FlashTest extends WP_UnitTestCase {
 		$subject->clearNext( 'foo' );
 
 		$this->assertEquals( [], $subject->getNext( 'foo' ) );
-		$this->assertEquals( null, $subject->getNext( 'foo', null ) );
+		$this->assertNull( $subject->getNext( 'foo', null ) );
 		$this->assertEquals( ['bar' => ['barbaz', 'bazfoo']], $subject->getNext() );
 
 		$subject->clearNext();

@@ -77,11 +77,50 @@ class RouteTest extends WP_UnitTestCase {
 		$expected = ['foo'];
 
 		$condition->shouldReceive( 'getArguments' )
-				  ->with( $request )
-				  ->andReturn( $expected );
+			->with( $request )
+			->andReturn( $expected );
 
 		$subject = new Route( [], $condition, $handler );
 		$this->assertSame( $expected, $subject->getArguments( $request ) );
+	}
+
+	/**
+	 * @covers ::decorate
+	 */
+	public function testDecorate_Middleware() {
+		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
+		$expected = ['foo'];
+		$subject = new Route( [], $condition, $handler );
+
+		$subject->decorate( [
+			'middleware' => $expected,
+		] );
+
+		$this->assertEquals( $expected, $subject->getMiddleware() );
+	}
+
+	/**
+	 * @covers ::decorate
+	 */
+	public function testDecorate_Query() {
+		$condition = Mockery::mock( ConditionInterface::class );
+		$handler = Mockery::mock( Handler::class );
+		$subject = new Route( [], $condition, $handler );
+
+		$subject->decorate( [] );
+		$this->assertNull( $subject->getQueryFilter() );
+
+		$subject->decorate( [
+			'query' => null,
+		] );
+		$this->assertNull( $subject->getQueryFilter() );
+
+		$query = function () {};
+		$subject->decorate( [
+			'query' => $query,
+		] );
+		$this->assertSame( $query, $subject->getQueryFilter() );
 	}
 
 	/**

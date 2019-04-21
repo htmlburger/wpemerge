@@ -50,10 +50,10 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::methods
 	 */
 	public function testMethods() {
-		$this->subject->methods( ['foo'] );
+		$this->assertSame( $this->subject, $this->subject->methods( ['foo'] ) );
 		$this->assertEquals( ['foo'], $this->subject->getAttribute( 'methods' ) );
 
-		$this->subject->methods( ['bar'] );
+		$this->assertSame( $this->subject, $this->subject->methods( ['bar'] ) );
 		$this->assertEquals( ['foo', 'bar'], $this->subject->getAttribute( 'methods' ) );
 	}
 
@@ -66,7 +66,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->andReturn( 'condition' )
 			->once();
 
-		$this->subject->url( 'foo', ['bar' => 'baz'] );
+		$this->assertSame( $this->subject, $this->subject->url( 'foo', ['bar' => 'baz'] ) );
 
 		$this->assertEquals( 'condition', $this->subject->getAttribute( 'condition' ) );
 	}
@@ -79,7 +79,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->with( '', ['foo', 'bar', 'baz'] )
 			->once();
 
-		$this->subject->where( 'foo', 'bar', 'baz' );
+		$this->assertSame( $this->subject, $this->subject->where( 'foo', 'bar', 'baz' ) );
 
 		$this->assertTrue( true );
 	}
@@ -92,7 +92,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->andReturn( 'foo' )
 			->once();
 
-		$this->subject->where( 'foo' );
+		$this->assertSame( $this->subject, $this->subject->where( 'foo' ) );
 
 		$this->assertEquals( 'foo', $this->subject->getAttribute( 'condition' ) );
 	}
@@ -105,7 +105,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->andReturn( '' )
 			->once();
 
-		$this->subject->where( 'foo' );
+		$this->assertSame( $this->subject, $this->subject->where( 'foo' ) );
 
 		$this->assertEquals( '', $this->subject->getAttribute( 'condition' ) );
 	}
@@ -114,10 +114,10 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::middleware
 	 */
 	public function testMiddleware() {
-		$this->subject->middleware( ['foo'] );
+		$this->assertSame( $this->subject, $this->subject->middleware( ['foo'] ) );
 		$this->assertEquals( ['foo'], $this->subject->getAttribute( 'middleware' ) );
 
-		$this->subject->middleware( ['bar'] );
+		$this->assertSame( $this->subject, $this->subject->middleware( ['bar'] ) );
 		$this->assertEquals( ['foo', 'bar'], $this->subject->getAttribute( 'middleware' ) );
 	}
 
@@ -125,11 +125,38 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::setNamespace
 	 */
 	public function testSetNamespace() {
-		$this->subject->setNamespace( 'foo' );
+		$this->assertSame( $this->subject, $this->subject->setNamespace( 'foo' ) );
 		$this->assertEquals( 'foo', $this->subject->getAttribute( 'namespace' ) );
 
-		$this->subject->setNamespace( 'bar' );
+		$this->assertSame( $this->subject, $this->subject->setNamespace( 'bar' ) );
 		$this->assertEquals( 'bar', $this->subject->getAttribute( 'namespace' ) );
+	}
+
+	/**
+	 * @covers ::query
+	 */
+	public function testQuery() {
+		$query1 = function ( $query_vars ) {
+			return array_merge( $query_vars, ['bar'=>'bar'] );
+		};
+
+		$query2 = function ( $query_vars ) {
+			return array_merge( $query_vars, ['baz'=>'baz'] );
+		};
+
+		$this->router->shouldReceive( 'mergeQueryAttribute' )
+			->with( null, $query1 )
+			->andReturn( $query1 )
+			->once()
+			->ordered();
+
+		$this->router->shouldReceive( 'mergeQueryAttribute' )
+			->with( $query1, $query2 )
+			->once()
+			->ordered();
+
+		$this->assertSame( $this->subject, $this->subject->query( $query1 ) );
+		$this->assertSame( $this->subject, $this->subject->query( $query2 ) );
 	}
 
 	/**

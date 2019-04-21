@@ -13,6 +13,7 @@ use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Support\Arr;
 
 /**
  * Represent a route
@@ -85,6 +86,20 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return $this->getCondition()->getArguments( $request );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function decorate( $attributes ) {
+		$middleware = Arr::get( $attributes, 'middleware', [] );
+		$query = Arr::get( $attributes, 'query', null );
+
+		$this->middleware( $middleware );
+
+		if ( $query !== null) {
+			$this->setQueryFilter( $query );
+		}
 	}
 
 	/**

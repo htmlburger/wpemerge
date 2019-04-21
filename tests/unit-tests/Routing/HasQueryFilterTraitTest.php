@@ -46,7 +46,7 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 		$condition = Mockery::mock( UrlCondition::class );
 		$subject = new Route( [], $condition, Mockery::mock( Handler::class ) );
-		$subject->query( function( $query_vars, $arg1, $arg2 ) {
+		$subject->setQueryFilter( function( $query_vars, $arg1, $arg2 ) {
 			return array_merge( $query_vars, [$arg1, $arg2] );
 		} );
 
@@ -67,7 +67,7 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 	public function testApplyQueryFilter_NonUrlCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
-		$this->subject->query( function() {} );
+		$this->subject->setQueryFilter( function() {} );
 		$this->subject->applyQueryFilter( $request, [] );
 	}
 }

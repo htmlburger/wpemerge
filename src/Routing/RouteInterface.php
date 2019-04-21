@@ -33,6 +33,14 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	public function getArguments( RequestInterface $request );
 
 	/**
+	 * Decorate route.
+	 *
+	 * @param  array<string, mixed> $attributes
+	 * @return void
+	 */
+	public function decorate( $attributes );
+
+	/**
 	 * Get a response for the given request.
 	 *
 	 * @param  RequestInterface                    $request

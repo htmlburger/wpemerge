@@ -38,12 +38,4 @@ interface HasQueryFilterInterface {
 	 * @return array
 	 */
 	public function applyQueryFilter( $request, $query_vars );
-
-	/**
-	 * Fluent alias for setQueryFilter().
-	 *
-	 * @param  callable $query_filter
-	 * @return static   $this
-	 */
-	public function query( $query_filter );
 }

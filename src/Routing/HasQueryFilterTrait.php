@@ -72,17 +72,4 @@ trait HasQueryFilterTrait {
 
 		return call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
 	}
-
-	/**
-	 * Fluent alias for setQueryFilter().
-	 *
-	 * @codeCoverageIgnore
-	 * @param  callable $query_filter
-	 * @return static   $this
-	 */
-	public function query( $query_filter ) {
-		$this->setQueryFilter( $query_filter );
-
-		return $this;
-	}
 }

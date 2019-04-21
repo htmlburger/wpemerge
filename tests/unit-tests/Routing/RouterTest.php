@@ -105,6 +105,36 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::mergeQueryAttribute
+	 */
+	public function testMergeQueryAttribute() {
+		$query1_called = false;
+		$query2_called = false;
+
+		$query1 = function ( $query_vars ) use ( &$query1_called ) {
+			$query1_called = true;
+			$this->assertEquals( ['foo' => 'foo'], $query_vars );
+			return array_merge( $query_vars, ['bar'=>'bar'] );
+		};
+
+		$query2 = function ( $query_vars ) use ( &$query2_called ) {
+			$query2_called = true;
+			$this->assertEquals( ['foo' => 'foo', 'bar' => 'bar'], $query_vars );
+			return array_merge( $query_vars, ['baz'=>'baz'] );
+		};
+
+		$this->assertNull( $this->subject->mergeQueryAttribute( null, null ) );
+		$this->assertSame( $query1, $this->subject->mergeQueryAttribute( $query1, null ) );
+		$this->assertSame( $query2, $this->subject->mergeQueryAttribute( null, $query2 ) );
+
+		$combined = $this->subject->mergeQueryAttribute( $query1, $query2 );
+		$combined( ['foo' => 'foo'] );
+
+		$this->assertTrue( $query1_called );
+		$this->assertTrue( $query2_called );
+	}
+
+	/**
 	 * @covers ::mergeAttributes
 	 */
 	public function testMergeAttributes() {
@@ -115,6 +145,7 @@ class RouterTest extends WP_UnitTestCase {
 				'middleware' => [],
 				'namespace' => '',
 				'handler' => '',
+				'query' => null,
 			],
 			$this->subject->mergeAttributes( [], [] )
 		);
@@ -187,6 +218,7 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( ['foo', 'bar'], $route->getMiddleware() );
 		// TODO test 'namespace'.
 		$this->assertSame( $route_attributes['handler'], $route->getHandler()->get() );
+		// TODO test 'query'.
 	}
 
 	/**
@@ -230,12 +262,12 @@ class RouterTest extends WP_UnitTestCase {
 		$route2->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
 
-		$this->assertEquals( null, $this->subject->execute( $request, '' ) );
+		$this->assertNull( $this->subject->execute( $request, '' ) );
 
 		$this->subject->addRoute( $route1 );
 		$this->subject->addRoute( $route2 );
 
-		$this->assertEquals( null, $this->subject->execute( $request, '' ) );
+		$this->assertNull( $this->subject->execute( $request, '' ) );
 	}
 }
 

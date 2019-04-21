@@ -251,7 +251,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		$condition1 = Mockery::mock( ConditionInterface::class );
 		$condition2 = Mockery::mock( ConditionInterface::class );
 
-		$this->assertEquals( null, $this->subject->merge( '', '' ) );
+		$this->assertNull( $this->subject->merge( '', '' ) );
 		$this->assertSame( $condition1, $this->subject->merge( $condition1, '' ) );
 		$this->assertSame( $condition1, $this->subject->merge( '', $condition1 ) );
 		$this->assertInstanceOf( MultipleCondition::class, $this->subject->merge( $condition1, $condition2 ) );

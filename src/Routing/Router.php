@@ -134,6 +134,27 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
+	 * Merge the handler attribute taking the latest value.
+	 *
+	 * @param  callable|null $old
+	 * @param  callable|null $new
+	 * @return string|\Closure
+	 */
+	public function mergeQueryAttribute( $old, $new ) {
+		if ( $new === null ) {
+			return $old;
+		}
+
+		if ( $old === null ) {
+			return $new;
+		}
+
+		return function ( $query_vars ) use ( $old, $new ) {
+			return call_user_func( $new, call_user_func( $old,  $query_vars ) );
+		};
+	}
+
+	/**
 	 * Merge attributes into route.
 	 *
 	 * @param  array<string, mixed> $old
@@ -165,6 +186,11 @@ class Router implements HasRoutesInterface {
 			'handler' => $this->mergeNamespaceAttribute(
 				Arr::get( $old, 'handler', '' ),
 				Arr::get( $new, 'handler', '' )
+			),
+
+			'query' => $this->mergeQueryAttribute(
+				Arr::get( $old, 'query', null ),
+				Arr::get( $new, 'query', null )
 			),
 		];
 
@@ -267,14 +293,13 @@ class Router implements HasRoutesInterface {
 		$condition = Arr::get( $attributes, 'condition', '' );
 		$handler = Arr::get( $attributes, 'handler', '' );
 		$namespace = Arr::get( $attributes, 'namespace', '' );
-		$middleware = Arr::get( $attributes, 'middleware', [] );
 
 		$condition = $this->routeCondition( $condition );
 		$handler = $this->routeHandler( $handler, $namespace );
 
 		$route = new Route( $methods, $condition, $handler );
 
-		$route->middleware( $middleware );
+		$route->decorate( $attributes );
 
 		return $route;
 	}
