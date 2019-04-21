@@ -25,6 +25,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		/** @var $container \Pimple\Container */
 		$this->extendConfig( $container, 'views', '' );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function () {

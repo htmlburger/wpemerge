@@ -150,7 +150,7 @@ class Router implements HasRoutesInterface {
 		}
 
 		return function ( $query_vars ) use ( $old, $new ) {
-			return call_user_func( $new, call_user_func( $old,  $query_vars ) );
+			return call_user_func( $new, call_user_func( $old, $query_vars ) );
 		};
 	}
 
