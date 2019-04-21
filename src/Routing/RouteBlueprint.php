@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Facades\Response;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
 
@@ -224,6 +225,28 @@ class RouteBlueprint {
 	}
 
 	/**
+	 * Handle a request by directly rendering a view.
+	 *
+	 * @param  string|array<string> $views
+	 * @return void
+	 */
+	public function view( $views ) {
+		$this->handle( function () use ( $views ) {
+			return Response::view( $views );
+		} );
+	}
+
+	/**
+	 * Match ALL requests.
+	 *
+	 * @param  string|\Closure $handler
+	 * @return void
+	 */
+	public function all( $handler = '' ) {
+		$this->any()->url( '*' )->handle( $handler );
+	}
+
+	/**
 	 * Match requests with a method of GET or HEAD.
 	 *
 	 * @return static $this
@@ -284,15 +307,5 @@ class RouteBlueprint {
 	 */
 	public function any() {
 		return $this->methods( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'] );
-	}
-
-	/**
-	 * Match ALL requests.
-	 *
-	 * @param  string|\Closure $handler
-	 * @return void
-	 */
-	public function all( $handler = '' ) {
-		$this->any()->url( '*' )->handle( $handler );
 	}
 }

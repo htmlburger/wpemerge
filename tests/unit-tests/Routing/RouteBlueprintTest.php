@@ -7,6 +7,7 @@ use WPEmerge\Routing\RouteBlueprint;
 use WPEmerge\Routing\RouteInterface;
 use WP_UnitTestCase;
 use WPEmerge\Routing\Router;
+use WPEmerge\View\ViewInterface;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\RouteBlueprint
@@ -210,6 +211,60 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::view
+	 */
+	public function testView() {
+		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
+		$contents = file_get_contents( $view );
+
+		$handler = null;
+		$this->router->shouldReceive( 'route' )
+			->with( Mockery::on( function ( $arguments ) use ( &$handler ) {
+				$handler = $arguments['handler'];
+				return true;
+			} ) )
+			->andReturn( Mockery::mock( RouteInterface::class ) );
+
+		$this->router->shouldReceive( 'addRoute' );
+
+
+		$this->assertNull( $this->subject->view( $view ) );
+
+		$response = $handler();
+		$this->assertInstanceOf( ViewInterface::class, $response );
+		$this->assertEquals( $contents, $response->toString() );
+	}
+
+	/**
+	 * @covers ::all
+	 */
+	public function testAll() {
+		$handler = 'foo';
+		$route = Mockery::mock( RouteInterface::class );
+
+		$this->router->shouldReceive( 'mergeConditionAttribute' )
+			->with( '', ['url', '*', []] )
+			->andReturn( '*' );
+
+		$this->router->shouldReceive( 'route' )
+			->with( [
+				'handler' => $handler,
+				'methods' => ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+				'condition' => '*',
+			] )
+			->andReturn( $route )
+			->once();
+
+		$this->router->shouldReceive( 'addRoute' )
+			->with( $route )
+			->once();
+
+		$this->subject->all( $handler );
+
+		$this->assertTrue( true );
+	}
+
+	/**
 	 * @covers ::get
 	 * @covers ::post
 	 * @covers ::put
@@ -252,34 +307,5 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 		$subject = new RouteBlueprint( $this->router );
 		$subject->any();
 		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $subject->getAttribute( 'methods' ) );
-	}
-
-	/**
-	 * @covers ::all
-	 */
-	public function testAll() {
-		$handler = 'foo';
-		$route = Mockery::mock( RouteInterface::class );
-
-		$this->router->shouldReceive( 'mergeConditionAttribute' )
-			->with( '', ['url', '*', []] )
-			->andReturn( '*' );
-
-		$this->router->shouldReceive( 'route' )
-			->with( [
-				'handler' => $handler,
-				'methods' => ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-				'condition' => '*',
-			] )
-			->andReturn( $route )
-			->once();
-
-		$this->router->shouldReceive( 'addRoute' )
-			->with( $route )
-			->once();
-
-		$this->subject->all( $handler );
-
-		$this->assertTrue( true );
 	}
 }
