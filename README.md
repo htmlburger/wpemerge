@@ -35,9 +35,10 @@ Brought to you by [Atanas Angelov](https://github.com/atanas-angelov-dev) and th
 
 WP Emerge is completely open source and we encourage everybody to participate by:
 
+- Reviewing `.github/CONTRIBUTING.md`.
 - ⭐ the project on GitHub \([https://github.com/htmlburger/wpemerge](https://github.com/htmlburger/wpemerge)\)
 - Posting bug reports \([https://github.com/htmlburger/wpemerge/issues](https://github.com/htmlburger/wpemerge/issues)\)
-- (Emailing security issues to [atanas.angelov.dev@gmail.com](mailto:atanas.angelov.dev@gmail.com) instead)
+- (Emailing security issues to [hi@atanas.dev](mailto:hi@atanas.dev) instead)
 - Posting feature suggestions \([https://github.com/htmlburger/wpemerge/issues](https://github.com/htmlburger/wpemerge/issues)\)
 - Posting and/or answering questions \([https://github.com/htmlburger/wpemerge/issues](https://github.com/htmlburger/wpemerge/issues)\)
 - Submitting pull requests \([https://github.com/htmlburger/wpemerge/pulls](https://github.com/htmlburger/wpemerge/pulls)\)

@@ -10,12 +10,11 @@ Sample usage:
 
     $ tests/bin/install.sh wpemerge_tests root root localhost 4.8
 
-**Important**: Make sure that the `<db-name>` database has been created. Note that all data will be removed during testing.
+**Important**: Make sure that the `<db-name>` database exists and it contains no information. All data inside it will be removed during testing!
 
 ## Running Tests
 
-Simply change to the framework root directory and type:
+1. Install PHPUnit globally using `composer require phpunit/phpunit`.
+2. Run `phpunit` in the root directory of the framework.
 
-    $ ./vendor/bin/phpunit
-
-Refer to the [phpunit command line test runner reference](https://phpunit.de/manual/current/en/phpunit-book.html#textui) for more information and command line options.
+Refer to the [phpunit command line test runner reference](https://phpunit.com/manual/current/en/phpunit-book.html#textui) for more information and command line options.
