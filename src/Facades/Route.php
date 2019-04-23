@@ -24,7 +24,7 @@ use WPEmerge\Support\Facade;
  * @method static \WPEmerge\Routing\RouteBlueprint middleware( string|array $middleware)
  * @method static \WPEmerge\Routing\RouteBlueprint setNamespace( string $namespace )
  * @method static void group( string|\Closure $routes )
- * @method static void handle( string|\Closure $routes )
+ * @method static void handle( string|\Closure $handler = '' )
  * @method static \WPEmerge\Routing\RouteBlueprint get()
  * @method static \WPEmerge\Routing\RouteBlueprint post()
  * @method static \WPEmerge\Routing\RouteBlueprint put()
