@@ -24,9 +24,9 @@
         "issues": "https://github.com/htmlburger/wpemerge/issues",
         "email": "wordpress@htmlburger.com"
     },
-	"scripts": {
-		"lint": "phpcs"
-	},
+    "scripts": {
+        "lint": "phpcs"
+    },
     "autoload": {
         "psr-4": {
             "WPEmerge\\": "src/",
