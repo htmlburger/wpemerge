@@ -294,6 +294,13 @@ class Router implements HasRoutesInterface {
 		$handler = Arr::get( $attributes, 'handler', '' );
 		$namespace = Arr::get( $attributes, 'namespace', '' );
 
+		if ( empty( $methods ) ) {
+			throw new ConfigurationException(
+				'Route does not have any assigned request methods. ' .
+				'Did you miss to call get() or post() on your route definition, for example?'
+			);
+		}
+
 		$condition = $this->routeCondition( $condition );
 		$handler = $this->routeHandler( $handler, $namespace );
 

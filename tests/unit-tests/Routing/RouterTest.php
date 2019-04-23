@@ -184,6 +184,15 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::route
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route does not have any assigned request methods
+	 */
+	public function testRoute_NoMethods_Exception() {
+		$this->subject->route( [] );
+	}
+
+	/**
 	 * Quick and dirty test to cover basic group functionality.
 	 * TODO Better and more extensive tests are needed.
 	 *
