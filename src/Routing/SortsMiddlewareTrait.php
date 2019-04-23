@@ -69,7 +69,9 @@ trait SortsMiddlewareTrait {
 		$sorted = $middleware;
 
 		usort( $sorted, function ( $a, $b ) use ( $middleware ) {
-			$priority = $this->getMiddlewarePriorityForMiddleware( $b ) - $this->getMiddlewarePriorityForMiddleware( $a );
+			$a_priority = $this->getMiddlewarePriorityForMiddleware( $a );
+			$b_priority = $this->getMiddlewarePriorityForMiddleware( $b );
+			$priority = $b_priority - $a_priority;
 
 			if ( $priority !== 0 ) {
 				return $priority;

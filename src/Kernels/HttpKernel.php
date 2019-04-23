@@ -65,7 +65,12 @@ class HttpKernel implements HttpKernelInterface {
 	 * @param Router                $router
 	 * @param ErrorHandlerInterface $error_handler
 	 */
-	public function __construct( Application $app, RequestInterface $request, Router $router, ErrorHandlerInterface $error_handler ) {
+	public function __construct(
+		Application $app,
+		RequestInterface $request,
+		Router $router,
+		ErrorHandlerInterface $error_handler
+	) {
 		$this->app = $app;
 		$this->request = $request;
 		$this->router = $router;

@@ -245,7 +245,11 @@ class UrlCondition implements ConditionInterface {
 		$validation_pattern = preg_quote( $validation_pattern, '~' );
 
 		// Replace the placeholders with the real parameter patterns.
-		$validation_pattern = str_replace( array_keys( $parameters ), array_values( $parameters ), $validation_pattern );
+		$validation_pattern = str_replace(
+			array_keys( $parameters ),
+			array_values( $parameters ),
+			$validation_pattern
+		);
 
 		// Match the entire url; make trailing slash optional.
 		$validation_pattern = '^' . $validation_pattern . '?$';

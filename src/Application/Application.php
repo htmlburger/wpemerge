@@ -185,7 +185,10 @@ class Application {
 
 		$service_providers = array_map( function ( $service_provider ) {
 			if ( ! is_subclass_of( $service_provider, ServiceProviderInterface::class ) ) {
-				throw new ConfigurationException( 'The following class does not implement ServiceProviderInterface: ' . $service_provider );
+				throw new ConfigurationException(
+					'The following class does not implement ' .
+					'ServiceProviderInterface: ' . $service_provider
+				);
 			}
 
 			return new $service_provider();

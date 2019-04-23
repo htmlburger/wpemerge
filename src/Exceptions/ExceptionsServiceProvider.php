@@ -37,7 +37,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			}
 
 			$handler = new PrettyPageHandler();
-			$handler->addResourcePath( WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Exceptions' . DIRECTORY_SEPARATOR . 'Whoops' );
+			$handler->addResourcePath( implode( DIRECTORY_SEPARATOR, [WPEMERGE_DIR, 'src', 'Exceptions', 'Whoops'] ) );
 
 			$run = new Run();
 			$run->allowQuit( false );

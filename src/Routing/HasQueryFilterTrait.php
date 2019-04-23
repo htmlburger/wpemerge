@@ -70,6 +70,9 @@ trait HasQueryFilterTrait {
 
 		$arguments = $this->getCondition()->getArguments( $request );
 
-		return call_user_func_array( $this->getQueryFilter(), array_merge( [$query_vars], array_values( $arguments ) ) );
+		return call_user_func_array(
+			$this->getQueryFilter(),
+			array_merge( [$query_vars], array_values( $arguments ) )
+		);
 	}
 }

@@ -38,7 +38,12 @@ class MixedType {
 	 * @param  callable $instantiator
 	 * @return mixed
 	 */
-	public static function value( $entity, $arguments = [], $method = '__invoke', $instantiator = 'static::instantiate' ) {
+	public static function value(
+		$entity,
+		$arguments = [],
+		$method = '__invoke',
+		$instantiator = 'static::instantiate'
+	) {
 		if ( is_callable( $entity ) ) {
 			return call_user_func_array( $entity, $arguments );
 		}

@@ -192,7 +192,7 @@ class RouteBlueprint {
 	 * @return static   $this
 	 */
 	public function query( $query ) {
- 		$query = $this->router->mergeQueryAttribute(
+		$query = $this->router->mergeQueryAttribute(
 			$this->getAttribute( 'query', null ),
 			$query
 		);
