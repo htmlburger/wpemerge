@@ -26,6 +26,7 @@ use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\AliasLoader;
+use WPEmerge\Support\Arr;
 use WPEmerge\View\ViewServiceProvider;
 
 /**
@@ -145,6 +146,11 @@ class Application {
 			$container = $this->getContainer();
 			$this->loadConfig( $container, $config );
 			$this->loadServiceProviders( $container );
+			$this->loadRoutes(
+				Arr::get( $config, 'routes.web', '' ),
+				Arr::get( $config, 'routes.admin', '' ),
+				Arr::get( $config, 'routes.ajax', '' )
+			);
 
 			$this->bootstrapped = true;
 
@@ -225,6 +231,55 @@ class Application {
 	}
 
 	/**
+	 * Load route definition files depending on the current request.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string $web
+	 * @param  string $admin
+	 * @param  string $ajax
+	 * @return void
+	 */
+	protected function loadRoutes( $web = '', $admin = '', $ajax = '' ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$this->loadRoutesFile( $ajax, [
+				'namespace' => '\\App\\Controllers\\Ajax\\',
+				'middleware' => ['ajax'],
+			] );
+			return;
+		}
+
+		if ( is_admin() ) {
+			$this->loadRoutesFile( $admin, [
+				'namespace' => '\\App\\Controllers\\Admin\\',
+				'middleware' => ['admin'],
+			] );
+			return;
+		}
+
+		$this->loadRoutesFile( $web, [
+			'namespace' => '\\App\\Controllers\\Web\\',
+			'handler' => '\\WPEmerge\\Controllers\\WordPressController@handle',
+			'middleware' => ['web'],
+		] );
+	}
+
+	/**
+	 * Load a route definition file, applying attributes to all routes defined within.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string               $file
+	 * @param  array<string, mixed> $attributes
+	 * @return void
+	 */
+	protected function loadRoutesFile( $file, $attributes ) {
+		if ( empty( $file ) ) {
+			return;
+		}
+
+		Route::attributes( $attributes )->group( $file );
+	}
+
+	/**
 	 * Register a facade class.
 	 *
 	 * @param  string $alias
@@ -272,57 +327,6 @@ class Application {
 		}
 
 		return $instance;
-	}
-
-	/**
-	 * Load a route definition file, applying middleware to all routes defined within.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  string               $file
-	 * @param  array<string, mixed> $attributes
-	 * @return void
-	 */
-	protected function loadRoutes( $file, $attributes ) {
-		if ( empty( $file ) ) {
-			return;
-		}
-
-		$this->renderConfigurationExceptions( function () use ( $attributes, $file ) {
-			Route::attributes( $attributes )->group( $file );
-		} );
-	}
-
-	/**
-	 * Load route definition files according to the current request.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  string $web
-	 * @param  string $admin
-	 * @param  string $ajax
-	 * @return void
-	 */
-	public function routes( $web = '', $admin = '', $ajax = '' ) {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$this->loadRoutes( $ajax, [
-				'namespace' => '\\App\\Controllers\\Ajax\\',
-				'middleware' => ['ajax'],
-			] );
-			return;
-		}
-
-		if ( is_admin() ) {
-			$this->loadRoutes( $admin, [
-				'namespace' => '\\App\\Controllers\\Admin\\',
-				'middleware' => ['admin'],
-			] );
-			return;
-		}
-
-		$this->loadRoutes( $web, [
-			'namespace' => '\\App\\Controllers\\Web\\',
-			'handler' => '\\WPEmerge\\Controllers\\WordPressController@handle',
-			'middleware' => ['web'],
-		] );
 	}
 
 	/**
