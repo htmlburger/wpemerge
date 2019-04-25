@@ -183,7 +183,7 @@ class Router implements HasRoutesInterface {
 				Arr::get( $new, 'namespace', '' )
 			),
 
-			'handler' => $this->mergeNamespaceAttribute(
+			'handler' => $this->mergeHandlerAttribute(
 				Arr::get( $old, 'handler', '' ),
 				Arr::get( $new, 'handler', '' )
 			),
