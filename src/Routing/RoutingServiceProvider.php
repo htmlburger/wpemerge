@@ -12,6 +12,7 @@ namespace WPEmerge\Routing;
 use WPEmerge\Facades\Application;
 use WPEmerge\Facades\Route as RouteFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
+use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -20,6 +21,7 @@ use WPEmerge\ServiceProviders\ServiceProviderInterface;
  * @codeCoverageIgnore
  */
 class RoutingServiceProvider implements ServiceProviderInterface {
+	use ExtendsConfigTrait;
 
 	/**
 	 * Key=>Class dictionary of condition types
@@ -45,6 +47,12 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$this->extendConfig( $container, 'routes', [
+			'web' => '',
+			'ajax' => '',
+			'admin' => '',
+		] );
+
 		/** @var $container \Pimple\Container */
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] =
 			static::$condition_types;
