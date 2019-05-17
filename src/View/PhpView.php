@@ -49,6 +49,10 @@ class PhpView implements ViewInterface {
 	public static function getLayoutContent() {
 		$view = array_pop( static::$layout_content_stack );
 
+		if ( ! $view ) {
+			return '';
+		}
+
 		return $view->render();
 	}
 
