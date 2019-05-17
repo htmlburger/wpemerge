@@ -66,6 +66,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::makeView
 	 * @covers ::getViewLayout
 	 */
 	public function testMake_WithLayout() {
