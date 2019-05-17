@@ -10,6 +10,7 @@
 namespace WPEmerge\View;
 
 use WPEmerge\Facades\Application;
+use WPEmerge\Helpers\MixedType;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
@@ -33,7 +34,8 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function ( $c ) {
-			return new PhpViewEngine( $c[ WPEMERGE_CONFIG_KEY ]['views'] );
+			$finder = new PhpViewFilesystemFinder( MixedType::toArray( $c[ WPEMERGE_CONFIG_KEY ]['views'] ) );
+			return new PhpViewEngine( $finder );
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );

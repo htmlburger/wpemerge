@@ -9,65 +9,60 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Helpers\MixedType;
-
 /**
  * Render view files with php.
  */
 class PhpViewEngine implements ViewEngineInterface {
 	/**
-	 * Custom views directory to check first.
+	 * View finder.
 	 *
-	 * @var string
+	 * @var PhpViewFilesystemFinder
 	 */
-	protected $directory = '';
+	protected $finder = [];
 
 	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param string $directory
+	 * @param PhpViewFilesystemFinder $finder
 	 */
-	public function __construct( $directory = '' ) {
-		$this->setDirectory( $directory );
+	public function __construct( PhpViewFilesystemFinder $finder ) {
+		$this->setFinder( $finder );
 	}
 
 	/**
-	 * Get the custom views directory.
+	 * Get the custom views directories.
 	 *
 	 * @codeCoverageIgnore
-	 * @return string
+	 * @return PhpViewFilesystemFinder
 	 */
-	public function getDirectory() {
-		return $this->directory;
+	public function getFinder() {
+		return $this->finder;
 	}
 
 	/**
-	 * Set the custom views directory.
+	 * Set the view finder.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string $directory
+	 * @param  PhpViewFilesystemFinder
 	 * @return void
 	 */
-	public function setDirectory( $directory ) {
-		$this->directory = MixedType::removeTrailingSlash( $directory );
+	public function setFinder( PhpViewFilesystemFinder $finder ) {
+		$this->finder = $finder;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function exists( $view ) {
-		$file = $this->resolveFilepath( $view );
-		return strlen( $file ) > 0;
+		return $this->getFinder()->exists( $view );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		$root = realpath( MixedType::normalizePath( get_template_directory() ) ) . DIRECTORY_SEPARATOR;
-		$match_root = '/^' . preg_quote( $root, '/' ) . '/';
-		return preg_replace( $match_root, '', $this->resolveFilepath( $view ) );
+		return $this->getFinder()->canonical( $view );
 	}
 
 	/**
@@ -77,7 +72,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	public function make( $views ) {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
-				$filepath = $this->resolveFilepath( $view );
+				$filepath = $this->finder->resolveFilepath( $view );
 				return $this->makeView( $view, $filepath );
 			}
 		}
@@ -130,104 +125,6 @@ class PhpViewEngine implements ViewEngineInterface {
 			throw new ViewNotFoundException( 'View layout not found for "' . $layout_file . '"' );
 		}
 
-		return $this->makeView( $this->canonical( $layout_file ), $this->resolveFilepath( $layout_file ) );
-	}
-
-	/**
-	 * Resolve a view name to an absolute filepath.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveFilepath( $view ) {
-		$view = $this->resolveRelativeFilepath( $view );
-		$file = $this->resolveFromCustomFilepath( $view );
-
-		if ( ! $file ) {
-			$file = $this->resolveFromThemeFilepath( $view );
-		}
-
-		if ( ! $file ) {
-			$file = $this->resolveFromAbsoluteFilepath( $view );
-		}
-
-		if ( $file ) {
-			$file = realpath( $file );
-		}
-
-		return $file;
-	}
-
-	/**
-	 * Resolve an absolute view to a relative one, if possible.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveRelativeFilepath( $view ) {
-		$normalized_view = MixedType::normalizePath( $view );
-		$paths = [ STYLESHEETPATH, TEMPLATEPATH ];
-
-		foreach ( $paths as $path ) {
-			$path = MixedType::addTrailingSlash( $path );
-
-			if ( substr( $normalized_view, 0, strlen( $path ) ) === $path ) {
-				return substr( $normalized_view, strlen( $path ) );
-			}
-		}
-
-		// Bail if we've failed to convert the view to a relative path.
-		return $view;
-	}
-
-	/**
-	 * Resolve a view if it exists in the custom views directory.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveFromCustomFilepath( $view ) {
-		$directory = $this->getDirectory();
-
-		if ( $directory === '' ) {
-			return '';
-		}
-
-		// Normalize to ensure there are no doubled separators.
-		$file = MixedType::normalizePath( $directory . DIRECTORY_SEPARATOR . $view );
-
-		if ( ! file_exists( $file ) ) {
-			// Try adding a .php extension.
-			$file .= '.php';
-		};
-
-		return file_exists( $file ) ? $file : '';
-	}
-
-	/**
-	 * Resolve a view if it exists in the current theme.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveFromThemeFilepath( $view ) {
-		$file = locate_template( $view, false );
-
-		if ( ! $file ) {
-			// Try adding a .php extension.
-			$file = locate_template( $view . '.php', false );
-		}
-
-		return $file;
-	}
-
-	/**
-	 * Resolve a view if it exists on the filesystem.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveFromAbsoluteFilepath( $view ) {
-		return file_exists( $view ) ? $view : '';
+		return $this->makeView( $this->canonical( $layout_file ), $this->finder->resolveFilepath( $layout_file ) );
 	}
 }

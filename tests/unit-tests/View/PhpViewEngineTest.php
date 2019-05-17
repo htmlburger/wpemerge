@@ -3,7 +3,9 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
+use WPEmerge\Helpers\MixedType;
 use WPEmerge\View\PhpViewEngine;
+use WPEmerge\View\PhpViewFilesystemFinder;
 use WPEmerge\View\ViewInterface;
 use WPEmergeTestTools\Helper;
 use WP_UnitTestCase;
@@ -15,7 +17,8 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new PhpViewEngine();
+		$finder = new PhpViewFilesystemFinder( [] );
+		$this->subject = new PhpViewEngine( $finder );
 	}
 
 	public function tearDown() {
@@ -27,69 +30,26 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::exists
-	 * @covers ::resolveFilepath
-	 * @covers ::resolveFromThemeFilepath
-	 * @covers ::resolveFromAbsoluteFilepath
 	 */
 	public function testExists() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
-
+		$this->assertTrue( $this->subject->exists( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php' ) );
 		$this->assertTrue( $this->subject->exists( 'index.php' ) );
 		$this->assertTrue( $this->subject->exists( 'index' ) );
-		$this->assertTrue( $this->subject->exists( $view ) );
+		$this->assertFalse( $this->subject->exists( 'nonexistant' ) );
 		$this->assertFalse( $this->subject->exists( '' ) );
-	}
-
-	/**
-	 * @covers ::resolveFromCustomFilepath
-	 */
-	public function testResolveFromCustomFilepath() {
-		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
-		$this->assertTrue( $this->subject->exists( 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( 'view' ) );
-		$this->assertFalse( $this->subject->exists( 'nonexistant.php' ) );
-
-		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR );
-		$this->assertTrue( $this->subject->exists( 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( 'view' ) );
-
-		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
-		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view' ) );
-
-		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR );
-		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'view' ) );
-
-		$this->subject->setDirectory( '' );
-		$this->assertFalse( $this->subject->exists( DIRECTORY_SEPARATOR . 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( DIRECTORY_SEPARATOR . 'index.php' ) );
-	}
-
-	/**
-	 * @covers ::resolveRelativeFilepath
-	 */
-	public function testResolveRelativeFilepath() {
-		$this->subject->setDirectory( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' );
-		$this->assertTrue( $this->subject->exists( STYLESHEETPATH . DIRECTORY_SEPARATOR . 'view.php' ) );
-		$this->assertTrue( $this->subject->exists( TEMPLATEPATH . DIRECTORY_SEPARATOR . 'view.php' ) );
-
-		// The path is absolute and exists but converting it to relative should fail thus covering our final code path.
-		$this->assertTrue( $this->subject->exists( ABSPATH . DIRECTORY_SEPARATOR . 'wp-login.php' ) );
 	}
 
 	/**
 	 * @covers ::canonical
 	 */
 	public function testCanonical() {
-		$root = realpath( TEMPLATEPATH ) . DIRECTORY_SEPARATOR;
-		$full = realpath( locate_template( 'index.php' ) );
-		$expected = substr( $full, strlen( $root ) );
+		$expected = realpath( MixedType::normalizePath( locate_template( 'index.php', false ) ) );
 
-		$this->assertEquals( '', $this->subject->canonical( '' ) );
-		$this->assertEquals( $expected, $this->subject->canonical( 'index' ) );
+		$this->assertEquals( $expected, $this->subject->canonical( $expected ) );
 		$this->assertEquals( $expected, $this->subject->canonical( 'index.php' ) );
-		$this->assertEquals( $expected, $this->subject->canonical( $full ) );
+		$this->assertEquals( $expected, $this->subject->canonical( 'index' ) );
+		$this->assertEquals( '', $this->subject->canonical( 'nonexistant' ) );
+		$this->assertEquals( '', $this->subject->canonical( '' ) );
 	}
 
 	/**
@@ -106,7 +66,6 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::makeView
 	 * @covers ::getViewLayout
 	 */
 	public function testMake_WithLayout() {
