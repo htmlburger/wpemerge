@@ -46,7 +46,7 @@ WP Emerge is completely open source and we encourage everybody to participate by
     Route::get()
         ->url( '/' )
         ->handle( function () {
-            return app_output( 'Hello World!' );
+            return WPEmerge\output( 'Hello World!' );
         } );
     ```
 1. Now open up your site's homepage and if everything is setup correctly it should read `Hello World!`.
