@@ -138,21 +138,22 @@ class Application {
 	 * @return void
 	 */
 	public function bootstrap( $config = [], $run = true ) {
-		$this->renderConfigurationExceptions( function () use ( $config, $run ) {
-			if ( $this->isBootstrapped() ) {
-				throw new ConfigurationException( static::class . ' already bootstrapped.' );
-			}
+		if ( $this->isBootstrapped() ) {
+			throw new ConfigurationException( static::class . ' already bootstrapped.' );
+		}
 
-			$container = $this->getContainer();
-			$this->loadConfig( $container, $config );
-			$this->loadServiceProviders( $container );
+		$this->bootstrapped = true;
+
+		$container = $this->getContainer();
+		$this->loadConfig( $container, $config );
+		$this->loadServiceProviders( $container );
+
+		$this->renderConfigurationExceptions( function () use ( $config, $run ) {
 			$this->loadRoutes(
 				Arr::get( $config, 'routes.web', '' ),
 				Arr::get( $config, 'routes.admin', '' ),
 				Arr::get( $config, 'routes.ajax', '' )
 			);
-
-			$this->bootstrapped = true;
 
 			if ( $run ) {
 				$kernel = $this->resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
