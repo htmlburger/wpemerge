@@ -27,6 +27,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 		$this->extendConfig( $container, 'middleware', [
 			'flash' => \WPEmerge\Flash\FlashMiddleware::class,
 			'oldinput' => \WPEmerge\Input\OldInputMiddleware::class,
+			'csrf' => \WPEmerge\Csrf\CsrfMiddleware::class,
 		] );
 		$this->extendConfig( $container, 'middleware_groups', [
 			'global' => [
