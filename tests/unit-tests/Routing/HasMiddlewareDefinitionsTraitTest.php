@@ -69,22 +69,24 @@ class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::expandMiddlewareGroup
 	 */
-	public function testExpandMiddlewareGroup_Predefined_HasGlobalPrepended() {
+	public function testExpandMiddlewareGroup_Predefined_HasWPEmergeAndGlobalPrepended() {
 		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
 		$subject->setMiddleware( [
 			'short' => 'long',
 			'global-short' => 'global-long',
+			'wpemerge-short' => 'wpemerge-long',
 		] );
 		$subject->setMiddlewareGroups( [
+			'wpemerge' => ['wpemerge-short'],
 			'global' => ['global-short'],
 			'web' => [],
 			'admin' => ['short'],
 			'ajax' => ['admin'],
 		] );
 
-		$this->assertEquals( [['global-long']], $subject->expandMiddlewareGroup( 'web' ) );
-		$this->assertEquals( [['global-long'], ['long']], $subject->expandMiddlewareGroup( 'admin' ) );
-		$this->assertEquals( [['global-long'], ['global-long'], ['long']], $subject->expandMiddlewareGroup( 'ajax' ) );
+		$this->assertEquals( [['wpemerge-long'], ['global-long']], $subject->expandMiddlewareGroup( 'web' ) );
+		$this->assertEquals( [['wpemerge-long'], ['global-long'], ['long']], $subject->expandMiddlewareGroup( 'admin' ) );
+		$this->assertEquals( [['wpemerge-long'], ['global-long'], ['wpemerge-long'], ['global-long'], ['long']], $subject->expandMiddlewareGroup( 'ajax' ) );
 	}
 
 	/**

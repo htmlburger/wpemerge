@@ -30,10 +30,11 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 			'csrf' => \WPEmerge\Csrf\CsrfMiddleware::class,
 		] );
 		$this->extendConfig( $container, 'middleware_groups', [
-			'global' => [
+			'wpemerge' => [
 				'flash',
 				'oldinput',
 			],
+			'global' => [],
 
 			'web' => [],
 			'ajax' => [],

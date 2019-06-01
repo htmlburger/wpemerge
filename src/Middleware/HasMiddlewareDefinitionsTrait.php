@@ -30,11 +30,11 @@ trait HasMiddlewareDefinitionsTrait {
 	protected $middleware_groups = [];
 
 	/**
-	 * Middleware groups that should have the 'global' group prepended to them.
+	 * Middleware groups that should have the 'wpemerge' and 'global' groups prepended to them.
 	 *
 	 * @var array<string, string>
 	 */
-	protected $middleware_groups_with_global = [
+	protected $prepend_special_groups_to = [
 		'web',
 		'admin',
 		'ajax',
@@ -104,8 +104,8 @@ trait HasMiddlewareDefinitionsTrait {
 
 		$middleware = $this->middleware_groups[ $group ];
 
-		if ( in_array( $group, $this->middleware_groups_with_global, true ) ) {
-			$middleware = array_merge( ['global'], $middleware );
+		if ( in_array( $group, $this->prepend_special_groups_to, true ) ) {
+			$middleware = array_merge( ['wpemerge', 'global'], $middleware );
 		}
 
 		return $this->expandMiddleware( $middleware );
