@@ -9,6 +9,7 @@
 	<file>./.sami.php</file>
 	<file>./config.php</file>
 	<exclude-pattern>src/Support/*</exclude-pattern>
+	<exclude-pattern>src/Facades/*</exclude-pattern>
 
 	<!-- Arguments -->
 	<arg name="tab-width" value="4"/>
