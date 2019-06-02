@@ -214,24 +214,28 @@ class RouteBlueprint {
 	 * Create a route.
 	 *
 	 * @param  string|\Closure $handler
-	 * @return void
+	 * @return RouteInterface
 	 */
 	public function handle( $handler = '' ) {
 		if ( ! empty( $handler ) ) {
 			$this->attribute( 'handler', $handler );
 		}
 
-		$this->router->addRoute( $this->router->route( $this->getAttributes() ) );
+		$route = $this->router->route( $this->getAttributes() );
+
+		$this->router->addRoute( $route );
+
+		return $route;
 	}
 
 	/**
 	 * Handle a request by directly rendering a view.
 	 *
 	 * @param  string|array<string> $views
-	 * @return void
+	 * @return RouteInterface
 	 */
 	public function view( $views ) {
-		$this->handle( function () use ( $views ) {
+		return $this->handle( function () use ( $views ) {
 			return Response::view( $views );
 		} );
 	}
@@ -240,10 +244,10 @@ class RouteBlueprint {
 	 * Match ALL requests.
 	 *
 	 * @param  string|\Closure $handler
-	 * @return void
+	 * @return RouteInterface
 	 */
 	public function all( $handler = '' ) {
-		$this->any()->url( '*' )->handle( $handler );
+		return $this->any()->url( '*' )->handle( $handler );
 	}
 
 	/**

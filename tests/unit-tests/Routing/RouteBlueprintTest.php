@@ -16,7 +16,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->router = Mockery::mock( Router::class );
+		$this->router = Mockery::mock( Router::class )->shouldIgnoreMissing();
 		$this->subject = new RouteBlueprint( $this->router );
 	}
 
@@ -184,7 +184,6 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	public function testHandle_Handler_SetHandlerAttribute() {
 		$this->router->shouldReceive( 'route' )
 			->andReturn( Mockery::mock( RouteInterface::class ) );
-		$this->router->shouldReceive( 'addRoute' );
 
 		$this->subject->handle( 'foo' );
 
@@ -196,18 +195,48 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 */
 	public function testHandle_EmptyHandler_PassAttributes() {
 		$attributes = ['foo' => 'bar'];
+		$route = Mockery::mock( RouteInterface::class );
 
 		$this->router->shouldReceive( 'route' )
 			->with( $attributes )
-			->andReturn( Mockery::mock( RouteInterface::class ) )
+			->andReturn( $route )
 			->once();
 
-		$this->router->shouldReceive( 'addRoute' );
-
 		$this->subject->setAttributes( $attributes );
+
 		$this->subject->handle();
 
 		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::handle
+	 */
+	public function testHandle_EmptyHandler_AddRouteToRouter() {
+		$route = Mockery::mock( RouteInterface::class );
+
+		$this->router->shouldReceive( 'route' )
+			->andReturn( $route );
+
+		$this->router->shouldReceive( 'addRoute' )
+			->with( $route )
+			->once();
+
+		$this->subject->handle();
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::handle
+	 */
+	public function testHandle_EmptyHandler_ReturnRoute() {
+		$route = Mockery::mock( RouteInterface::class );
+
+		$this->router->shouldReceive( 'route' )
+			->andReturn( $route );
+
+		$this->assertSame( $route, $this->subject->handle() );
 	}
 
 	/**
@@ -216,19 +245,21 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	public function testView() {
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
 		$contents = file_get_contents( $view );
-
+		$route = Mockery::mock( RouteInterface::class );
 		$handler = null;
+
 		$this->router->shouldReceive( 'route' )
 			->with( Mockery::on( function ( $arguments ) use ( &$handler ) {
 				$handler = $arguments['handler'];
 				return true;
 			} ) )
-			->andReturn( Mockery::mock( RouteInterface::class ) );
+			->andReturn( $route );
 
-		$this->router->shouldReceive( 'addRoute' );
+		$this->router->shouldReceive( 'addRoute' )
+			->with( $route )
+			->once();
 
-
-		$this->assertNull( $this->subject->view( $view ) );
+		$this->assertSame( $route, $this->subject->view( $view ) );
 
 		$response = $handler();
 		$this->assertInstanceOf( ViewInterface::class, $response );
@@ -259,9 +290,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->with( $route )
 			->once();
 
-		$this->subject->all( $handler );
-
-		$this->assertTrue( true );
+		$this->assertSame( $route, $this->subject->all( $handler ) );
 	}
 
 	/**
