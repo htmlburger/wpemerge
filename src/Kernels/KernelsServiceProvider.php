@@ -26,7 +26,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 	public function register( $container ) {
 		$this->extendConfig( $container, 'middleware', [
 			'flash' => \WPEmerge\Flash\FlashMiddleware::class,
-			'oldinput' => \WPEmerge\Input\OldInputMiddleware::class,
+			'old_input' => \WPEmerge\Input\OldInputMiddleware::class,
 			'csrf' => \WPEmerge\Csrf\CsrfMiddleware::class,
 			'user.logged_in' => \WPEmerge\Middleware\UserLoggedInMiddleware::class,
 			'user.logged_out' => \WPEmerge\Middleware\UserLoggedOutMiddleware::class,
@@ -36,7 +36,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 		$this->extendConfig( $container, 'middleware_groups', [
 			'wpemerge' => [
 				'flash',
-				'oldinput',
+				'old_input',
 			],
 			'global' => [],
 
