@@ -22,7 +22,7 @@ class UserCanMiddleware {
 	 */
 	public function handle( RequestInterface $request, Closure $next, $capability = '', $object_id = '0', $url = '' ) {
 		$capability = apply_filters( 'wpemerge.middleware.user.can.capability', $capability, $request );
-		$object_id = apply_filters( 'wpemerge.middleware.user.can.object_id', (int) $object_id, $request );
+		$object_id = apply_filters( 'wpemerge.middleware.user.can.object_id', (int) $object_id, $capability, $request );
 		$args = [$capability];
 
 		if ( $object_id !== 0 ) {
