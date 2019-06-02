@@ -28,7 +28,11 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 			'flash' => \WPEmerge\Flash\FlashMiddleware::class,
 			'oldinput' => \WPEmerge\Input\OldInputMiddleware::class,
 			'csrf' => \WPEmerge\Csrf\CsrfMiddleware::class,
+			'user.logged_in' => \WPEmerge\Middleware\UserLoggedInMiddleware::class,
+			'user.logged_out' => \WPEmerge\Middleware\UserLoggedOutMiddleware::class,
+			'user.can' => \WPEmerge\Middleware\UserCanMiddleware::class,
 		] );
+
 		$this->extendConfig( $container, 'middleware_groups', [
 			'wpemerge' => [
 				'flash',
@@ -40,6 +44,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 			'ajax' => [],
 			'admin' => [],
 		] );
+
 		$this->extendConfig( $container, 'middleware_priority', [] );
 
 		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = function ( $c ) {
