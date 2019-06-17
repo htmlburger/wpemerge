@@ -274,12 +274,6 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return void
 	 */
 	public function registerAdminAction() {
-		global $pagenow;
-
-		if ( $pagenow !== 'admin.php' ) {
-			return;
-		}
-
 		$page_hook = $this->getAdminPageHook();
 		$hook_suffix = $this->getAdminHook( $page_hook );
 
