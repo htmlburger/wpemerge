@@ -37,6 +37,10 @@ class RequestTest extends WP_UnitTestCase {
 		$expected = 'PUT';
 		$subject = (new Request( 'POST', '', ['X-HTTP-METHOD-OVERRIDE' => ['PATCH']] ))->withParsedBody( ['_method' => $expected] );
 		$this->assertEquals( $expected, $subject->getMethod() );
+
+		$expected = 'POST';
+		$subject = (new Request( 'POST', '' ))->withParsedBody( ['_method' => 'INVALID'] );
+		$this->assertEquals( $expected, $subject->getMethod() );
 	}
 
 	/**
