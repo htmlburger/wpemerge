@@ -13,6 +13,8 @@ use WPEmerge\Facades\Response;
 use WPEmerge\Facades\View;
 
 /**
+ * Create a "blank" response.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::response()
  * @return \Psr\Http\Message\ResponseInterface
@@ -22,6 +24,8 @@ function response() {
 }
 
 /**
+ * Create a response with the specified string as its body.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::output()
  * @param  string                              $output
@@ -32,6 +36,8 @@ function output( $output ) {
 }
 
 /**
+ * Create a response with the specified data encoded as JSON as its body.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::json()
  * @param  mixed                               $data
@@ -42,6 +48,8 @@ function json( $data ) {
 }
 
 /**
+ * Create a redirect response.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::redirect()
  * @return \WPEmerge\Responses\RedirectResponse
@@ -51,6 +59,8 @@ function redirect() {
 }
 
 /**
+ * Create a view.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::view()
  * @param  string|array<string>         $views
@@ -61,6 +71,8 @@ function view( $views ) {
 }
 
 /**
+ * Create a response with the specified error status code.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Responses\ResponseService::error()
  * @param  integer                             $status
@@ -71,6 +83,8 @@ function error( $status ) {
 }
 
 /**
+ * Output the specified view.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\View\ViewService::make()
  * @see    \WPEmerge\View\ViewInterface::toString()
@@ -85,6 +99,8 @@ function render( $views, $context = [] ) {
 }
 
 /**
+ * Output child layout content.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\View\PhpView::getLayoutContent()
  * @return void
@@ -94,6 +110,8 @@ function layout_content() {
 }
 
 /**
+ * Run a full middleware + handler pipeline independently of routes.
+ *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Kernels\HttpKernel::run()
  * @param  \WPEmerge\Requests\RequestInterface $request
