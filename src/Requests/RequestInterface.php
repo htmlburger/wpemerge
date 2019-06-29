@@ -9,23 +9,19 @@
 
 namespace WPEmerge\Requests;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * A representation of a request to the server.
  */
-interface RequestInterface {
+interface RequestInterface extends ServerRequestInterface {
 	/**
-	 * Create a new instance from php super globals.
-	 *
-	 * @return RequestInterface
-	 */
-	public static function fromGlobals();
-
-	/**
-	 * Get the request method.
+	 * Alias for ::getUri().
+	 * Even though URI and URL are slightly different things this alias returns the URI for simplicity/familiarity.
 	 *
 	 * @return string
 	 */
-	public function getMethod();
+	public function getUrl();
 
 	/**
 	 * Check if the request method is GET.
@@ -91,29 +87,31 @@ interface RequestInterface {
 	public function isAjax();
 
 	/**
-	 * Get the request url.
-	 *
-	 * @return string
-	 */
-	public function getUrl();
-
-	/**
-	 * Get a value from the GET parameters.
+	 * Get a value from the request attributes.
 	 *
 	 * @param  string $key
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function get( $key = '', $default = null );
+	public function attributes( $key = '', $default = null );
 
 	/**
-	 * Get a value from the POST parameters.
+	 * Get a value from the request query (i.e. $_GET).
 	 *
 	 * @param  string $key
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function post( $key = '', $default = null );
+	public function query( $key = '', $default = null );
+
+	/**
+	 * Get a value from the request body (i.e. $_POST).
+	 *
+	 * @param  string $key
+	 * @param  mixed  $default
+	 * @return mixed
+	 */
+	public function body( $key = '', $default = null );
 
 	/**
 	 * Get a value from the COOKIE parameters.
@@ -122,7 +120,7 @@ interface RequestInterface {
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public function cookie( $key = '', $default = null );
+	public function cookies( $key = '', $default = null );
 
 	/**
 	 * Get a value from the FILES parameters.

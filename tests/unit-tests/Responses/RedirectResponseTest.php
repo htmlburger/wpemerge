@@ -50,7 +50,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 		$expected = 'http://example.com/foobar?hello=world';
 		$request = Mockery::mock( RequestInterface::class );
 
-		$request->shouldReceive( 'headers' )
+		$request->shouldReceive( 'getHeaderLine' )
 			->with( 'Referer' )
 			->andReturn( $expected );
 
@@ -65,7 +65,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 		$expected = 'http://example.com/foobar?hello=world';
 		$request = Mockery::mock( RequestInterface::class );
 
-		$request->shouldReceive( 'headers' )
+		$request->shouldReceive( 'getHeaderLine' )
 			->with( 'Referer' )
 			->andReturn( null );
 
@@ -80,7 +80,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 		$expected = 'http://example.com/foobar?hello=world';
 		$request = Mockery::mock( RequestInterface::class );
 
-		$request->shouldReceive( 'headers' )
+		$request->shouldReceive( 'getHeaderLine' )
 			->with( 'Referer' )
 			->andReturn( null );
 
@@ -100,7 +100,7 @@ class RedirectResponseTest extends WP_UnitTestCase {
 		$url = 'http://example.com/foobar?hello=world';
 		$request = Mockery::mock( RequestInterface::class );
 
-		$request->shouldReceive( 'headers' )
+		$request->shouldReceive( 'getHeaderLine' )
 			->with( 'Referer' )
 			->andReturn( $url );
 

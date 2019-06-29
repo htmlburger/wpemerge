@@ -22,7 +22,7 @@ class OldInputMiddleware {
 	 */
 	public function handle( RequestInterface $request, Closure $next ) {
 		if ( OldInputService::enabled() && $request->isPost() ) {
-			OldInputService::set( $request->post() );
+			OldInputService::set( $request->body() );
 		}
 
 		return $next( $request );

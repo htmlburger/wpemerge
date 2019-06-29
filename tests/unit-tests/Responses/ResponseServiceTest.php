@@ -3,10 +3,10 @@
 namespace WPEmergeTests\Responses;
 
 use Mockery;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\ResponseService;
-use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 
 /**

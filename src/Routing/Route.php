@@ -106,12 +106,6 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, $arguments = [] ) {
-		$arguments = array_merge(
-			[$request],
-			$arguments,
-			array_values( $this->condition->getArguments( $request ) )
-		);
-
 		return call_user_func_array( [$this->getHandler(), 'execute'], $arguments );
 	}
 }

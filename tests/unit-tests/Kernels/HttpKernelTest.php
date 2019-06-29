@@ -46,17 +46,25 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route = Mockery::mock( RouteInterface::class );
 		$response = Mockery::mock( ResponseInterface::class );
 		$arguments = ['foo', 'bar'];
+		$route_arguments = ['baz'];
 		$subject = new HttpKernel( $this->app, $request, $this->router, $this->error_handler );
-
-		$route->shouldReceive( 'getMiddleware' )
-			->andReturn( [] );
 
 		$this->router->shouldReceive( 'execute' )
 			->andReturn( $route );
 
+		$request->shouldReceive( 'withAttribute' )
+			->andReturn( $request );
+
+		$route->shouldReceive( 'getArguments' )
+			->andReturn( $route_arguments );
+
+		$route->shouldReceive( 'getMiddleware' )
+			->andReturn( [] );
+
 		$route->shouldReceive( 'handle' )
-			->with( $request, $arguments )
-			->andReturn( $response );
+			->with( $request, array_merge( [$request], $arguments, array_values( $route_arguments ) ) )
+			->andReturn( $response )
+			->once();
 
 		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
 	}

@@ -32,7 +32,7 @@ class PipelineHandler {
 	 * @param string|\Closure $handler
 	 */
 	public function __construct( $handler ) {
-		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\' );
+		$this->handler = new Handler( $handler, '', '\\App\\Controllers\\Web\\' );
 	}
 
 	/**

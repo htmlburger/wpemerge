@@ -55,7 +55,7 @@ class RedirectResponse extends Psr7Response {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function back( $fallback = '', $status = 302 ) {
-		$url = $this->request->headers( 'Referer' );
+		$url = $this->request->getHeaderLine( 'Referer' );
 
 		if ( empty( $url ) ) {
 			$url = $fallback;

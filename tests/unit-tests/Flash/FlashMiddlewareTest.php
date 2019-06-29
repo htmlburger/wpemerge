@@ -5,7 +5,7 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Facades\Flash;
 use WPEmerge\Flash\FlashMiddleware;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
 
 /**
@@ -37,7 +37,7 @@ class FlashMiddlewareTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_Disabled_Ignore() {
-		$request = new Request( [], ['foo' => 'bar'], [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$this->flash->shouldReceive( 'enabled' )
 			->andReturn( false );
@@ -52,8 +52,7 @@ class FlashMiddlewareTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_Enabled_StoresAll() {
-		$expected = ['foo' => 'bar'];
-		$request = new Request( [], $expected, [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$this->flash->shouldReceive( 'enabled' )
 			->andReturn( true )

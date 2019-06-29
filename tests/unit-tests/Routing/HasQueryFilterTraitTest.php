@@ -3,7 +3,6 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;

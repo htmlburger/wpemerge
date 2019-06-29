@@ -5,7 +5,7 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Facades\OldInput;
 use WPEmerge\Input\OldInputMiddleware;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
 
 /**
@@ -37,7 +37,7 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_DisabledPostRequest_Ignore() {
-		$request = new Request( [], ['foo' => 'bar'], [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$request = Mockery::mock( RequestInterface::class );
 
 		$this->oldInput->shouldReceive( 'enabled' )
 			->andReturn( false );
@@ -52,12 +52,19 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	 */
 	public function testHandle_EnabledPostRequest_StoresAll() {
 		$expected = ['foo' => 'bar'];
-		$request = new Request( [], $expected, [], [], ['REQUEST_METHOD' => 'POST'], [] );
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'isPost' )
+			->andReturn( true );
+
+		$request->shouldReceive( 'body' )
+			->andReturn( $expected );
 
 		$this->oldInput->shouldReceive( 'enabled' )
 			->andReturn( true );
 		$this->oldInput->shouldReceive( 'set' )
-			->with( $expected );
+			->with( $expected )
+			->once();
 
 		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
 		$this->assertSame( $request, $result );
@@ -67,7 +74,10 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_EnabledGetRequest_Ignore() {
-		$request = new Request( ['foo' => 'bar'], [], [], [], ['REQUEST_METHOD' => 'GET'], [] );
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'isPost' )
+			->andReturn( false );
 
 		$this->oldInput->shouldReceive( 'enabled' )
 			->andReturn( true );

@@ -9,105 +9,79 @@
 
 namespace WPEmerge\Requests;
 
-use WPEmerge\Helpers\Url;
+use GuzzleHttp\Psr7\ServerRequest;
 use WPEmerge\Support\Arr;
 
 /**
  * A representation of a request to the server.
  */
-class Request implements RequestInterface {
+class Request extends ServerRequest implements RequestInterface {
 	/**
-	 * GET parameters.
-	 *
-	 * @var array
+	 * @codeCoverageIgnore
+	 * {@inheritDoc}
+	 * @return static
 	 */
-	protected $get = [];
+	public static function fromGlobals() {
+		$request = parent::fromGlobals();
+		$new = new self(
+			$request->getMethod(),
+			$request->getUri(),
+			$request->getHeaders(),
+			$request->getBody(),
+			$request->getProtocolVersion(),
+			$request->getServerParams()
+		);
+
+		return $new
+			->withCookieParams($_COOKIE)
+			->withQueryParams($_GET)
+			->withParsedBody($_POST)
+			->withUploadedFiles(self::normalizeFiles($_FILES));
+	}
 
 	/**
-	 * POST parameters.
-	 *
-	 * @var array
+	 * @codeCoverageIgnore
+	 * {@inheritDoc}
 	 */
-	protected $post = [];
-
-	/**
-	 * COOKIE parameters.
-	 *
-	 * @var array
-	 */
-	protected $cookie = [];
-
-	/**
-	 * FILES parameters.
-	 *
-	 * @var array
-	 */
-	protected $files = [];
-
-	/**
-	 * SERVER parameters.
-	 *
-	 * @var array
-	 */
-	protected $server = [];
-
-	/**
-	 * Headers.
-	 *
-	 * @var array
-	 */
-	protected $headers = [];
+	public function getUrl() {
+		return $this->getUri();
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function fromGlobals() {
-		return new static(
-			stripslashes_deep( $_GET ),
-			stripslashes_deep( $_POST ),
-			$_COOKIE,
-			$_FILES,
-			$_SERVER,
-			getallheaders()
-		);
-	}
+	protected function getMethodOverride( $default ) {
+		$valid_overrides = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
+		$override = '';
 
-	/**
-	 * Constructor.
-	 *
-	 * @param array $get
-	 * @param array $post
-	 * @param array $cookie
-	 * @param array $files
-	 * @param array $server
-	 * @param array $headers
-	 */
-	public function __construct( $get, $post, $cookie, $files, $server, $headers ) {
-		$this->get = $get;
-		$this->post = $post;
-		$this->cookie = $cookie;
-		$this->files = $files;
-		$this->server = $server;
-		$this->headers = $headers;
+		$header_override = (string) $this->getHeaderLine( 'X-HTTP-METHOD-OVERRIDE' );
+		if ( is_string( $header_override ) && ! empty( $header_override ) ) {
+			$override = strtoupper( $header_override );
+		}
+
+		$body_override = (string) $this->body( '_method', '' );
+		if ( is_string( $body_override ) && ! empty( $body_override ) ) {
+			$override = strtoupper( $body_override );
+		}
+
+		if ( ! empty( $override ) && in_array( $override, $valid_overrides, true ) ) {
+			return $override;
+		}
+
+		return $default;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function getMethod() {
-		$method = (string) $this->server( 'REQUEST_METHOD', 'GET' );
+		$method = parent::getMethod();
 
-		$header_override = (string) $this->headers( 'X-HTTP-METHOD-OVERRIDE' );
-		if ( $method === 'POST' && $header_override ) {
-			$method = strtoupper( $header_override );
+		if ( $method === 'POST' ) {
+			$method = $this->getMethodOverride( $method );
 		}
 
-		$body_override = (string) $this->post( '_method' );
-		if ( $method === 'POST' && $body_override ) {
-			$method = strtoupper( $body_override );
-		}
-
-		return strtoupper( $method );
+		return $method;
 	}
 
 	/**
@@ -170,21 +144,7 @@ class Request implements RequestInterface {
 	 * {@inheritDoc}
 	 */
 	public function isAjax() {
-		return $this->headers( 'X-Requested-With' ) === 'XMLHttpRequest';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getUrl() {
-		$https = $this->server( 'HTTPS' );
-
-		$protocol = $https ? 'https' : 'http';
-		$host = (string) $this->server( 'HTTP_HOST', '' );
-		$uri = (string) $this->server( 'REQUEST_URI', '' );
-		$uri = Url::addLeadingSlash( $uri );
-
-		return $protocol . '://' . $host . $uri;
+		return strtolower( $this->getHeaderLine( 'X-Requested-With' ) ) === 'xmlhttprequest';
 	}
 
 	/**
@@ -195,8 +155,8 @@ class Request implements RequestInterface {
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	protected function input( $source, $key = '', $default = null ) {
-		$source = isset( $this->{$source} ) && is_array( $this->{$source} ) ? $this->{$source} : [];
+	protected function get( $source, $key = '', $default = null ) {
+		$source = is_array( $source ) ? $source : [];
 
 		if ( empty( $key ) ) {
 			return $source;
@@ -207,49 +167,57 @@ class Request implements RequestInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
 	 */
-	public function get( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'get', $key, $default );
+	public function attributes( $key = '', $default = null ) {
+		return call_user_func( [$this, 'get'], $this->getAttributes(), $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
 	 */
-	public function post( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'post', $key, $default );
+	public function query( $key = '', $default = null ) {
+		return call_user_func( [$this, 'get'], $this->getQueryParams(), $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
 	 */
-	public function cookie( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'cookie', $key, $default );
+	public function body( $key = '', $default = null ) {
+		return call_user_func( [$this, 'get'], $this->getParsedBody(), $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
+	 */
+	public function cookies( $key = '', $default = null ) {
+		return call_user_func( [$this, 'get'], $this->getCookieParams(), $key, $default );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see ::get()
 	 */
 	public function files( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'files', $key, $default );
+		return call_user_func( [$this, 'get'], $this->getUploadedFiles(), $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
 	 */
 	public function server( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'server', $key, $default );
+		return call_user_func( [$this, 'get'], $this->getServerParams(), $key, $default );
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ::input()
+	 * @see ::get()
 	 */
 	public function headers( $key = '', $default = null ) {
-		return call_user_func( [$this, 'input'], 'headers', $key, $default );
+		return call_user_func( [$this, 'get'], $this->getHeaders(), $key, $default );
 	}
 }

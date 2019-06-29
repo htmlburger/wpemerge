@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use stdClass;
 use WPEmerge\Facades\Application;
-use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\CustomCondition;
@@ -22,7 +22,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->request = new Request( [], [], [], [], [], [] );
+		$this->request = Mockery::mock( RequestInterface::class );
 		$this->subject = new ConditionFactory( Application::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY ) );
 	}
 

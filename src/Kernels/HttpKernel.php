@@ -103,13 +103,26 @@ class HttpKernel implements HttpKernelInterface {
 			return null;
 		}
 
-		$handler = function () use ( $route ) {
-			$arguments = func_get_args();
-			$request = array_shift( $arguments );
-			return call_user_func( [$route, 'handle'], $request, $arguments );
+		$route_arguments = $route->getArguments( $request );
+
+		$request = $request
+			->withAttribute( 'route', $route )
+			->withAttribute( 'routeArguments', $route_arguments );
+
+		$handler = function ( $request ) use ( $route ) {
+			return call_user_func( [$route, 'handle'], $request, func_get_args() );
 		};
 
-		$response = $this->run( $request, $route->getMiddleware(), $handler, $arguments );
+		$response = $this->run(
+			$request,
+			$route->getMiddleware(),
+			$handler,
+			array_merge(
+				[$request],
+				$arguments,
+				$route_arguments
+			)
+		);
 
 		$container = $this->app->getContainer();
 		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
@@ -131,7 +144,7 @@ class HttpKernel implements HttpKernelInterface {
 			$response = ( new Pipeline() )
 				->pipe( $middleware )
 				->to( $handler )
-				->run( $request, array_merge( [$request], $arguments ) );
+				->run( $request, $arguments );
 		} catch ( Exception $exception ) {
 			$response = $this->error_handler->getResponse( $request, $exception );
 		}
@@ -200,7 +213,7 @@ class HttpKernel implements HttpKernelInterface {
 			return;
 		}
 
-		$action = $this->request->post( 'action', $this->request->get( 'action' ) );
+		$action = $this->request->body( 'action', $this->request->query( 'action' ) );
 		$action = sanitize_text_field( $action );
 
 		add_action( "wp_ajax_{$action}", [$this, 'actionAjax'] );

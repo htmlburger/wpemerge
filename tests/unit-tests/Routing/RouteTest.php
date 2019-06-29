@@ -4,10 +4,8 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WP_UnitTestCase;
@@ -140,10 +138,6 @@ class RouteTest extends WP_UnitTestCase {
 				return $expected;
 			} );
 
-		$condition->shouldReceive( 'getArguments' )
-			->with( $request )
-			->andReturn( ['foo', 'bar'] );
-
-		$this->assertSame( $expected, $subject->handle( $request, [$view] ) );
+		$this->assertSame( $expected, $subject->handle( $request, [$request, $view, 'foo', 'bar'] ) );
 	}
 }

@@ -77,7 +77,7 @@ class AjaxCondition implements ConditionInterface {
 	 * @return boolean
 	 */
 	protected function matchesActionRequirement( RequestInterface $request ) {
-		return $this->action === $request->post( 'action', $request->get( 'action' ) );
+		return $this->action === $request->body( 'action', $request->query( 'action' ) );
 	}
 
 	/**

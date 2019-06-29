@@ -59,7 +59,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 		$exception = new Exception();
 		$request = Mockery::mock( RequestInterface::class );
 
-		$request->shouldReceive( 'isAjax')
+		$request->shouldReceive( 'isAjax' )
 			->andReturn( true );
 
 		$subject = new ErrorHandler( null, true );
@@ -86,7 +86,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 		$request = Mockery::mock( RequestInterface::class );
 		$whoops = Mockery::mock( RunInterface::class );
 
-		$request->shouldReceive( 'isAjax')
+		$request->shouldReceive( 'isAjax' )
 			->andReturn( false );
 
 		$whoops->shouldReceive( RunInterface::EXCEPTION_HANDLER )

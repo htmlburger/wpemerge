@@ -5,7 +5,6 @@ namespace WPEmergeTests\Middleware;
 use Closure;
 use GuzzleHttp\Psr7;
 use Mockery;
-use WPEmerge\Requests\Request;
 use WPEmerge\Middleware\ExecutesMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
@@ -18,12 +17,15 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->subject = new ExecutesMiddlewareTraitTestImplementation();
-		$this->request = new Request( [], [], [], [], [], [] );
+		$this->request = Mockery::mock( RequestInterface::class );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		$this->subject = null;
+		$this->request = null;
 	}
 
 	/**
