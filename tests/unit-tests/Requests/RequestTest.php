@@ -121,6 +121,9 @@ class RequestTest extends WP_UnitTestCase {
 		$expected = 'foo';
 		$key = 'key';
 
+		$subject = (new Request( 'GET', '' ))->withAttribute( $key, $expected );
+		$this->assertEquals( $expected, $subject->attributes( $key ) );
+
 		$subject = (new Request( 'GET', '' ))->withQueryParams( [$key => $expected] );
 		$this->assertEquals( $expected, $subject->query( $key ) );
 
@@ -152,6 +155,9 @@ class RequestTest extends WP_UnitTestCase {
 	public function testGet_NonExistantKey_ReturnNull() {
 		$expected = null;
 		$key = 'key';
+
+		$subject = (new Request( 'GET', '' ));
+		$this->assertEquals( $expected, $subject->attributes( $key ) );
 
 		$subject = new Request( 'GET', '' );
 		$this->assertEquals( $expected, $subject->query( $key ) );
@@ -185,6 +191,9 @@ class RequestTest extends WP_UnitTestCase {
 		$expected = 'foo';
 		$key = 'key';
 
+		$subject = (new Request( 'GET', '' ));
+		$this->assertEquals( $expected, $subject->attributes( $key, $expected ) );
+
 		$subject = new Request( 'GET', '' );
 		$this->assertEquals( $expected, $subject->query( $key, $expected ) );
 
@@ -215,6 +224,9 @@ class RequestTest extends WP_UnitTestCase {
 	 */
 	public function testGet_NoKey_ReturnAll() {
 		$expected = ['foo' => 'bar'];
+
+		$subject = (new Request( 'GET', '' ))->withAttribute( 'foo', 'bar' );
+		$this->assertEquals( $expected, $subject->attributes() );
 
 		$subject = (new Request( 'GET', '' ))->withQueryParams( $expected );
 		$this->assertEquals( $expected, $subject->query() );
