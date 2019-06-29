@@ -33,10 +33,10 @@ class Request extends ServerRequest implements RequestInterface {
 		);
 
 		return $new
-			->withCookieParams($_COOKIE)
-			->withQueryParams($_GET)
-			->withParsedBody($_POST)
-			->withUploadedFiles(self::normalizeFiles($_FILES));
+			->withCookieParams( $_COOKIE )
+			->withQueryParams( $_GET )
+			->withParsedBody( $_POST )
+			->withUploadedFiles( self::normalizeFiles( $_FILES ) );
 	}
 
 	/**
@@ -52,19 +52,19 @@ class Request extends ServerRequest implements RequestInterface {
 	 */
 	protected function getMethodOverride( $default ) {
 		$valid_overrides = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
-		$override = '';
+		$override = $default;
 
 		$header_override = (string) $this->getHeaderLine( 'X-HTTP-METHOD-OVERRIDE' );
-		if ( is_string( $header_override ) && ! empty( $header_override ) ) {
+		if ( ! empty( $header_override ) ) {
 			$override = strtoupper( $header_override );
 		}
 
 		$body_override = (string) $this->body( '_method', '' );
-		if ( is_string( $body_override ) && ! empty( $body_override ) ) {
+		if ( ! empty( $body_override ) ) {
 			$override = strtoupper( $body_override );
 		}
 
-		if ( ! empty( $override ) && in_array( $override, $valid_overrides, true ) ) {
+		if ( in_array( $override, $valid_overrides, true ) ) {
 			return $override;
 		}
 
@@ -150,14 +150,12 @@ class Request extends ServerRequest implements RequestInterface {
 	/**
 	 * Get all values or a single one from an input type.
 	 *
-	 * @param  string $source
+	 * @param  array $source
 	 * @param  string $key
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
 	protected function get( $source, $key = '', $default = null ) {
-		$source = is_array( $source ) ? $source : [];
-
 		if ( empty( $key ) ) {
 			return $source;
 		}
