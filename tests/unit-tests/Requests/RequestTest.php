@@ -110,6 +110,7 @@ class RequestTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::get
+	 * @covers ::attributes
 	 * @covers ::query
 	 * @covers ::body
 	 * @covers ::cookies
@@ -145,6 +146,7 @@ class RequestTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::get
+	 * @covers ::attributes
 	 * @covers ::query
 	 * @covers ::body
 	 * @covers ::cookies
@@ -180,6 +182,7 @@ class RequestTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::get
+	 * @covers ::attributes
 	 * @covers ::query
 	 * @covers ::body
 	 * @covers ::cookies
@@ -215,6 +218,7 @@ class RequestTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::get
+	 * @covers ::attributes
 	 * @covers ::query
 	 * @covers ::body
 	 * @covers ::cookies
