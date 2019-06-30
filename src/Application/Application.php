@@ -148,12 +148,8 @@ class Application {
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 
-		$this->renderConfigurationExceptions( function () use ( $config, $run ) {
-			$this->loadRoutes(
-				Arr::get( $config, 'routes.web', '' ),
-				Arr::get( $config, 'routes.admin', '' ),
-				Arr::get( $config, 'routes.ajax', '' )
-			);
+		$this->renderConfigurationExceptions( function () use ( $run ) {
+			$this->loadRoutes();
 
 			if ( $run ) {
 				$kernel = $this->resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
@@ -235,47 +231,45 @@ class Application {
 	 * Load route definition files depending on the current request.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string $web
-	 * @param  string $admin
-	 * @param  string $ajax
 	 * @return void
 	 */
-	protected function loadRoutes( $web = '', $admin = '', $ajax = '' ) {
+	protected function loadRoutes() {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$this->loadRoutesFile( $ajax, [
-				'namespace' => '\\App\\Controllers\\Ajax\\',
-				'middleware' => ['ajax'],
-			] );
+			$this->loadRoutesGroup( 'ajax' );
 			return;
 		}
 
 		if ( is_admin() ) {
-			$this->loadRoutesFile( $admin, [
-				'namespace' => '\\App\\Controllers\\Admin\\',
-				'middleware' => ['admin'],
-			] );
+			$this->loadRoutesGroup( 'admin' );
 			return;
 		}
 
-		$this->loadRoutesFile( $web, [
-			'namespace' => '\\App\\Controllers\\Web\\',
-			'handler' => '\\WPEmerge\\Controllers\\WordPressController@handle',
-			'middleware' => ['web'],
-		] );
+		$this->loadRoutesGroup( 'web' );
 	}
 
 	/**
-	 * Load a route definition file, applying attributes to all routes defined within.
+	 * Load a route group applying default attributes, if any.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string               $file
-	 * @param  array<string, mixed> $attributes
+	 * @param  string $group
 	 * @return void
 	 */
-	protected function loadRoutesFile( $file, $attributes ) {
+	protected function loadRoutesGroup( $group ) {
+		$config = $this->resolve( WPEMERGE_CONFIG_KEY );
+		$file = Arr::get( $config, 'routes.' . $group . '.definitions', '' );
+		$attributes = Arr::get( $config, 'routes.' . $group . '.attributes', [] );
+
 		if ( empty( $file ) ) {
 			return;
 		}
+
+		$middleware = Arr::get( $attributes, 'middleware', [] );
+
+		if ( ! in_array( $group, $middleware, true ) ) {
+			$middleware = array_merge( [$group], $middleware );
+		}
+
+		$attributes['middleware'] = $middleware;
 
 		Route::attributes( $attributes )->group( $file );
 	}
