@@ -16,7 +16,6 @@ use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Facades\Response;
-use WPEmerge\Facades\Route;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
@@ -271,7 +270,8 @@ class Application {
 
 		$attributes['middleware'] = $middleware;
 
-		Route::attributes( $attributes )->group( $file );
+		$blueprint = $this->resolve( WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY );
+		$blueprint->attributes( $attributes )->group( $file );
 	}
 
 	/**
