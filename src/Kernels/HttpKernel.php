@@ -36,7 +36,7 @@ class HttpKernel implements HttpKernelInterface {
 	protected $app = null;
 
 	/**
-	 * Application.
+	 * Response service.
 	 *
 	 * @var ResponseService
 	 */

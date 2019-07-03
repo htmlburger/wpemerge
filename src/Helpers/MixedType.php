@@ -11,7 +11,8 @@ namespace WPEmerge\Helpers;
 
 class MixedType {
 	/**
-	 * Converts a value to an array containing this value unless it is an array
+	 * Converts a value to an array containing this value unless it is an array.
+	 * This will not convert objects like (array) casting does.
 	 *
 	 * @param  mixed $argument
 	 * @return array

@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Facades\Response;
+use WPEmerge\Facades\View;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
 
@@ -236,7 +236,7 @@ class RouteBlueprint {
 	 */
 	public function view( $views ) {
 		return $this->handle( function () use ( $views ) {
-			return Response::view( $views );
+			return View::make( $views );
 		} );
 	}
 

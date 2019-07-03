@@ -13,12 +13,19 @@ use Exception as PhpException;
 use Psr\Http\Message\ResponseInterface;
 use Whoops\RunInterface;
 use WPEmerge\Csrf\InvalidCsrfTokenException;
-use WPEmerge\Facades\Response;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\NotFoundException;
 use WPEmerge\Support\Arr;
 
 class ErrorHandler implements ErrorHandlerInterface {
+	/**
+	 * Response service.
+	 *
+	 * @var ResponseService
+	 */
+	protected $response_service = null;
+
 	/**
 	 * Pretty handler.
 	 *
@@ -37,10 +44,12 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
+	 * @param ResponseService   $response_service
 	 * @param RunInterface|null $whoops
 	 * @param boolean           $debug
 	 */
-	public function __construct( $whoops, $debug = false ) {
+	public function __construct( $response_service, $whoops, $debug = false ) {
+		$this->response_service = $response_service;
 		$this->whoops = $whoops;
 		$this->debug = $debug;
 	}
@@ -79,7 +88,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 		// @codeCoverageIgnoreEnd
 
 		if ( $exception instanceof NotFoundException ) {
-			return Response::error( 404 );
+			return $this->response_service->error( 404 );
 		}
 
 		return false;
@@ -95,7 +104,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 */
 	protected function toDebugResponse( RequestInterface $request, PhpException $exception ) {
 		if ( $request->isAjax() ) {
-			return Response::json( [
+			return $this->response_service->json( [
 				'message' => $exception->getMessage(),
 				'exception' => get_class( $exception ),
 				'file' => $exception->getFile(),
@@ -125,7 +134,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 		ob_start();
 		$this->whoops->$method( $exception );
 		$response = ob_get_clean();
-		return Response::output( $response )->withStatus( 500 );
+		return $this->response_service->output( $response )->withStatus( 500 );
 	}
 
 	/**
@@ -140,7 +149,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 		}
 
 		if ( ! $this->debug ) {
-			return Response::error( 500 );
+			return $this->response_service->error( 500 );
 		}
 
 		return $this->toDebugResponse( $request, $exception );

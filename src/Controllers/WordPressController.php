@@ -10,7 +10,7 @@
 namespace WPEmerge\Controllers;
 
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Response;
+use WPEmerge\Facades\View;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -44,7 +44,7 @@ class WordPressController {
 			);
 		}
 
-		return Response::view( $view )
+		return View::make( $view )
 			->toResponse()
 			->withStatus( http_response_code() );
 	}

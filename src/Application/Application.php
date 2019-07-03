@@ -15,7 +15,6 @@ use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ExceptionsServiceProvider;
-use WPEmerge\Facades\Response;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
@@ -343,7 +342,10 @@ class Application {
 			$handler = $this->resolve( WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY );
 
 			add_filter( 'wpemerge.pretty_errors.apply_admin_styles', '__return_false' );
-			Response::respond( $handler->getResponse( $request, $exception ) );
+
+			$response_service = $this->resolve( WPEMERGE_RESPONSE_SERVICE_KEY );
+			$response_service->respond( $handler->getResponse( $request, $exception ) );
+
 			wp_die();
 		}
 	}

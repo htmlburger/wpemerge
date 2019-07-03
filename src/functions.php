@@ -62,12 +62,12 @@ function redirect() {
  * Create a view.
  *
  * @codeCoverageIgnore
- * @see    \WPEmerge\Responses\ResponseService::view()
+ * @see    \WPEmerge\View\ViewService::make()
  * @param  string|array<string>         $views
  * @return \WPEmerge\View\ViewInterface
  */
 function view( $views ) {
-	return call_user_func_array( [Response::class, 'view'], func_get_args() );
+	return call_user_func_array( [View::class, 'make'], func_get_args() );
 }
 
 /**

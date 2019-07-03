@@ -7,6 +7,7 @@ use Mockery;
 use Whoops\RunInterface;
 use WPEmerge\Exceptions\ErrorHandler;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\NotFoundException;
 use WP_UnitTestCase;
 
@@ -17,13 +18,15 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ErrorHandler( null, false );
+		$this->response_service = new ResponseService( Mockery::mock( RequestInterface::class ) );
+		$this->subject = new ErrorHandler( $this->response_service, null, false );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
+		unset( $this->response_service );
 		unset( $this->subject );
 	}
 
@@ -62,7 +65,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 		$request->shouldReceive( 'isAjax' )
 			->andReturn( true );
 
-		$subject = new ErrorHandler( null, true );
+		$subject = new ErrorHandler( $this->response_service, null, true );
 		$response = $subject->getResponse( $request, $exception );
 		$response_body = $response->getBody();
 
@@ -95,7 +98,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 				echo $exception->getMessage();
 			} );
 
-		$subject = new ErrorHandler( $whoops, true );
+		$subject = new ErrorHandler( $this->response_service, $whoops, true );
 
 		$this->assertEquals( $expected, $subject->getResponse( $request, $exception )->getBody()->read( strlen( $expected ) ) );
 	}
@@ -109,7 +112,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	public function testGetResponse_DebugException_RethrowException() {
 		$exception = new Exception( 'Rethrown exception' );
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$subject = new ErrorHandler( null, true );
+		$subject = new ErrorHandler( $this->response_service, null, true );
 		$subject->getResponse( $request, $exception );
 	}
 }

@@ -13,7 +13,6 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use WPEmerge\Facades\View;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\View\ViewInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -216,23 +215,13 @@ class ResponseService {
 	}
 
 	/**
-	 * Get a view file representation.
-	 *
-	 * @param  string|array<string> $views
-	 * @return ViewInterface
-	 */
-	public function view( $views ) {
-		return View::make( $views );
-	}
-
-	/**
 	 * Get an error response, with status headers and rendering a suitable view as the body.
 	 *
 	 * @param  integer           $status
 	 * @return ResponseInterface
 	 */
 	public function error( $status ) {
-		return $this->view( [$status, 'error', 'index'] )
+		return View::make( [$status, 'error', 'index'] )
 			->toResponse()
 			->withStatus( $status );
 	}
