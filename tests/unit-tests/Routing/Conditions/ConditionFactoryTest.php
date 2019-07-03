@@ -30,8 +30,8 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$this->request = null;
-		$this->subject = null;
+		unset( $this->request );
+		unset( $this->subject );
 	}
 
 	/**

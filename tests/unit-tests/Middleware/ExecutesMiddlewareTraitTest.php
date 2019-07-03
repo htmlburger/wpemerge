@@ -24,8 +24,8 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		$this->subject = null;
-		$this->request = null;
+		unset( $this->subject );
+		unset( $this->request );
 	}
 
 	/**
