@@ -50,6 +50,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 		$container[ WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY ] = function ( $c ) {
 			$kernel = new HttpKernel(
 				$c[ WPEMERGE_APPLICATION_KEY ],
+				$c[ WPEMERGE_RESPONSE_SERVICE_KEY ],
 				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_ROUTER_KEY ],
 				$c[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ]

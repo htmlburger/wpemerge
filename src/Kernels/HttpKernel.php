@@ -13,9 +13,9 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
-use WPEmerge\Facades\Response;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Router;
@@ -34,6 +34,13 @@ class HttpKernel implements HttpKernelInterface {
 	 * @var Application
 	 */
 	protected $app = null;
+
+	/**
+	 * Application.
+	 *
+	 * @var ResponseService
+	 */
+	protected $response_service = null;
 
 	/**
 	 * Request.
@@ -61,17 +68,20 @@ class HttpKernel implements HttpKernelInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param Application           $app
+	 * @param ResponseService       $response_service
 	 * @param RequestInterface      $request
 	 * @param Router                $router
 	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
 		Application $app,
+		ResponseService $response_service,
 		RequestInterface $request,
 		Router $router,
 		ErrorHandlerInterface $error_handler
 	) {
 		$this->app = $app;
+		$this->response_service = $response_service;
 		$this->request = $request;
 		$this->router = $router;
 		$this->error_handler = $error_handler;
@@ -91,6 +101,19 @@ class HttpKernel implements HttpKernelInterface {
 
 		// Admin.
 		add_action( 'admin_init', [$this, 'registerAdminAction'] );
+	}
+
+	/**
+	 * Respond with the current response.
+	 *
+	 * @return void
+	 */
+	public function respond() {
+		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
+
+		if ( $response instanceof ResponseInterface ) {
+			$this->response_service->respond( $response );
+		}
 	}
 
 	/**
@@ -197,6 +220,8 @@ class HttpKernel implements HttpKernelInterface {
 				$wp_query->set_404();
 			}
 
+			add_action( 'wpemerge.respond', [$this, 'respond'] );
+
 			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 		}
 
@@ -232,7 +257,8 @@ class HttpKernel implements HttpKernelInterface {
 			return;
 		}
 
-		Response::respond( $response );
+		$this->response_service->respond( $response );
+
 		wp_die( '', '', ['response' => null] );
 	}
 
@@ -311,7 +337,7 @@ class HttpKernel implements HttpKernelInterface {
 		}
 
 		if ( ! headers_sent() ) {
-			Response::sendHeaders( $response );
+			$this->response_service->sendHeaders( $response );
 		}
 	}
 
@@ -323,10 +349,10 @@ class HttpKernel implements HttpKernelInterface {
 	public function actionAdmin() {
 		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
 
-		if ( $response === null ) {
+		if ( ! $response instanceof ResponseInterface ) {
 			return;
 		}
 
-		Response::sendBody( $response );
+		$this->response_service->sendBody( $response );
 	}
 }
