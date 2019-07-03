@@ -10,7 +10,6 @@
 namespace WPEmerge\Csrf;
 
 use Closure;
-use WPEmerge\Facades\Csrf as CsrfService;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -18,18 +17,34 @@ use WPEmerge\Requests\RequestInterface;
  */
 class CsrfMiddleware {
 	/**
+	 * CSRF service.
+	 *
+	 * @var Csrf
+	 */
+	protected $csrf = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Csrf $csrf
+	 */
+	public function __construct( $csrf ) {
+		$this->csrf = $csrf;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @throws InvalidCsrfTokenException
 	 */
 	public function handle( RequestInterface $request, Closure $next ) {
 		if ( ! $request->isReadVerb() ) {
-			$token = CsrfService::getTokenFromRequest( $request );
-			if ( ! CsrfService::isValidToken( $token ) ) {
+			$token = $this->csrf->getTokenFromRequest( $request );
+			if ( ! $this->csrf->isValidToken( $token ) ) {
 				throw new InvalidCsrfTokenException();
 			}
 		}
 
-		CsrfService::generateToken();
+		$this->csrf->generateToken();
 
 		return $next( $request );
 	}

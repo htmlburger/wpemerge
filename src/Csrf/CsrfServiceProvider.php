@@ -26,6 +26,10 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 			return new Csrf();
 		};
 
+		$container[ CsrfMiddleware::class ] = function ( $c ) {
+			return new CsrfMiddleware( $c[ WPEMERGE_CSRF_KEY ] );
+		};
+
 		Application::alias( 'Csrf', \WPEmerge\Facades\Csrf::class );
 	}
 
