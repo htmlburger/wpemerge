@@ -142,12 +142,8 @@ class ResponseService {
 	 * @return void
 	 */
 	protected function sendBodyWithoutLength( StreamInterface $body, $chunk_size ) {
-		while ( ! $body->eof() ) {
+		while ( connection_status() === CONNECTION_NORMAL && ! $body->eof() ) {
 			echo $body->read( $chunk_size );
-
-			if ( connection_status() !== CONNECTION_NORMAL ) {
-				break;
-			}
 		}
 	}
 
@@ -163,7 +159,7 @@ class ResponseService {
 	protected function sendBodyWithLength( StreamInterface $body, $length, $chunk_size ) {
 		$content_left = $length;
 
-		while ( $content_left > 0 ) {
+		while ( connection_status() === CONNECTION_NORMAL && $content_left > 0 ) {
 			$read = min( $chunk_size, $content_left );
 
 			if ( $read <= 0 ) {
@@ -173,10 +169,6 @@ class ResponseService {
 			echo $body->read( $read );
 
 			$content_left -= $read;
-
-			if ( connection_status() !== CONNECTION_NORMAL ) {
-				break;
-			}
 		}
 	}
 

@@ -75,16 +75,19 @@ class Csrf {
 	 * @return string
 	 */
 	public function getTokenFromRequest( RequestInterface $request ) {
-		if ( $request->query( $this->key ) ) {
-			return $request->query( $this->key );
+		$query = $request->query( $this->key );
+		if ( $query ) {
+			return $query;
 		}
 
-		if ( $request->body( $this->key ) ) {
-			return $request->body( $this->key );
+		$body = $request->body( $this->key );
+		if ( $body ) {
+			return $body;
 		}
 
-		if ( $request->getHeaderLine( $this->header ) ) {
-			return $request->getHeaderLine( $this->header );
+		$header = $request->getHeaderLine( $this->header );
+		if ( $header ) {
+			return $header;
 		}
 
 		return '';

@@ -246,11 +246,12 @@ class HttpKernel implements HttpKernelInterface {
 		global $pagenow, $typenow, $plugin_page;
 
 		$page_hook = '';
+
 		if ( isset( $plugin_page ) ) {
+			$the_parent = $pagenow;
+
 			if ( ! empty( $typenow ) ) {
 				$the_parent = $pagenow . '?post_type=' . $typenow;
-			} else {
-				$the_parent = $pagenow;
 			}
 
 			$page_hook = get_plugin_page_hook( $plugin_page, $the_parent );
@@ -269,16 +270,19 @@ class HttpKernel implements HttpKernelInterface {
 	protected function getAdminHook( $page_hook ) {
 		global $pagenow, $plugin_page;
 
-		$hook_suffix = '';
 		if ( ! empty( $page_hook ) ) {
-			$hook_suffix = $page_hook;
-		} else if ( isset( $plugin_page ) ) {
-			$hook_suffix = $plugin_page;
-		} else if ( isset( $pagenow ) ) {
-			$hook_suffix = $pagenow;
+			return $page_hook;
 		}
 
-		return $hook_suffix;
+		if ( isset( $plugin_page ) ) {
+			return $plugin_page;
+		}
+
+		if ( isset( $pagenow ) ) {
+			return $pagenow;
+		}
+
+		return '';
 	}
 
 	/**
