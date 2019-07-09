@@ -13,7 +13,7 @@ use WPEmerge\Support\AliasLoader;
 use Pimple\Container;
 
 if ( php_sapi_name() !== 'cli' && ! defined( 'ABSPATH' ) ) {
-	exit;
+	return;
 }
 
 // @codeCoverageIgnoreStart
