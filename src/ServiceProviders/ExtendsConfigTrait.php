@@ -33,7 +33,7 @@ trait ExtendsConfigTrait {
 
 		$container[ WPEMERGE_CONFIG_KEY ] = array_merge(
 			$container[ WPEMERGE_CONFIG_KEY ],
-			[ $key => $config ]
+			[$key => $config]
 		);
 	}
 }

@@ -59,6 +59,7 @@ class Application {
 	 * @var string[]
 	 */
 	protected $service_providers = [
+		ApplicationServiceProvider::class,
 		KernelsServiceProvider::class,
 		ExceptionsServiceProvider::class,
 		RequestsServiceProvider::class,
@@ -100,12 +101,6 @@ class Application {
 	public function __construct( Container $container, $render_configuration_exceptions = true ) {
 		$this->container = $container;
 		$this->render_configuration_exceptions = $render_configuration_exceptions;
-
-		$config = isset( $container[ WPEMERGE_CONFIG_KEY ] ) ? $container[ WPEMERGE_CONFIG_KEY ] : [];
-		$config = array_merge( [
-			'providers' => [],
-		], $config );
-		$container[ WPEMERGE_CONFIG_KEY ] = $config;
 	}
 
 	/**
@@ -186,10 +181,7 @@ class Application {
 	 * @return void
 	 */
 	protected function loadConfig( Container $container, $config ) {
-		$container[ WPEMERGE_CONFIG_KEY ] = array_merge(
-			$container[ WPEMERGE_CONFIG_KEY ],
-			$config
-		);
+		$container[ WPEMERGE_CONFIG_KEY ] = $config;
 	}
 
 	/**
@@ -202,7 +194,7 @@ class Application {
 	protected function loadServiceProviders( Container $container ) {
 		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
 			$this->service_providers,
-			$container[ WPEMERGE_CONFIG_KEY ]['providers']
+			Arr::get( $container[ WPEMERGE_CONFIG_KEY ], 'providers', [] )
 		);
 
 		$service_providers = array_map( function ( $service_provider ) {
