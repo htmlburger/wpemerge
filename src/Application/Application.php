@@ -75,6 +75,7 @@ class Application {
 	/**
 	 * Make a new application instance.
 	 *
+	 * @codeCoverageIgnore
 	 * @return self
 	 */
 	public static function make() {
