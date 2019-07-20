@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Application;
 
+use WPEmerge\Helpers\MixedType;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
@@ -25,12 +26,17 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$this->extendConfig( $container, 'providers', [] );
+
+		$upload_dir = wp_upload_dir();
+		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';
+		$this->extendConfig( $container, 'cache', $cache_dir );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function bootstrap( $container ) {
-		// Nothing to bootstrap.
+		$cache_dir = $container[ WPEMERGE_CONFIG_KEY ]['cache'];
+		wp_mkdir_p( $cache_dir );
 	}
 }
