@@ -25,6 +25,7 @@ use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\AliasLoader;
 use WPEmerge\Support\Arr;
+use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewServiceProvider;
 
 /**
@@ -69,6 +70,26 @@ class Application {
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,
 	];
+
+	/**
+	 * Make a new application instance.
+	 *
+	 * @return self
+	 */
+	public static function make() {
+		$container = new Container();
+		$container[ WPEMERGE_APPLICATION_KEY ] = function ( $container ) {
+			return new self( $container );
+		};
+
+		Facade::setFacadeApplication( $container );
+		AliasLoader::getInstance()->register();
+
+		/** @var $app self */
+		$app = $container[ WPEMERGE_APPLICATION_KEY ];
+
+		return $app;
+	}
 
 	/**
 	 * Constructor.

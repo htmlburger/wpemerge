@@ -62,7 +62,8 @@ class WPEmerge_Tests_Bootstrap {
 			$wp->query_vars = [];
 		}
 
-		WPEmerge\Facades\Application::bootstrap( [], false );
+		$app = WPEmerge\Application\Application::make();
+		$app->bootstrap( [], false );
 	}
 
 	/**

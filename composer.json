@@ -34,8 +34,7 @@
         },
         "files": [
             "config.php",
-            "src/functions.php",
-            "src/load.php"
+            "src/functions.php"
         ]
     },
     "require": {
