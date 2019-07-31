@@ -216,7 +216,7 @@ class Application {
 	/**
 	 * Register all service providers.
 	 *
-	 * @param  array<\WPEmerge\ServiceProviders\ServiceProviderInterface> $service_providers
+	 * @param  array<ServiceProviderInterface> $service_providers
 	 * @param  Container                                                  $container
 	 * @return void
 	 */
@@ -229,7 +229,7 @@ class Application {
 	/**
 	 * Bootstrap all service providers.
 	 *
-	 * @param  array<\WPEmerge\ServiceProviders\ServiceProviderInterface> $service_providers
+	 * @param  array<ServiceProviderInterface> $service_providers
 	 * @param  Container                                                  $container
 	 * @return void
 	 */
