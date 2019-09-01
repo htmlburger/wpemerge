@@ -70,8 +70,8 @@ class ResponseService {
 
 		// Headers
 		foreach ( $response->getHeaders() as $name => $values ) {
-			foreach ( $values as $value ) {
-				header( sprintf( '%s: %s', $name, $value ), false );
+			foreach ( $values as $i => $value ) {
+				header( sprintf( '%s: %s', $name, $value ), $i === 0 );
 			}
 		}
 	}
