@@ -1,11 +1,11 @@
 # wordpress test environment
-tmp/
+/tmp/
 
 # composer
-vendor/
+/vendor/
 
 # sami docs
-api-reference/
+/api-reference/
 
 # phpstorm
 .idea
