@@ -139,7 +139,7 @@ class ViewService {
 	 */
 	public function triggerPartialHooks( $name ) {
 		$core_partial = '/^(header|sidebar|footer)(?:-(.*?))?(\.|$)/i';
-		if ( preg_match( $core_partial, $name, $matches ) ) {
+		if ( preg_match( $core_partial, $name, $matches ) && apply_filters( "wpemerge.partials.{$matches[1]}.hook", true ) ) {
 			do_action( "get_{$matches[1]}", $matches[2] );
 		}
 	}
