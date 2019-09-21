@@ -92,9 +92,11 @@ class HttpKernel implements HttpKernelInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function bootstrap() {
-		// Web.
-		add_action( 'request', [$this, 'filterRequest'], 1000 );
-		add_action( 'template_include', [$this, 'filterTemplateInclude'], 1000 );
+		// Web. Use 3100 so it's high enough and has uncommonly used numbers
+		// before and after. For example, 1000 is too common and it would have 999 before it
+		// which is too common as well.).
+		add_action( 'request', [$this, 'filterRequest'], 3100 );
+		add_action( 'template_include', [$this, 'filterTemplateInclude'], 3100 );
 
 		// Ajax.
 		add_action( 'admin_init', [$this, 'registerAjaxAction'] );
