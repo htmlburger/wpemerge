@@ -27,7 +27,8 @@ class ResponsesServiceProvider implements ServiceProviderInterface {
 			return new ResponseService( $c[ WPEMERGE_REQUEST_KEY ] );
 		};
 
-		Application::alias( 'Response', ResponseFacade::class );
+		$app = $container[ WPEMERGE_APPLICATION_KEY ];
+		$app->alias( 'Response', ResponseFacade::class );
 	}
 
 	/**

@@ -9,7 +9,7 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Facades\Application;
+use WPEmerge\Application\Application;
 
 /**
  * Render view files with different engines depending on their filename
@@ -23,6 +23,13 @@ class NameProxyViewEngine implements ViewEngineInterface {
 	protected $default = WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY;
 
 	/**
+	 * Application.
+	 *
+	 * @var Application
+	 */
+	protected $app = null;
+
+	/**
 	 * Array of filename_suffix=>engine_container_key bindings
 	 *
 	 * @var array
@@ -32,10 +39,12 @@ class NameProxyViewEngine implements ViewEngineInterface {
 	/**
 	 * Constructor
 	 *
-	 * @param array  $bindings
-	 * @param string $default
+	 * @param Application $app
+	 * @param array       $bindings
+	 * @param string      $default
 	 */
-	public function __construct( $bindings, $default = '' ) {
+	public function __construct( Application $app, $bindings, $default = '' ) {
+		$this->app = $app;
 		$this->bindings = $bindings;
 
 		if ( ! empty( $default ) ) {
@@ -48,7 +57,7 @@ class NameProxyViewEngine implements ViewEngineInterface {
 	 */
 	public function exists( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine = Application::resolve( $engine_key );
+		$engine = $this->app->resolve( $engine_key );
 		return $engine->exists( $view );
 	}
 
@@ -57,7 +66,7 @@ class NameProxyViewEngine implements ViewEngineInterface {
 	 */
 	public function canonical( $view ) {
 		$engine_key = $this->getBindingForFile( $view );
-		$engine = Application::resolve( $engine_key );
+		$engine = $this->app->resolve( $engine_key );
 		return $engine->canonical( $view );
 	}
 
@@ -69,7 +78,7 @@ class NameProxyViewEngine implements ViewEngineInterface {
 		foreach ( $views as $view ) {
 			if ( $this->exists( $view ) ) {
 				$engine_key = $this->getBindingForFile( $view );
-				$engine = Application::resolve( $engine_key );
+				$engine = $this->app->resolve( $engine_key );
 				return $engine->make( [$view] );
 			}
 		}

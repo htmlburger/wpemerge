@@ -18,6 +18,7 @@ class ApplicationTest extends WP_UnitTestCase {
 
 		$this->container = new Container();
 		$this->subject = new Application( $this->container, false );
+		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this->subject;
 		$this->facade_application = Facade::getFacadeApplication();
 		Facade::setFacadeApplication( $this->container );
 	}

@@ -15,6 +15,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->container = Application::getContainer();
+		$this->app = $this->container[ WPEMERGE_APPLICATION_KEY ];
 	}
 
 	public function tearDown() {
@@ -22,6 +23,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 
 		unset( $this->container['engine_mockup'] );
 		unset( $this->container );
+		unset( $this->app );
 	}
 
 	/**
@@ -31,7 +33,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 	public function testConstruct_Bindings_Accepted() {
 		$expected = ['.foo' => 'foo', '.bar' => 'bar'];
 
-		$subject = new NameProxyViewEngine( $expected );
+		$subject = new NameProxyViewEngine( $this->app, $expected );
 
 		$this->assertEquals( $expected, $subject->getBindings() );
 	}
@@ -43,7 +45,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 	public function testConstruct_Default_Accepted() {
 		$expected = 'foo';
 
-		$subject = new NameProxyViewEngine( [], $expected );
+		$subject = new NameProxyViewEngine( $this->app, [], $expected );
 
 		$this->assertEquals( $expected, $subject->getDefaultBinding() );
 	}
@@ -53,7 +55,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 	 * @covers ::getDefaultBinding
 	 */
 	public function testConstruct_EmptyDefault_Ignored() {
-		$subject = new NameProxyViewEngine( [], '' );
+		$subject = new NameProxyViewEngine( $this->app, [], '' );
 
 		$this->assertNotEquals( '', $subject->getDefaultBinding() );
 	}
@@ -62,10 +64,14 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 	 * @covers ::getBindingForFile
 	 */
 	public function testGetBindingForFile() {
-		$subject = new NameProxyViewEngine( [
-			'.blade.php' => 'blade',
-			'.twig.php' => 'twig',
-		], 'default' );
+		$subject = new NameProxyViewEngine(
+			$this->app,
+			[
+				'.blade.php' => 'blade',
+				'.twig.php' => 'twig',
+			],
+			'default'
+		);
 
 		$this->assertEquals( 'blade', $subject->getBindingForFile( 'test.blade.php' ) );
 		$this->assertEquals( 'twig', $subject->getBindingForFile( 'test.twig.php' ) );
@@ -88,7 +94,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( $this->app, [], 'engine_mockup' );
 
 		$this->assertTrue( $subject->exists( $view ) );
 	}
@@ -111,7 +117,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( $this->app, [], 'engine_mockup' );
 
 		$this->assertEquals( $expected, $subject->canonical( $view ) );
 	}
@@ -137,7 +143,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( $this->app, [], 'engine_mockup' );
 
 		$this->assertEquals( $result, $subject->make( [$view] ) );
 	}
@@ -160,7 +166,7 @@ class NameProxyViewEngineTest extends WP_UnitTestCase {
 			return $mock;
 		};
 
-		$subject = new NameProxyViewEngine( [], 'engine_mockup' );
+		$subject = new NameProxyViewEngine( $this->app, [], 'engine_mockup' );
 
 		$subject->make( [$view] );
 	}

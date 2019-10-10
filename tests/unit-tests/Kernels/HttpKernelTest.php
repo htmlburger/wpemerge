@@ -6,6 +6,7 @@ use ArrayAccess;
 use Closure;
 use Exception;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Response as Psr7Response;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
@@ -54,6 +55,11 @@ class HttpKernelTest extends WP_UnitTestCase {
 		};
 		$subject = new HttpKernel( $this->app, $this->response_service, $this->request, $this->router, $this->error_handler );
 
+		$this->response_service->shouldReceive( 'output' )
+			->andReturnUsing( function ( $output ) {
+				return (new Psr7Response())->withBody( Psr7\stream_for( $output ) );
+			} );
+
 		$response = $subject->run( $this->request, [], $handler );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
 	}
@@ -68,6 +74,11 @@ class HttpKernelTest extends WP_UnitTestCase {
 			return $value;
 		};
 		$subject = new HttpKernel( $this->app, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->response_service->shouldReceive( 'json' )
+			->andReturnUsing( function ( $data ) {
+				return (new Psr7Response())->withBody( Psr7\stream_for( json_encode( $data ) ) );
+			} );
 
 		$response = $subject->run( $this->request, [], $handler );
 		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
@@ -171,7 +182,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 				HttpKernelTestMiddlewareStub3::class,
 			],
 			function () {
-				return 'Handler';
+				return (new Psr7Response())->withBody( Psr7\stream_for( 'Handler' ) );
 			}
 		);
 
@@ -195,7 +206,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 				HttpKernelTestMiddlewareStubWithParameters::class . ':Arg1,Arg2',
 			],
 			function () {
-				return '';
+				return (new Psr7Response())->withBody( Psr7\stream_for( '' ) );
 			}
 		);
 

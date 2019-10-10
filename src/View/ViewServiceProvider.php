@@ -40,8 +40,9 @@ class ViewServiceProvider implements ServiceProviderInterface {
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
 
-		Application::alias( 'View', \WPEmerge\Facades\View::class );
-		Application::alias( 'ViewEngine', \WPEmerge\Facades\ViewEngine::class );
+		$app = $container[ WPEMERGE_APPLICATION_KEY ];
+		$app->alias( 'View', \WPEmerge\Facades\View::class );
+		$app->alias( 'ViewEngine', \WPEmerge\Facades\ViewEngine::class );
 	}
 
 	/**

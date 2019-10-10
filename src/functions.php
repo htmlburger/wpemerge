@@ -9,8 +9,11 @@
 
 namespace WPEmerge;
 
+use WPEmerge\Facades\Application;
 use WPEmerge\Facades\Response;
 use WPEmerge\Facades\View;
+use WPEmerge\Requests\RequestInterface;
+use WPEmerge\View\PhpView;
 
 /**
  * Create a "blank" response.
@@ -106,7 +109,7 @@ function render( $views, $context = [] ) {
  * @return void
  */
 function layout_content() {
-	echo \WPEmerge\View\PhpView::getLayoutContent();
+	echo PhpView::getLayoutContent();
 }
 
 /**
@@ -114,13 +117,13 @@ function layout_content() {
  *
  * @codeCoverageIgnore
  * @see    \WPEmerge\Kernels\HttpKernel::run()
- * @param  \WPEmerge\Requests\RequestInterface $request
+ * @param  RequestInterface $request
  * @param  array<string>                       $middleware
  * @param  string|\Closure                     $handler
  * @param  array                               $arguments
  * @return \Psr\Http\Message\ResponseInterface
  */
-function run( \WPEmerge\Requests\RequestInterface $request, $middleware, $handler, $arguments = [] ) {
-	$kernel = \WPEmerge\Facades\Application::resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
+function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {
+	$kernel = Application::resolve( WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY );
 	return call_user_func_array( [$kernel, 'run'], func_get_args() );
 }
