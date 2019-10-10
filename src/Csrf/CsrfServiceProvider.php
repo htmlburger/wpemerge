@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Csrf;
 
-use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**

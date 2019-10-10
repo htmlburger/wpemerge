@@ -9,7 +9,6 @@
 
 namespace WPEmerge\View;
 
-use WPEmerge\Facades\Application;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;

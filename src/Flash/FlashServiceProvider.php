@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Flash;
 
-use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**

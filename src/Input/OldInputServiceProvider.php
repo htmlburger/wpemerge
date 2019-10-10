@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Input;
 
-use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**

@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Responses;
 
-use WPEmerge\Facades\Application;
 use WPEmerge\Facades\Response as ResponseFacade;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 

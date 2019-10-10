@@ -3,7 +3,6 @@
 namespace WPEmergeTests\Input;
 
 use Mockery;
-use WPEmerge\Facades\Flash;
 use WPEmerge\Flash\FlashMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;

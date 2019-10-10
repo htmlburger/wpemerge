@@ -11,7 +11,6 @@ namespace WPEmerge\Exceptions;
 
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
-use WPEmerge\Facades\Application;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
