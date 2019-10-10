@@ -26,6 +26,7 @@ class FlashMiddleware {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param Flash $flash
 	 */
 	public function __construct( Flash $flash ) {

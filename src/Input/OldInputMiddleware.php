@@ -26,6 +26,7 @@ class OldInputMiddleware {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param OldInput $old_input
 	 */
 	public function __construct( OldInput $old_input ) {
