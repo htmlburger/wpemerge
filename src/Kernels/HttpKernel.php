@@ -9,15 +9,18 @@
 
 namespace WPEmerge\Kernels;
 
+use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
-use WPEmerge\Routing\Pipeline;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\SortsMiddlewareTrait;
 
@@ -106,16 +109,100 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
-	 * Respond with the current response.
+	 * Convert a user returned response to a ResponseInterface instance if possible.
+	 * Return the original value if unsupported.
 	 *
-	 * @return void
+	 * @param  mixed $response
+	 * @return mixed
 	 */
-	public function respond() {
-		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
-
-		if ( $response instanceof ResponseInterface ) {
-			$this->response_service->respond( $response );
+	protected function toResponse( $response ) {
+		if ( is_string( $response ) ) {
+			return $this->response_service->output( $response );
 		}
+
+		if ( is_array( $response ) ) {
+			return $this->response_service->json( $response );
+		}
+
+		if ( $response instanceof ResponsableInterface ) {
+			return $response->toResponse();
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Execute a handler.
+	 *
+	 * @param  Handler           $handler
+	 * @param  array             $arguments
+	 * @return ResponseInterface
+	 */
+	protected function executeHandler( Handler $handler, $arguments = [] ) {
+		$response = call_user_func_array( [$handler, 'execute'], $arguments );
+		$response = $this->toResponse( $response );
+
+		if ( ! $response instanceof ResponseInterface ) {
+			throw new ConfigurationException(
+				'Response returned by controller is not valid ' .
+				'(expected ' . ResponseInterface::class . '; received ' . gettype( $response ) . ').'
+			);
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Execute an array of middleware recursively (last in, first out).
+	 *
+	 * @param  array<array<string>> $middleware
+	 * @param  RequestInterface     $request
+	 * @param  Closure              $next
+	 * @return ResponseInterface
+	 */
+	protected function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
+		$top_middleware = array_shift( $middleware );
+
+		if ( $top_middleware === null ) {
+			return $next( $request );
+		}
+
+		$top_middleware_next = function ( $request ) use ( $middleware, $next ) {
+			return $this->executeMiddleware( $middleware, $request, $next );
+		};
+
+		$class = $top_middleware[0];
+		$instance = $this->app->instantiate( $class );
+		$arguments = array_merge(
+			[$request, $top_middleware_next],
+			array_slice( $top_middleware, 1 )
+		);
+
+		return call_user_func_array( [$instance, 'handle'], $arguments );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {
+		$this->error_handler->register();
+
+		try {
+			$middleware = $this->expandMiddleware( $middleware );
+			$middleware = $this->uniqueMiddleware( $middleware );
+			$middleware = $this->sortMiddleware( $middleware );
+
+			$response = $this->executeMiddleware( $middleware, $request, function () use ( $handler, $arguments ) {
+				$handler = $handler instanceof Handler ? $handler : new Handler( $handler );
+				return $this->executeHandler( $handler, $arguments );
+			} );
+		} catch ( Exception $exception ) {
+			$response = $this->error_handler->getResponse( $request, $exception );
+		}
+
+		$this->error_handler->unregister();
+
+		return $response;
 	}
 
 	/**
@@ -156,27 +243,16 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Respond with the current response.
+	 *
+	 * @return void
 	 */
-	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {
-		$this->error_handler->register();
+	public function respond() {
+		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
 
-		try {
-			$middleware = $this->expandMiddleware( $middleware );
-			$middleware = $this->uniqueMiddleware( $middleware );
-			$middleware = $this->sortMiddleware( $middleware );
-
-			$response = ( new Pipeline() )
-				->pipe( $middleware )
-				->to( $handler )
-				->run( $request, $arguments );
-		} catch ( Exception $exception ) {
-			$response = $this->error_handler->getResponse( $request, $exception );
+		if ( $response instanceof ResponseInterface ) {
+			$this->response_service->respond( $response );
 		}
-
-		$this->error_handler->unregister();
-
-		return $response;
 	}
 
 	/**

@@ -54,7 +54,7 @@ trait SortsMiddlewareTrait {
 			$middleware = $middleware[0];
 		}
 
-		$increasing_priority = array_reverse( $this->middleware_priority );
+		$increasing_priority = array_reverse( $this->getMiddlewarePriority() );
 		$priority = array_search( $middleware, $increasing_priority );
 		return $priority !== false ? (int) $priority : -1;
 	}

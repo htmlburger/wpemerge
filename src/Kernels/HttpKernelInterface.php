@@ -25,15 +25,6 @@ interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	public function bootstrap();
 
 	/**
-	 * Return a response for the given request.
-	 *
-	 * @param  RequestInterface       $request
-	 * @param  array                  $arguments
-	 * @return ResponseInterface|null
-	 */
-	public function handle( RequestInterface $request, $arguments = [] );
-
-	/**
 	 * Run a response pipeline for the given request.
 	 *
 	 * @param  RequestInterface  $request
@@ -43,4 +34,13 @@ interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	 * @return ResponseInterface
 	 */
 	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] );
+
+	/**
+	 * Return a response for the given request.
+	 *
+	 * @param  RequestInterface       $request
+	 * @param  array                  $arguments
+	 * @return ResponseInterface|null
+	 */
+	public function handle( RequestInterface $request, $arguments = [] );
 }
