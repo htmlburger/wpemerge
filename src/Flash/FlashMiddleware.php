@@ -10,7 +10,6 @@
 namespace WPEmerge\Flash;
 
 use Closure;
-use WPEmerge\Facades\Flash as FlashService;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -18,14 +17,30 @@ use WPEmerge\Requests\RequestInterface;
  */
 class FlashMiddleware {
 	/**
+	 * Flash service.
+	 *
+	 * @var Flash
+	 */
+	protected $flash = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Flash $flash
+	 */
+	public function __construct( Flash $flash ) {
+		$this->flash = $flash;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, Closure $next ) {
 		$response = $next( $request );
 
-		if ( FlashService::enabled() ) {
-			FlashService::shift();
-			FlashService::save();
+		if ( $this->flash->enabled() ) {
+			$this->flash->shift();
+			$this->flash->save();
 		}
 
 		return $response;

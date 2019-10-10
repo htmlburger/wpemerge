@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Input;
 
 use Mockery;
-use WPEmerge\Facades\OldInput;
+use WPEmerge\Input\OldInput;
 use WPEmerge\Input\OldInputMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WP_UnitTestCase;
@@ -15,21 +15,15 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->oldInputBackup = OldInput::getFacadeRoot();
-		$this->oldInput = Mockery::mock();
-		OldInput::swap( $this->oldInput );
-
-		$this->subject = new OldInputMiddleware();
+		$this->old_input = Mockery::mock( OldInput::class );
+		$this->subject = new OldInputMiddleware( $this->old_input );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		OldInput::swap( $this->oldInputBackup );
-		unset( $this->oldInputBackup );
-		unset( $this->oldInput );
-
+		unset( $this->old_input );
 		unset( $this->subject );
 	}
 
@@ -39,9 +33,9 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 	public function testHandle_DisabledPostRequest_Ignore() {
 		$request = Mockery::mock( RequestInterface::class );
 
-		$this->oldInput->shouldReceive( 'enabled' )
+		$this->old_input->shouldReceive( 'enabled' )
 			->andReturn( false );
-		$this->oldInput->shouldNotReceive( 'set' );
+		$this->old_input->shouldNotReceive( 'set' );
 
 		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
 		$this->assertSame( $request, $result );
@@ -60,9 +54,9 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request->shouldReceive( 'body' )
 			->andReturn( $expected );
 
-		$this->oldInput->shouldReceive( 'enabled' )
+		$this->old_input->shouldReceive( 'enabled' )
 			->andReturn( true );
-		$this->oldInput->shouldReceive( 'set' )
+		$this->old_input->shouldReceive( 'set' )
 			->with( $expected )
 			->once();
 
@@ -79,9 +73,9 @@ class OldInputMiddlewareTest extends WP_UnitTestCase {
 		$request->shouldReceive( 'isPost' )
 			->andReturn( false );
 
-		$this->oldInput->shouldReceive( 'enabled' )
+		$this->old_input->shouldReceive( 'enabled' )
 			->andReturn( true );
-		$this->oldInput->shouldNotReceive( 'set' );
+		$this->old_input->shouldNotReceive( 'set' );
 
 		$result = $this->subject->handle( $request, function( $request ) { return $request; } );
 		$this->assertSame( $request, $result );

@@ -14,21 +14,15 @@ class FlashMiddlewareTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->flashBackup = Flash::getFacadeRoot();
-		$this->flash = Mockery::mock();
-		Flash::swap( $this->flash );
-
-		$this->subject = new FlashMiddleware();
+		$this->flash = Mockery::mock( \WPEmerge\Flash\Flash::class );
+		$this->subject = new FlashMiddleware( $this->flash );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		Flash::swap( $this->flashBackup );
-		unset( $this->flashBackup );
 		unset( $this->flash );
-
 		unset( $this->subject );
 	}
 

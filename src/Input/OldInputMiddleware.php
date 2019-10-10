@@ -10,7 +10,6 @@
 namespace WPEmerge\Input;
 
 use Closure;
-use WPEmerge\Facades\OldInput as OldInputService;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -18,11 +17,27 @@ use WPEmerge\Requests\RequestInterface;
  */
 class OldInputMiddleware {
 	/**
+	 * OldInput service.
+	 *
+	 * @var OldInput
+	 */
+	protected $old_input = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param OldInput $old_input
+	 */
+	public function __construct( OldInput $old_input ) {
+		$this->old_input = $old_input;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function handle( RequestInterface $request, Closure $next ) {
-		if ( OldInputService::enabled() && $request->isPost() ) {
-			OldInputService::set( $request->body() );
+		if ( $this->old_input->enabled() && $request->isPost() ) {
+			$this->old_input->set( $request->body() );
 		}
 
 		return $next( $request );

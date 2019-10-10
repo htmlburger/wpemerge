@@ -31,6 +31,10 @@ class FlashServiceProvider implements ServiceProviderInterface {
 			return new Flash( $session );
 		};
 
+		$container[ FlashMiddleware::class ] = function ( $c ) {
+			return new FlashMiddleware( $c[ WPEMERGE_FLASH_KEY ] );
+		};
+
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
 		$app->alias( 'Flash', \WPEmerge\Facades\Flash::class );
 	}
