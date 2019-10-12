@@ -10,7 +10,6 @@
 namespace WPEmerge\View;
 
 use Closure;
-use WPEmerge\Facades\ViewEngine;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\MixedType;
 
@@ -18,6 +17,13 @@ use WPEmerge\Helpers\MixedType;
  * Provide general view-related functionality.
  */
 class ViewService {
+	/**
+	 * View engine.
+	 *
+	 * @var ViewEngineInterface
+	 */
+	protected $engine = null;
+
 	/**
 	 * Global variables.
 	 *
@@ -31,6 +37,16 @@ class ViewService {
 	 * @var array
 	 */
 	protected $composers = [];
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param ViewEngineInterface $engine
+	 */
+	public function __construct( $engine ) {
+		$this->engine = $engine;
+	}
 
 	/**
 	 * Get global variables.
@@ -71,7 +87,7 @@ class ViewService {
 	 * @return array<Handler>
 	 */
 	public function getComposersForView( $view ) {
-		$view = ViewEngine::canonical( $view );
+		$view = $this->engine->canonical( $view );
 
 		$composers = [];
 
@@ -93,7 +109,7 @@ class ViewService {
 	 */
 	public function addComposer( $views, $composer ) {
 		$views = array_map( function ( $view ) {
-			return ViewEngine::canonical( $view );
+			return $this->engine->canonical( $view );
 		}, MixedType::toArray( $views ) );
 
 		$handler = new Handler( $composer, 'compose', '\\App\\ViewComposers\\' );
@@ -105,18 +121,23 @@ class ViewService {
 	}
 
 	/**
-	 * Get the composed context for a view.
-	 * Passes all arguments to the composer.
+	 * Composes a view instance with contexts in the following order: Global, Composers, Local.
 	 *
 	 * @param  ViewInterface $view
 	 * @return void
 	 */
 	public function compose( ViewInterface $view ) {
-		$composers = $this->getComposersForView( $view->getName() );
+		$global = ['global' => $this->getGlobals()];
+		$local = $view->getContext();
 
+		$view->with( $global );
+
+		$composers = $this->getComposersForView( $view->getName() );
 		foreach ( $composers as $composer ) {
 			$composer->execute( $view );
 		}
+
+		$view->with( $local );
 	}
 
 	/**
@@ -126,8 +147,7 @@ class ViewService {
 	 * @return ViewInterface
 	 */
 	public function make( $views ) {
-		$views = MixedType::toArray( $views );
-		return ViewEngine::make( $views );
+		return $this->engine->make( MixedType::toArray( $views ) );
 	}
 
 	/**

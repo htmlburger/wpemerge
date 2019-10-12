@@ -53,7 +53,9 @@ class PhpView implements ViewInterface {
 			return '';
 		}
 
-		return $view->render();
+		$clone = clone $view;
+		View::compose( $clone );
+		return $clone->render();
 	}
 
 	/**
@@ -109,27 +111,13 @@ class PhpView implements ViewInterface {
 			throw new ViewException( 'View must have a filepath.' );
 		}
 
-		$clone = clone $this;
-		static::$layout_content_stack[] = $clone->compose();
+		static::$layout_content_stack[] = $this;
 
 		if ( $this->getLayout() !== null ) {
 			return $this->getLayout()->toString();
 		}
 
 		return static::getLayoutContent();
-	}
-
-	/**
-	 * Compose the context.
-	 *
-	 * @return static $this
-	 */
-	protected function compose() {
-		$context = $this->getContext();
-		$this->with( ['global' => View::getGlobals()] );
-		View::compose( $this );
-		$this->with( $context );
-		return $this;
 	}
 
 	/**

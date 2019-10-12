@@ -2,8 +2,8 @@
 
 namespace WPEmergeTests\View;
 
+use Illuminate\View\Engines\EngineInterface;
 use Mockery;
-use WPEmerge\Facades\ViewEngine;
 use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewService;
 use WPEmerge\View\ViewInterface;
@@ -16,7 +16,8 @@ class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ViewService();
+		$this->engine = Mockery::mock( EngineInterface::class )->shouldIgnoreMissing();
+		$this->subject = Mockery::mock( ViewService::class, [$this->engine] )->makePartial();
 	}
 
 	public function tearDown() {
@@ -25,6 +26,7 @@ class ViewServiceTest extends WP_UnitTestCase {
 
 		Facade::clearResolvedInstance( WPEMERGE_VIEW_SERVICE_KEY );
 
+		unset( $this->engine );
 		unset( $this->subject );
 	}
 
@@ -74,6 +76,10 @@ class ViewServiceTest extends WP_UnitTestCase {
 		$view = Mockery::mock( ViewInterface::class );
 		$view->shouldReceive( 'getName' )
 			->andReturn( $view_name );
+		$view->shouldReceive( 'getContext' )
+			->andReturn( [] );
+		$view->shouldReceive( 'with' )
+			->andReturn( $view );
 
 		$mock = Mockery::mock();
 		$mock->shouldReceive( 'foobar' )
@@ -92,21 +98,99 @@ class ViewServiceTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::compose
+	 */
+	public function testCompose_GlobalContext() {
+		$context = ['foo' => 'bar'];
+		$expected = ['global' => $context];
+		$view = Mockery::mock( ViewInterface::class )->shouldIgnoreMissing();
+
+		$view->shouldReceive( 'with' )
+			->with( $expected )
+			->once();
+
+		$this->subject->addGlobals( $context );
+
+		$this->subject->compose( $view );
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::compose
+	 */
+	public function testCompose_ViewComposer() {
+		$expected = ['foo' => 'bar'];
+		$view = Mockery::mock( ViewInterface::class )->shouldIgnoreMissing();
+		$composer = Mockery::mock();
+
+		$view->shouldReceive( 'with' )
+			->with( $expected )
+			->once();
+
+		$composer->shouldReceive( 'execute' )
+			->andReturnUsing( function ( $view ) use ( $expected ) {
+				$view->with( $expected );
+			} );
+
+		$this->subject->shouldReceive( 'getComposersForView' )
+			->andReturn( [$composer] );
+
+		$this->subject->compose( $view );
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::compose
+	 */
+	public function testCompose_LocalContextOverridesViewComposerContext() {
+		$composer_context = ['foo' => 1, 'bar' => 1];
+		$local_context = ['baz' => 1];
+		$view = Mockery::mock( ViewInterface::class )->shouldIgnoreMissing();
+		$composer = Mockery::mock();
+
+		$view->shouldReceive( 'getContext' )
+			->andReturn( $local_context );
+
+		$composer->shouldReceive( 'execute' )
+			->andReturnUsing( function ( $view ) use ( $composer_context ) {
+				$view->with( $composer_context );
+			} );
+
+		$this->subject->shouldReceive( 'getComposersForView' )
+			->andReturn( [$composer] );
+
+		$view->shouldReceive( 'with' )
+			->with( $composer_context )
+			->once()
+			->ordered();
+
+		$view->shouldReceive( 'with' )
+			->with( $local_context )
+			->once()
+			->ordered();
+
+		$this->subject->compose( $view );
+
+		$this->assertTrue( true );
+	}
+
+	/**
 	 * @covers ::make
 	 */
 	public function testMake() {
 		$view = Mockery::mock( ViewInterface::class );
-		$subject = new ViewService();
 
-		ViewEngine::shouldReceive( 'make' )
+		$this->engine->shouldReceive( 'make' )
 			->with( ['foo'] )
 			->andReturn( $view );
 
-		ViewEngine::shouldReceive( 'make' )
+		$this->engine->shouldReceive( 'make' )
 			->with( ['foo', 'bar'] )
 			->andReturn( $view );
 
-		$this->assertSame( $view, $subject->make( 'foo' ) );
-		$this->assertSame( $view, $subject->make( ['foo', 'bar'] ) );
+		$this->assertSame( $view, $this->subject->make( 'foo' ) );
+		$this->assertSame( $view, $this->subject->make( ['foo', 'bar'] ) );
 	}
 }

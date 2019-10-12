@@ -28,8 +28,8 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		/** @var $container \Pimple\Container */
 		$this->extendConfig( $container, 'views', '' );
 
-		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function () {
-			return new ViewService();
+		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function ( $c ) {
+			return new ViewService( $c[ WPEMERGE_VIEW_ENGINE_KEY ] );
 		};
 
 		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function ( $c ) {
