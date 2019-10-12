@@ -10,8 +10,8 @@
 namespace WPEmerge\Controllers;
 
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\View;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\View\ViewService;
 
 /**
  * Handles normal WordPress requests without interfering
@@ -20,6 +20,23 @@ use WPEmerge\Requests\RequestInterface;
  * @codeCoverageIgnore
  */
 class WordPressController {
+	/**
+	 * View service.
+	 *
+	 * @var ViewService
+	 */
+	protected $view_service = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param ViewService $view_service
+	 */
+	public function __construct( ViewService $view_service ) {
+		$this->view_service = $view_service;
+	}
+
 	/**
 	 * Default WordPress handler.
 	 *
@@ -44,7 +61,7 @@ class WordPressController {
 			);
 		}
 
-		return View::make( $view )
+		return $this->view_service->make( $view )
 			->toResponse()
 			->withStatus( http_response_code() );
 	}

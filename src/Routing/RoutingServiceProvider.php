@@ -52,21 +52,21 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 				'attributes'  => [
 					'middleware' => ['web'],
 					'namespace' => '\\App\\Controllers\\Web\\',
-					'handler' => '\\WPEmerge\\Controllers\\WordPressController@handle',
+					'handler' => 'WPEmerge\\Controllers\\WordPressController@handle',
 				],
 			],
 			'admin' => [
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['admin'],
-					'namespace' => '\\App\\Controllers\\Admin\\',
+					'namespace' => 'App\\Controllers\\Admin\\',
 				],
 			],
 			'ajax' => [
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['ajax'],
-					'namespace' => '\\App\\Controllers\\Ajax\\',
+					'namespace' => 'App\\Controllers\\Ajax\\',
 				],
 			],
 		] );
