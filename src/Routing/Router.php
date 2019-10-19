@@ -11,6 +11,7 @@ namespace WPEmerge\Routing;
 
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -28,6 +29,13 @@ class Router implements HasRoutesInterface {
 	 * @var ConditionFactory
 	 */
 	protected $condition_factory = null;
+
+	/**
+	 * Handler factory.
+	 *
+	 * @var HandlerFactory
+	 */
+	protected $handler_factory = null;
 
 	/**
 	 * Group stack.
@@ -48,9 +56,11 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param ConditionFactory $condition_factory
+	 * @param HandlerFactory   $handler_factory
 	 */
-	public function __construct( ConditionFactory $condition_factory ) {
+	public function __construct( ConditionFactory $condition_factory, HandlerFactory $handler_factory ) {
 		$this->condition_factory = $condition_factory;
+		$this->handler_factory = $handler_factory;
 	}
 
 	/**
@@ -277,7 +287,7 @@ class Router implements HasRoutesInterface {
 	 * @return Handler
 	 */
 	protected function routeHandler( $handler, $namespace ) {
-		return new Handler( $handler, '', $namespace );
+		return $this->handler_factory->make( $handler, '', $namespace );
 	}
 
 	/**

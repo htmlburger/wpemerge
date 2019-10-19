@@ -29,7 +29,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		$this->extendConfig( $container, 'views', '' );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function ( $c ) {
-			return new ViewService( $c[ WPEMERGE_VIEW_ENGINE_KEY ] );
+			return new ViewService( $c[ WPEMERGE_VIEW_ENGINE_KEY ], $c[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] );
 		};
 
 		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function ( $c ) {

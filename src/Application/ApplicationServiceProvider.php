@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Application;
 
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
@@ -30,6 +31,10 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 		$upload_dir = wp_upload_dir();
 		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';
 		$this->extendConfig( $container, 'cache', $cache_dir );
+
+		$container[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] = function ( $c ) {
+			return new HandlerFactory();
+		};
 	}
 
 	/**

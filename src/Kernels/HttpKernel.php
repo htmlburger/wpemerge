@@ -16,6 +16,7 @@ use WPEmerge\Application\Application;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponsableInterface;
@@ -37,6 +38,13 @@ class HttpKernel implements HttpKernelInterface {
 	 * @var Application
 	 */
 	protected $app = null;
+
+	/**
+	 * Handler factory.
+	 *
+	 * @var HandlerFactory
+	 */
+	protected $handler_factory = null;
 
 	/**
 	 * Response service.
@@ -71,6 +79,7 @@ class HttpKernel implements HttpKernelInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param Application           $app
+	 * @param HandlerFactory        $handler_factory
 	 * @param ResponseService       $response_service
 	 * @param RequestInterface      $request
 	 * @param Router                $router
@@ -78,12 +87,14 @@ class HttpKernel implements HttpKernelInterface {
 	 */
 	public function __construct(
 		Application $app,
+		HandlerFactory $handler_factory,
 		ResponseService $response_service,
 		RequestInterface $request,
 		Router $router,
 		ErrorHandlerInterface $error_handler
 	) {
 		$this->app = $app;
+		$this->handler_factory = $handler_factory;
 		$this->response_service = $response_service;
 		$this->request = $request;
 		$this->router = $router;
@@ -193,7 +204,7 @@ class HttpKernel implements HttpKernelInterface {
 			$middleware = $this->sortMiddleware( $middleware );
 
 			$response = $this->executeMiddleware( $middleware, $request, function () use ( $handler, $arguments ) {
-				$handler = $handler instanceof Handler ? $handler : new Handler( $handler );
+				$handler = $handler instanceof Handler ? $handler : $this->handler_factory->make( $handler );
 				return $this->executeHandler( $handler, $arguments );
 			} );
 		} catch ( Exception $exception ) {

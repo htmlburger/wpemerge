@@ -96,3 +96,7 @@ if ( ! defined( 'WPEMERGE_OLD_INPUT_KEY' ) ) {
 if ( ! defined( 'WPEMERGE_CSRF_KEY' ) ) {
 	define( 'WPEMERGE_CSRF_KEY', 'wpemerge.csrf.csrf' );
 }
+
+if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {
+	define( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY', 'wpemerge.handlers.helper_factory' );
+}

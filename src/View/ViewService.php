@@ -11,6 +11,7 @@ namespace WPEmerge\View;
 
 use Closure;
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Helpers\MixedType;
 
 /**
@@ -23,6 +24,13 @@ class ViewService {
 	 * @var ViewEngineInterface
 	 */
 	protected $engine = null;
+
+	/**
+	 * Handler factory.
+	 *
+	 * @var HandlerFactory
+	 */
+	protected $handler_factory = null;
 
 	/**
 	 * Global variables.
@@ -43,9 +51,11 @@ class ViewService {
 	 *
 	 * @codeCoverageIgnore
 	 * @param ViewEngineInterface $engine
+	 * @param HandlerFactory $handler_factory
 	 */
-	public function __construct( $engine ) {
+	public function __construct( ViewEngineInterface $engine, HandlerFactory $handler_factory ) {
 		$this->engine = $engine;
+		$this->handler_factory = $handler_factory;
 	}
 
 	/**
@@ -112,7 +122,7 @@ class ViewService {
 			return $this->engine->canonical( $view );
 		}, MixedType::toArray( $views ) );
 
-		$handler = new Handler( $composer, 'compose', '\\App\\ViewComposers\\' );
+		$handler = $this->handler_factory->make( $composer, 'compose', '\\App\\ViewComposers\\' );
 
 		$this->composers[] = [
 			'views' => $views,

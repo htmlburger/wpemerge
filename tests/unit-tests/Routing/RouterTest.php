@@ -3,6 +3,8 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -23,7 +25,12 @@ class RouterTest extends WP_UnitTestCase {
 			'multiple' => \WPEmerge\Routing\Conditions\MultipleCondition::class,
 			'negate' => \WPEmerge\Routing\Conditions\NegateCondition::class,
 		] );
-		$this->subject = new Router( $this->condition_factory );
+		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
+		$this->factory_handler = Mockery::mock( Handler::class );
+		$this->subject = new Router( $this->condition_factory, $this->handler_factory );
+
+		$this->handler_factory->shouldReceive( 'make' )
+			->andReturn( $this->factory_handler );
 	}
 
 	public function tearDown() {
@@ -31,6 +38,7 @@ class RouterTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		unset( $this->condition_factory );
+		unset( $this->handler_factory );
 		unset( $this->subject );
 	}
 
@@ -155,7 +163,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::routeCondition
 	 */
 	public function testRouteCondition_Condition_ConditionInterface() {
-		$subject = new RouterTestImplementation( $this->condition_factory );
+		$subject = new RouterTestImplementation( $this->condition_factory, $this->handler_factory );
 
 		$this->assertInstanceOf( ConditionInterface::class, $subject->publicRouteCondition( '/' ) );
 
@@ -166,7 +174,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::routeCondition
 	 */
 	public function testRouteCondition_ConditionInterface_Route() {
-		$subject = new RouterTestImplementation( $this->condition_factory );
+		$subject = new RouterTestImplementation( $this->condition_factory, $this->handler_factory );
 		$condition = Mockery::mock( ConditionInterface::class );
 
 		$this->assertSame( $condition, $subject->publicRouteCondition( $condition ) );
@@ -178,7 +186,7 @@ class RouterTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No route condition specified
 	 */
 	public function testRouteCondition_NoCondition_Exception() {
-		$subject = new RouterTestImplementation( $this->condition_factory );
+		$subject = new RouterTestImplementation( $this->condition_factory, $this->handler_factory );
 
 		$subject->publicRouteCondition( null );
 	}
@@ -216,6 +224,10 @@ class RouterTest extends WP_UnitTestCase {
 		];
 
 		$route = null;
+
+		$this->factory_handler->shouldReceive( 'get' )
+			->andReturn( $route_attributes['handler'] );
+
 		$this->subject->group( $group_attributes, function () use ( $route_attributes, &$route ) {
 			$route = $this->subject->route( $route_attributes );
 		} );

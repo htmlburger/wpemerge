@@ -2,11 +2,13 @@
 
 namespace WPEmergeTests\View;
 
-use Illuminate\View\Engines\EngineInterface;
 use Mockery;
+use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewService;
 use WPEmerge\View\ViewInterface;
+use WPEmerge\View\ViewEngineInterface;
 use WP_UnitTestCase;
 
 /**
@@ -16,8 +18,13 @@ class ViewServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->engine = Mockery::mock( EngineInterface::class )->shouldIgnoreMissing();
-		$this->subject = Mockery::mock( ViewService::class, [$this->engine] )->makePartial();
+		$this->engine = Mockery::mock( ViewEngineInterface::class )->shouldIgnoreMissing();
+		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
+		$this->factory_handler = Mockery::mock( Handler::class );
+		$this->subject = Mockery::mock( ViewService::class, [$this->engine, $this->handler_factory] )->makePartial();
+
+		$this->handler_factory->shouldReceive( 'make' )
+			->andReturn( $this->factory_handler );
 	}
 
 	public function tearDown() {
@@ -27,6 +34,8 @@ class ViewServiceTest extends WP_UnitTestCase {
 		Facade::clearResolvedInstance( WPEMERGE_VIEW_SERVICE_KEY );
 
 		unset( $this->engine );
+		unset( $this->handler_factory );
+		unset( $this->factory_handler );
 		unset( $this->subject );
 	}
 
@@ -62,6 +71,9 @@ class ViewServiceTest extends WP_UnitTestCase {
 		$expected = function () { return []; };
 		$view = 'foo';
 
+		$this->factory_handler->shouldReceive( 'get' )
+			->andReturn( $expected );
+
 		$this->subject->addComposer( $view, $expected );
 
 		$this->assertSame( $expected, $this->subject->getComposersForView( $view )[0]->get() );
@@ -89,6 +101,9 @@ class ViewServiceTest extends WP_UnitTestCase {
 		$composer = function( $view ) use ( $mock ) {
 			$mock->foobar( $view );
 		};
+
+		$this->factory_handler->shouldReceive( 'execute' )
+			->andReturnUsing( $composer );
 
 		$this->subject->addComposer( $view_name, $composer );
 
