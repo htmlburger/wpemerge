@@ -278,8 +278,13 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route->shouldReceive( 'getMiddleware' )
 			->andReturn( [] );
 
-		$subject->shouldReceive( 'run' )
+		$route->shouldReceive( 'handle' )
 			->andReturn( $response );
+
+		$subject->shouldReceive( 'run' )
+			->andReturnUsing( function ( $request, $middleware, $handler ) {
+				return $handler( $request );
+			} );
 
 		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
 	}
