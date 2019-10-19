@@ -11,10 +11,10 @@ namespace WPEmerge\Responses;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use WPEmerge\Facades\View;
 use WPEmerge\Requests\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use WPEmerge\View\ViewService;
 
 /**
  * A collection of tools for the creation of responses.
@@ -28,13 +28,22 @@ class ResponseService {
 	protected $request = null;
 
 	/**
+	 * View service.
+	 *
+	 * @var ViewService
+	 */
+	protected $view_service = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
 	 * @param RequestInterface $request
+	 * @param ViewService      $view_service
 	 */
-	public function __construct( RequestInterface $request ) {
+	public function __construct( RequestInterface $request, ViewService $view_service ) {
 		$this->request = $request;
+		$this->view_service = $view_service;
 	}
 
 	/**
@@ -221,7 +230,7 @@ class ResponseService {
 	 * @return ResponseInterface
 	 */
 	public function error( $status ) {
-		return View::make( [$status, 'error', 'index'] )
+		return $this->view_service->make( [$status, 'error', 'index'] )
 			->toResponse()
 			->withStatus( $status );
 	}

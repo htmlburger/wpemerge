@@ -8,21 +8,28 @@ use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\ResponseService;
 use WP_UnitTestCase;
+use WPEmerge\View\ViewInterface;
+use WPEmerge\View\ViewService;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\ResponseService
  */
-class ResponseTest extends WP_UnitTestCase {
+class ResponseServiceTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new ResponseService( Mockery::mock( RequestInterface::class ) );
+		$this->request = Mockery::mock( RequestInterface::class );
+		$this->view_service = Mockery::mock( ViewService::class );
+		$this->subject = new ResponseService( $this->request, $this->view_service );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
-
 		Mockery::close();
+
+		unset( $this->request );
+		unset( $this->view_service );
+		unset( $this->subject );
 	}
 
 	protected function readStream( $stream, $chunk_size = 4096 ) {
@@ -75,10 +82,31 @@ class ResponseTest extends WP_UnitTestCase {
 		$expected1 = 404;
 		$expected2 = 500;
 
-		$subject1 = $this->subject->error( $expected1 );
-		$this->assertEquals( $expected1, $subject1->getStatusCode() );
+		$view = Mockery::mock( ViewInterface::class );
+		$response = Mockery::mock( ResponseInterface::class );
 
-		$subject2 = $this->subject->error( $expected2 );
-		$this->assertEquals( $expected2, $subject2->getStatusCode() );
+		$this->view_service->shouldReceive( 'make' )
+			->andReturn( $view );
+
+		$view->shouldReceive( 'toResponse' )
+			->andReturn( $response );
+
+		$response->shouldReceive( 'withStatus' )
+			->with( $expected1 )
+			->andReturn( $response )
+			->once()
+			->ordered();
+
+		$response->shouldReceive( 'withStatus' )
+			->with( $expected2 )
+			->andReturn( $response )
+			->once()
+			->ordered();
+
+		$response1 = $this->subject->error( $expected1 );
+		$response2 = $this->subject->error( $expected2 );
+
+		$this->assertSame( $response, $response1 );
+		$this->assertSame( $response, $response2 );
 	}
 }

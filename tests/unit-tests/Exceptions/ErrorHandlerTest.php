@@ -3,13 +3,16 @@
 namespace WPEmergeTests\Exceptions;
 
 use Exception;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Response;
 use Mockery;
 use Whoops\RunInterface;
+use WP_UnitTestCase;
 use WPEmerge\Exceptions\ErrorHandler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\NotFoundException;
-use WP_UnitTestCase;
+use WPEmerge\View\ViewService;
 
 /**
  * @coversDefaultClass \WPEmerge\Exceptions\ErrorHandler
@@ -18,7 +21,7 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->response_service = new ResponseService( Mockery::mock( RequestInterface::class ) );
+		$this->response_service = Mockery::mock( ResponseService::class );
 		$this->subject = new ErrorHandler( $this->response_service, null, false );
 	}
 
@@ -39,6 +42,11 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 		$exception = new NotFoundException();
 		$request = Mockery::mock( RequestInterface::class );
 
+		$this->response_service->shouldReceive( 'error' )
+			->andReturnUsing( function ( $status ) {
+				return (new Response())->withStatus( $status );
+			} );
+
 		$this->assertEquals( $expected, $this->subject->getResponse( $request, $exception )->getStatusCode() );
 	}
 
@@ -51,6 +59,11 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 		$exception = new Exception();
 		$request = Mockery::mock( RequestInterface::class );
 
+		$this->response_service->shouldReceive( 'error' )
+			->andReturnUsing( function ( $status ) {
+				return (new Response())->withStatus( $status );
+			} );
+
 		$this->assertEquals( $expected, $this->subject->getResponse( $request, $exception )->getStatusCode() );
 	}
 
@@ -61,11 +74,18 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 	public function testGetResponse_AjaxException_JsonResponse() {
 		$exception = new Exception();
 		$request = Mockery::mock( RequestInterface::class );
+		$subject = new ErrorHandler( $this->response_service, null, true );
 
 		$request->shouldReceive( 'isAjax' )
 			->andReturn( true );
 
-		$subject = new ErrorHandler( $this->response_service, null, true );
+		$this->response_service->shouldReceive( 'json' )
+			->andReturnUsing( function ( $data ) {
+				return (new Response())
+					->withHeader( 'Content-Type', 'application/json' )
+					->withBody( Psr7\stream_for( wp_json_encode( $data ) ) );
+			} );
+
 		$response = $subject->getResponse( $request, $exception );
 		$response_body = $response->getBody();
 
@@ -96,6 +116,12 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 			->with( $exception )
 			->andReturnUsing( function( $exception ) {
 				echo $exception->getMessage();
+			} );
+
+		$this->response_service->shouldReceive( 'output' )
+			->andReturnUsing( function ( $output ) {
+				return (new Response())
+					->withBody( Psr7\stream_for( $output ) );
 			} );
 
 		$subject = new ErrorHandler( $this->response_service, $whoops, true );
