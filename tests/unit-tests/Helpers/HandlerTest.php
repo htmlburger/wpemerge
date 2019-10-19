@@ -3,6 +3,8 @@
 namespace WPEmergeTests\Helpers;
 
 use Mockery;
+use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmerge\Helpers\Handler;
 use stdClass;
 use WP_UnitTestCase;
@@ -13,11 +15,24 @@ use WP_UnitTestCase;
 class HandlerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
+
+		$this->injection_factory = Mockery::mock( InjectionFactory::class );
+
+		$this->injection_factory->shouldReceive( 'make' )
+			->andReturnUsing( function ( $class ) {
+				if ( ! class_exists( $class ) ) {
+					throw new ClassNotFoundException();
+				}
+
+				return new $class();
+			} );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		unset( $this->injection_factory );
 	}
 
 	/**
@@ -27,7 +42,7 @@ class HandlerTest extends WP_UnitTestCase {
 	public function testConstruct() {
 		$expected = function() {};
 
-		$subject = new Handler( $expected );
+		$subject = new Handler( $this->injection_factory, $expected );
 
 		$this->assertSame( $expected, $subject->get() );
 	}
@@ -39,7 +54,7 @@ class HandlerTest extends WP_UnitTestCase {
 	public function testSet_Closure_Closure() {
 		$expected = function() {};
 
-		$subject = new Handler( $expected );
+		$subject = new Handler( $this->injection_factory, $expected );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -56,7 +71,7 @@ class HandlerTest extends WP_UnitTestCase {
 			'namespace' => '',
 		];
 
-		$subject = new Handler( '\WPEmergeTestTools\TestService', 'defaultMethod' );
+		$subject = new Handler( $this->injection_factory, '\WPEmergeTestTools\TestService', 'defaultMethod' );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -69,7 +84,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testSet_ClassWithoutMethodWithoutDefault_Exception() {
-		$subject = new Handler( '\WPEmergeTestTools\TestService' );
+		$subject = new Handler( $this->injection_factory, '\WPEmergeTestTools\TestService' );
 	}
 
 	/**
@@ -84,7 +99,7 @@ class HandlerTest extends WP_UnitTestCase {
 			'namespace' => '',
 		];
 
-		$subject = new Handler( '\WPEmergeTestTools\TestService@getTest' );
+		$subject = new Handler( $this->injection_factory, '\WPEmergeTestTools\TestService@getTest' );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -101,7 +116,7 @@ class HandlerTest extends WP_UnitTestCase {
 			'namespace' => '',
 		];
 
-		$subject = new Handler( '\WPEmergeTestTools\TestService::getTest' );
+		$subject = new Handler( $this->injection_factory, '\WPEmergeTestTools\TestService::getTest' );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -114,7 +129,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testSet_InvalidString_ThrowException() {
-		$subject = new Handler( '\WPEmergeTestTools\TestService' );
+		$subject = new Handler( $this->injection_factory, '\WPEmergeTestTools\TestService' );
 	}
 
 	/**
@@ -131,7 +146,7 @@ class HandlerTest extends WP_UnitTestCase {
 			$mock->execute( $mock, $stub );
 		};
 
-		$subject = new Handler( $closure );
+		$subject = new Handler( $this->injection_factory, $closure );
 		$subject->execute( $mock, $stub );
 		$this->assertTrue( true );
 	}
@@ -144,7 +159,7 @@ class HandlerTest extends WP_UnitTestCase {
 		$bar = 'bar';
 		$expected = (object) ['value' => $foo . $bar];
 
-		$subject = new Handler( HandlerTestControllerMock::class . '@foobar' );
+		$subject = new Handler( $this->injection_factory, HandlerTestControllerMock::class . '@foobar' );
 		$this->assertEquals( $expected, $subject->execute( 'foo', 'bar' ) );
 	}
 
@@ -157,7 +172,7 @@ class HandlerTest extends WP_UnitTestCase {
 			return $value;
 		};
 
-		$subject = new Handler( $closure );
+		$subject = new Handler( $this->injection_factory, $closure );
 		$this->assertSame( $expected, $subject->execute( $expected ) );
 	}
 
@@ -165,27 +180,28 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::execute
 	 */
 	public function testExecute_ClassWithPrefix_Execute() {
-		$subject = new Handler( 'HandlerTestMock@foo', '', '\\WPEmergeTests\\Helpers\\' );
+		$subject = new Handler( $this->injection_factory, 'HandlerTestMock@foo', '', '\\WPEmergeTests\\Helpers\\' );
+
 		$this->assertEquals( 'foo', $subject->execute() );
 	}
 
 	/**
 	 * @covers ::execute
-	 * @expectedException \WPEmerge\Application\ClassNotFoundException
+	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found
 	 */
 	public function testExecute_NonexistantClassWithPrefix_Exception() {
-		$subject = new Handler( 'HandlerTestMock@foo', '', '\\WPEmergeTests\\NonexistantNamespace\\' );
+		$subject = new Handler( $this->injection_factory, 'HandlerTestMock@foo', '', '\\WPEmergeTests\\NonexistantNamespace\\' );
 		$this->assertEquals( 'foo', $subject->execute() );
 	}
 
 	/**
 	 * @covers ::execute
-	 * @expectedException \WPEmerge\Application\ClassNotFoundException
+	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found - tried
 	 */
 	public function testExecute_ClassWithoutPrefix_Exception() {
-		$subject = new Handler( 'HandlerTestMock@foo' );
+		$subject = new Handler( $this->injection_factory, 'HandlerTestMock@foo' );
 		$subject->execute();
 	}
 }

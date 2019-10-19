@@ -74,8 +74,17 @@ class ApplicationTest extends WP_UnitTestCase {
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage must be bootstrapped first
 	 */
-	public function testVerifyBootstrap() {
+	public function testVerifyBootstrap_NotBootstrapped_Exception() {
 		$this->subject->resolve( 'foobar' );
+	}
+
+	/**
+	 * @covers ::verifyBootstrap
+	 */
+	public function testVerifyBootstrap_Bootstrapped_NoException() {
+		$this->subject->bootstrap( [], false );
+		$this->subject->resolve( 'foobar' );
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -134,7 +143,6 @@ class ApplicationTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::resolve
-	 * @covers ::verifyBootstrap
 	 */
 	public function testResolve_NonexistantKey_ReturnNull() {
 		$expected = null;
@@ -146,7 +154,6 @@ class ApplicationTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::resolve
-	 * @covers ::verifyBootstrap
 	 */
 	public function testResolve_ExistingKey_IsResolved() {
 		$expected = 'foobar';
@@ -157,55 +164,6 @@ class ApplicationTest extends WP_UnitTestCase {
 
 		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
-	}
-
-	/**
-	 * @covers ::instantiate
-	 * @covers ::verifyBootstrap
-	 */
-	public function testInstantiate_UnknownClass_CreateFreshInstance() {
-		$class = \WPEmergeTestTools\TestService::class;
-
-		$this->subject->bootstrap( [], false );
-		$instance1 = $this->subject->instantiate( $class );
-		$instance2 = $this->subject->instantiate( $class );
-
-		$this->assertInstanceOf( $class, $instance1 );
-		$this->assertInstanceOf( $class, $instance2 );
-		$this->assertNotSame( $instance1, $instance2 );
-	}
-
-	/**
-	 * @covers ::instantiate
-	 * @expectedException \WPEmerge\Application\ClassNotFoundException
-	 * @expectedExceptionMessage Class not found
-	 */
-	public function testInstantiate_UnknownNonexistantClass_Exception() {
-		$class = \WPEmergeTestTools\NonExistantClass::class;
-
-		$this->subject->bootstrap( [], false );
-		$this->subject->instantiate( $class );
-	}
-
-	/**
-	 * @covers ::instantiate
-	 * @covers ::verifyBootstrap
-	 */
-	public function testInstantiate_KnownClass_ResolveInstanceFromContainer() {
-		$expected = rand(1, 999999);
-		$class = \WPEmergeTestTools\TestService::class;
-
-		$container = $this->subject->getContainer();
-		$container[ $class ] = function() use ( $expected, $class ) {
-			$instance = new $class();
-			$instance->setTest( $expected );
-			return $instance;
-		};
-
-		$this->subject->bootstrap( [], false );
-		$instance = $this->subject->instantiate( $class );
-
-		$this->assertEquals( $expected, $instance->getTest() );
 	}
 }
 

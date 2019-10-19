@@ -7,9 +7,7 @@
  * @link      https://wpemerge.com/
  */
 
-namespace WPEmerge\Application;
-
-use WPEmerge\Exceptions\ConfigurationException;
+namespace WPEmerge\Exceptions;
 
 class ClassNotFoundException extends ConfigurationException {
 

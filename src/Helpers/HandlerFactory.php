@@ -9,10 +9,29 @@
 
 namespace WPEmerge\Helpers;
 
+use WPEmerge\Application\InjectionFactory;
+
 /**
  * Handler factory.
  */
 class HandlerFactory {
+	/**
+	 * Injection Factory.
+	 *
+	 * @var InjectionFactory
+	 */
+	protected $injection_factory = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param InjectionFactory $injection_factory
+	 */
+	public function __construct( InjectionFactory $injection_factory ) {
+		$this->injection_factory = $injection_factory;
+	}
+
 	/**
 	 * Make a Handler.
 	 *
@@ -24,6 +43,6 @@ class HandlerFactory {
 	 * @return Handler
 	 */
 	public function make( $raw_handler, $default_method = '', $namespace = '' ) {
-		return new Handler( $raw_handler, $default_method, $namespace );
+		return new Handler( $this->injection_factory, $raw_handler, $default_method, $namespace );
 	}
 }

@@ -315,29 +315,6 @@ class Application {
 	}
 
 	/**
-	 * Create and return a class instance.
-	 *
-	 * @throws ClassNotFoundException
-	 * @param  string $class
-	 * @return object
-	 */
-	public function instantiate( $class ) {
-		$this->verifyBootstrap();
-
-		$instance = $this->resolve( $class );
-
-		if ( $instance === null ) {
-			if ( ! class_exists( $class ) ) {
-				throw new ClassNotFoundException( 'Class not found: ' . $class );
-			}
-
-			$instance = new $class();
-		}
-
-		return $instance;
-	}
-
-	/**
 	 * Catch any configuration exceptions and short-circuit to an error page.
 	 *
 	 * @codeCoverageIgnore

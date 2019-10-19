@@ -21,6 +21,14 @@ if ( ! defined( 'WPEMERGE_APPLICATION_KEY' ) ) {
 	define( 'WPEMERGE_APPLICATION_KEY', 'wpemerge.application.application' );
 }
 
+if ( ! defined( 'WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY' ) ) {
+	define( 'WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY', 'wpemerge.application.injection_factory' );
+}
+
+if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {
+	define( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY', 'wpemerge.handlers.helper_factory' );
+}
+
 if ( ! defined( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY' ) ) {
 	define( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY', 'wpemerge.kernels.wordpress_http_kernel' );
 }
@@ -95,8 +103,4 @@ if ( ! defined( 'WPEMERGE_OLD_INPUT_KEY' ) ) {
 
 if ( ! defined( 'WPEMERGE_CSRF_KEY' ) ) {
 	define( 'WPEMERGE_CSRF_KEY', 'wpemerge.csrf.csrf' );
-}
-
-if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {
-	define( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY', 'wpemerge.handlers.helper_factory' );
 }

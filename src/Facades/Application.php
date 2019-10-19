@@ -23,7 +23,6 @@ use WPEmerge\Support\Facade;
  * @method static void bootstrap( array $config = [], boolean $run = true )
  * @method static void alias( string $alias, string $facade_class )
  * @method static mixed|null resolve( string $key )
- * @method static object instantiate( string $class )
  */
 class Application extends Facade {
 	protected static function getFacadeAccessor() {

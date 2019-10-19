@@ -10,14 +10,21 @@
 namespace WPEmerge\Helpers;
 
 use Closure;
+use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Facades\Application;
-use WPEmerge\Application\ClassNotFoundException;
 
 /**
  * Represent a generic handler - a Closure or a class method to be resolved from the service container
  */
 class Handler {
+	/**
+	 * Injection Factory.
+	 *
+	 * @var InjectionFactory
+	 */
+	protected $injection_factory = null;
+
 	/**
 	 * Parsed handler
 	 *
@@ -28,11 +35,14 @@ class Handler {
 	/**
 	 * Constructor
 	 *
-	 * @param string|Closure $raw_handler
-	 * @param string         $default_method
-	 * @param string         $namespace
+	 * @param InjectionFactory $injection_factory
+	 * @param string|Closure   $raw_handler
+	 * @param string           $default_method
+	 * @param string           $namespace
 	 */
-	public function __construct( $raw_handler, $default_method = '', $namespace = '' ) {
+	public function __construct( InjectionFactory $injection_factory, $raw_handler, $default_method = '', $namespace = '' ) {
+		$this->injection_factory = $injection_factory;
+
 		$handler = $this->parse( $raw_handler, $default_method, $namespace );
 
 		if ( $handler === null ) {
@@ -111,10 +121,10 @@ class Handler {
 		$method = $this->handler['method'];
 
 		try {
-			$instance = Application::instantiate( $class );
+			$instance = $this->injection_factory->make( $class );
 		} catch ( ClassNotFoundException $e ) {
 			try {
-				$instance = Application::instantiate( $namespace . $class );
+				$instance = $this->injection_factory->make( $namespace . $class );
 			} catch ( ClassNotFoundException $e ) {
 				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $namespace . $class );
 			}

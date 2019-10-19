@@ -13,6 +13,7 @@ use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
+use WPEmerge\Application\InjectionFactory;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
@@ -38,6 +39,13 @@ class HttpKernel implements HttpKernelInterface {
 	 * @var Application
 	 */
 	protected $app = null;
+
+	/**
+	 * Injection factory.
+	 *
+	 * @var InjectionFactory
+	 */
+	protected $injection_factory = null;
 
 	/**
 	 * Handler factory.
@@ -79,6 +87,7 @@ class HttpKernel implements HttpKernelInterface {
 	 *
 	 * @codeCoverageIgnore
 	 * @param Application           $app
+	 * @param InjectionFactory      $injection_factory
 	 * @param HandlerFactory        $handler_factory
 	 * @param ResponseService       $response_service
 	 * @param RequestInterface      $request
@@ -87,6 +96,7 @@ class HttpKernel implements HttpKernelInterface {
 	 */
 	public function __construct(
 		Application $app,
+		InjectionFactory $injection_factory,
 		HandlerFactory $handler_factory,
 		ResponseService $response_service,
 		RequestInterface $request,
@@ -94,6 +104,7 @@ class HttpKernel implements HttpKernelInterface {
 		ErrorHandlerInterface $error_handler
 	) {
 		$this->app = $app;
+		$this->injection_factory = $injection_factory;
 		$this->handler_factory = $handler_factory;
 		$this->response_service = $response_service;
 		$this->request = $request;
@@ -183,7 +194,7 @@ class HttpKernel implements HttpKernelInterface {
 		};
 
 		$class = $top_middleware[0];
-		$instance = $this->app->instantiate( $class );
+		$instance = $this->injection_factory->make( $class );
 		$arguments = array_merge(
 			[$request, $top_middleware_next],
 			array_slice( $top_middleware, 1 )
