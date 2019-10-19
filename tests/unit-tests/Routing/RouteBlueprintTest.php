@@ -8,6 +8,7 @@ use WPEmerge\Routing\RouteInterface;
 use WP_UnitTestCase;
 use WPEmerge\Routing\Router;
 use WPEmerge\View\ViewInterface;
+use WPEmerge\View\ViewService;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\RouteBlueprint
@@ -17,7 +18,8 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->router = Mockery::mock( Router::class )->shouldIgnoreMissing();
-		$this->subject = new RouteBlueprint( $this->router );
+		$this->view_service = Mockery::mock( ViewService::class );
+		$this->subject = Mockery::mock( RouteBlueprint::class, [$this->router, $this->view_service] )->makePartial();
 	}
 
 	public function tearDown() {
@@ -25,6 +27,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		unset( $this->router );
+		unset( $this->view_service );
 		unset( $this->subject );
 	}
 
@@ -243,27 +246,22 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::view
 	 */
 	public function testView() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
-		$contents = file_get_contents( $view );
-		$route = Mockery::mock( RouteInterface::class );
+		$view_name = 'foo';
+		$view = Mockery::mock( ViewInterface::class );
 		$handler = null;
 
-		$this->router->shouldReceive( 'route' )
-			->with( Mockery::on( function ( $arguments ) use ( &$handler ) {
-				$handler = $arguments['handler'];
-				return true;
-			} ) )
-			->andReturn( $route );
-
-		$this->router->shouldReceive( 'addRoute' )
-			->with( $route )
+		$this->view_service->shouldReceive( 'make' )
+			->with( $view_name )
+			->andReturn( $view )
 			->once();
 
-		$this->assertSame( $route, $this->subject->view( $view ) );
+		$this->subject->shouldReceive( 'handle' )
+			->andReturnUsing( function ( $handler ) {
+				return $handler();
+			} )
+			->once();
 
-		$response = $handler();
-		$this->assertInstanceOf( ViewInterface::class, $response );
-		$this->assertEquals( $contents, $response->toString() );
+		$this->assertSame( $view, $this->subject->view( $view_name ) );
 	}
 
 	/**
@@ -303,37 +301,37 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::any
 	 */
 	public function testMethodShortcuts() {
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->get();
 		$this->assertEquals( ['GET', 'HEAD'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->post();
 		$this->assertEquals( ['POST'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->put();
 		$this->assertEquals( ['PUT'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->patch();
 		$this->assertEquals( ['PATCH'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->delete();
 		$this->assertEquals( ['DELETE'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->options();
 		$this->assertEquals( ['OPTIONS'], $subject->getAttribute( 'methods' ) );
 
 
-		$subject = new RouteBlueprint( $this->router );
+		$subject = new RouteBlueprint( $this->router, $this->view_service );
 		$subject->any();
 		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $subject->getAttribute( 'methods' ) );
 	}

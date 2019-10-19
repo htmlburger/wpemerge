@@ -83,7 +83,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container[ WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY ] = $container->factory( function ( $c ) {
-			return new RouteBlueprint( $c[ WPEMERGE_ROUTING_ROUTER_KEY ] );
+			return new RouteBlueprint( $c[ WPEMERGE_ROUTING_ROUTER_KEY ], $c[ WPEMERGE_VIEW_SERVICE_KEY ] );
 		} );
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];

@@ -9,9 +9,9 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Facades\View;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
+use WPEmerge\View\ViewService;
 
 /**
  * Provide a fluent interface for registering routes with the router.
@@ -23,6 +23,13 @@ class RouteBlueprint {
 	 * @var Router
 	 */
 	protected $router = null;
+
+	/**
+	 * View service.
+	 *
+	 * @var ViewService
+	 */
+	protected $view_service = null;
 
 	/**
 	 * Attributes.
@@ -37,8 +44,9 @@ class RouteBlueprint {
 	 * @codeCoverageIgnore
 	 * @param Router           $router
 	 */
-	public function __construct( Router $router ) {
+	public function __construct( Router $router, ViewService $view_service ) {
 		$this->router = $router;
+		$this->view_service = $view_service;
 	}
 
 	/**
@@ -236,7 +244,7 @@ class RouteBlueprint {
 	 */
 	public function view( $views ) {
 		return $this->handle( function () use ( $views ) {
-			return View::make( $views );
+			return $this->view_service->make( $views );
 		} );
 	}
 
