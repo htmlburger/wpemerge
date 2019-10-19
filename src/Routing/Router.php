@@ -328,7 +328,7 @@ class Router implements HasRoutesInterface {
 	 * @return RouteInterface
 	 */
 	public function execute( $request ) {
-		/** @var $routes \WPEmerge\Routing\RouteInterface[] */
+		/** @var $routes RouteInterface[] */
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {

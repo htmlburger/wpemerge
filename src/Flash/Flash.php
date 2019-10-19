@@ -34,7 +34,7 @@ class Flash {
 	/**
 	 * Root store array or object implementing ArrayAccess.
 	 *
-	 * @var array|\ArrayAccess
+	 * @var array|ArrayAccess
 	 */
 	protected $store = null;
 
@@ -49,7 +49,7 @@ class Flash {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param array|\ArrayAccess $store
+	 * @param array|ArrayAccess $store
 	 * @param string             $store_key
 	 */
 	public function __construct( &$store, $store_key = '__wpemergeFlash' ) {
@@ -84,7 +84,7 @@ class Flash {
 	/**
 	 * Get the store for flash messages.
 	 *
-	 * @return array|\ArrayAccess
+	 * @return array|ArrayAccess
 	 */
 	public function getStore() {
 		return $this->store;
@@ -93,7 +93,7 @@ class Flash {
 	/**
 	 * Set the store for flash messages.
 	 *
-	 * @param  array|\ArrayAccess $store
+	 * @param  array|ArrayAccess $store
 	 * @return void
 	 */
 	public function setStore( &$store ) {

@@ -36,7 +36,7 @@ class MultipleCondition implements ConditionInterface {
 	 * Get all assigned conditions
 	 *
 	 * @codeCoverageIgnore
-	 * @return array<\WPEmerge\Routing\Conditions\ConditionInterface>
+	 * @return array<ConditionInterface>
 	 */
 	public function getConditions() {
 		return $this->conditions;
