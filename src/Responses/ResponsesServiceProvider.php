@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Responses;
 
-use WPEmerge\Facades\Response as ResponseFacade;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 
 /**
@@ -27,7 +26,7 @@ class ResponsesServiceProvider implements ServiceProviderInterface {
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Response', ResponseFacade::class );
+		$app->alias( 'Response', \WPEmerge\Facades\Response::class );
 	}
 
 	/**

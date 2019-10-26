@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Facades\Route as RouteFacade;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
@@ -87,7 +86,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		} );
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Route', RouteFacade::class );
+		$app->alias( 'Route', \WPEmerge\Facades\Route::class );
 	}
 
 	/**
