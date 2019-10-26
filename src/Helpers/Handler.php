@@ -104,21 +104,19 @@ class Handler {
 	}
 
 	/**
-	 * Execute the parsed handler with any provided arguments and return the result
+	 * Make an instance of the handler.
 	 *
-	 * @param  mixed ,...$arguments
-	 * @return mixed
+	 * @return object
 	 */
-	public function execute() {
-		$arguments = func_get_args();
+	public function make() {
+		$handler = $this->get();
 
-		if ( $this->handler instanceof Closure ) {
-			return call_user_func_array( $this->handler, $arguments );
+		if ( $handler instanceof Closure ) {
+			return $handler;
 		}
 
-		$namespace = $this->handler['namespace'];
-		$class = $this->handler['class'];
-		$method = $this->handler['method'];
+		$namespace = $handler['namespace'];
+		$class = $handler['class'];
 
 		try {
 			$instance = $this->injection_factory->make( $class );
@@ -130,6 +128,23 @@ class Handler {
 			}
 		}
 
-		return call_user_func_array( [$instance, $method], $arguments );
+		return $instance;
+	}
+
+	/**
+	 * Execute the parsed handler with any provided arguments and return the result.
+	 *
+	 * @param  mixed ,...$arguments
+	 * @return mixed
+	 */
+	public function execute() {
+		$arguments = func_get_args();
+		$instance = $this->make();
+
+		if ( $instance instanceof Closure ) {
+			return call_user_func_array( $instance, $arguments );
+		}
+
+		return call_user_func_array( [$instance, $this->get()['method']], $arguments );
 	}
 }
