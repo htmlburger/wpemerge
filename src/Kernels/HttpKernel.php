@@ -241,7 +241,7 @@ class HttpKernel implements HttpKernelInterface {
 
 		$request = $request
 			->withAttribute( 'route', $route )
-			->withAttribute( 'routeArguments', $route_arguments );
+			->withAttribute( 'route_arguments', $route_arguments );
 
 		$handler = function ( $request ) use ( $route ) {
 			return call_user_func( [$route, 'handle'], $request, func_get_args() );
