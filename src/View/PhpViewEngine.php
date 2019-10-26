@@ -14,40 +14,35 @@ namespace WPEmerge\View;
  */
 class PhpViewEngine implements ViewEngineInterface {
 	/**
+	 * View compose action.
+	 *
+	 * @var callable
+	 */
+	protected $compose_action = null;
+
+	/**
 	 * View finder.
 	 *
 	 * @var PhpViewFilesystemFinder
 	 */
-	protected $finder = [];
+	protected $finder = null;
+
+	/**
+	 * Stack of views ready to be rendered.
+	 *
+	 * @var array<ViewInterface>
+	 */
+	protected $layout_content_stack = [];
 
 	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
+	 * @param callable                $compose_action
 	 * @param PhpViewFilesystemFinder $finder
 	 */
-	public function __construct( PhpViewFilesystemFinder $finder ) {
-		$this->setFinder( $finder );
-	}
-
-	/**
-	 * Get the custom views directories.
-	 *
-	 * @codeCoverageIgnore
-	 * @return PhpViewFilesystemFinder
-	 */
-	public function getFinder() {
-		return $this->finder;
-	}
-
-	/**
-	 * Set the view finder.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  PhpViewFilesystemFinder
-	 * @return void
-	 */
-	public function setFinder( PhpViewFilesystemFinder $finder ) {
+	public function __construct( callable $compose_action, PhpViewFilesystemFinder $finder ) {
+		$this->compose_action = $compose_action;
 		$this->finder = $finder;
 	}
 
@@ -55,14 +50,14 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * {@inheritDoc}
 	 */
 	public function exists( $view ) {
-		return $this->getFinder()->exists( $view );
+		return $this->finder->exists( $view );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function canonical( $view ) {
-		return $this->getFinder()->canonical( $view );
+		return $this->finder->canonical( $view );
 	}
 
 	/**
@@ -89,7 +84,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * @throws ViewNotFoundException
 	 */
 	protected function makeView( $name, $filepath ) {
-		$view = (new PhpView())
+		$view = (new PhpView( $this ))
 			->setName( $name )
 			->setFilepath( $filepath );
 
@@ -112,7 +107,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	protected function getViewLayout( PhpView $view ) {
 		$layout_headers = array_filter( get_file_data(
 			$view->getFilepath(),
-			['App Layout']
+			['Layout']
 		) );
 
 		if ( empty( $layout_headers ) ) {
@@ -126,5 +121,61 @@ class PhpViewEngine implements ViewEngineInterface {
 		}
 
 		return $this->makeView( $this->canonical( $layout_file ), $this->finder->resolveFilepath( $layout_file ) );
+	}
+
+	/**
+	 * Render a view.
+	 *
+	 * @param  PhpView $__view
+	 * @return string
+	 */
+	protected function renderView( PhpView $__view ) {
+		$__context = $__view->getContext();
+		ob_start();
+		extract( $__context, EXTR_OVERWRITE );
+		/** @noinspection PhpIncludeInspection */
+		include $__view->getFilepath();
+		return ob_get_clean();
+	}
+
+	/**
+	 * Push layout content to the top of the stack.
+	 *
+	 * @codeCoverageIgnore
+	 * @param PhpView $view
+	 * @return void
+	 */
+	public function pushLayoutContent( PhpView $view ) {
+		$this->layout_content_stack[] = $view;
+	}
+
+	/**
+	 * Pop the top-most layout content from the stack.
+	 *
+	 * @codeCoverageIgnore
+	 * @return PhpView|null
+	 */
+	public function popLayoutContent() {
+		return array_pop( $this->layout_content_stack );
+	}
+
+	/**
+	 * Pop the top-most layout content from the stack, render and return it.
+	 *
+	 * @codeCoverageIgnore
+	 * @return string
+	 */
+	public function getLayoutContent() {
+		$view = $this->popLayoutContent();
+
+		if ( ! $view ) {
+			return '';
+		}
+
+		$clone = clone $view;
+
+		call_user_func( $this->compose_action, $clone );
+
+		return $this->renderView( $clone );
 	}
 }

@@ -42,7 +42,8 @@ class RouteBlueprint {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Router           $router
+	 * @param Router      $router
+	 * @param ViewService $view_service
 	 */
 	public function __construct( Router $router, ViewService $view_service ) {
 		$this->router = $router;

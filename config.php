@@ -81,6 +81,10 @@ if ( ! defined( 'WPEMERGE_VIEW_SERVICE_KEY' ) ) {
 	define( 'WPEMERGE_VIEW_SERVICE_KEY', 'wpemerge.view.view_service' );
 }
 
+if ( ! defined( 'WPEMERGE_VIEW_COMPOSE_ACTION_KEY' ) ) {
+	define( 'WPEMERGE_VIEW_COMPOSE_ACTION_KEY', 'wpemerge.view.view_compose_action' );
+}
+
 if ( ! defined( 'WPEMERGE_VIEW_ENGINE_KEY' ) ) {
 	define( 'WPEMERGE_VIEW_ENGINE_KEY', 'wpemerge.view.view_engine' );
 }

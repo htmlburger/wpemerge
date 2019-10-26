@@ -4,9 +4,11 @@ namespace WPEmergeTests\View;
 
 use Mockery;
 use WPEmerge\Helpers\MixedType;
+use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\PhpViewFilesystemFinder;
 use WPEmerge\View\ViewInterface;
+use WPEmerge\View\ViewService;
 use WPEmergeTestTools\Helper;
 use WP_UnitTestCase;
 
@@ -17,14 +19,17 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$finder = new PhpViewFilesystemFinder( [] );
-		$this->subject = new PhpViewEngine( $finder );
+		$this->compose_action = [Mockery::mock()->shouldIgnoreMissing(), '__invoke'];
+		$this->finder = new PhpViewFilesystemFinder( [] );
+		$this->subject = new PhpViewEngine( $this->compose_action, $this->finder );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
+		unset( $this->compose_action );
+		unset( $this->finder );
 		unset( $this->subject );
 	}
 
@@ -97,5 +102,31 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 	 */
 	public function testMake_NoView() {
 		$this->subject->make( [''], [] );
+	}
+
+	/**
+	 * @covers ::renderView
+	 */
+	public function testRenderView_View_Render() {
+		$view = Mockery::mock( PhpView::class );
+		$file = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-context.php';
+		$expected = "Hello World!\n";
+
+		$view->shouldReceive( 'getContext' )
+			->andReturn( ['world' => 'World'] );
+
+		$view->shouldReceive( 'getFilepath' )
+			->andReturn( $file );
+
+		$this->subject->pushLayoutContent( $view );
+
+		$this->assertEquals( $expected, $this->subject->getLayoutContent() );
+	}
+
+	/**
+	 * @covers ::renderView
+	 */
+	public function testRenderView_NoView_EmptyString() {
+		$this->assertEquals( '', $this->subject->getLayoutContent() );
 	}
 }

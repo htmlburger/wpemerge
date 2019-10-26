@@ -11,7 +11,6 @@ namespace WPEmerge\View;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
-use WPEmerge\Facades\View;
 
 /**
  * Render a view file with php.
@@ -20,11 +19,11 @@ class PhpView implements ViewInterface {
 	use HasNameTrait, HasContextTrait;
 
 	/**
-	 * Stack of views ready to be rendered.
+	 * PHP view engine.
 	 *
-	 * @var array<ViewInterface>
+	 * @var PhpViewEngine
 	 */
-	protected static $layout_content_stack = [];
+	protected $engine = null;
 
 	/**
 	 * Filepath to view.
@@ -41,21 +40,13 @@ class PhpView implements ViewInterface {
 	protected $layout = null;
 
 	/**
-	 * Get the top-most layout content from the stack.
+	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @return string
+	 * @param PhpViewEngine $engine
 	 */
-	public static function getLayoutContent() {
-		$view = array_pop( static::$layout_content_stack );
-
-		if ( ! $view ) {
-			return '';
-		}
-
-		$clone = clone $view;
-		View::compose( $clone );
-		return $clone->render();
+	public function __construct( PhpViewEngine $engine ) {
+		$this->engine = $engine;
 	}
 
 	/**
@@ -111,27 +102,13 @@ class PhpView implements ViewInterface {
 			throw new ViewException( 'View must have a filepath.' );
 		}
 
-		static::$layout_content_stack[] = $this;
+		$this->engine->pushLayoutContent( $this );
 
 		if ( $this->getLayout() !== null ) {
 			return $this->getLayout()->toString();
 		}
 
-		return static::getLayoutContent();
-	}
-
-	/**
-	 * Render the view to a string.
-	 *
-	 * @return string
-	 */
-	protected function render() {
-		$__context = $this->getContext();
-		ob_start();
-		extract( $__context, EXTR_OVERWRITE );
-		/** @noinspection PhpIncludeInspection */
-		include $this->getFilepath();
-		return ob_get_clean();
+		return $this->engine->getLayoutContent();
 	}
 
 	/**

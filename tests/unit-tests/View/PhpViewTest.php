@@ -5,6 +5,7 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\Facades\View;
 use WPEmerge\View\PhpView;
+use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\ViewInterface;
 use WPEmergeTestTools\Helper;
 use WP_UnitTestCase;
@@ -16,21 +17,15 @@ class PhpViewTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->view = View::getFacadeRoot();
-		$this->viewMock = Mockery::mock()->shouldIgnoreMissing()->asUndefined();
-		View::swap( $this->viewMock );
-
-		$this->subject = new PhpView();
+		$this->engine = Mockery::mock( PhpViewEngine::class )->shouldIgnoreMissing();
+		$this->subject = new PhpView( $this->engine );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		View::swap( $this->view );
-		unset( $this->view );
-		unset( $this->viewMock );
-
+		unset( $this->engine );
 		unset( $this->subject );
 	}
 
@@ -56,40 +51,36 @@ class PhpViewTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::toString
-	 * @covers ::render
 	 */
-	public function testRender() {
-		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php';
-		$expected = file_get_contents( $view );
+	public function testToString_Layout() {
+		$layout = Mockery::mock( PhpView::class );
+		$expected = 'foo';
 
-		$this->subject->setName( $view );
-		$this->subject->setFilepath( $view );
+		$layout->shouldReceive( 'toString' )
+			->andReturn( $expected );
+
+		$this->subject
+			->setName( 'foo' )
+			->setFilepath( 'foo' )
+			->setLayout( $layout );
+
 		$this->assertEquals( $expected, $this->subject->toString() );
 	}
 
 	/**
 	 * @covers ::toString
 	 */
-	public function testToString_Layout() {
-		global $view_rendered;
+	public function testToString_NoLayout() {
+		$expected = 'foo';
 
-		list( $view, $layout, $expected, $handle ) = Helper::createLayoutView();
-
-		$layout = (new PhpView())
-			->setName( $layout )
-			->setFilepath( $layout );
+		$this->engine->shouldReceive( 'getLayoutContent' )
+			->andReturn( $expected );
 
 		$this->subject
-			->setName( $view )
-			->setFilepath( $view )
-			->setLayout( $layout );
+			->setName( 'foo' )
+			->setFilepath( 'foo' );
 
-		$this->assertEquals( $expected, trim( $this->subject->toString() ) );
-
-		// Ensure the child view is rendered last.
-		$this->assertEquals( 'child', $view_rendered );
-
-		Helper::deleteLayoutView( $handle );
+		$this->assertEquals( $expected, $this->subject->toString() );
 	}
 
 	/**

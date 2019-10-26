@@ -13,7 +13,6 @@ use WPEmerge\Facades\Application;
 use WPEmerge\Facades\Response;
 use WPEmerge\Facades\View;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\View\PhpView;
 
 /**
  * Create a "blank" response.
@@ -105,11 +104,12 @@ function render( $views, $context = [] ) {
  * Output child layout content.
  *
  * @codeCoverageIgnore
- * @see    \WPEmerge\View\PhpView::getLayoutContent()
+ * @see    \WPEmerge\View\PhpViewEngine::getLayoutContent()
  * @return void
  */
 function layout_content() {
-	echo PhpView::getLayoutContent();
+	$engine = Application::resolve( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
+	echo $engine->getLayoutContent();
 }
 
 /**

@@ -32,9 +32,17 @@ class ViewServiceProvider implements ServiceProviderInterface {
 			return new ViewService( $c[ WPEMERGE_VIEW_ENGINE_KEY ], $c[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] );
 		};
 
+		$container[ WPEMERGE_VIEW_COMPOSE_ACTION_KEY ] = function ( $c ) {
+			return function ( ViewInterface $view ) use ( $c ) {
+				$view_service = $c[ WPEMERGE_VIEW_SERVICE_KEY ];
+				$view_service->compose( $view );
+				return $view;
+			};
+		};
+
 		$container[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ] = function ( $c ) {
 			$finder = new PhpViewFilesystemFinder( MixedType::toArray( $c[ WPEMERGE_CONFIG_KEY ]['views'] ) );
-			return new PhpViewEngine( $finder );
+			return new PhpViewEngine( $c[ WPEMERGE_VIEW_COMPOSE_ACTION_KEY ], $finder );
 		};
 
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
