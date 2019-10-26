@@ -32,27 +32,37 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			'pretty_errors' => true,
 		] );
 
-		$container['whoops'] = function () {
+		$container[ PrettyPageHandler::class ] = function () {
+			$handler = new PrettyPageHandler();
+			$handler->addResourcePath( implode( DIRECTORY_SEPARATOR, [WPEMERGE_DIR, 'src', 'Exceptions', 'Whoops'] ) );
+
+			return $handler;
+		};
+
+		$container[ Run::class ] = function ( $c ) {
 			if ( ! class_exists( Run::class ) ) {
 				return null;
 			}
 
-			$handler = new PrettyPageHandler();
-			$handler->addResourcePath( implode( DIRECTORY_SEPARATOR, [WPEMERGE_DIR, 'src', 'Exceptions', 'Whoops'] ) );
-
 			$run = new Run();
 			$run->allowQuit( false );
-			$run->pushHandler( $handler );
+
+			$handler = $c[ PrettyPageHandler::class ];
+
+			if ( $handler ) {
+				$run->pushHandler( $handler );
+			}
+
 			return $run;
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) use ( $app ) {
-			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
+			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
 			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) use ( $app ) {
-			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c['whoops'] : null;
+			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
 			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
 		};
 	}
