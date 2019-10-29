@@ -101,52 +101,6 @@ class HttpKernelTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::handle
-	 */
-	public function testHandle_SatisfiedRequest_Response() {
-		$request = Mockery::mock( RequestInterface::class );
-		$route = Mockery::mock( RouteInterface::class );
-		$response = Mockery::mock( ResponseInterface::class );
-		$arguments = ['foo', 'bar'];
-		$route_arguments = ['baz'];
-		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $request, $this->router, $this->error_handler] )->makePartial();
-
-		$this->router->shouldReceive( 'execute' )
-			->andReturn( $route );
-
-		$request->shouldReceive( 'withAttribute' )
-			->andReturn( $request );
-
-		$route->shouldReceive( 'getArguments' )
-			->andReturn( $route_arguments );
-
-		$route->shouldReceive( 'getMiddleware' )
-			->andReturn( [] );
-
-		$route->shouldReceive( 'getHandler' )
-			->andReturn( $this->factory_handler );
-
-		$subject->shouldReceive( 'run' )
-			->andReturnUsing( function ( $request, $middleware, $handler ) use ( $response ) {
-				return $response;
-			} );
-
-		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
-	}
-
-	/**
-	 * @covers ::handle
-	 */
-	public function testHandle_UnsatisfiedRequest_Null() {
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->router->shouldReceive( 'execute' )
-			->andReturn( null );
-
-		$this->assertNull( $subject->handle( $this->request, [] ) );
-	}
-
-	/**
 	 * @covers ::run
 	 */
 	public function testRun_Middleware_ExecutedInOrder() {
@@ -214,6 +168,89 @@ class HttpKernelTest extends WP_UnitTestCase {
 			} );
 
 		$subject->run( $this->request, [], $handler );
+	}
+
+	/**
+	 * @covers ::handle
+	 */
+	public function testHandle_SatisfiedRequest_Response() {
+		$request = Mockery::mock( RequestInterface::class );
+		$route = Mockery::mock( RouteInterface::class );
+		$response = Mockery::mock( ResponseInterface::class );
+		$arguments = ['foo', 'bar'];
+		$route_arguments = ['baz'];
+		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $request, $this->router, $this->error_handler] )->makePartial();
+
+		$this->router->shouldReceive( 'execute' )
+			->andReturn( $route );
+
+		$request->shouldReceive( 'withAttribute' )
+			->andReturn( $request );
+
+		$route->shouldReceive( 'getArguments' )
+			->andReturn( $route_arguments );
+
+		$route->shouldReceive( 'getMiddleware' )
+			->andReturn( [] );
+
+		$route->shouldReceive( 'getHandler' )
+			->andReturn( $this->factory_handler );
+
+		$subject->shouldReceive( 'run' )
+			->andReturnUsing( function ( $request, $middleware, $handler ) use ( $response ) {
+				return $response;
+			} );
+
+		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
+	}
+
+	/**
+	 * @covers ::handle
+	 */
+	public function testHandle_UnsatisfiedRequest_Null() {
+		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->router->shouldReceive( 'execute' )
+			->andReturn( null );
+
+		$this->assertNull( $subject->handle( $this->request, [] ) );
+	}
+
+	/**
+	 * @covers ::respond
+	 */
+	public function testRespond_Response_Respond() {
+		$response = Mockery::mock( ResponseInterface::class );
+		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->app->shouldReceive( 'resolve' )
+			->with( WPEMERGE_RESPONSE_KEY )
+			->andReturn( $response );
+
+		$this->response_service->shouldReceive( 'respond' )
+			->with( $response )
+			->once();
+
+		$subject->respond();
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * @covers ::respond
+	 */
+	public function testRespond_NoResponse_DoNotRespond() {
+		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->app->shouldReceive( 'resolve' )
+			->with( WPEMERGE_RESPONSE_KEY )
+			->andReturn( null );
+
+		$this->response_service->shouldNotReceive( 'respond' );
+
+		$subject->respond();
+
+		$this->assertTrue( true );
 	}
 
 	/**
