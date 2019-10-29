@@ -39,6 +39,7 @@ class ControllerMiddleware {
 	/**
 	 * Constructor.
 	 *
+	 * @codeCoverageIgnore
 	 * @param  string|array<string> $middleware
 	 */
 	public function __construct( $middleware ) {
