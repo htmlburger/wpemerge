@@ -72,6 +72,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 				return (new Psr7Response())->withBody( Psr7\stream_for( $output ) );
 			} );
 
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
+
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
 
@@ -95,6 +98,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 				return (new Psr7Response())->withBody( Psr7\stream_for( json_encode( $data ) ) );
 			} );
 
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
+
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
 
@@ -116,6 +122,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$input->shouldReceive( 'toResponse' )
 			->andReturn( Mockery::mock( ResponseInterface::class ) );
 
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
+
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
 
@@ -132,6 +141,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 			return $expected;
 		};
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
@@ -150,6 +162,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 		};
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
+
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
 
@@ -167,6 +182,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 		};
 		$error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $error_handler );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
@@ -189,6 +207,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 		};
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
+
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
 
@@ -210,6 +231,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 			->andReturnUsing( function ( $class ) {
 				return new $class();
 			} );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
@@ -240,6 +264,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 			->andReturnUsing( function ( $class ) {
 				return new $class();
 			} );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );
@@ -278,12 +305,12 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route->shouldReceive( 'getMiddleware' )
 			->andReturn( [] );
 
-		$route->shouldReceive( 'handle' )
-			->andReturn( $response );
+		$route->shouldReceive( 'getHandler' )
+			->andReturn( $this->factory_handler );
 
 		$subject->shouldReceive( 'run' )
-			->andReturnUsing( function ( $request, $middleware, $handler ) {
-				return $handler( $request );
+			->andReturnUsing( function ( $request, $middleware, $handler ) use ( $response ) {
+				return $response;
 			} );
 
 		$this->assertSame( $response, $subject->handle( $request, $arguments ) );
@@ -309,6 +336,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 			return ( new Psr7\Response() )->withBody( Psr7\stream_for( 'Handler' ) );
 		};
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->injection_factory->shouldReceive( 'make' )
 			->andReturnUsing( function ( $class ) {
@@ -352,6 +382,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 			throw $exception;
 		};
 		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+
+		$this->factory_handler->shouldReceive( 'make' )
+			->andReturn( $handler );
 
 		$this->factory_handler->shouldReceive( 'execute' )
 			->andReturnUsing( $handler );

@@ -28,7 +28,7 @@ class Handler {
 	/**
 	 * Parsed handler
 	 *
-	 * @var array|Closure|null
+	 * @var array|Closure
 	 */
 	protected $handler = null;
 
@@ -97,7 +97,7 @@ class Handler {
 	/**
 	 * Get the parsed handler
 	 *
-	 * @return array|Closure|null
+	 * @return array|Closure
 	 */
 	public function get() {
 		return $this->handler;

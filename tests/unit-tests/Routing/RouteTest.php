@@ -120,24 +120,4 @@ class RouteTest extends WP_UnitTestCase {
 		] );
 		$this->assertSame( $query, $subject->getQueryFilter() );
 	}
-
-	/**
-	 * @covers ::handle
-	 */
-	public function testHandle() {
-		$request = Mockery::mock( RequestInterface::class );
-		$view = 'foobar.php';
-		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
-		$expected = Mockery::mock( ResponseInterface::class );
-		$subject = new Route( [], $condition, $handler );
-
-		$handler->shouldReceive( 'execute' )
-			->andReturnUsing( function( $a, $b, $c, $d ) use ( $request, $view, $expected ) {
-				$this->assertEquals( [$request, $view, 'foo', 'bar'], [$a, $b, $c, $d] );
-				return $expected;
-			} );
-
-		$this->assertSame( $expected, $subject->handle( $request, [$request, $view, 'foo', 'bar'] ) );
-	}
 }

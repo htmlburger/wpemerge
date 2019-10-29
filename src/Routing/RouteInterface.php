@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 
@@ -16,6 +17,13 @@ use WPEmerge\Requests\RequestInterface;
  * Interface that routes must implement
  */
 interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
+	/**
+	 * Get handler.
+	 *
+	 * @return Handler
+	 */
+	public function getHandler();
+
 	/**
 	 * Get whether the route is satisfied.
 	 *
@@ -39,13 +47,4 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	 * @return void
 	 */
 	public function decorate( $attributes );
-
-	/**
-	 * Get a response for the given request.
-	 *
-	 * @param  RequestInterface                    $request
-	 * @param  array                               $arguments
-	 * @return \Psr\Http\Message\ResponseInterface
-	 */
-	public function handle( RequestInterface $request, $arguments = [] );
 }

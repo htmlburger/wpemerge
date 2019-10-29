@@ -61,10 +61,8 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	}
 
 	/**
-	 * Get handler.
-	 *
+	 * {@inheritDoc}
 	 * @codeCoverageIgnore
-	 * @return Handler
 	 */
 	public function getHandler() {
 		return $this->handler;
@@ -100,12 +98,5 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 		if ( $query !== null) {
 			$this->setQueryFilter( $query );
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function handle( RequestInterface $request, $arguments = [] ) {
-		return call_user_func_array( [$this->getHandler(), 'execute'], $arguments );
 	}
 }

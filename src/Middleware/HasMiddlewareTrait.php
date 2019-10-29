@@ -16,7 +16,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware.
 	 *
-	 * @var array
+	 * @var array<string>
 	 */
 	protected $middleware = [];
 

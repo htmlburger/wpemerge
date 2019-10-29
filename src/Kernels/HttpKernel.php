@@ -18,6 +18,7 @@ use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
+use WPEmerge\Middleware\HasControllerMiddlewareInterface;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponsableInterface;
@@ -154,6 +155,22 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
+	 * Get middleware registered with the given handler.
+	 *
+	 * @param  Handler       $handler
+	 * @return array<string>
+	 */
+	protected function getHandlerMiddleware( Handler $handler ) {
+		$instance = $handler->make();
+
+		if ( ! $instance instanceof HasControllerMiddlewareInterface ) {
+			return [];
+		}
+
+		return $instance->getMiddleware( $handler->get()['method'] );
+	}
+
+	/**
 	 * Execute a handler.
 	 *
 	 * @param  Handler           $handler
@@ -210,12 +227,14 @@ class HttpKernel implements HttpKernelInterface {
 		$this->error_handler->register();
 
 		try {
+			$handler = $handler instanceof Handler ? $handler : $this->handler_factory->make( $handler );
+
+			$middleware = array_merge( $middleware, $this->getHandlerMiddleware( $handler ) );
 			$middleware = $this->expandMiddleware( $middleware );
 			$middleware = $this->uniqueMiddleware( $middleware );
 			$middleware = $this->sortMiddleware( $middleware );
 
 			$response = $this->executeMiddleware( $middleware, $request, function () use ( $handler, $arguments ) {
-				$handler = $handler instanceof Handler ? $handler : $this->handler_factory->make( $handler );
 				return $this->executeHandler( $handler, $arguments );
 			} );
 		} catch ( Exception $exception ) {
@@ -243,14 +262,10 @@ class HttpKernel implements HttpKernelInterface {
 			->withAttribute( 'route', $route )
 			->withAttribute( 'route_arguments', $route_arguments );
 
-		$handler = function ( $request ) use ( $route ) {
-			return call_user_func( [$route, 'handle'], $request, func_get_args() );
-		};
-
 		$response = $this->run(
 			$request,
 			$route->getMiddleware(),
-			$handler,
+			$route->getHandler(),
 			array_merge(
 				[$request],
 				$arguments,

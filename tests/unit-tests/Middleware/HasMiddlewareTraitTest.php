@@ -19,6 +19,8 @@ class HasMiddlewareTraitTest extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
+
+		unset( $this->subject );
 	}
 
 	/**
