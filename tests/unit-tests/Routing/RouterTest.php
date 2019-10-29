@@ -246,7 +246,9 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getCondition()->getUrlWhere() );
 		$this->assertEquals( ['foo', 'bar'], $route->getMiddleware() );
 		$this->assertSame( $route_attributes['handler'], $route->getHandler()->get() );
-		$this->assertEquals( ['foo' => 1, 'bar' => 1], $route->getQueryFilter()( [] ) );
+
+		$query_filter = $route->getQueryFilter();
+		$this->assertEquals( ['foo' => 1, 'bar' => 1], $query_filter( [] ) );
 
 		// TODO namespace A: null; B: null
 		// TODO namespace A: string; B: null
