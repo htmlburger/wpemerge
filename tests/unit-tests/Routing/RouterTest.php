@@ -213,6 +213,10 @@ class RouterTest extends WP_UnitTestCase {
 			'middleware' => ['foo'],
 			'namespace' => 'foo',
 			'handler' => 'foo',
+			'query' => function ( $query_vars ) {
+				$query_vars['foo'] = 1;
+				return $query_vars;
+			}
 		];
 
 		$route_attributes = [
@@ -221,6 +225,10 @@ class RouterTest extends WP_UnitTestCase {
 			'middleware' => ['bar'],
 			'namespace' => 'bar',
 			'handler' => function () {},
+			'query' => function ( $query_vars ) {
+				$query_vars['bar'] = 1;
+				return $query_vars;
+			}
 		];
 
 		$route = null;
@@ -237,9 +245,16 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( '/foo/{foo}/bar/{bar}/', $route->getCondition()->getUrl() );
 		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getCondition()->getUrlWhere() );
 		$this->assertEquals( ['foo', 'bar'], $route->getMiddleware() );
-		// TODO test 'namespace'.
 		$this->assertSame( $route_attributes['handler'], $route->getHandler()->get() );
-		// TODO test 'query'.
+		$this->assertEquals( ['foo' => 1, 'bar' => 1], $route->getQueryFilter()( [] ) );
+
+		// TODO namespace A: null; B: null
+		// TODO namespace A: string; B: null
+		// TODO namespace A: null; B: string
+		// TODO namespace A: string; B: string
+		// TODO query A: null; B: null
+		// TODO query A: Closure; B: null
+		// TODO query A: null; B: Closure
 	}
 
 	/**
