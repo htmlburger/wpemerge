@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Kernels;
 
-use Closure;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
@@ -18,10 +17,11 @@ use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
-use WPEmerge\Middleware\HasControllerMiddlewareInterface;
+use WPEmerge\Middleware\ExecutesMiddlewareTrait;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
+use WPEmerge\Middleware\ReadsHandlerMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Responses\ResponsableInterface;
+use WPEmerge\Responses\ConvertsToResponseTrait;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\Router;
@@ -33,6 +33,9 @@ use WPEmerge\Routing\SortsMiddlewareTrait;
 class HttpKernel implements HttpKernelInterface {
 	use HasMiddlewareDefinitionsTrait;
 	use SortsMiddlewareTrait;
+	use ConvertsToResponseTrait;
+	use ReadsHandlerMiddlewareTrait;
+	use ExecutesMiddlewareTrait;
 
 	/**
 	 * Application.
@@ -114,60 +117,24 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Get a Response Service instance.
+	 *
 	 * @codeCoverageIgnore
+	 * @return ResponseService
 	 */
-	public function bootstrap() {
-		// Web. Use 3100 so it's high enough and has uncommonly used numbers
-		// before and after. For example, 1000 is too common and it would have 999 before it
-		// which is too common as well.).
-		add_action( 'request', [$this, 'filterRequest'], 3100 );
-		add_action( 'template_include', [$this, 'filterTemplateInclude'], 3100 );
-
-		// Ajax.
-		add_action( 'admin_init', [$this, 'registerAjaxAction'] );
-
-		// Admin.
-		add_action( 'admin_init', [$this, 'registerAdminAction'] );
+	protected function getResponseService() {
+		return $this->response_service;
 	}
 
 	/**
-	 * Convert a user returned response to a ResponseInterface instance if possible.
-	 * Return the original value if unsupported.
+	 * Make a middleware class instance.
 	 *
-	 * @param  mixed $response
-	 * @return mixed
+	 * @codeCoverageIgnore
+	 * @param  string $class
+	 * @return object
 	 */
-	protected function toResponse( $response ) {
-		if ( is_string( $response ) ) {
-			return $this->response_service->output( $response );
-		}
-
-		if ( is_array( $response ) ) {
-			return $this->response_service->json( $response );
-		}
-
-		if ( $response instanceof ResponsableInterface ) {
-			return $response->toResponse();
-		}
-
-		return $response;
-	}
-
-	/**
-	 * Get middleware registered with the given handler.
-	 *
-	 * @param  Handler       $handler
-	 * @return array<string>
-	 */
-	protected function getHandlerMiddleware( Handler $handler ) {
-		$instance = $handler->make();
-
-		if ( ! $instance instanceof HasControllerMiddlewareInterface ) {
-			return [];
-		}
-
-		return $instance->getMiddleware( $handler->get()['method'] );
+	protected function makeMiddleware( $class ) {
+		return $this->injection_factory->make( $class );
 	}
 
 	/**
@@ -189,35 +156,6 @@ class HttpKernel implements HttpKernelInterface {
 		}
 
 		return $response;
-	}
-
-	/**
-	 * Execute an array of middleware recursively (last in, first out).
-	 *
-	 * @param  array<array<string>> $middleware
-	 * @param  RequestInterface     $request
-	 * @param  Closure              $next
-	 * @return ResponseInterface
-	 */
-	protected function executeMiddleware( $middleware, RequestInterface $request, Closure $next ) {
-		$top_middleware = array_shift( $middleware );
-
-		if ( $top_middleware === null ) {
-			return $next( $request );
-		}
-
-		$top_middleware_next = function ( $request ) use ( $middleware, $next ) {
-			return $this->executeMiddleware( $middleware, $request, $next );
-		};
-
-		$class = $top_middleware[0];
-		$instance = $this->injection_factory->make( $class );
-		$arguments = array_merge(
-			[$request, $top_middleware_next],
-			array_slice( $top_middleware, 1 )
-		);
-
-		return call_user_func_array( [$instance, 'handle'], $arguments );
 	}
 
 	/**
@@ -290,6 +228,24 @@ class HttpKernel implements HttpKernelInterface {
 		if ( $response instanceof ResponseInterface ) {
 			$this->response_service->respond( $response );
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @codeCoverageIgnore
+	 */
+	public function bootstrap() {
+		// Web. Use 3100 so it's high enough and has uncommonly used numbers
+		// before and after. For example, 1000 is too common and it would have 999 before it
+		// which is too common as well.).
+		add_action( 'request', [$this, 'filterRequest'], 3100 );
+		add_action( 'template_include', [$this, 'filterTemplateInclude'], 3100 );
+
+		// Ajax.
+		add_action( 'admin_init', [$this, 'registerAjaxAction'] );
+
+		// Admin.
+		add_action( 'admin_init', [$this, 'registerAdminAction'] );
 	}
 
 	/**

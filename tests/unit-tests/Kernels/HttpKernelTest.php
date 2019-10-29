@@ -6,7 +6,6 @@ use ArrayAccess;
 use Closure;
 use Exception;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Response as Psr7Response;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Application\Application;
@@ -16,7 +15,6 @@ use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Kernels\HttpKernel;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\RouteInterface;
@@ -55,101 +53,6 @@ class HttpKernelTest extends WP_UnitTestCase {
 		unset( $this->router );
 		unset( $this->error_handler );
 		unset( $this->factory_handler );
-	}
-
-	/**
-	 * @covers ::toResponse
-	 */
-	public function testToResponse_String_OutputResponse() {
-		$expected = 'foobar';
-		$handler = function() use ( $expected ) {
-			return $expected;
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->response_service->shouldReceive( 'output' )
-			->andReturnUsing( function ( $output ) {
-				return (new Psr7Response())->withBody( Psr7\stream_for( $output ) );
-			} );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run( $this->request, [], $handler );
-		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
-	}
-
-	/**
-	 * @covers ::toResponse
-	 */
-	public function testToResponse_Array_JsonResponse() {
-		$value = ['foo' => 'bar'];
-		$expected = json_encode( $value );
-		$handler = function() use ( $value ) {
-			return $value;
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->response_service->shouldReceive( 'json' )
-			->andReturnUsing( function ( $data ) {
-				return (new Psr7Response())->withBody( Psr7\stream_for( json_encode( $data ) ) );
-			} );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run( $this->request, [], $handler );
-		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
-	}
-
-	/**
-	 * @covers ::toResponse
-	 */
-	public function testToResponse_ResponsableInterface_Psr7Response() {
-		$input = Mockery::mock( ResponsableInterface::class );
-		$expected = ResponseInterface::class;
-		$handler = function() use ( $input ) {
-			return $input;
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$input->shouldReceive( 'toResponse' )
-			->andReturn( Mockery::mock( ResponseInterface::class ) );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run( $this->request, [], $handler );
-		$this->assertInstanceOf( $expected, $response );
-	}
-
-	/**
-	 * @covers ::toResponse
-	 */
-	public function testToResponse_Response_SameResponse() {
-		$expected = Mockery::mock( ResponseInterface::class );
-		$handler = function() use ( $expected ) {
-			return $expected;
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run( $this->request, [], $handler );
-		$this->assertSame( $expected, $response );
 	}
 
 	/**
@@ -195,91 +98,6 @@ class HttpKernelTest extends WP_UnitTestCase {
 			} );
 
 		$subject->run( $this->request, [], $handler );
-	}
-
-	/**
-	 * @covers ::executeMiddleware
-	 */
-	public function testExecuteMiddleware_EmptyList_CallsHandler() {
-		$expected = 'Test complete';
-		$handler = function () use ( $expected ) {
-			return ( new Psr7\Response() )->withBody( Psr7\stream_for( $expected ) );
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run( $this->request, [], $handler );
-
-		$this->assertEquals( $expected, $response->getBody()->read( strlen( $expected ) ) );
-	}
-
-	/**
-	 * @covers ::executeMiddleware
-	 */
-	public function testExecuteMiddleware_ClassNames_CallsClassNamesFirstThenClosure() {
-		$handler = function () {
-			return (new Psr7Response())->withBody( Psr7\stream_for( 'Handler' ) );
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->injection_factory->shouldReceive( 'make' )
-			->andReturnUsing( function ( $class ) {
-				return new $class();
-			} );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run(
-			$this->request,
-			[
-				HttpKernelTestMiddlewareStub1::class,
-				HttpKernelTestMiddlewareStub2::class,
-				HttpKernelTestMiddlewareStub3::class,
-			],
-			$handler
-		);
-
-		$this->assertEquals( 'FooBarBazHandler', $response->getBody()->read( 999 ) );
-	}
-
-	/**
-	 * @covers ::executeMiddleware
-	 */
-	public function testExecuteMiddleware_ClassNameWithParameters_PassParameters() {
-		$handler = function () {
-			return (new Psr7Response())->withBody( Psr7\stream_for( '' ) );
-		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
-
-		$this->injection_factory->shouldReceive( 'make' )
-			->andReturnUsing( function ( $class ) {
-				return new $class();
-			} );
-
-		$this->factory_handler->shouldReceive( 'make' )
-			->andReturn( $handler );
-
-		$this->factory_handler->shouldReceive( 'execute' )
-			->andReturnUsing( $handler );
-
-		$response = $subject->run(
-			$this->request,
-			[
-				HttpKernelTestMiddlewareStubWithParameters::class . ':Arg1,Arg2',
-			],
-			$handler
-		);
-
-		$this->assertEquals( 'Arg1Arg2', $response->getBody()->read( 999 ) );
 	}
 
 	/**
