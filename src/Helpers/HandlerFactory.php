@@ -9,7 +9,7 @@
 
 namespace WPEmerge\Helpers;
 
-use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Application\GenericFactory;
 
 /**
  * Handler factory.
@@ -18,18 +18,18 @@ class HandlerFactory {
 	/**
 	 * Injection Factory.
 	 *
-	 * @var InjectionFactory
+	 * @var GenericFactory
 	 */
-	protected $injection_factory = null;
+	protected $factory = null;
 
 	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param InjectionFactory $injection_factory
+	 * @param GenericFactory $factory
 	 */
-	public function __construct( InjectionFactory $injection_factory ) {
-		$this->injection_factory = $injection_factory;
+	public function __construct( GenericFactory $factory ) {
+		$this->factory = $factory;
 	}
 
 	/**
@@ -43,6 +43,6 @@ class HandlerFactory {
 	 * @return Handler
 	 */
 	public function make( $raw_handler, $default_method = '', $namespace = '' ) {
-		return new Handler( $this->injection_factory, $raw_handler, $default_method, $namespace );
+		return new Handler( $this->factory, $raw_handler, $default_method, $namespace );
 	}
 }

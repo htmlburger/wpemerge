@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use Mockery;
 use WP_UnitTestCase;
-use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Application\GenericFactory;
 use WPEmerge\Middleware\ExecutesMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub1;
@@ -22,8 +22,8 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->request = Mockery::mock( RequestInterface::class );
-		$this->injection_factory = Mockery::mock( InjectionFactory::class );
-		$this->subject = new ExecutesMiddlewareTraitImplementation( $this->injection_factory );
+		$this->factory = Mockery::mock( GenericFactory::class );
+		$this->subject = new ExecutesMiddlewareTraitImplementation( $this->factory );
 	}
 
 	public function tearDown() {
@@ -31,7 +31,7 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 		Mockery::close();
 
 		unset( $this->request );
-		unset( $this->injection_factory );
+		unset( $this->factory );
 		unset( $this->subject );
 	}
 
@@ -54,7 +54,7 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 	 * @covers ::executeMiddleware
 	 */
 	public function testExecuteMiddleware_ClassNames_CallsClassNamesFirstThenClosure() {
-		$this->injection_factory->shouldReceive( 'make' )
+		$this->factory->shouldReceive( 'make' )
 			->andReturnUsing( function ( $class ) {
 				return new $class();
 			} );
@@ -78,7 +78,7 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 	 * @covers ::executeMiddleware
 	 */
 	public function testExecuteMiddleware_ClassNameWithParameters_PassParameters() {
-		$this->injection_factory->shouldReceive( 'make' )
+		$this->factory->shouldReceive( 'make' )
 			->andReturnUsing( function ( $class ) {
 				return new $class();
 			} );
@@ -100,14 +100,14 @@ class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
 class ExecutesMiddlewareTraitImplementation {
 	use ExecutesMiddlewareTrait;
 
-	protected $injection_factory = null;
+	protected $factory = null;
 
-	public function __construct( $injection_factory ) {
-		$this->injection_factory = $injection_factory;
+	public function __construct( $factory ) {
+		$this->factory = $factory;
 	}
 
 	protected function makeMiddleware( $class ) {
-		return $this->injection_factory->make( $class );
+		return $this->factory->make( $class );
 	}
 
 	public function publicExecuteMiddleware() {

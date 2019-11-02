@@ -9,47 +9,46 @@
 
 namespace WPEmerge\Application;
 
+use Pimple\Container;
 use WPEmerge\Exceptions\ClassNotFoundException;
 
 /**
- * Injection factory.
+ * Generic class instance factory.
  */
-class InjectionFactory {
+class GenericFactory {
 	/**
-	 * Application.
+	 * Container.
 	 *
-	 * @var Application
+	 * @var Container
 	 */
-	protected $app = null;
+	protected $container = null;
 
 	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Application $app
+	 * @param Container $container
 	 */
-	public function __construct( Application $app ) {
-		$this->app = $app;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	/**
-	 * Make a Handler.
+	 * Make a class instance.
 	 *
 	 * @throws ClassNotFoundException
 	 * @param  string $class
 	 * @return object
 	 */
 	public function make( $class ) {
-		$instance = $this->app->resolve( $class );
-
-		if ( $instance === null ) {
-			if ( ! class_exists( $class ) ) {
-				throw new ClassNotFoundException( 'Class not found: ' . $class );
-			}
-
-			$instance = new $class();
+		if ( isset( $this->container[ $class ] ) ) {
+			return $this->container[ $class ];
 		}
 
-		return $instance;
+		if ( ! class_exists( $class ) ) {
+			throw new ClassNotFoundException( 'Class not found: ' . $class );
+		}
+
+		return new $class();
 	}
 }

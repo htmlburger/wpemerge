@@ -18,7 +18,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 *
 	 * @var callable
 	 */
-	protected $compose_action = null;
+	protected $compose = null;
 
 	/**
 	 * View finder.
@@ -38,11 +38,11 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param callable                $compose_action
+	 * @param callable                $compose
 	 * @param PhpViewFilesystemFinder $finder
 	 */
-	public function __construct( callable $compose_action, PhpViewFilesystemFinder $finder ) {
-		$this->compose_action = $compose_action;
+	public function __construct( callable $compose, PhpViewFilesystemFinder $finder ) {
+		$this->compose = $compose;
 		$this->finder = $finder;
 	}
 
@@ -174,7 +174,7 @@ class PhpViewEngine implements ViewEngineInterface {
 
 		$clone = clone $view;
 
-		call_user_func( $this->compose_action, $clone );
+		call_user_func( $this->compose, $clone );
 
 		return $this->renderView( $clone );
 	}

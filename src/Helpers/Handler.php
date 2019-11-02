@@ -10,7 +10,7 @@
 namespace WPEmerge\Helpers;
 
 use Closure;
-use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmerge\Exceptions\ConfigurationException;
 
@@ -21,9 +21,9 @@ class Handler {
 	/**
 	 * Injection Factory.
 	 *
-	 * @var InjectionFactory
+	 * @var GenericFactory
 	 */
-	protected $injection_factory = null;
+	protected $factory = null;
 
 	/**
 	 * Parsed handler
@@ -35,13 +35,13 @@ class Handler {
 	/**
 	 * Constructor
 	 *
-	 * @param InjectionFactory $injection_factory
-	 * @param string|Closure   $raw_handler
-	 * @param string           $default_method
-	 * @param string           $namespace
+	 * @param GenericFactory $factory
+	 * @param string|Closure $raw_handler
+	 * @param string         $default_method
+	 * @param string         $namespace
 	 */
-	public function __construct( InjectionFactory $injection_factory, $raw_handler, $default_method = '', $namespace = '' ) {
-		$this->injection_factory = $injection_factory;
+	public function __construct( GenericFactory $factory, $raw_handler, $default_method = '', $namespace = '' ) {
+		$this->factory = $factory;
 
 		$handler = $this->parse( $raw_handler, $default_method, $namespace );
 
@@ -119,10 +119,10 @@ class Handler {
 		$class = $handler['class'];
 
 		try {
-			$instance = $this->injection_factory->make( $class );
+			$instance = $this->factory->make( $class );
 		} catch ( ClassNotFoundException $e ) {
 			try {
-				$instance = $this->injection_factory->make( $namespace . $class );
+				$instance = $this->factory->make( $namespace . $class );
 			} catch ( ClassNotFoundException $e ) {
 				throw new ClassNotFoundException( 'Class not found - tried: ' . $class . ', ' . $namespace . $class );
 			}

@@ -3,26 +3,26 @@
 namespace WPEmergeTests\Application;
 
 use Mockery;
-use WPEmerge\Application\Application;
-use WPEmerge\Application\InjectionFactory;
+use Pimple\Container;
+use WPEmerge\Application\GenericFactory;
 use WP_UnitTestCase;
 
 /**
- * @coversDefaultClass \WPEmerge\Application\InjectionFactory
+ * @coversDefaultClass \WPEmerge\Application\GenericFactory
  */
-class InjectionFactoryTest extends WP_UnitTestCase {
+class GenericFactoryTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->app = Mockery::mock( Application::class );
-		$this->subject = new InjectionFactory( $this->app );
+		$this->container = Mockery::mock( Container::class );
+		$this->subject = new GenericFactory( $this->container );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		unset( $this->app );
+		unset( $this->container );
 		unset( $this->subject );
 	}
 
@@ -32,8 +32,9 @@ class InjectionFactoryTest extends WP_UnitTestCase {
 	public function testMake_UnknownClass_CreateFreshInstance() {
 		$class = \WPEmergeTestTools\TestService::class;
 
-		$this->app->shouldReceive( 'resolve' )
-			->andReturn( null );
+		$this->container->shouldReceive( 'offsetExists' )
+			->with( $class )
+			->andReturn( false );
 
 		$instance1 = $this->subject->make( $class );
 		$instance2 = $this->subject->make( $class );
@@ -51,8 +52,9 @@ class InjectionFactoryTest extends WP_UnitTestCase {
 	public function testMake_UnknownNonexistantClass_Exception() {
 		$class = \WPEmergeTestTools\NonExistantClass::class;
 
-		$this->app->shouldReceive( 'resolve' )
-			->andReturn( null );
+		$this->container->shouldReceive( 'offsetExists' )
+			->with( $class )
+			->andReturn( false );
 
 		$this->subject->make( $class );
 	}
@@ -64,7 +66,11 @@ class InjectionFactoryTest extends WP_UnitTestCase {
 		$expected = 'foo';
 		$class = \WPEmergeTestTools\TestService::class;
 
-		$this->app->shouldReceive( 'resolve' )
+		$this->container->shouldReceive( 'offsetExists' )
+			->with( $class )
+			->andReturn( true );
+
+		$this->container->shouldReceive( 'offsetGet' )
 			->andReturnUsing( function ( $class ) use ( $expected ) {
 				$instance = new $class();
 				$instance->setTest( $expected );

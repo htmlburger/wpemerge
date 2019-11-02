@@ -2,14 +2,13 @@
 
 namespace WPEmergeTests\Routing;
 
-use ArrayAccess;
 use Closure;
 use Exception;
 use GuzzleHttp\Psr7;
 use Mockery;
+use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Application\Application;
-use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
@@ -28,8 +27,8 @@ class HttpKernelTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->app = Mockery::mock( Application::class )->shouldIgnoreMissing();
-		$this->injection_factory = Mockery::mock( InjectionFactory::class )->shouldIgnoreMissing();
+		$this->container = Mockery::mock( Container::class );
+		$this->factory = Mockery::mock( GenericFactory::class )->shouldIgnoreMissing();
 		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
 		$this->request = Mockery::mock( RequestInterface::class );
 		$this->response_service = Mockery::mock( ResponseService::class )->shouldIgnoreMissing();
@@ -45,8 +44,8 @@ class HttpKernelTest extends WP_UnitTestCase {
 		parent::tearDown();
 		Mockery::close();
 
-		unset( $this->app );
-		unset( $this->injection_factory );
+		unset( $this->container );
+		unset( $this->factory );
 		unset( $this->handler_factory );
 		unset( $this->request );
 		unset( $this->response_service );
@@ -63,7 +62,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$handler = function() use ( $expected ) {
 			return $expected;
 		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->factory_handler->shouldReceive( 'make' )
 			->andReturn( $handler );
@@ -84,7 +83,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 			return null;
 		};
 		$error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $error_handler );
 
 		$this->factory_handler->shouldReceive( 'make' )
 			->andReturn( $handler );
@@ -107,12 +106,12 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$handler = function () {
 			return ( new Psr7\Response() )->withBody( Psr7\stream_for( 'Handler' ) );
 		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->factory_handler->shouldReceive( 'make' )
 			->andReturn( $handler );
 
-		$this->injection_factory->shouldReceive( 'make' )
+		$this->factory->shouldReceive( 'make' )
 			->andReturnUsing( function ( $class ) {
 				return new $class();
 			} );
@@ -153,7 +152,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$handler = function () use ( $exception ) {
 			throw $exception;
 		};
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->factory_handler->shouldReceive( 'make' )
 			->andReturn( $handler );
@@ -179,7 +178,9 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class );
 		$arguments = ['foo', 'bar'];
 		$route_arguments = ['baz'];
-		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $request, $this->router, $this->error_handler] )->makePartial();
+		$subject = Mockery::mock( HttpKernel::class, [$this->container, $this->factory, $this->handler_factory, $this->response_service, $request, $this->router, $this->error_handler] )->makePartial();
+
+		$this->container->shouldReceive( 'offsetSet' );
 
 		$this->router->shouldReceive( 'execute' )
 			->andReturn( $route );
@@ -208,7 +209,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_UnsatisfiedRequest_Null() {
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->router->shouldReceive( 'execute' )
 			->andReturn( null );
@@ -221,9 +222,13 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 */
 	public function testRespond_Response_Respond() {
 		$response = Mockery::mock( ResponseInterface::class );
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
-		$this->app->shouldReceive( 'resolve' )
+		$this->container->shouldReceive( 'offsetExists' )
+			->with( WPEMERGE_RESPONSE_KEY )
+			->andReturn( true );
+
+		$this->container->shouldReceive( 'offsetGet' )
 			->with( WPEMERGE_RESPONSE_KEY )
 			->andReturn( $response );
 
@@ -240,11 +245,11 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 * @covers ::respond
 	 */
 	public function testRespond_NoResponse_DoNotRespond() {
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
-		$this->app->shouldReceive( 'resolve' )
+		$this->container->shouldReceive( 'offsetExists' )
 			->with( WPEMERGE_RESPONSE_KEY )
-			->andReturn( null );
+			->andReturn( false );
 
 		$this->response_service->shouldNotReceive( 'respond' );
 
@@ -262,7 +267,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route3 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$route4 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$query_vars = ['unfiltered'];
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->router->shouldReceive( 'getRoutes' )
 			->andReturn( [$route1, $route2, $route3] );
@@ -298,7 +303,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route2 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$route3 = Mockery::mock( RouteInterface::class, HasQueryFilterInterface::class );
 		$query_vars = ['unfiltered'];
-		$subject = new HttpKernel( $this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
+		$subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler );
 
 		$this->router->shouldReceive( 'getRoutes' )
 			->andReturn( [$route1, $route2, $route3] );
@@ -325,16 +330,12 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 */
 	public function testFilterTemplateInclude_Response_Override() {
 		$response = Mockery::mock( ResponseInterface::class )->shouldIgnoreMissing();
-		$container = Mockery::mock( ArrayAccess::class );
-		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
+		$subject = Mockery::mock( HttpKernel::class, [$this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
 
 		$subject->shouldReceive( 'handle' )
 			->andReturn( $response );
 
-		$this->app->shouldReceive( 'getContainer' )
-			->andReturn( $container );
-
-		$container->shouldReceive( 'offsetSet' )
+		$this->container->shouldReceive( 'offsetSet' )
 			->with( WPEMERGE_RESPONSE_KEY, $response );
 
 		$this->assertEquals( WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php', $subject->filterTemplateInclude( '' ) );
@@ -347,8 +348,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		global $wp_query;
 
 		$response = Mockery::mock( ResponseInterface::class );
-		$container = Mockery::mock( ArrayAccess::class );
-		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
+		$subject = Mockery::mock( HttpKernel::class, [$this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
 
 		$response->shouldReceive( 'getStatusCode' )
 			->andReturn( 404 );
@@ -356,10 +356,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$subject->shouldReceive( 'handle' )
 			->andReturn( $response );
 
-		$this->app->shouldReceive( 'getContainer' )
-			->andReturn( $container );
-
-		$container->shouldReceive( 'offsetSet' )
+		$this->container->shouldReceive( 'offsetSet' )
 			->with( WPEMERGE_RESPONSE_KEY, $response );
 
 		$this->assertFalse( $wp_query->is_404() );
@@ -371,7 +368,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 	 * @covers ::filterTemplateInclude
 	 */
 	public function testFilterTemplateInclude_NoResponse_Passthrough() {
-		$subject = Mockery::mock( HttpKernel::class, [$this->app, $this->injection_factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
+		$subject = Mockery::mock( HttpKernel::class, [$this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->error_handler] )->makePartial();
 
 		$subject->shouldReceive( 'handle' )
 			->andReturn( null );

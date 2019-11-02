@@ -10,9 +10,9 @@
 namespace WPEmerge\Kernels;
 
 use Exception;
+use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Application\Application;
-use WPEmerge\Application\InjectionFactory;
+use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
@@ -38,18 +38,18 @@ class HttpKernel implements HttpKernelInterface {
 	use ExecutesMiddlewareTrait;
 
 	/**
-	 * Application.
+	 * Container.
 	 *
-	 * @var Application
+	 * @var Container
 	 */
-	protected $app = null;
+	protected $container = null;
 
 	/**
 	 * Injection factory.
 	 *
-	 * @var InjectionFactory
+	 * @var GenericFactory
 	 */
-	protected $injection_factory = null;
+	protected $factory = null;
 
 	/**
 	 * Handler factory.
@@ -90,8 +90,8 @@ class HttpKernel implements HttpKernelInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param Application           $app
-	 * @param InjectionFactory      $injection_factory
+	 * @param Container             $container
+	 * @param GenericFactory        $factory
 	 * @param HandlerFactory        $handler_factory
 	 * @param ResponseService       $response_service
 	 * @param RequestInterface      $request
@@ -99,21 +99,31 @@ class HttpKernel implements HttpKernelInterface {
 	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
-		Application $app,
-		InjectionFactory $injection_factory,
+		Container $container,
+		GenericFactory $factory,
 		HandlerFactory $handler_factory,
 		ResponseService $response_service,
 		RequestInterface $request,
 		Router $router,
 		ErrorHandlerInterface $error_handler
 	) {
-		$this->app = $app;
-		$this->injection_factory = $injection_factory;
+		$this->container = $container;
+		$this->factory = $factory;
 		$this->handler_factory = $handler_factory;
 		$this->response_service = $response_service;
 		$this->request = $request;
 		$this->router = $router;
 		$this->error_handler = $error_handler;
+	}
+
+	/**
+	 * Get the current response.
+	 *
+	 * @codeCoverageIgnore
+	 * @return ResponseInterface|null
+	 */
+	protected function getResponse() {
+		return isset( $this->container[ WPEMERGE_RESPONSE_KEY ] ) ? $this->container[ WPEMERGE_RESPONSE_KEY ] : null;
 	}
 
 	/**
@@ -134,7 +144,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return object
 	 */
 	protected function makeMiddleware( $class ) {
-		return $this->injection_factory->make( $class );
+		return $this->factory->make( $class );
 	}
 
 	/**
@@ -211,8 +221,7 @@ class HttpKernel implements HttpKernelInterface {
 			)
 		);
 
-		$container = $this->app->getContainer();
-		$container[ WPEMERGE_RESPONSE_KEY ] = $response;
+		$this->container[ WPEMERGE_RESPONSE_KEY ] = $response;
 
 		return $response;
 	}
@@ -223,11 +232,13 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return void
 	 */
 	public function respond() {
-		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
+		$response = $this->getResponse();
 
-		if ( $response instanceof ResponseInterface ) {
-			$this->response_service->respond( $response );
+		if ( ! $response instanceof ResponseInterface ) {
+			return;
 		}
+
+		$this->response_service->respond( $response );
 	}
 
 	/**
@@ -418,7 +429,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return void
 	 */
 	public function actionAdmin() {
-		$response = $this->app->resolve( WPEMERGE_RESPONSE_KEY );
+		$response = $this->getResponse();
 
 		if ( ! $response instanceof ResponseInterface ) {
 			return;

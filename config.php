@@ -21,8 +21,8 @@ if ( ! defined( 'WPEMERGE_APPLICATION_KEY' ) ) {
 	define( 'WPEMERGE_APPLICATION_KEY', 'wpemerge.application.application' );
 }
 
-if ( ! defined( 'WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY' ) ) {
-	define( 'WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY', 'wpemerge.application.injection_factory' );
+if ( ! defined( 'WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY' ) ) {
+	define( 'WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY', 'wpemerge.application.generic_factory' );
 }
 
 if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {

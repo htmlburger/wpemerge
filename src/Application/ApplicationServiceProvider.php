@@ -32,12 +32,12 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';
 		$this->extendConfig( $container, 'cache', $cache_dir );
 
-		$container[ WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY ] = function ( $c ) {
-			return new InjectionFactory( $c[ WPEMERGE_APPLICATION_KEY ] );
+		$container[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] = function ( $c ) {
+			return new GenericFactory( $c );
 		};
 
 		$container[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] = function ( $c ) {
-			return new HandlerFactory( $c[ WPEMERGE_APPLICATION_INJECTION_FACTORY_KEY ] );
+			return new HandlerFactory( $c[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] );
 		};
 	}
 

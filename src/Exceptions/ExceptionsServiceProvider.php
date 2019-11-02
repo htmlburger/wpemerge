@@ -26,8 +26,6 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-
 		$this->extendConfig( $container, 'debug', [
 			'pretty_errors' => true,
 		] );
@@ -56,12 +54,14 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			return $run;
 		};
 
-		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) use ( $app ) {
+		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) {
+			$app = $c[ WPEMERGE_APPLICATION_KEY ];
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
 			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
 		};
 
-		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) use ( $app ) {
+		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) {
+			$app = $c[ WPEMERGE_APPLICATION_KEY ];
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
 			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
 		};
