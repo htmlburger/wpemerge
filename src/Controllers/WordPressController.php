@@ -45,7 +45,7 @@ class WordPressController {
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	public function handle( RequestInterface $request, $view = '' ) {
-		if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		if ( is_admin() || wp_doing_ajax() ) {
 			throw new ConfigurationException(
 				'Attempted to run the default WordPress controller on an ' .
 				'admin or AJAX page. Did you miss to specify a custom handler for ' .

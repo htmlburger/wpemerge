@@ -84,7 +84,7 @@ class AjaxCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
-		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+		if ( ! wp_doing_ajax() ) {
 			return false;
 		}
 

@@ -49,7 +49,7 @@ class AdminCondition implements ConditionInterface {
 	 * @return boolean
 	 */
 	protected function isAdminPage() {
-		return is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX );
+		return is_admin() && ! wp_doing_ajax();
 	}
 
 	/**

@@ -246,7 +246,7 @@ class Application {
 	 * @return void
 	 */
 	protected function loadRoutes() {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			$this->loadRoutesGroup( 'ajax' );
 			return;
 		}

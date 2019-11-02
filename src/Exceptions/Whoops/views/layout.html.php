@@ -6,7 +6,7 @@
  */
 
 $is_admin = function_exists( 'is_admin' ) && is_admin();
-$is_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
+$is_ajax = wp_doing_ajax();
 
 if ( ! apply_filters( 'wpemerge.pretty_errors.apply_admin_styles', true ) ) {
 	$is_admin = false;
