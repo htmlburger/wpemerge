@@ -3,7 +3,6 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
-use WPEmerge\Facades\View;
 use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\ViewInterface;

@@ -33,8 +33,7 @@
             "WPEmergeTestTools\\": "tests/tools"
         },
         "files": [
-            "config.php",
-            "src/functions.php"
+            "config.php"
         ]
     },
     "require": {

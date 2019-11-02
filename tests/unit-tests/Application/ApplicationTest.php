@@ -19,18 +19,14 @@ class ApplicationTest extends WP_UnitTestCase {
 		$this->container = new Container();
 		$this->subject = new Application( $this->container, false );
 		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this->subject;
-		$this->facade_application = Facade::getFacadeApplication();
-		Facade::setFacadeApplication( $this->container );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
 
-		Facade::setFacadeApplication( $this->facade_application );
 		unset( $this->container );
 		unset( $this->subject );
-		unset( $this->facade_application );
 	}
 
 	/**

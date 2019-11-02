@@ -39,6 +39,9 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 		$container[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] = function ( $c ) {
 			return new HandlerFactory( $c[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] );
 		};
+
+		$app = $container[ WPEMERGE_APPLICATION_KEY ];
+		$app->alias( 'app', WPEMERGE_APPLICATION_KEY );
 	}
 
 	/**

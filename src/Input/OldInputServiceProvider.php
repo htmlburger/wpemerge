@@ -30,7 +30,7 @@ class OldInputServiceProvider implements ServiceProviderInterface {
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'OldInput', \WPEmerge\Facades\OldInput::class );
+		$app->alias( 'oldInput', WPEMERGE_OLD_INPUT_KEY );
 	}
 
 	/**

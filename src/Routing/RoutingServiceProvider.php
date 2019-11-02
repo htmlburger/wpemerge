@@ -86,7 +86,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 		} );
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Route', \WPEmerge\Facades\Route::class );
+		$app->alias( 'route', WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY );
 	}
 
 	/**

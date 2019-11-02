@@ -4,7 +4,6 @@ namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
 use stdClass;
-use WPEmerge\Facades\Application;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;

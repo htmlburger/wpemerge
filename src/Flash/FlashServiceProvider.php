@@ -36,7 +36,7 @@ class FlashServiceProvider implements ServiceProviderInterface {
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Flash', \WPEmerge\Facades\Flash::class );
+		$app->alias( 'flash', WPEMERGE_FLASH_KEY );
 	}
 
 	/**

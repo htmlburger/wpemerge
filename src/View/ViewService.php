@@ -173,4 +173,18 @@ class ViewService {
 			do_action( "get_{$matches[1]}", $matches[2] );
 		}
 	}
+
+	/**
+	 * Render a view.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string|array<string> $views
+	 * @param  array<string, mixed> $context
+	 * @return void
+	 */
+	public function render( $views, $context = [] ) {
+		$view = $this->make( $views )->with( $context );
+		$this->triggerPartialHooks( $view->getName() );
+		echo $view->toString();
+	}
 }

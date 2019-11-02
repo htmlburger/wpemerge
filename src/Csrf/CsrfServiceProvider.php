@@ -30,7 +30,7 @@ class CsrfServiceProvider implements ServiceProviderInterface {
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Csrf', \WPEmerge\Facades\Csrf::class );
+		$app->alias( 'csrf', WPEMERGE_CSRF_KEY );
 	}
 
 	/**

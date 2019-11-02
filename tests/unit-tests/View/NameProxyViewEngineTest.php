@@ -3,7 +3,6 @@
 namespace WPEmergeTests\View;
 
 use Mockery;
-use WPEmerge\Facades\Application;
 use WPEmerge\View\NameProxyViewEngine;
 use WP_UnitTestCase;
 

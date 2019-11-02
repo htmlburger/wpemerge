@@ -48,8 +48,20 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'View', \WPEmerge\Facades\View::class );
-		$app->alias( 'ViewEngine', \WPEmerge\Facades\ViewEngine::class );
+		$app->alias( 'views', WPEMERGE_VIEW_SERVICE_KEY );
+
+		$app->alias( 'view', function () use ( $app ) {
+			return call_user_func_array( [$app->views(), 'make'], func_get_args() );
+		} );
+
+		$app->alias( 'render', function () use ( $app ) {
+			return call_user_func_array( [$app->views(), 'render'], func_get_args() );
+		} );
+
+		$app->alias( 'layoutContent', function () use ( $app ) {
+			$engine = $app->resolve( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
+			echo $engine->getLayoutContent();
+		} );
 	}
 
 	/**

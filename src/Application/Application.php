@@ -23,15 +23,17 @@ use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
-use WPEmerge\Support\AliasLoader;
 use WPEmerge\Support\Arr;
-use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewServiceProvider;
 
 /**
  * Main communication channel with the application.
  */
-class Application {
+abstract class Application {
+	use HasStaticAliasesTrait {
+		__construct as __constructTrait;
+	}
+
 	/**
 	 * IoC container.
 	 *
@@ -76,32 +78,24 @@ class Application {
 	 * Make a new application instance.
 	 *
 	 * @codeCoverageIgnore
-	 * @return self
+	 * @return static
 	 */
 	public static function make() {
-		$container = new Container();
-		$container[ WPEMERGE_APPLICATION_KEY ] = function ( $container ) {
-			return new self( $container );
-		};
-
-		Facade::setFacadeApplication( $container );
-		AliasLoader::getInstance()->register();
-
-		/** @var $app self */
-		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-
-		return $app;
+		return new static( new Container() );
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Container $container
-	 * @param boolean   $render_configuration_exceptions
+	 * @param Container   $container
+	 * @param boolean     $render_configuration_exceptions
 	 */
 	public function __construct( Container $container, $render_configuration_exceptions = true ) {
 		$this->container = $container;
+		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this;
 		$this->render_configuration_exceptions = $render_configuration_exceptions;
+
+		$this->__constructTrait();
 	}
 
 	/**
@@ -285,17 +279,6 @@ class Application {
 
 		$blueprint = $this->resolve( WPEMERGE_ROUTING_ROUTE_BLUEPRINT_KEY );
 		$blueprint->attributes( $attributes )->group( $file );
-	}
-
-	/**
-	 * Register a facade class.
-	 *
-	 * @param  string $alias
-	 * @param  string $facade_class
-	 * @return void
-	 */
-	public function alias( $alias, $facade_class ) {
-		AliasLoader::getInstance()->alias( $alias, $facade_class );
 	}
 
 	/**

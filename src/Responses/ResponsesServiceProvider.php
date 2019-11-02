@@ -26,7 +26,27 @@ class ResponsesServiceProvider implements ServiceProviderInterface {
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
-		$app->alias( 'Response', \WPEmerge\Facades\Response::class );
+		$app->alias( 'responses', WPEMERGE_RESPONSE_SERVICE_KEY );
+
+		$app->alias( 'response', function () use ( $app ) {
+			return call_user_func_array( [$app->responses(), 'response'], func_get_args() );
+		} );
+
+		$app->alias( 'output', function () use ( $app ) {
+			return call_user_func_array( [$app->responses(), 'output'], func_get_args() );
+		} );
+
+		$app->alias( 'json', function () use ( $app ) {
+			return call_user_func_array( [$app->responses(), 'json'], func_get_args() );
+		} );
+
+		$app->alias( 'redirect', function () use ( $app ) {
+			return call_user_func_array( [$app->responses(), 'redirect'], func_get_args() );
+		} );
+
+		$app->alias( 'error', function () use ( $app ) {
+			return call_user_func_array( [$app->responses(), 'error'], func_get_args() );
+		} );
 	}
 
 	/**
