@@ -23,7 +23,7 @@ class Request extends ServerRequest implements RequestInterface {
 	 */
 	public static function fromGlobals() {
 		$request = parent::fromGlobals();
-		$new = new self(
+		$new = new static(
 			$request->getMethod(),
 			$request->getUri(),
 			$request->getHeaders(),
@@ -36,7 +36,7 @@ class Request extends ServerRequest implements RequestInterface {
 			->withCookieParams( $_COOKIE )
 			->withQueryParams( $_GET )
 			->withParsedBody( $_POST )
-			->withUploadedFiles( self::normalizeFiles( $_FILES ) );
+			->withUploadedFiles( static::normalizeFiles( $_FILES ) );
 	}
 
 	/**
