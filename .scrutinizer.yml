@@ -17,6 +17,7 @@ filter:
     - 'tests/*'
     - 'tmp/*'
     - '.sami.php'
+    - '_ide_helper.php'
   dependency_paths:
     - wordpress/
 
