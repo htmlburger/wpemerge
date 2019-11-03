@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use Closure;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Support\Arr;
 use WPEmerge\View\ViewService;
@@ -212,7 +213,7 @@ class RouteBlueprint {
 	/**
 	 * Create a route group.
 	 *
-	 * @param \Closure|string $routes Closure or path to file.
+	 * @param  Closure|string $routes Closure or path to file.
 	 * @return void
 	 */
 	public function group( $routes ) {
@@ -222,7 +223,7 @@ class RouteBlueprint {
 	/**
 	 * Create a route.
 	 *
-	 * @param  string|\Closure $handler
+	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
 	public function handle( $handler = '' ) {
@@ -252,7 +253,7 @@ class RouteBlueprint {
 	/**
 	 * Match ALL requests.
 	 *
-	 * @param  string|\Closure $handler
+	 * @param  string|Closure $handler
 	 * @return RouteInterface
 	 */
 	public function all( $handler = '' ) {

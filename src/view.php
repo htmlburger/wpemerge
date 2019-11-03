@@ -14,3 +14,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 do_action( 'wpemerge.respond' );
+remove_all_filters( 'wpemerge.respond' );

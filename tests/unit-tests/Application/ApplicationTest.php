@@ -3,9 +3,9 @@
 namespace WPEmergeTests\Application;
 
 use Mockery;
+use TestApp;
 use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
-use WPEmerge\Support\Facade;
 use Pimple\Container;
 use WP_UnitTestCase;
 
@@ -17,7 +17,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->container = new Container();
-		$this->subject = new Application( $this->container, false );
+		$this->subject = new TestApp( $this->container, false );
 		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this->subject;
 	}
 
@@ -34,7 +34,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	 */
 	public function testConstruct() {
 		$container = new Container();
-		$subject = new Application( $container );
+		$subject = new TestApp( $container );
 		$this->assertSame( $container, $subject->getContainer() );
 	}
 
@@ -122,22 +122,6 @@ class ApplicationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::alias
-	 */
-	public function testAlias() {
-		$expected = 'foobar';
-
-		$container = $this->subject->getContainer();
-		$container['test_service'] = function() {
-			return new \WPEmergeTestTools\TestService();
-		};
-		$alias = 'TestServiceAlias';
-
-		$this->subject->alias( $alias, \WPEmergeTestTools\TestServiceFacade::class );
-		$this->assertSame( $expected, call_user_func( [$alias, 'getTest'] ) );
-	}
-
-	/**
 	 * @covers ::resolve
 	 */
 	public function testResolve_NonexistantKey_ReturnNull() {
@@ -160,6 +144,40 @@ class ApplicationTest extends WP_UnitTestCase {
 
 		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
+	}
+
+	/**
+	 * @covers ::alias
+	 */
+	public function testAlias_String_ResolveFromContainer() {
+		$alias = 'test';
+		$service_key = 'test_service';
+
+		$container = $this->subject->getContainer();
+		$container[ $service_key ] = function() {
+			return new \WPEmergeTestTools\TestService();
+		};
+
+		$this->subject->bootstrap( [], false );
+		$this->subject->alias( $alias, $service_key );
+
+		$this->assertSame( $container[ $service_key ], $this->subject->{$alias}() );
+	}
+
+	/**
+	 * @covers ::alias
+	 */
+	public function testAlias_Closure_CallClosure() {
+		$expected = 'foo';
+		$alias = 'test';
+		$closure = function () use ( $expected ) {
+			return $expected;
+		};
+
+		$this->subject->bootstrap( [], false );
+		$this->subject->alias( $alias, $closure );
+
+		$this->assertEquals( $expected, $this->subject->{$alias}() );
 	}
 }
 

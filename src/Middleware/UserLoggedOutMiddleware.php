@@ -10,8 +10,8 @@
 namespace WPEmerge\Middleware;
 
 use Closure;
-use WPEmerge;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\RedirectResponse;
 
 /**
  * Redirect logged in users to a specific URL.
@@ -31,6 +31,6 @@ class UserLoggedOutMiddleware {
 
 		$url = apply_filters( 'wpemerge.middleware.user.logged_out.redirect_url', $url, $request );
 
-		return WPEmerge\redirect()->to( $url );
+		return (new RedirectResponse( $request ))->to( $url );
 	}
 }

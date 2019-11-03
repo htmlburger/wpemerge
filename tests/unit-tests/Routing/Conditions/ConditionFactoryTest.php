@@ -21,8 +21,12 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		$app = new \TestApp( new \Pimple\Container(), false );
+		$app->bootstrap( [], false );
+		$condition_types = $app->resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY );
+
 		$this->request = Mockery::mock( RequestInterface::class );
-		$this->subject = new ConditionFactory( Application::resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY ) );
+		$this->subject = new ConditionFactory( $condition_types );
 	}
 
 	public function tearDown() {

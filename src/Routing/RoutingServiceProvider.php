@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use Pimple\Container;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
@@ -70,7 +71,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			],
 		] );
 
-		/** @var $container \Pimple\Container */
+		/** @var $container Container */
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
 
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function ( $c ) {

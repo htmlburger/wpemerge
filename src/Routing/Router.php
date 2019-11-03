@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing;
 
+use Closure;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
@@ -96,8 +97,8 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the condition attribute.
 	 *
-	 * @param  string|array|\Closure|ConditionInterface|null $old
-	 * @param  string|array|\Closure|ConditionInterface|null $new
+	 * @param  string|array|Closure|ConditionInterface|null $old
+	 * @param  string|array|Closure|ConditionInterface|null $new
 	 * @return ConditionInterface|string
 	 */
 	public function mergeConditionAttribute( $old, $new ) {
@@ -135,9 +136,9 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the handler attribute taking the latest value.
 	 *
-	 * @param  string|\Closure $old
-	 * @param  string|\Closure $new
-	 * @return string|\Closure
+	 * @param  string|Closure $old
+	 * @param  string|Closure $new
+	 * @return string|Closure
 	 */
 	public function mergeHandlerAttribute( $old, $new ) {
 		return ! empty( $new ) ? $new : $old;
@@ -148,7 +149,7 @@ class Router implements HasRoutesInterface {
 	 *
 	 * @param  callable|null $old
 	 * @param  callable|null $new
-	 * @return string|\Closure
+	 * @return string|Closure
 	 */
 	public function mergeQueryAttribute( $old, $new ) {
 		if ( $new === null ) {
@@ -242,8 +243,8 @@ class Router implements HasRoutesInterface {
 	 * Create a route group.
 	 *
 	 * @codeCoverageIgnore
-	 * @param array<string, mixed> $attributes
-	 * @param \Closure|string      $routes Closure or path to file.
+	 * @param  array<string, mixed> $attributes
+	 * @param  Closure|string      $routes Closure or path to file.
 	 * @return void
 	 */
 	public function group( $attributes, $routes ) {
@@ -282,8 +283,8 @@ class Router implements HasRoutesInterface {
 	 * Make a route handler.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|\Closure|null $handler
-	 * @param  string               $namespace
+	 * @param  string|Closure|null $handler
+	 * @param  string              $namespace
 	 * @return Handler
 	 */
 	protected function routeHandler( $handler, $namespace ) {

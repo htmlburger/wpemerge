@@ -12,6 +12,7 @@ namespace WPEmerge\Kernels;
 use Exception;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
+use WP_Query;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
@@ -24,6 +25,7 @@ use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ConvertsToResponseTrait;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
+use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\SortsMiddlewareTrait;
 
@@ -266,7 +268,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return array
 	 */
 	public function filterRequest( $query_vars ) {
-		/** @var $routes \WPEmerge\Routing\RouteInterface[] */
+		/** @var $routes RouteInterface[] */
 		$routes = $this->router->getRoutes();
 
 		foreach ( $routes as $route ) {
@@ -292,7 +294,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return string
 	 */
 	public function filterTemplateInclude( $view ) {
-		/** @var $wp_query \WP_Query */
+		/** @var $wp_query WP_Query */
 		global $wp_query;
 
 		$response = $this->handle( $this->request, [$view] );

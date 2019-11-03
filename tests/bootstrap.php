@@ -58,12 +58,12 @@ class WPEmerge_Tests_Bootstrap {
 
 		// make sure query vars are prepared
 		global $wp;
+
 		if ( ! is_array( $wp->query_vars ) ) {
 			$wp->query_vars = [];
 		}
 
-		$app = WPEmerge\Application\Application::make();
-		$app->bootstrap( [], false );
+		require_once $this->tests_dir . '/TestApp.php';
 	}
 
 	/**

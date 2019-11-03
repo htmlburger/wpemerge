@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Helpers;
 
+use Closure;
 use WPEmerge\Application\GenericFactory;
 
 /**
@@ -36,10 +37,9 @@ class HandlerFactory {
 	 * Make a Handler.
 	 *
 	 * @codeCoverageIgnore
-	 * @param string|\Closure $raw_handler
-	 * @param string         $default_method
-	 * @param string         $namespace
-	 *
+	 * @param  string|Closure $raw_handler
+	 * @param  string         $default_method
+	 * @param  string         $namespace
 	 * @return Handler
 	 */
 	public function make( $raw_handler, $default_method = '', $namespace = '' ) {

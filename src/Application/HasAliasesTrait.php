@@ -26,8 +26,7 @@ trait HasAliasesTrait {
 	 * @param  string|Closure $target
 	 * @return void
 	 */
-	public function alias( $alias, $target )
-	{
+	public function alias( $alias, $target ) {
 		$this->aliases[ $alias ] = $target;
 	}
 
@@ -52,6 +51,7 @@ trait HasAliasesTrait {
 			return $this->resolve( $target );
 		}
 
+		/** @var $target Closure */
 		return call_user_func_array( $target->bindTo( $this, static::class ), $parameters );
 	}
 

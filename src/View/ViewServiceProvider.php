@@ -9,6 +9,7 @@
 
 namespace WPEmerge\View;
 
+use Pimple\Container;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
@@ -25,7 +26,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		/** @var $container \Pimple\Container */
+		/** @var $container Container */
 		$this->extendConfig( $container, 'views', '' );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function ( $c ) {
@@ -59,6 +60,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		} );
 
 		$app->alias( 'layoutContent', function () use ( $app ) {
+			/** @var $engine PhpViewEngine */
 			$engine = $app->resolve( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
 			echo $engine->getLayoutContent();
 		} );

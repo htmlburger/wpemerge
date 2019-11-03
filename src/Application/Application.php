@@ -11,6 +11,7 @@ namespace WPEmerge\Application;
 
 use Closure;
 use Pimple\Container;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Controllers\ControllersServiceProvider;
 use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
@@ -19,15 +20,28 @@ use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
 use WPEmerge\Requests\Request;
+use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Requests\RequestsServiceProvider;
+use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\ResponsesServiceProvider;
 use WPEmerge\Routing\RoutingServiceProvider;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\Arr;
+use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewServiceProvider;
 
 /**
  * Main communication channel with the application.
+ *
+ * @method static ResponseInterface response()
+ * @method static ResponseInterface output( string $output )
+ * @method static ResponseInterface json( $data )
+ * @method static RedirectResponse redirect()
+ * @method static ViewInterface view( string|string[] $views )
+ * @method static ResponseInterface error( integer $status )
+ * @method static void render( string|string[] $views, array $context = [] )
+ * @method static void layoutContent()
+ * @method static ResponseInterface run( RequestInterface $request, string[] $middleware, string|Closure $handler, array $arguments = [] )
  */
 abstract class Application {
 	use HasStaticAliasesTrait {

@@ -10,8 +10,8 @@
 namespace WPEmerge\Middleware;
 
 use Closure;
-use WPEmerge;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\RedirectResponse;
 
 /**
  * Redirect users who do not have a capability to a specific URL.
@@ -39,6 +39,6 @@ class UserCanMiddleware {
 
 		$url = apply_filters( 'wpemerge.middleware.user.can.redirect_url', $url, $request );
 
-		return WPEmerge\redirect()->to( $url );
+		return (new RedirectResponse( $request ))->to( $url );
 	}
 }

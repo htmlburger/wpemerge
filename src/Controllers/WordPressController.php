@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Controllers;
 
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\View\ViewService;
@@ -40,9 +41,9 @@ class WordPressController {
 	/**
 	 * Default WordPress handler.
 	 *
-	 * @param  RequestInterface                    $request
-	 * @param  string                              $view
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @param  RequestInterface  $request
+	 * @param  string            $view
+	 * @return ResponseInterface
 	 */
 	public function handle( RequestInterface $request, $view = '' ) {
 		if ( is_admin() || wp_doing_ajax() ) {

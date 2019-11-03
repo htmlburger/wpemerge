@@ -5,7 +5,6 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
-use WPEmerge\Support\Facade;
 use WPEmerge\View\ViewService;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewEngineInterface;
@@ -30,8 +29,6 @@ class ViewServiceTest extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 		Mockery::close();
-
-		Facade::clearResolvedInstance( WPEMERGE_VIEW_SERVICE_KEY );
 
 		unset( $this->engine );
 		unset( $this->handler_factory );

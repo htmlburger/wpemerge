@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Kernels;
 
+use Closure;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsInterface;
 use WPEmerge\Requests\RequestInterface;
@@ -29,7 +30,7 @@ interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	 *
 	 * @param  RequestInterface  $request
 	 * @param  array<string>     $middleware
-	 * @param  string|\Closure   $handler
+	 * @param  string|Closure    $handler
 	 * @param  array             $arguments
 	 * @return ResponseInterface
 	 */

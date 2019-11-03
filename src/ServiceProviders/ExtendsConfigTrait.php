@@ -9,6 +9,7 @@
 
 namespace WPEmerge\ServiceProviders;
 
+use Pimple\Container;
 use WPEmerge\Support\Arr;
 
 /**
@@ -18,9 +19,9 @@ trait ExtendsConfigTrait {
 	/**
 	 * Extends the WP Emerge config in the container with a new key.
 	 *
-	 * @param  \Pimple\Container $container
-	 * @param  string            $key
-	 * @param  mixed             $default
+	 * @param  Container $container
+	 * @param  string    $key
+	 * @param  mixed     $default
 	 * @return void
 	 */
 	public function extendConfig( $container, $key, $default ) {
