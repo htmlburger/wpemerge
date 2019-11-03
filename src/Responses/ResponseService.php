@@ -217,10 +217,12 @@ class ResponseService {
 	/**
 	 * Get a cloned response, with location and status headers.
 	 *
+	 * @param  RequestInterface|null $request
 	 * @return RedirectResponse
 	 */
-	public function redirect() {
-		return new RedirectResponse( $this->request );
+	public function redirect( RequestInterface $request = null ) {
+		$request = $request ? $request : $this->request;
+		return new RedirectResponse( $request );
 	}
 
 	/**

@@ -3,9 +3,11 @@
 namespace WPEmergeTests\Input;
 
 use Mockery;
+use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 use WPEmerge\Middleware\UserCanMiddleware;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponseService;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserCanMiddleware
@@ -15,7 +17,9 @@ class UserCanMiddlewareTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->user_ids = [];
-		$this->subject = new UserCanMiddleware();
+		$this->response_service = Mockery::mock( ResponseService::class );
+		$this->response = Mockery::mock( ResponseInterface::class );
+		$this->subject = new UserCanMiddleware( $this->response_service );
 	}
 
 	public function tearDown() {
@@ -30,6 +34,8 @@ class UserCanMiddlewareTest extends WP_UnitTestCase {
 			}
 		}
 
+		unset( $this->response_service );
+		unset( $this->response );
 		unset( $this->subject );
 	}
 
@@ -61,9 +67,15 @@ class UserCanMiddlewareTest extends WP_UnitTestCase {
 		] );
 		wp_set_current_user( $this->user_ids['subscriber'] );
 
-		$response = $this->subject->handle( $request, $next, 'manage_options' );
+		$this->response_service->shouldReceive( 'redirect' )
+			->andReturn( $this->response );
 
-		$this->assertEquals( $url, $response->getHeaderLine( 'Location' ) );
+		$this->response->shouldReceive( 'to' )
+			->with( $url )
+			->andReturn( $this->response )
+			->once();
+
+		$this->assertSame( $this->response, $this->subject->handle( $request, $next, 'manage_options' ) );
 	}
 
 	/**
@@ -79,9 +91,15 @@ class UserCanMiddlewareTest extends WP_UnitTestCase {
 		] );
 		wp_set_current_user( $this->user_ids['subscriber'] );
 
-		$response = $this->subject->handle( $request, $next, 'manage_options', 0, $url );
+		$this->response_service->shouldReceive( 'redirect' )
+			->andReturn( $this->response );
 
-		$this->assertEquals( $url, $response->getHeaderLine( 'Location' ) );
+		$this->response->shouldReceive( 'to' )
+			->with( $url )
+			->andReturn( $this->response )
+			->once();
+
+		$this->assertSame( $this->response, $this->subject->handle( $request, $next, 'manage_options', 0, $url ) );
 	}
 
 	/**
@@ -110,7 +128,15 @@ class UserCanMiddlewareTest extends WP_UnitTestCase {
 		$this->assertTrue( $this->subject->handle( $request, $next, 'read_post', $post_id ) );
 
 		wp_set_current_user( $this->user_ids['user2'] );
-		$response = $this->subject->handle( $request, $next, 'read_post', $post_id );
-		$this->assertEquals( $url, $response->getHeaderLine( 'Location' ) );
+
+		$this->response_service->shouldReceive( 'redirect' )
+			->andReturn( $this->response );
+
+		$this->response->shouldReceive( 'to' )
+			->with( $url )
+			->andReturn( $this->response )
+			->once();
+
+		$this->assertSame( $this->response, $this->subject->handle( $request, $next, 'read_post', $post_id ) );
 	}
 }

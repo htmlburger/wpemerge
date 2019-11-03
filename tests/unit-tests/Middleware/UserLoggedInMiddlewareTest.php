@@ -3,9 +3,11 @@
 namespace WPEmergeTests\Input;
 
 use Mockery;
+use Psr\Http\Message\ResponseInterface;
 use WP_UnitTestCase;
 use WPEmerge\Middleware\UserLoggedInMiddleware;
 use WPEmerge\Requests\RequestInterface;
+use WPEmerge\Responses\ResponseService;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserLoggedInMiddleware
@@ -15,7 +17,9 @@ class UserLoggedInMiddlewareTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->user_id = 0;
-		$this->subject = new UserLoggedInMiddleware();
+		$this->response_service = Mockery::mock( ResponseService::class );
+		$this->response = Mockery::mock( ResponseInterface::class );
+		$this->subject = new UserLoggedInMiddleware( $this->response_service );
 	}
 
 	public function tearDown() {
@@ -28,6 +32,8 @@ class UserLoggedInMiddlewareTest extends WP_UnitTestCase {
 			wp_delete_user( $this->user_id );
 		}
 
+		unset( $this->response_service );
+		unset( $this->response );
 		unset( $this->subject );
 	}
 
@@ -55,9 +61,15 @@ class UserLoggedInMiddlewareTest extends WP_UnitTestCase {
 		$request->shouldReceive( 'getUrl' )
 			->andReturn( 'foo' );
 
-		$response = $this->subject->handle( $request, $next );
+		$this->response_service->shouldReceive( 'redirect' )
+			->andReturn( $this->response );
 
-		$this->assertEquals( $url, $response->getHeaderLine( 'Location' ) );
+		$this->response->shouldReceive( 'to' )
+			->with( $url )
+			->andReturn( $this->response )
+			->once();
+
+		$this->assertSame( $this->response, $this->subject->handle( $request, $next ) );
 	}
 
 	/**
@@ -68,8 +80,14 @@ class UserLoggedInMiddlewareTest extends WP_UnitTestCase {
 		$next = function () {};
 		$url = wp_login_url( 'foo' );
 
-		$response = $this->subject->handle( $request, $next, $url );
+		$this->response_service->shouldReceive( 'redirect' )
+			->andReturn( $this->response );
 
-		$this->assertEquals( $url, $response->getHeaderLine( 'Location' ) );
+		$this->response->shouldReceive( 'to' )
+			->with( $url )
+			->andReturn( $this->response )
+			->once();
+
+		$this->assertSame( $this->response, $this->subject->handle( $request, $next, $url ) );
 	}
 }

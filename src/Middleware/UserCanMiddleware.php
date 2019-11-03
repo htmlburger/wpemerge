@@ -11,12 +11,29 @@ namespace WPEmerge\Middleware;
 
 use Closure;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Responses\RedirectResponse;
+use WPEmerge\Responses\ResponseService;
 
 /**
  * Redirect users who do not have a capability to a specific URL.
  */
 class UserCanMiddleware {
+	/**
+	 * Response service.
+	 *
+	 * @var ResponseService
+	 */
+	protected $response_service = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
+	 * @param ResponseService $response_service
+	 */
+	public function __construct( ResponseService $response_service ) {
+		$this->response_service = $response_service;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -39,6 +56,6 @@ class UserCanMiddleware {
 
 		$url = apply_filters( 'wpemerge.middleware.user.can.redirect_url', $url, $request );
 
-		return (new RedirectResponse( $request ))->to( $url );
+		return $this->response_service->redirect( $request )->to( $url );
 	}
 }

@@ -72,7 +72,19 @@ class ResponseServiceTest extends WP_UnitTestCase {
 	 * @covers ::redirect
 	 */
 	public function testRedirect() {
-		$this->assertInstanceOf( RedirectResponse::class, $this->subject->redirect() );
+		$this->request->shouldReceive( 'getHeaderLine' )
+			->with( 'Referer' )
+			->andReturn( 'foo' );
+
+		$this->assertEquals( 'foo', $this->subject->redirect()->back()->getHeaderLine( 'Location' ) );
+
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'getHeaderLine' )
+			->with( 'Referer' )
+			->andReturn( 'bar' );
+
+		$this->assertEquals( 'bar', $this->subject->redirect( $request )->back()->getHeaderLine( 'Location' ) );
 	}
 
 	/**

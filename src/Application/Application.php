@@ -18,6 +18,7 @@ use WPEmerge\Exceptions\ExceptionsServiceProvider;
 use WPEmerge\Flash\FlashServiceProvider;
 use WPEmerge\Input\OldInputServiceProvider;
 use WPEmerge\Kernels\KernelsServiceProvider;
+use WPEmerge\Middleware\MiddlewareServiceProvider;
 use WPEmerge\Requests\Request;
 use WPEmerge\Requests\RequestsServiceProvider;
 use WPEmerge\Responses\ResponsesServiceProvider;
@@ -69,6 +70,7 @@ abstract class Application {
 		RoutingServiceProvider::class,
 		ViewServiceProvider::class,
 		ControllersServiceProvider::class,
+		MiddlewareServiceProvider::class,
 		CsrfServiceProvider::class,
 		FlashServiceProvider::class,
 		OldInputServiceProvider::class,

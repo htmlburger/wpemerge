@@ -39,7 +39,6 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 				'old_input',
 			],
 			'global' => [],
-
 			'web' => [],
 			'ajax' => [],
 			'admin' => [],
