@@ -26,6 +26,7 @@ if ( $is_admin && ! $is_ajax ) {
 	<style>
 		.wpemerge-whoops {
 			position: relative;
+			z-index: 1;
 			margin: 20px 20px 0 0;
 		}
 
