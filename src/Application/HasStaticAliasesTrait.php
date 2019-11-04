@@ -20,17 +20,29 @@ trait HasStaticAliasesTrait {
 	use HasAliasesTrait;
 
 	/**
-	 * Instances.
+	 * Filter to "store" instances in.
 	 *
-	 * @var array<string, static>
+	 * @var string
 	 */
-	protected static $instances = [];
+	protected static $instances_filter = 'wpemerge.application.instances';
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		static::$instances[ static::class ] = $this;
+		add_filter( static::$instances_filter, [$this, 'registerInstance'] );
+	}
+
+	/**
+	 * Register the current instance.
+	 *
+	 * @param  array<string, object> $instances
+	 * @return array<string, object>
+	 */
+	public function registerInstance( $instances ) {
+		$instances[ static::class ] = $this;
+
+		return $instances;
 	}
 
 	/**
@@ -40,9 +52,18 @@ trait HasStaticAliasesTrait {
 	 * @return static
 	 */
 	protected static function instance( $class ) {
-		return isset( static::$instances[ $class ] ) ? static::$instances[ $class ] : null;
+		$instances = apply_filters( static::$instances_filter, [] );
+
+		return isset( $instances[ $class ] ) ? $instances[ $class ] : null;
 	}
 
+	/**
+	 * Invoke any matching alias when a static method is used.
+	 *
+	 * @param  string $method
+	 * @param  array  $parameters
+	 * @return mixed
+	 */
 	public static function __callStatic( $method, $parameters ) {
 		$instance = static::instance( static::class );
 
