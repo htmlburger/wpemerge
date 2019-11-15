@@ -28,10 +28,6 @@ if ( ! defined( 'WPEMERGE_CONFIG_KEY' ) ) {
 	define( 'WPEMERGE_CONFIG_KEY', 'wpemerge.config' );
 }
 
-if ( ! defined( 'WPEMERGE_APPLICATION_DEBUG_KEY' ) ) {
-	define( 'WPEMERGE_APPLICATION_DEBUG_KEY', 'wpemerge.application.debug' );
-}
-
 if ( ! defined( 'WPEMERGE_APPLICATION_KEY' ) ) {
 	define( 'WPEMERGE_APPLICATION_KEY', 'wpemerge.application.application' );
 }

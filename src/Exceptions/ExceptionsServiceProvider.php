@@ -27,6 +27,7 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$this->extendConfig( $container, 'debug', [
+			'enable' => true,
 			'pretty_errors' => true,
 		] );
 
@@ -55,13 +56,15 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) {
-			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
-			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $c[ WPEMERGE_APPLICATION_DEBUG_KEY ] );
+			$debug = $c[ WPEMERGE_CONFIG_KEY ]['debug'];
+			$whoops = $debug['pretty_errors'] ? $c[ Run::class ] : null;
+			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $debug['enable'] );
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) {
-			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
-			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $c[ WPEMERGE_APPLICATION_DEBUG_KEY ] );
+			$debug = $c[ WPEMERGE_CONFIG_KEY ]['debug'];
+			$whoops = $debug['pretty_errors'] ? $c[ Run::class ] : null;
+			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $debug['enable'] );
 		};
 	}
 
