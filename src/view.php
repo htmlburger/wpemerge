@@ -11,5 +11,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-do_action( 'wpemerge.respond' );
-remove_all_filters( 'wpemerge.respond' );
+do_action( 'wpemerge.kernels.http_kernel.respond' );
+remove_all_filters( 'wpemerge.kernels.http_kernel.respond' );

@@ -304,7 +304,7 @@ class HttpKernel implements HttpKernelInterface {
 				$wp_query->set_404();
 			}
 
-			add_action( 'wpemerge.respond', [$this, 'respond'] );
+			add_action( 'wpemerge.kernels.http_kernel.respond', [$this, 'respond'] );
 
 			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 		}
