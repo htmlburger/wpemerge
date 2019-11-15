@@ -4,7 +4,8 @@ This guide covers all the steps required to release a new version for all packag
 
 ## 1. htmlburger/wpemerge
 
-1. Create a new release: https://github.com/htmlburger/wpemerge/releases/new
+1. Edit config.php and update WPEMERGE_VERSION.
+2. Create a new release: https://github.com/htmlburger/wpemerge/releases/new
 
 ## 2. htmlburger/wpemerge-cli
 

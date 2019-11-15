@@ -8,6 +8,13 @@
  */
 
 /**
+ * Current version.
+ */
+if ( ! defined( 'WPEMERGE_VERSION' ) ) {
+	define( 'WPEMERGE_VERSION', '0.15.0' );
+}
+
+/**
  * Absolute path to application's directory.
  */
 if ( ! defined( 'WPEMERGE_DIR' ) ) {
