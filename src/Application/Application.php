@@ -142,7 +142,6 @@ abstract class Application {
 
 	/**
 	 * Bootstrap the application.
-	 * WordPress' 'after_setup_theme' action is a good place to call this.
 	 *
 	 * @param  array   $config
 	 * @param  boolean $run

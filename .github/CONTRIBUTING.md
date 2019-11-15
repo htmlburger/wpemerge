@@ -28,15 +28,13 @@ WP Emerge is completely open source and we encourage everybody to participate by
         session_start(); // required only if you use Flash and OldInput
     } );
 
-    add_action( 'after_setup_theme', function() {
-        WPEmerge::bootstrap( [
-            'routes'              => [
-                'web'   => __DIR__ . '/wpemerge-dev/web.php',
-                'admin' => __DIR__ . '/wpemerge-dev/admin.php',
-                'ajax'  => __DIR__ . '/wpemerge-dev/ajax.php',
-            ],
-        ] );
-    } );
+    WPEmerge::bootstrap( [
+        'routes'              => [
+            'web'   => __DIR__ . '/wpemerge-dev/web.php',
+            'admin' => __DIR__ . '/wpemerge-dev/admin.php',
+            'ajax'  => __DIR__ . '/wpemerge-dev/ajax.php',
+        ],
+    ] );
     ```
 1. To make sure everything is running correctly, open up the new `wpemerge-dev/web.php` file and add this:
     ```php
