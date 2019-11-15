@@ -24,6 +24,14 @@ if ( ! defined( 'WPEMERGE_DIR' ) ) {
 /**
  * Service container keys.
  */
+if ( ! defined( 'WPEMERGE_CONFIG_KEY' ) ) {
+	define( 'WPEMERGE_CONFIG_KEY', 'wpemerge.config' );
+}
+
+if ( ! defined( 'WPEMERGE_APPLICATION_DEBUG_KEY' ) ) {
+	define( 'WPEMERGE_APPLICATION_DEBUG_KEY', 'wpemerge.application.debug' );
+}
+
 if ( ! defined( 'WPEMERGE_APPLICATION_KEY' ) ) {
 	define( 'WPEMERGE_APPLICATION_KEY', 'wpemerge.application.application' );
 }
@@ -38,10 +46,6 @@ if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {
 
 if ( ! defined( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY' ) ) {
 	define( 'WPEMERGE_WORDPRESS_HTTP_KERNEL_KEY', 'wpemerge.kernels.wordpress_http_kernel' );
-}
-
-if ( ! defined( 'WPEMERGE_CONFIG_KEY' ) ) {
-	define( 'WPEMERGE_CONFIG_KEY', 'wpemerge.config' );
 }
 
 if ( ! defined( 'WPEMERGE_SESSION_KEY' ) ) {

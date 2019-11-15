@@ -101,17 +101,6 @@ abstract class Application {
 	}
 
 	/**
-	 * Get whether WordPress is in debug mode.
-	 *
-	 * @return boolean
-	 */
-	public function debugging() {
-		$debugging = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-		$debugging = apply_filters( 'wpemerge.debug', $debugging );
-		return $debugging;
-	}
-
-	/**
 	 * Get whether the application has been bootstrapped.
 	 *
 	 * @return boolean

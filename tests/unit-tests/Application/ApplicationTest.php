@@ -39,15 +39,6 @@ class ApplicationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::debugging
-	 */
-	public function testDebugging() {
-		$this->assertTrue( $this->subject->debugging() );
-		add_filter( 'wpemerge.debug', '__return_false' );
-		$this->assertFalse( $this->subject->debugging() );
-	}
-
-	/**
 	 * @covers ::isBootstrapped
 	 * @covers ::bootstrap
 	 */

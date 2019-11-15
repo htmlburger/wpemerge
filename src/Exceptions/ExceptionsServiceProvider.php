@@ -55,15 +55,13 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $c ) {
-			$app = $c[ WPEMERGE_APPLICATION_KEY ];
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
-			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
+			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $c[ WPEMERGE_APPLICATION_DEBUG_KEY ] );
 		};
 
 		$container[ WPEMERGE_EXCEPTIONS_CONFIGURATION_ERROR_HANDLER_KEY ] = function ( $c ) {
-			$app = $c[ WPEMERGE_APPLICATION_KEY ];
 			$whoops = $c[ WPEMERGE_CONFIG_KEY ]['debug']['pretty_errors'] ? $c[ Run::class ] : null;
-			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $app->debugging() );
+			return new ErrorHandler( $c[ WPEMERGE_RESPONSE_SERVICE_KEY ], $whoops, $c[ WPEMERGE_APPLICATION_DEBUG_KEY ] );
 		};
 	}
 

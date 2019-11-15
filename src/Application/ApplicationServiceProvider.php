@@ -26,11 +26,16 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$this->extendConfig( $container, 'debug', defined( 'WP_DEBUG' ) && WP_DEBUG );
 		$this->extendConfig( $container, 'providers', [] );
 
 		$upload_dir = wp_upload_dir();
 		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';
 		$this->extendConfig( $container, 'cache', $cache_dir );
+
+		$container[ WPEMERGE_APPLICATION_DEBUG_KEY ] = function ( $c ) {
+			return $c[ WPEMERGE_CONFIG_KEY ]['debug'];
+		};
 
 		$container[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] = function ( $c ) {
 			return new GenericFactory( $c );
