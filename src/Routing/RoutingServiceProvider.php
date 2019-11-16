@@ -51,7 +51,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['web'],
-					'namespace' => '\\App\\Controllers\\Web\\',
+					'namespace' => 'App\\Controllers\\Web\\',
 					'handler' => 'WPEmerge\\Controllers\\WordPressController@handle',
 				],
 			],

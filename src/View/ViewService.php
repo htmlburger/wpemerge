@@ -19,6 +19,13 @@ use WPEmerge\Helpers\MixedType;
  */
 class ViewService {
 	/**
+	 * Configuration.
+	 *
+	 * @var array<string, mixed>
+	 */
+	protected $config = [];
+
+	/**
 	 * View engine.
 	 *
 	 * @var ViewEngineInterface
@@ -50,10 +57,12 @@ class ViewService {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param ViewEngineInterface $engine
-	 * @param HandlerFactory $handler_factory
+	 * @param array<string, mixed> $config
+	 * @param ViewEngineInterface  $engine
+	 * @param HandlerFactory       $handler_factory
 	 */
-	public function __construct( ViewEngineInterface $engine, HandlerFactory $handler_factory ) {
+	public function __construct( $config, ViewEngineInterface $engine, HandlerFactory $handler_factory ) {
+		$this->config = $config;
 		$this->engine = $engine;
 		$this->handler_factory = $handler_factory;
 	}
@@ -122,7 +131,7 @@ class ViewService {
 			return $this->engine->canonical( $view );
 		}, MixedType::toArray( $views ) );
 
-		$handler = $this->handler_factory->make( $composer, 'compose', '\\App\\ViewComposers\\' );
+		$handler = $this->handler_factory->make( $composer, 'compose', $this->config['namespace'] );
 
 		$this->composers[] = [
 			'views' => $views,
