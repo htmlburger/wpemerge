@@ -13,12 +13,12 @@ WP Emerge is completely open source and we encourage everybody to participate by
 ## Development setup
 
 1. Fork this repository.
-1. Open up your theme directory in your terminal of choice.
-1. Clone your fork e.g. `git clone git@github.com:your-username/wpemerge.git wpemerge`.
-1. Run `cd wpemerge/ && composer install`.
-1. Run `mkdir ../wpemerge-dev && cd ../wpemerge-dev`.
-1. Run `printf '<?php\n' > web.php && printf '<?php\n' > admin.php && printf '<?php\n' > ajax.php`.
-1. Open up your theme's `functions.php` file in your editor and add the following lines at the top:
+2. Open up your theme directory in your terminal of choice.
+3. Clone your fork e.g. `git clone git@github.com:your-username/wpemerge.git wpemerge`.
+4. Run `cd wpemerge/ && composer install`.
+5. Run `mkdir ../wpemerge-dev && cd ../wpemerge-dev`.
+6. Run `printf '<?php\n' > web.php && printf '<?php\n' > admin.php && printf '<?php\n' > ajax.php`.
+7. Open up your theme's `functions.php` file in your editor and add the following lines at the top:
     ```php
     use WPEmerge\Facades\WPEmerge;
 
@@ -36,7 +36,7 @@ WP Emerge is completely open source and we encourage everybody to participate by
         ],
     ] );
     ```
-1. To make sure everything is running correctly, open up the new `wpemerge-dev/web.php` file and add this:
+8. To make sure everything is running correctly, open up the new `wpemerge-dev/web.php` file and add this:
     ```php
     <?php
     use WPEmerge\Facades\Route;
