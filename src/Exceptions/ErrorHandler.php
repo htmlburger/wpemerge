@@ -149,6 +149,8 @@ class ErrorHandler implements ErrorHandlerInterface {
 		}
 
 		if ( ! $this->debug ) {
+			error_log( $exception );
+
 			return $this->response_service->error( 500 );
 		}
 
