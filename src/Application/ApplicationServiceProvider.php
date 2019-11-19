@@ -30,7 +30,9 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 
 		$upload_dir = wp_upload_dir();
 		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';
-		$this->extendConfig( $container, 'cache', $cache_dir );
+		$this->extendConfig( $container, 'cache', [
+			'path' => $cache_dir,
+		] );
 
 		$container[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] = function ( $c ) {
 			return new GenericFactory( $c );
@@ -48,7 +50,7 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function bootstrap( $container ) {
-		$cache_dir = $container[ WPEMERGE_CONFIG_KEY ]['cache'];
+		$cache_dir = $container[ WPEMERGE_CONFIG_KEY ]['cache']['path'];
 		wp_mkdir_p( $cache_dir );
 	}
 }
