@@ -50,7 +50,9 @@ class ViewServiceProvider implements ServiceProviderInterface {
 			return new PhpViewEngine( $c[ WPEMERGE_VIEW_COMPOSE_ACTION_KEY ], $finder );
 		};
 
-		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = $container->raw( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
+		$container[ WPEMERGE_VIEW_ENGINE_KEY ] = function ( $c ) {
+			return $c[ WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY ];
+		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
 		$app->alias( 'views', WPEMERGE_VIEW_SERVICE_KEY );
@@ -66,6 +68,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		$app->alias( 'layoutContent', function () use ( $app ) {
 			/** @var $engine PhpViewEngine */
 			$engine = $app->resolve( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
+
 			echo $engine->getLayoutContent();
 		} );
 	}
