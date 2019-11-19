@@ -20,7 +20,7 @@ class ViewServiceTest extends WP_UnitTestCase {
 		$this->engine = Mockery::mock( ViewEngineInterface::class )->shouldIgnoreMissing();
 		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
 		$this->factory_handler = Mockery::mock( Handler::class );
-		$this->subject = Mockery::mock( ViewService::class, [$this->engine, $this->handler_factory] )->makePartial();
+		$this->subject = Mockery::mock( ViewService::class, [['namespace' => ''], $this->engine, $this->handler_factory] )->makePartial();
 
 		$this->handler_factory->shouldReceive( 'make' )
 			->andReturn( $this->factory_handler );

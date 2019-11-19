@@ -64,7 +64,12 @@ class ErrorHandlerTest extends WP_UnitTestCase {
 				return (new Response())->withStatus( $status );
 			} );
 
+
+		$error_log = tmpfile();
+		$old_error_log = ini_set( 'error_log', stream_get_meta_data( $error_log )['uri'] );
 		$this->assertEquals( $expected, $this->subject->getResponse( $request, $exception )->getStatusCode() );
+		ini_set( 'error_log', $old_error_log );
+		$this->assertTrue( strpos( stream_get_contents( $error_log ), 'ErrorHandlerTest.php:59' ) !== -1 );
 	}
 
 	/**
