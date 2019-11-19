@@ -232,7 +232,18 @@ class ResponseService {
 	 * @return ResponseInterface
 	 */
 	public function error( $status ) {
-		return $this->view_service->make( [$status, 'error', 'index'] )
+		$views = [$status, 'error', 'index'];
+
+		if ( is_admin() ) {
+			$views = array_merge(
+				array_map( function ( $view ) {
+					return $view . '-' . ( wp_doing_ajax() ? 'ajax' : 'admin' );
+				}, $views ),
+				$views
+			);
+		}
+
+		return $this->view_service->make( $views )
 			->toResponse()
 			->withStatus( $status );
 	}
