@@ -33,18 +33,19 @@ class CsrfMiddleware {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Reject requests that fail nonce validation.
+	 *
 	 * @throws InvalidCsrfTokenException
 	 */
-	public function handle( RequestInterface $request, Closure $next ) {
+	public function handle( RequestInterface $request, Closure $next, $action = -1 ) {
 		if ( ! $request->isReadVerb() ) {
 			$token = $this->csrf->getTokenFromRequest( $request );
-			if ( ! $this->csrf->isValidToken( $token ) ) {
+			if ( ! $this->csrf->isValidToken( $token, $action ) ) {
 				throw new InvalidCsrfTokenException();
 			}
 		}
 
-		$this->csrf->generateToken();
+		$this->csrf->generateToken( $action );
 
 		return $next( $request );
 	}

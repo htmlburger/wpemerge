@@ -38,11 +38,11 @@ class Csrf {
 	protected $maximum_lifetime = 2;
 
 	/**
-	 * Last generated token.
+	 * Last generated tokens.
 	 *
-	 * @var string
+	 * @var array<string, string>
 	 */
-	protected $token = '';
+	protected $tokens = [];
 
 	/**
 	 * Constructor.
@@ -59,13 +59,15 @@ class Csrf {
 	/**
 	 * Get the last generated token.
 	 *
+	 * @param  int|string $action
 	 * @return string
 	 */
-	public function getToken() {
-		if ( ! $this->token ) {
-			$this->generateToken();
+	public function getToken( $action = -1 ) {
+		if ( ! isset( $this->tokens[ $action ] ) ) {
+			return $this->generateToken( $action );
 		}
-		return $this->token;
+
+		return $this->tokens[ $action ];
 	}
 
 	/**
@@ -101,8 +103,10 @@ class Csrf {
 	 */
 	public function generateToken( $action = -1 ) {
 		$action = $action === -1 ? session_id() : $action;
-		$this->token = wp_create_nonce( $action );
-		return $this->getToken();
+
+		$this->tokens[ $action ] = wp_create_nonce( $action );
+
+		return $this->getToken( $action );
 	}
 
 	/**
@@ -115,29 +119,32 @@ class Csrf {
 	public function isValidToken( $token, $action = -1 ) {
 		$action = $action === -1 ? session_id() : $action;
 		$lifetime = (int) wp_verify_nonce( $token, $action );
+
 		return ( $lifetime > 0 && $lifetime <= $this->maximum_lifetime );
 	}
 
 	/**
 	 * Add the token to a URL.
 	 *
-	 * @param  string $url
+	 * @param  string     $url
+	 * @param  int|string $action
 	 * @return string
 	 */
-	public function url( $url ) {
-		return add_query_arg( $this->key, $this->getToken(), $url );
+	public function url( $url, $action = -1 ) {
+		return add_query_arg( $this->key, $this->getToken( $action ), $url );
 	}
 
 	/**
 	 * Return the markup for a hidden input which holds the current token.
 	 *
+	 * @param  int|string $action
 	 * @return void
 	 */
-	public function field() {
+	public function field( $action = -1 ) {
 		echo sprintf(
 			'<input type="hidden" name="%1$s" value="%2$s" />',
 			esc_attr( $this->key ),
-			esc_attr( $this->getToken() )
+			esc_attr( $this->getToken( $action ) )
 		);
 	}
 }
