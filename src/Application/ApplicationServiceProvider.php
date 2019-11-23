@@ -38,12 +38,17 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 			return new GenericFactory( $c );
 		};
 
+		$container[ WPEMERGE_APPLICATION_CLOSURE_FACTORY_KEY ] = function ( $c ) {
+			return new ClosureFactory( $c[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] );
+		};
+
 		$container[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] = function ( $c ) {
 			return new HandlerFactory( $c[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] );
 		};
 
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
 		$app->alias( 'app', WPEMERGE_APPLICATION_KEY );
+		$app->alias( 'closure', WPEMERGE_APPLICATION_CLOSURE_FACTORY_KEY );
 	}
 
 	/**

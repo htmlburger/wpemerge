@@ -113,5 +113,13 @@ namespace WPEmerge\Application {
 		 * @return ResponseInterface
 		 */
 		public static function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {}
+
+		/**
+		 * Get closure factory instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return ClosureFactory
+		 */
+		public static function closure() {}
 	}
 }
