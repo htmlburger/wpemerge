@@ -125,7 +125,7 @@ abstract class Application {
 	 *
 	 * @return Container
 	 */
-	public function getContainer() {
+	public function container() {
 		return $this->container;
 	}
 
@@ -143,7 +143,7 @@ abstract class Application {
 
 		$this->bootstrapped = true;
 
-		$container = $this->getContainer();
+		$container = $this->container();
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 
@@ -280,11 +280,11 @@ abstract class Application {
 	public function resolve( $key ) {
 		$this->verifyBootstrap();
 
-		if ( ! isset( $this->getContainer()[ $key ] ) ) {
+		if ( ! isset( $this->container()[ $key ] ) ) {
 			return null;
 		}
 
-		return $this->getContainer()[ $key ];
+		return $this->container()[ $key ];
 	}
 
 	/**

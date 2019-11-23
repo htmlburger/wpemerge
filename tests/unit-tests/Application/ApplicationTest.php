@@ -35,7 +35,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	public function testConstruct() {
 		$container = new Container();
 		$subject = new TestApp( $container );
-		$this->assertSame( $container, $subject->getContainer() );
+		$this->assertSame( $container, $subject->container() );
 	}
 
 	/**
@@ -49,10 +49,10 @@ class ApplicationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::getContainer
+	 * @covers ::container
 	 */
-	public function testGetContainer_ReturnContainer() {
-		$container = $this->subject->getContainer();
+	public function testContainer_ReturnContainer() {
+		$container = $this->subject->container();
 		$this->assertInstanceOf( Container::class, $container );
 	}
 
@@ -130,7 +130,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		$expected = 'foobar';
 		$container_key = 'test';
 
-		$container = $this->subject->getContainer();
+		$container = $this->subject->container();
 		$container[ $container_key ] = $expected;
 
 		$this->subject->bootstrap( [], false );
@@ -144,7 +144,7 @@ class ApplicationTest extends WP_UnitTestCase {
 		$alias = 'test';
 		$service_key = 'test_service';
 
-		$container = $this->subject->getContainer();
+		$container = $this->subject->container();
 		$container[ $service_key ] = function() {
 			return new \WPEmergeTestTools\TestService();
 		};
