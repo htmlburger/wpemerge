@@ -37,7 +37,8 @@ class ClosureFactoryTest extends WP_UnitTestCase {
 			->with( $key )
 			->andReturn( $expected );
 
-		$this->assertEquals( $expected, $this->subject->value( $key )() );
+		$closure = $this->subject->value( $key );
+		$this->assertEquals( $expected, $closure() );
 	}
 
 	/**
@@ -54,7 +55,8 @@ class ClosureFactoryTest extends WP_UnitTestCase {
 			->with( $key )
 			->andReturn( new ClosureFactoryTestInstance() );
 
-		$this->assertEquals( $expected, $this->subject->method( $key, $method )( $a, $b ) );
+		$closure = $this->subject->method( $key, $method );
+		$this->assertEquals( $expected, $closure( $a, $b ) );
 	}
 }
 
