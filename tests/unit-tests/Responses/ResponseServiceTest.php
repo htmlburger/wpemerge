@@ -98,7 +98,16 @@ class ResponseServiceTest extends WP_UnitTestCase {
 		$response = Mockery::mock( ResponseInterface::class );
 
 		$this->view_service->shouldReceive( 'make' )
-			->andReturn( $view );
+			->with( [$expected1, 'error', 'index'] )
+			->andReturn( $view )
+			->once()
+			->ordered();
+
+		$this->view_service->shouldReceive( 'make' )
+			->with( [$expected2, 'error', 'index'] )
+			->andReturn( $view )
+			->once()
+			->ordered();
 
 		$view->shouldReceive( 'toResponse' )
 			->andReturn( $response );
@@ -120,5 +129,65 @@ class ResponseServiceTest extends WP_UnitTestCase {
 
 		$this->assertSame( $response, $response1 );
 		$this->assertSame( $response, $response2 );
+	}
+
+	/**
+	 * @covers ::error
+	 */
+	public function testError_Admin_AdminTemplate() {
+		$expected = 404;
+
+		$view = Mockery::mock( ViewInterface::class );
+		$response = Mockery::mock( ResponseInterface::class );
+
+		$this->view_service->shouldReceive( 'make' )
+			->with( [$expected . '-admin', 'error-admin', 'index-admin', $expected, 'error', 'index'] )
+			->andReturn( $view )
+			->once();
+
+		$view->shouldReceive( 'toResponse' )
+			->andReturn( $response );
+
+		$response->shouldReceive( 'withStatus' )
+			->with( $expected )
+			->andReturn( $response )
+			->once();
+
+		set_current_screen( 'options.php' );
+
+		$this->assertSame( $response, $this->subject->error( $expected ) );
+
+		set_current_screen( 'front' );
+	}
+
+	/**
+	 * @covers ::error
+	 */
+	public function testError_Ajax_AjaxTemplate() {
+		$expected = 404;
+
+		$view = Mockery::mock( ViewInterface::class );
+		$response = Mockery::mock( ResponseInterface::class );
+
+		$this->view_service->shouldReceive( 'make' )
+			->with( [$expected . '-ajax', 'error-ajax', 'index-ajax', $expected, 'error', 'index'] )
+			->andReturn( $view )
+			->once();
+
+		$view->shouldReceive( 'toResponse' )
+			->andReturn( $response );
+
+		$response->shouldReceive( 'withStatus' )
+			->with( $expected )
+			->andReturn( $response )
+			->once();
+
+		set_current_screen( 'options.php' );
+		add_filter( 'wp_doing_ajax', '__return_true' );
+
+		$this->assertSame( $response, $this->subject->error( $expected ) );
+
+		remove_filter( 'wp_doing_ajax', '__return_true' );
+		set_current_screen( 'front' );
 	}
 }
