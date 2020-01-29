@@ -34,7 +34,11 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		] );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function ( $c ) {
-			return new ViewService( $c[ WPEMERGE_CONFIG_KEY ]['view_composers'], $c[ WPEMERGE_VIEW_ENGINE_KEY ], $c[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ] );
+			return new ViewService(
+				$c[ WPEMERGE_CONFIG_KEY ]['view_composers'],
+				$c[ WPEMERGE_VIEW_ENGINE_KEY ],
+				$c[ WPEMERGE_HELPERS_HANDLER_FACTORY_KEY ]
+			);
 		};
 
 		$container[ WPEMERGE_VIEW_COMPOSE_ACTION_KEY ] = function ( $c ) {
