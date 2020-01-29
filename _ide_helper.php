@@ -17,11 +17,74 @@ namespace  {
 namespace WPEmerge\Application {
 
 	use Psr\Http\Message\ResponseInterface;
+	use WPEmerge\Csrf\Csrf;
 	use WPEmerge\Requests\RequestInterface;
 	use WPEmerge\Responses\RedirectResponse;
+	use WPEmerge\Routing\RouteBlueprint;
 	use WPEmerge\View\ViewInterface;
 
 	class Application {
+		/**
+		 * Get the Application instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\Application\Application
+		 */
+		public static function app() {}
+
+		/**
+		 * Get the ClosureFactory instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return ClosureFactory
+		 */
+		public static function closure() {}
+
+		/**
+		 * Get the CSRF service instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\Csrf\Csrf
+		 */
+		public static function csrf() {}
+
+		/**
+		 * Get the Flash service instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\Flash\Flash
+		 */
+		public static function flash() {}
+
+		/**
+		 * Get the OldInput service instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\Input\OldInput
+		 */
+		public static function oldInput() {}
+
+		/**
+		 * Run a full middleware + handler pipeline independently of routes.
+		 *
+		 * @codeCoverageIgnore
+		 * @see    \WPEmerge\Kernels\HttpKernel::run()
+		 * @param  RequestInterface  $request
+		 * @param  array<string>     $middleware
+		 * @param  string|\Closure   $handler
+		 * @param  array             $arguments
+		 * @return ResponseInterface
+		 */
+		public static function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {}
+
+		/**
+		 * Get the ResponseService instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\Responses\ResponseService
+		 */
+		public static function responses() {}
+
 		/**
 		 * Create a "blank" response.
 		 *
@@ -61,16 +124,6 @@ namespace WPEmerge\Application {
 		public static function redirect() {}
 
 		/**
-		 * Create a view.
-		 *
-		 * @codeCoverageIgnore
-		 * @see    \WPEmerge\View\ViewService::make()
-		 * @param  string|array<string> $views
-		 * @return ViewInterface
-		 */
-		public static function view( $views ) {}
-
-		/**
 		 * Create a response with the specified error status code.
 		 *
 		 * @codeCoverageIgnore
@@ -79,6 +132,31 @@ namespace WPEmerge\Application {
 		 * @return ResponseInterface
 		 */
 		public static function error( $status ) {}
+
+		/**
+		 * Create a new route.
+		 *
+		 * @codeCoverageIgnore
+		 * @return RouteBlueprint
+		 */
+		public static function route() {}
+		/**
+		 * Get the ViewService instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return \WPEmerge\View\ViewService
+		 */
+		public static function views() {}
+
+		/**
+		 * Create a view.
+		 *
+		 * @codeCoverageIgnore
+		 * @see    \WPEmerge\View\ViewService::make()
+		 * @param  string|array<string> $views
+		 * @return ViewInterface
+		 */
+		public static function view( $views ) {}
 
 		/**
 		 * Output the specified view.
@@ -100,26 +178,5 @@ namespace WPEmerge\Application {
 		 * @return void
 		 */
 		public static function layoutContent() {}
-
-		/**
-		 * Run a full middleware + handler pipeline independently of routes.
-		 *
-		 * @codeCoverageIgnore
-		 * @see    \WPEmerge\Kernels\HttpKernel::run()
-		 * @param  RequestInterface  $request
-		 * @param  array<string>     $middleware
-		 * @param  string|\Closure   $handler
-		 * @param  array             $arguments
-		 * @return ResponseInterface
-		 */
-		public static function run( RequestInterface $request, $middleware, $handler, $arguments = [] ) {}
-
-		/**
-		 * Get closure factory instance.
-		 *
-		 * @codeCoverageIgnore
-		 * @return ClosureFactory
-		 */
-		public static function closure() {}
 	}
 }
