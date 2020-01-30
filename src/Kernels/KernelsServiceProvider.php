@@ -54,6 +54,7 @@ class KernelsServiceProvider implements ServiceProviderInterface {
 				$c[ WPEMERGE_RESPONSE_SERVICE_KEY ],
 				$c[ WPEMERGE_REQUEST_KEY ],
 				$c[ WPEMERGE_ROUTING_ROUTER_KEY ],
+				$c[ WPEMERGE_VIEW_SERVICE_KEY ],
 				$c[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ]
 			);
 

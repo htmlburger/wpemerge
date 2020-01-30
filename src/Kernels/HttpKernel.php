@@ -28,6 +28,7 @@ use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\SortsMiddlewareTrait;
+use WPEmerge\View\ViewService;
 
 /**
  * Describes how a request is handled.
@@ -82,11 +83,25 @@ class HttpKernel implements HttpKernelInterface {
 	protected $router = null;
 
 	/**
+	 * View Service.
+	 *
+	 * @var ViewService
+	 */
+	protected $view_service = null;
+
+	/**
 	 * Error handler.
 	 *
 	 * @var ErrorHandlerInterface
 	 */
 	protected $error_handler = null;
+
+	/**
+	 * Template WordPress attempted to load.
+	 *
+	 * @var string
+	 */
+	protected $template = '';
 
 	/**
 	 * Constructor.
@@ -98,6 +113,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @param ResponseService       $response_service
 	 * @param RequestInterface      $request
 	 * @param Router                $router
+	 * @param ViewService           $view_service
 	 * @param ErrorHandlerInterface $error_handler
 	 */
 	public function __construct(
@@ -107,6 +123,7 @@ class HttpKernel implements HttpKernelInterface {
 		ResponseService $response_service,
 		RequestInterface $request,
 		Router $router,
+		ViewService $view_service,
 		ErrorHandlerInterface $error_handler
 	) {
 		$this->container = $container;
@@ -115,6 +132,7 @@ class HttpKernel implements HttpKernelInterface {
 		$this->response_service = $response_service;
 		$this->request = $request;
 		$this->router = $router;
+		$this->view_service = $view_service;
 		$this->error_handler = $error_handler;
 	}
 
@@ -244,6 +262,17 @@ class HttpKernel implements HttpKernelInterface {
 	}
 
 	/**
+	 * Output the current view outside of the routing flow.
+	 *
+	 * @return void
+	 */
+	public function compose() {
+		$view = $this->view_service->make( $this->template );
+
+		echo $view->toString();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @codeCoverageIgnore
 	 */
@@ -290,14 +319,16 @@ class HttpKernel implements HttpKernelInterface {
 	/**
 	 * Filter the main template file.
 	 *
-	 * @param  string $view
+	 * @param  string $template
 	 * @return string
 	 */
-	public function filterTemplateInclude( $view ) {
+	public function filterTemplateInclude( $template ) {
 		/** @var $wp_query WP_Query */
 		global $wp_query;
 
-		$response = $this->handle( $this->request, [$view] );
+		$this->template = $template;
+
+		$response = $this->handle( $this->request, [$template] );
 
 		if ( $response instanceof ResponseInterface ) {
 			if ( $response->getStatusCode() === 404 ) {
@@ -309,7 +340,15 @@ class HttpKernel implements HttpKernelInterface {
 			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 		}
 
-		return $view;
+		$composers = $this->view_service->getComposersForView( $template );
+
+		if ( ! empty( $composers ) ) {
+			add_action( 'wpemerge.kernels.http_kernel.respond', [$this, 'compose'] );
+
+			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
+		}
+
+		return $template;
 	}
 
 	/**
