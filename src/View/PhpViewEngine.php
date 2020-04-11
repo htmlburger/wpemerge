@@ -30,7 +30,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * Stack of views ready to be rendered.
 	 *
-	 * @var array<ViewInterface>
+	 * @var array<PhpView>
 	 */
 	protected $layout_content_stack = [];
 
@@ -101,7 +101,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	 * Create a view instance for the given view's layout header, if any.
 	 *
 	 * @param  PhpView $view
-	 * @return ViewInterface
+	 * @return ViewInterface|null
 	 * @throws ViewNotFoundException
 	 */
 	protected function getViewLayout( PhpView $view ) {

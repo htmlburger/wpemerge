@@ -32,7 +32,7 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Middleware groups that should have the 'wpemerge' and 'global' groups prepended to them.
 	 *
-	 * @var array<string, string>
+	 * @var array<string>
 	 */
 	protected $prepend_special_groups_to = [
 		'web',

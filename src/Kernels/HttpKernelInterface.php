@@ -11,6 +11,7 @@ namespace WPEmerge\Kernels;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsInterface;
 use WPEmerge\Requests\RequestInterface;
 
@@ -28,10 +29,10 @@ interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	/**
 	 * Run a response pipeline for the given request.
 	 *
-	 * @param  RequestInterface  $request
-	 * @param  array<string>     $middleware
-	 * @param  string|Closure    $handler
-	 * @param  array             $arguments
+	 * @param  RequestInterface       $request
+	 * @param  array<string>          $middleware
+	 * @param  string|Closure|Handler $handler
+	 * @param  array                  $arguments
 	 * @return ResponseInterface
 	 */
 	public function run( RequestInterface $request, $middleware, $handler, $arguments = [] );

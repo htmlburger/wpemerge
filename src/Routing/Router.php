@@ -76,7 +76,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Set the current route.
 	 *
-	 * @param  RouteInterface
+	 * @param  RouteInterface $current_route
 	 * @return void
 	 */
 	public function setCurrentRoute( RouteInterface $current_route ) {
@@ -325,8 +325,8 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Assign and return the first satisfied route (if any) as the current one for the given request.
 	 *
-	 * @param  RequestInterface $request
-	 * @return RouteInterface
+	 * @param  RequestInterface    $request
+	 * @return RouteInterface|null
 	 */
 	public function execute( $request ) {
 		/** @var $routes RouteInterface[] */

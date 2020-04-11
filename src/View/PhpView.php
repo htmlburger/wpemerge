@@ -84,7 +84,7 @@ class PhpView implements ViewInterface {
 	 * @param  ViewInterface|null $layout
 	 * @return static             $this
 	 */
-	public function setLayout( ViewInterface $layout ) {
+	public function setLayout( $layout ) {
 		$this->layout = $layout;
 		return $this;
 	}
