@@ -16,14 +16,14 @@ trait HasMiddlewareTrait {
 	/**
 	 * Array of all registered middleware.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $middleware = [];
 
 	/**
 	 * Get registered middleware.
 	 *
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function getMiddleware() {
 		return $this->middleware;
@@ -32,7 +32,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Set registered middleware.
 	 *
-	 * @param  array<string> $middleware
+	 * @param  string[] $middleware
 	 * @return void
 	 */
 	public function setMiddleware( $middleware ) {
@@ -42,7 +42,7 @@ trait HasMiddlewareTrait {
 	/**
 	 * Add middleware.
 	 *
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[] $middleware
 	 * @return void
 	 */
 	public function addMiddleware( $middleware ) {

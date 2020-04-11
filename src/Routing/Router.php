@@ -86,9 +86,9 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the methods attribute combining values.
 	 *
-	 * @param  array<string> $old
-	 * @param  array<string> $new
-	 * @return array<string>
+	 * @param  string[] $old
+	 * @param  string[] $new
+	 * @return string[]
 	 */
 	public function mergeMethodsAttribute( $old, $new ) {
 		return array_merge( $old, $new );
@@ -114,9 +114,9 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Merge the middleware attribute combining values.
 	 *
-	 * @param  array<string> $old
-	 * @param  array<string> $new
-	 * @return array<string>
+	 * @param  string[] $old
+	 * @param  string[] $new
+	 * @return string[]
 	 */
 	public function mergeMiddlewareAttribute( $old, $new ) {
 		return array_merge( $old, $new );
@@ -329,7 +329,6 @@ class Router implements HasRoutesInterface {
 	 * @return RouteInterface|null
 	 */
 	public function execute( $request ) {
-		/** @var $routes RouteInterface[] */
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {

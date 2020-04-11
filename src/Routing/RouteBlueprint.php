@@ -125,8 +125,8 @@ class RouteBlueprint {
 	/**
 	 * Match requests using one of the specified methods.
 	 *
-	 * @param  array<string> $methods
-	 * @return static        $this
+	 * @param  string[] $methods
+	 * @return static   $this
 	 */
 	public function methods( $methods ) {
 		$methods = array_merge(
@@ -171,8 +171,8 @@ class RouteBlueprint {
 	/**
 	 * Set the middleware attribute.
 	 *
-	 * @param  string|array<string> $middleware
-	 * @return static               $this
+	 * @param  string|string[] $middleware
+	 * @return static          $this
 	 */
 	public function middleware( $middleware ) {
 		$middleware = array_merge(
@@ -241,7 +241,7 @@ class RouteBlueprint {
 	/**
 	 * Handle a request by directly rendering a view.
 	 *
-	 * @param  string|array<string> $views
+	 * @param  string|string[] $views
 	 * @return RouteInterface
 	 */
 	public function view( $views ) {

@@ -18,8 +18,8 @@ trait ReadsHandlerMiddlewareTrait {
 	/**
 	 * Get middleware registered with the given handler.
 	 *
-	 * @param  Handler       $handler
-	 * @return array<string>
+	 * @param  Handler  $handler
+	 * @return string[]
 	 */
 	protected function getHandlerMiddleware( Handler $handler ) {
 		$instance = $handler->make();

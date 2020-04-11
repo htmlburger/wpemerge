@@ -16,7 +16,7 @@ trait SortsMiddlewareTrait {
 	/**
 	 * Middleware sorted in order of execution.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $middleware_priority = [];
 
@@ -24,7 +24,7 @@ trait SortsMiddlewareTrait {
 	 * Get middleware execution priority.
 	 *
 	 * @codeCoverageIgnore
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function getMiddlewarePriority() {
 		return $this->middleware_priority;
@@ -34,7 +34,7 @@ trait SortsMiddlewareTrait {
 	 * Set middleware execution priority.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  array<string> $middleware_priority
+	 * @param  string[] $middleware_priority
 	 * @return void
 	 */
 	public function setMiddlewarePriority( $middleware_priority ) {
@@ -62,7 +62,7 @@ trait SortsMiddlewareTrait {
 	/**
 	 * Sort array of fully qualified middleware class names by priority in ascending order.
 	 *
-	 * @param  array<string> $middleware
+	 * @param  string[] $middleware
 	 * @return array
 	 */
 	public function sortMiddleware( $middleware ) {

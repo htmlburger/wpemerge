@@ -102,8 +102,8 @@ class ViewService {
 	/**
 	 * Get view composer.
 	 *
-	 * @param  string         $view
-	 * @return array<Handler>
+	 * @param  string    $view
+	 * @return Handler[]
 	 */
 	public function getComposersForView( $view ) {
 		$view = $this->engine->canonical( $view );
@@ -122,8 +122,8 @@ class ViewService {
 	/**
 	 * Add view composer.
 	 *
-	 * @param  string|array<string> $views
-	 * @param  string|Closure       $composer
+	 * @param  string|string[] $views
+	 * @param  string|Closure  $composer
 	 * @return void
 	 */
 	public function addComposer( $views, $composer ) {
@@ -162,7 +162,7 @@ class ViewService {
 	/**
 	 * Create a view instance.
 	 *
-	 * @param  string|array<string> $views
+	 * @param  string|string[] $views
 	 * @return ViewInterface
 	 */
 	public function make( $views ) {
@@ -190,7 +190,7 @@ class ViewService {
 	 * Render a view.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|array<string> $views
+	 * @param  string|string[]      $views
 	 * @param  array<string, mixed> $context
 	 * @return void
 	 */

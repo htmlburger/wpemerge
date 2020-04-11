@@ -18,7 +18,7 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 	/**
 	 * Custom views directories to check first.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $directories = [];
 
@@ -26,7 +26,7 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param array<string> $directories
+	 * @param string[] $directories
 	 */
 	public function __construct( $directories = [] ) {
 		$this->setDirectories( $directories );
@@ -36,7 +36,7 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 	 * Get the custom views directories.
 	 *
 	 * @codeCoverageIgnore
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function getDirectories() {
 		return $this->directories;
@@ -46,7 +46,7 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 	 * Set the custom views directories.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  array<string> $directories
+	 * @param  string[] $directories
 	 * @return void
 	 */
 	public function setDirectories( $directories ) {

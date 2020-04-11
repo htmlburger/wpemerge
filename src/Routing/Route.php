@@ -40,7 +40,7 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  array<string>      $methods
+	 * @param  string[]           $methods
 	 * @param  ConditionInterface $condition
 	 * @param  Handler            $handler
 	 */
@@ -54,7 +54,7 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	 * Get allowed methods.
 	 *
 	 * @codeCoverageIgnore
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function getMethods() {
 		return $this->methods;

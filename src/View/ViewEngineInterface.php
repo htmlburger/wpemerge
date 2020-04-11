@@ -16,7 +16,7 @@ interface ViewEngineInterface extends ViewFinderInterface {
 	/**
 	 * Create a view instance from the first view name that exists.
 	 *
-	 * @param  array<string> $views
+	 * @param  string[]      $views
 	 * @return ViewInterface
 	 */
 	public function make( $views );

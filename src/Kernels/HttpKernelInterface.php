@@ -30,7 +30,7 @@ interface HttpKernelInterface extends HasMiddlewareDefinitionsInterface {
 	 * Run a response pipeline for the given request.
 	 *
 	 * @param  RequestInterface       $request
-	 * @param  array<string>          $middleware
+	 * @param  string[]               $middleware
 	 * @param  string|Closure|Handler $handler
 	 * @param  array                  $arguments
 	 * @return ResponseInterface

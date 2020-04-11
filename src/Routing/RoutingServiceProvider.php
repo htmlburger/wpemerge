@@ -71,7 +71,7 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 			],
 		] );
 
-		/** @var $container Container */
+		/** @var Container $container */
 		$container[ WPEMERGE_ROUTING_CONDITION_TYPES_KEY ] = static::$condition_types;
 
 		$container[ WPEMERGE_ROUTING_ROUTER_KEY ] = function ( $c ) {

@@ -16,14 +16,14 @@ interface HasMiddlewareInterface {
 	/**
 	 * Get registered middleware.
 	 *
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function getMiddleware();
 
 	/**
 	 * Set registered middleware.
 	 *
-	 * @param  array<string> $middleware
+	 * @param  string[] $middleware
 	 * @return void
 	 */
 	public function setMiddleware( $middleware );
@@ -31,7 +31,7 @@ interface HasMiddlewareInterface {
 	/**
 	 * Add middleware.
 	 *
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[] $middleware
 	 * @return void
 	 */
 	public function addMiddleware( $middleware );

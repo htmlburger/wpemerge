@@ -16,14 +16,14 @@ interface HasRoutesInterface {
 	/**
 	 * Get routes.
 	 *
-	 * @return array<RouteInterface>
+	 * @return RouteInterface[]
 	 */
 	public function getRoutes();
 
 	/**
 	 * Set routes.
 	 *
-	 * @param  array<RouteInterface> $routes
+	 * @param  RouteInterface[] $routes
 	 * @return void
 	 */
 	public function setRoutes( $routes );

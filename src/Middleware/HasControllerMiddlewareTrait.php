@@ -16,15 +16,15 @@ trait HasControllerMiddlewareTrait {
 	/**
 	 * Array of middleware.
 	 *
-	 * @var array<ControllerMiddleware>
+	 * @var ControllerMiddleware[]
 	 */
 	protected $middleware = [];
 
 	/**
 	 * Get middleware.
 	 *
-	 * @param  string        $method
-	 * @return array<string>
+	 * @param  string   $method
+	 * @return string[]
 	 */
 	public function getMiddleware( $method ) {
 		$middleware = array_filter( $this->middleware, function ( ControllerMiddleware $middleware ) use ( $method ) {
@@ -45,7 +45,7 @@ trait HasControllerMiddlewareTrait {
 	/**
 	 * Add middleware.
 	 *
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[]      $middleware
 	 * @return ControllerMiddleware
 	 */
 	public function addMiddleware( $middleware ) {
@@ -63,7 +63,7 @@ trait HasControllerMiddlewareTrait {
 	 * Fluent alias for addMiddleware().
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[]      $middleware
 	 * @return ControllerMiddleware
 	 */
 	public function middleware( $middleware ) {

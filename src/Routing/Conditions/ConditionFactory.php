@@ -187,7 +187,7 @@ class ConditionFactory {
 
 		try {
 			$reflection = new ReflectionClass( $condition_class );
-			/** @var $instance ConditionInterface */
+			/** @var ConditionInterface $instance */
 			$instance = $reflection->newInstanceArgs( $condition_options['arguments'] );
 			return $instance;
 		} catch ( ReflectionException $e ) {

@@ -58,7 +58,7 @@ trait HasAliasesTrait {
 			return $this->resolve( $target );
 		}
 
-		/** @var $target Closure */
+		/** @var Closure $target */
 		return call_user_func_array( $target->bindTo( $this, static::class ), $parameters );
 	}
 

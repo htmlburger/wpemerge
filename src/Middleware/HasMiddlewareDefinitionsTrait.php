@@ -25,14 +25,14 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Middleware groups.
 	 *
-	 * @var array<string, array<string>>
+	 * @var array<string, string[]>
 	 */
 	protected $middleware_groups = [];
 
 	/**
 	 * Middleware groups that should have the 'wpemerge' and 'global' groups prepended to them.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $prepend_special_groups_to = [
 		'web',
@@ -55,7 +55,7 @@ trait HasMiddlewareDefinitionsTrait {
 	 * Register middleware groups.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  array<string, array<string>> $middleware_groups
+	 * @param  array<string, string[]> $middleware_groups
 	 * @return void
 	 */
 	public function setMiddlewareGroups( $middleware_groups ) {
@@ -65,8 +65,8 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Filter array of middleware into a unique set.
 	 *
-	 * @param  array<array>  $middleware
-	 * @return array<string>
+	 * @param  array[]  $middleware
+	 * @return string[]
 	 */
 	public function uniqueMiddleware( $middleware ) {
 		return array_values( array_unique( $middleware, SORT_REGULAR ) );
@@ -75,8 +75,8 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Expand array of middleware into an array of fully qualified class names.
 	 *
-	 * @param  array<string> $middleware
-	 * @return array<array>
+	 * @param  string[] $middleware
+	 * @return array[]
 	 */
 	public function expandMiddleware( $middleware ) {
 		$classes = [];
@@ -94,8 +94,8 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Expand a middleware group into an array of fully qualified class names.
 	 *
-	 * @param  string        $group
-	 * @return array<array>
+	 * @param  string  $group
+	 * @return array[]
 	 */
 	public function expandMiddlewareGroup( $group ) {
 		if ( ! isset( $this->middleware_groups[ $group ] ) ) {
@@ -114,8 +114,8 @@ trait HasMiddlewareDefinitionsTrait {
 	/**
 	 * Expand middleware into an array of fully qualified class names and any companion arguments.
 	 *
-	 * @param  string       $middleware
-	 * @return array<array>
+	 * @param  string  $middleware
+	 * @return array[]
 	 */
 	public function expandMiddlewareMolecule( $middleware ) {
 		$pieces = explode( ':', $middleware, 2 );

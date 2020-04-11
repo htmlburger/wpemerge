@@ -18,21 +18,21 @@ class ControllerMiddleware {
 	/**
 	 * Middleware.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $middleware = [];
 
 	/**
 	 * Methods the middleware applies to.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $whitelist = [];
 
 	/**
 	 * Methods the middleware does not apply to.
 	 *
-	 * @var array<string>
+	 * @var string[]
 	 */
 	protected $blacklist = [];
 
@@ -40,7 +40,7 @@ class ControllerMiddleware {
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[] $middleware
 	 */
 	public function __construct( $middleware ) {
 		$this->middleware = (array) $middleware;
@@ -50,7 +50,7 @@ class ControllerMiddleware {
 	 * Get middleware.
 	 *
 	 * @codeCoverageIgnore
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function get() {
 		return $this->middleware;
@@ -60,7 +60,7 @@ class ControllerMiddleware {
 	 * Set methods the middleware should apply to.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|array<string> $methods
+	 * @param  string|string[] $methods
 	 * @return static
 	 */
 	public function only( $methods ) {
@@ -73,7 +73,7 @@ class ControllerMiddleware {
 	 * Set methods the middleware should not apply to.
 	 *
 	 * @codeCoverageIgnore
-	 * @param  string|array<string> $methods
+	 * @param  string|string[] $methods
 	 * @return static
 	 */
 	public function except( $methods ) {

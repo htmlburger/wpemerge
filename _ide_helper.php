@@ -70,7 +70,7 @@ namespace WPEmerge\Application {
 		 * @codeCoverageIgnore
 		 * @see    \WPEmerge\Kernels\HttpKernel::run()
 		 * @param  RequestInterface  $request
-		 * @param  array<string>     $middleware
+		 * @param  string[]          $middleware
 		 * @param  string|\Closure   $handler
 		 * @param  array             $arguments
 		 * @return ResponseInterface
@@ -153,7 +153,7 @@ namespace WPEmerge\Application {
 		 *
 		 * @codeCoverageIgnore
 		 * @see    \WPEmerge\View\ViewService::make()
-		 * @param  string|array<string> $views
+		 * @param  string|string[] $views
 		 * @return ViewInterface
 		 */
 		public static function view( $views ) {}
@@ -164,7 +164,7 @@ namespace WPEmerge\Application {
 		 * @codeCoverageIgnore
 		 * @see    \WPEmerge\View\ViewService::make()
 		 * @see    \WPEmerge\View\ViewInterface::toString()
-		 * @param  string|array<string> $views
+		 * @param  string|string[]      $views
 		 * @param  array<string, mixed> $context
 		 * @return void
 		 */

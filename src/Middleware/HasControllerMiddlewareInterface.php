@@ -16,15 +16,15 @@ interface HasControllerMiddlewareInterface {
 	/**
 	 * Get middleware.
 	 *
-	 * @param  string        $method
-	 * @return array<string>
+	 * @param  string   $method
+	 * @return string[]
 	 */
 	public function getMiddleware( $method );
 
 	/**
 	 * Add middleware.
 	 *
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[]      $middleware
 	 * @return ControllerMiddleware
 	 */
 	public function addMiddleware( $middleware );
@@ -32,7 +32,7 @@ interface HasControllerMiddlewareInterface {
 	/**
 	 * Fluent alias for addMiddleware().
 	 *
-	 * @param  string|array<string> $middleware
+	 * @param  string|string[]      $middleware
 	 * @return ControllerMiddleware
 	 */
 	public function middleware( $middleware );

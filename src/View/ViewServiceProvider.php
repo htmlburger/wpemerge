@@ -26,7 +26,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
-		/** @var $container Container */
+		/** @var Container $container */
 		$this->extendConfig( $container, 'views', '' );
 
 		$this->extendConfig( $container, 'view_composers', [
@@ -70,7 +70,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 		} );
 
 		$app->alias( 'layoutContent', function () use ( $app ) {
-			/** @var $engine PhpViewEngine */
+			/** @var PhpViewEngine $engine */
 			$engine = $app->resolve( WPEMERGE_VIEW_PHP_VIEW_ENGINE_KEY );
 
 			echo $engine->getLayoutContent();

@@ -297,7 +297,6 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return array
 	 */
 	public function filterRequest( $query_vars ) {
-		/** @var $routes RouteInterface[] */
 		$routes = $this->router->getRoutes();
 
 		foreach ( $routes as $route ) {
@@ -323,7 +322,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return string
 	 */
 	public function filterTemplateInclude( $template ) {
-		/** @var $wp_query WP_Query */
+		/** @var WP_Query $wp_query */
 		global $wp_query;
 
 		$this->template = $template;

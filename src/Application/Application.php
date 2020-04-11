@@ -200,8 +200,8 @@ abstract class Application {
 	/**
 	 * Register all service providers.
 	 *
-	 * @param  array<ServiceProviderInterface> $service_providers
-	 * @param  Container                                                  $container
+	 * @param  ServiceProviderInterface[] $service_providers
+	 * @param  Container                  $container
 	 * @return void
 	 */
 	protected function registerServiceProviders( $service_providers, Container $container ) {
@@ -213,8 +213,8 @@ abstract class Application {
 	/**
 	 * Bootstrap all service providers.
 	 *
-	 * @param  array<ServiceProviderInterface> $service_providers
-	 * @param  Container                                                  $container
+	 * @param  ServiceProviderInterface[] $service_providers
+	 * @param  Container                  $container
 	 * @return void
 	 */
 	protected function bootstrapServiceProviders( $service_providers, Container $container ) {

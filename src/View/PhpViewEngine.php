@@ -30,7 +30,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	/**
 	 * Stack of views ready to be rendered.
 	 *
-	 * @var array<PhpView>
+	 * @var PhpView[]
 	 */
 	protected $layout_content_stack = [];
 
