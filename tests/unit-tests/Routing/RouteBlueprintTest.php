@@ -164,6 +164,17 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::name
+	 */
+	public function testName() {
+		$this->assertSame( $this->subject, $this->subject->name( 'foo' ) );
+		$this->assertEquals( 'foo', $this->subject->getAttribute( 'name' ) );
+
+		$this->assertSame( $this->subject, $this->subject->name( 'bar' ) );
+		$this->assertEquals( 'bar', $this->subject->getAttribute( 'name' ) );
+	}
+
+	/**
 	 * @covers ::group
 	 */
 	public function testGroup() {

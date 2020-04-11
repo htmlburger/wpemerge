@@ -166,6 +166,18 @@ class Router implements HasRoutesInterface {
 	}
 
 	/**
+	 * Merge the name attribute combining values with a dot.
+	 *
+	 * @param  string $old
+	 * @param  string $new
+	 * @return string
+	 */
+	public function mergeNameAttribute( $old, $new ) {
+		$name = array_filter( [$old, $new] );
+		return implode( '.', $name );
+	}
+
+	/**
 	 * Merge attributes into route.
 	 *
 	 * @param  array<string, mixed> $old
@@ -202,6 +214,11 @@ class Router implements HasRoutesInterface {
 			'query' => $this->mergeQueryAttribute(
 				Arr::get( $old, 'query', null ),
 				Arr::get( $new, 'query', null )
+			),
+
+			'name' => $this->mergeNameAttribute(
+				Arr::get( $old, 'name', null ),
+				Arr::get( $new, 'name', null )
 			),
 		];
 	}
@@ -331,6 +348,27 @@ class Router implements HasRoutesInterface {
 
 		foreach ( $routes as $route ) {
 			if ( $route->isSatisfied( $request ) ) {
+				$this->setCurrentRoute( $route );
+				return $route;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the url for a named route.
+	 *
+	 * @param  string $route
+	 * @param  array  $arguments
+	 * @return string
+	 */
+	public function getRouteUrl( $request, $arguments ) {
+		/** @var $routes RouteInterface[] */
+		$routes = $this->getRoutes();
+
+		foreach ( $routes as $route ) {
+			if (  $route->isSatisfied( $request ) ) {
 				$this->setCurrentRoute( $route );
 				return $route;
 			}

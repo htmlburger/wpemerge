@@ -143,6 +143,15 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::mergeNameAttribute
+	 */
+	public function testMergeNameAttribute() {
+		$this->assertEquals( 'foo', $this->subject->mergeNameAttribute( 'foo', '' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( 'foo', 'bar' ) );
+		$this->assertEquals( 'foo.bar.baz', $this->subject->mergeNameAttribute( 'foo.bar', 'baz' ) );
+	}
+
+	/**
 	 * @covers ::mergeAttributes
 	 */
 	public function testMergeAttributes() {
@@ -154,6 +163,7 @@ class RouterTest extends WP_UnitTestCase {
 				'namespace' => '',
 				'handler' => '',
 				'query' => null,
+				'name' => '',
 			],
 			$this->subject->mergeAttributes( [], [] )
 		);

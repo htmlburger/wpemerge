@@ -10,6 +10,7 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HasAttributesTrait;
 use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -21,6 +22,9 @@ use WPEmerge\Support\Arr;
 class Route implements RouteInterface, HasQueryFilterInterface {
 	use HasMiddlewareTrait;
 	use HasQueryFilterTrait;
+	use HasAttributesTrait {
+		setAttributes as traitSetAttributes;
+	}
 
 	/**
 	 * Allowed methods.
@@ -62,14 +66,6 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @codeCoverageIgnore
-	 */
-	public function getHandler() {
-		return $this->handler;
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
 		if ( ! in_array( $request->getMethod(), $this->methods ) ) {
@@ -89,9 +85,11 @@ class Route implements RouteInterface, HasQueryFilterInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function decorate( $attributes ) {
-		$middleware = Arr::get( $attributes, 'middleware', [] );
-		$query = Arr::get( $attributes, 'query', null );
+	public function setAttributes( $attributes ) {
+		$this->traitSetAttributes( $attributes );
+
+		$middleware = $this->getAttribute( 'middleware', [] );
+		$query = $this->getAttribute( 'query', null );
 
 		$this->middleware( $middleware );
 

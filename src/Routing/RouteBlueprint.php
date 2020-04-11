@@ -18,6 +18,8 @@ use WPEmerge\View\ViewService;
  * Provide a fluent interface for registering routes with the router.
  */
 class RouteBlueprint {
+	use HasAttributesTrait;
+
 	/**
 	 * Router.
 	 *
@@ -33,13 +35,6 @@ class RouteBlueprint {
 	protected $view_service = null;
 
 	/**
-	 * Attributes.
-	 *
-	 * @var array<string, mixed>
-	 */
-	protected $attributes = [];
-
-	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
@@ -49,77 +44,6 @@ class RouteBlueprint {
 	public function __construct( Router $router, ViewService $view_service ) {
 		$this->router = $router;
 		$this->view_service = $view_service;
-	}
-
-	/**
-	 * Get attributes.
-	 *
-	 * @return array<string, mixed>
-	 */
-	public function getAttributes() {
-		return $this->attributes;
-	}
-
-	/**
-	 * Set the attributes.
-	 *
-	 * @param  array<string, mixed> $attributes
-	 * @return void
-	 */
-	public function setAttributes( $attributes ) {
-		$this->attributes = $attributes;
-	}
-
-	/**
-	 * Fluent alias for setAttributes().
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array<string, mixed> $attributes
-	 * @return static               $this
-	 */
-	public function attributes( $attributes ) {
-		$this->setAttributes( $attributes );
-
-		return $this;
-	}
-
-	/**
-	 * Get attribute.
-	 *
-	 * @param  string $key
-	 * @param  mixed  $default
-	 * @return mixed
-	 */
-	public function getAttribute( $key, $default = '' ) {
-		return Arr::get( $this->getAttributes(), $key, $default );
-	}
-
-	/**
-	 * Set attribute.
-	 *
-	 * @param  string $key
-	 * @param  mixed  $value
-	 * @return void
-	 */
-	public function setAttribute( $key, $value ) {
-		$this->setAttributes( array_merge(
-			$this->getAttributes(),
-			[$key => $value]
-		) );
-	}
-
-	/**
-	 * Set attribute.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  string $key
-	 * @param  mixed  $value
-	 * @return static $this
-	 */
-	public function attribute( $key, $value ) {
-		$this->setAttribute( $key, $value );
-
-		return $this;
 	}
 
 	/**
@@ -208,6 +132,16 @@ class RouteBlueprint {
 		);
 
 		return $this->attribute( 'query', $query );
+	}
+
+	/**
+	 * Set the name attribute.
+	 *
+	 * @param  string $name
+	 * @return static $this
+	 */
+	public function name( $name ) {
+		return $this->attribute( 'name', $name );
 	}
 
 	/**

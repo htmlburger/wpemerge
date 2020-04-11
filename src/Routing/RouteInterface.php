@@ -10,20 +10,14 @@
 namespace WPEmerge\Routing;
 
 use WPEmerge\Helpers\Handler;
+use WPEmerge\Helpers\HasAttributesInterface;
 use WPEmerge\Middleware\HasMiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
  * Interface that routes must implement
  */
-interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
-	/**
-	 * Get handler.
-	 *
-	 * @return Handler
-	 */
-	public function getHandler();
-
+interface RouteInterface extends HasAttributesInterface, HasConditionInterface, HasMiddlewareInterface {
 	/**
 	 * Get whether the route is satisfied.
 	 *
@@ -39,12 +33,4 @@ interface RouteInterface extends HasConditionInterface, HasMiddlewareInterface {
 	 * @return array
 	 */
 	public function getArguments( RequestInterface $request );
-
-	/**
-	 * Decorate route.
-	 *
-	 * @param  array<string, mixed> $attributes
-	 * @return void
-	 */
-	public function decorate( $attributes );
 }
