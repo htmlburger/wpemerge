@@ -68,6 +68,18 @@ class UrlCondition implements ConditionInterface {
 	}
 
 	/**
+	 * Make a new instance.
+	 *
+	 * @codeCoverageIgnore
+	 * @param string $url
+	 * @param array<string, string> $where
+	 * @return self
+	 */
+	protected function make( $url, $where = [] ) {
+		return new self( $url, $where );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected function whereIsSatisfied( RequestInterface $request ) {
@@ -172,13 +184,13 @@ class UrlCondition implements ConditionInterface {
 	 */
 	public function concatenate( $url, $where = [] ) {
 		if ( $this->getUrl() === static::WILDCARD || $url === static::WILDCARD ) {
-			return new static( static::WILDCARD );
+			return $this->make( static::WILDCARD );
 		}
 
 		$leading = UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $this->getUrl() ), true );
 		$trailing = UrlUtility::addLeadingSlash( UrlUtility::addTrailingSlash( $url ) );
 
-		$concatenated = new static( $leading . $trailing, array_merge(
+		$concatenated = $this->make( $leading . $trailing, array_merge(
 			$this->getUrlWhere(),
 			$where
 		) );

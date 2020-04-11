@@ -80,7 +80,7 @@ class WPEmerge_Tests_Bootstrap {
 	 */
 	public static function instance() {
 		if ( static::$instance === null ) {
-			static::$instance = new static();
+			static::$instance = new self();
 		}
 
 		return static::$instance;

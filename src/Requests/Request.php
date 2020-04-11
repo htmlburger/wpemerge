@@ -23,7 +23,7 @@ class Request extends ServerRequest implements RequestInterface {
 	 */
 	public static function fromGlobals() {
 		$request = parent::fromGlobals();
-		$new = new static(
+		$new = new self(
 			$request->getMethod(),
 			$request->getUri(),
 			$request->getHeaders(),
