@@ -20,9 +20,9 @@ use BadMethodCallException;
  */
 trait HasAliasesTrait {
 	/**
-	 * Aliases.
+	 * Registered aliases.
 	 *
-	 * @var array<string, string|Closure>
+	 * @var array<string, array>
 	 */
 	protected $aliases = [];
 
@@ -31,10 +31,14 @@ trait HasAliasesTrait {
 	 *
 	 * @param  string         $alias
 	 * @param  string|Closure $target
+	 * @param  string         $method
 	 * @return void
 	 */
-	public function alias( $alias, $target ) {
-		$this->aliases[ $alias ] = $target;
+	public function alias( $alias, $target, $method = '' ) {
+		$this->aliases[ $alias ] = [
+			'target' => $target,
+			'method' => $method,
+		];
 	}
 
 	/**
@@ -47,19 +51,31 @@ trait HasAliasesTrait {
 		return isset( $this->aliases[ $alias ] );
 	}
 
+	/**
+	 * Call alias if registered.
+	 *
+	 * @param string $method
+	 * @param array  $parameters
+	 * @return mixed
+	 */
 	public function __call( $method, $parameters ) {
 		if ( ! $this->hasAlias( $method ) ) {
 			throw new BadMethodCallException( "Method {$method} does not exist." );
 		}
 
-		$target = $this->aliases[ $method ];
+		$alias = $this->aliases[ $method ];
 
-		if ( is_string( $target ) ) {
-			return $this->resolve( $target );
+		if ( $alias['target'] instanceof Closure ) {
+			return call_user_func_array( $alias['target']->bindTo( $this, static::class ), $parameters );
 		}
 
-		/** @var Closure $target */
-		return call_user_func_array( $target->bindTo( $this, static::class ), $parameters );
+		$target = $this->resolve( $alias['target'] );
+
+		if ( ! empty( $alias['method'] ) ) {
+			return call_user_func_array( [$target, $alias['method']], $parameters );
+		}
+
+		return $target;
 	}
 
 	/**
