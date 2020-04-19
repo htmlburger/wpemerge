@@ -16,6 +16,7 @@ namespace  {
 
 namespace WPEmerge\Application {
 
+	use Pimple\Container;
 	use Psr\Http\Message\ResponseInterface;
 	use WPEmerge\Requests\RequestInterface;
 	use WPEmerge\Responses\RedirectResponse;
@@ -23,6 +24,51 @@ namespace WPEmerge\Application {
 	use WPEmerge\View\ViewInterface;
 
 	class Portal {
+		// --- Methods --------------------------------------- //
+
+		/**
+		 * Get whether the application has been bootstrapped.
+		 *
+		 * @return boolean
+		 */
+		public function isBootstrapped() {}
+
+		/**
+		 * Bootstrap the application.
+		 *
+		 * @param  array   $config
+		 * @param  boolean $run
+		 * @return void
+		 */
+		public function bootstrap( $config = [], $run = true ) {}
+
+		/**
+		 * Get the IoC container instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @return Container
+		 */
+		public function container() {}
+
+		/**
+		 * Set the IoC container instance.
+		 *
+		 * @codeCoverageIgnore
+		 * @param  Container $container
+		 * @return void
+		 */
+		public function setContainer( $container ) {}
+
+		/**
+		 * Resolve a dependency from the IoC container.
+		 *
+		 * @param  string     $key
+		 * @return mixed|null
+		 */
+		public function resolve( $key ) {}
+
+		// --- Aliases --------------------------------------- //
+
 		/**
 		 * Get the Application instance.
 		 *

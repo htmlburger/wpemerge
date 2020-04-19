@@ -9,7 +9,8 @@
 
 namespace WPEmerge\Application;
 
-use RuntimeException;
+use BadMethodCallException;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Support\Arr;
 
 /**
@@ -70,15 +71,19 @@ class Portal {
 	 */
 	public static function __callStatic( $method, $parameters ) {
 		$application = static::getApplication();
+		$callable = [$application, $method];
 
 		if ( ! $application ) {
-			throw new RuntimeException( 'Application instance not registered with portal: ' . static::class );
+			throw new ConfigurationException(
+				'Application instance not registered with portal: ' . static::class . '. ' .
+				'Did you miss to call ' . static::class . '::make()->bootstrap()?'
+			);
 		}
 
-		if ( ! is_callable( [$application, $method] ) ) {
-			throw new RuntimeException( 'Application method or alias not found: ' . $method );
+		if ( ! is_callable( $callable ) ) {
+			throw new BadMethodCallException( "Method {$method} does not exist." );
 		}
 
-		return call_user_func_array( [$application, $method], $parameters );
+		return call_user_func_array( $callable, $parameters );
 	}
 }

@@ -11,41 +11,24 @@ namespace WPEmerge\Application;
 
 use Closure;
 use Pimple\Container;
-use WPEmerge\Controllers\ControllersServiceProvider;
-use WPEmerge\Csrf\CsrfServiceProvider;
 use WPEmerge\Exceptions\ConfigurationException;
-use WPEmerge\Exceptions\ExceptionsServiceProvider;
-use WPEmerge\Flash\FlashServiceProvider;
-use WPEmerge\Input\OldInputServiceProvider;
-use WPEmerge\Kernels\KernelsServiceProvider;
-use WPEmerge\Middleware\MiddlewareServiceProvider;
 use WPEmerge\Requests\Request;
-use WPEmerge\Requests\RequestsServiceProvider;
-use WPEmerge\Responses\ResponsesServiceProvider;
-use WPEmerge\Routing\RoutingServiceProvider;
-use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use WPEmerge\Support\Arr;
-use WPEmerge\View\ViewServiceProvider;
 
 /**
- * Main communication channel with the application.
+ * The core WP Emerge component representing an application.
  */
 class Application {
 	use HasAliasesTrait;
-
-	/**
-	 * IoC container.
-	 *
-	 * @var Container
-	 */
-	protected $container = null;
+	use LoadsServiceProvidersTrait;
+	use HasContainerTrait;
 
 	/**
 	 * Flag whether to intercept and render configuration exceptions.
 	 *
 	 * @var boolean
 	 */
-	protected $render_configuration_exceptions = true;
+	protected $render_config_exceptions = true;
 
 	/**
 	 * Flag whether the application has been bootstrapped.
@@ -53,26 +36,6 @@ class Application {
 	 * @var boolean
 	 */
 	protected $bootstrapped = false;
-
-	/**
-	 * Array of application service providers.
-	 *
-	 * @var string[]
-	 */
-	protected $service_providers = [
-		ApplicationServiceProvider::class,
-		KernelsServiceProvider::class,
-		ExceptionsServiceProvider::class,
-		RequestsServiceProvider::class,
-		ResponsesServiceProvider::class,
-		RoutingServiceProvider::class,
-		ViewServiceProvider::class,
-		ControllersServiceProvider::class,
-		MiddlewareServiceProvider::class,
-		CsrfServiceProvider::class,
-		FlashServiceProvider::class,
-		OldInputServiceProvider::class,
-	];
 
 	/**
 	 * Make a new application instance.
@@ -87,13 +50,13 @@ class Application {
 	/**
 	 * Constructor.
 	 *
-	 * @param Container   $container
-	 * @param boolean     $render_configuration_exceptions
+	 * @param Container $container
+	 * @param boolean   $render_config_exceptions
 	 */
-	public function __construct( Container $container, $render_configuration_exceptions = true ) {
-		$this->container = $container;
-		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this;
-		$this->render_configuration_exceptions = $render_configuration_exceptions;
+	public function __construct( Container $container, $render_config_exceptions = true ) {
+		$this->setContainer( $container );
+		$this->container()[ WPEMERGE_APPLICATION_KEY ] = $this;
+		$this->render_config_exceptions = $render_config_exceptions;
 	}
 
 	/**
@@ -103,26 +66,6 @@ class Application {
 	 */
 	public function isBootstrapped() {
 		return $this->bootstrapped;
-	}
-
-	/**
-	 * Throw an exception if the application has not been bootstrapped.
-	 *
-	 * @return void
-	 */
-	protected function verifyBootstrap() {
-		if ( ! $this->isBootstrapped() ) {
-			throw new ConfigurationException( static::class . ' must be bootstrapped first.' );
-		}
-	}
-
-	/**
-	 * Get the IoC container instance.
-	 *
-	 * @return Container
-	 */
-	public function container() {
-		return $this->container;
 	}
 
 	/**
@@ -143,7 +86,7 @@ class Application {
 		$this->loadConfig( $container, $config );
 		$this->loadServiceProviders( $container );
 
-		$this->renderConfigurationExceptions( function () use ( $run ) {
+		$this->renderConfigExceptions( function () use ( $run ) {
 			$this->loadRoutes();
 
 			if ( $run ) {
@@ -163,60 +106,6 @@ class Application {
 	 */
 	protected function loadConfig( Container $container, $config ) {
 		$container[ WPEMERGE_CONFIG_KEY ] = $config;
-	}
-
-	/**
-	 * Register and bootstrap all service providers.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  Container $container
-	 * @return void
-	 */
-	protected function loadServiceProviders( Container $container ) {
-		$container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] = array_merge(
-			$this->service_providers,
-			Arr::get( $container[ WPEMERGE_CONFIG_KEY ], 'providers', [] )
-		);
-
-		$service_providers = array_map( function ( $service_provider ) {
-			if ( ! is_subclass_of( $service_provider, ServiceProviderInterface::class ) ) {
-				throw new ConfigurationException(
-					'The following class does not implement ' .
-					'ServiceProviderInterface: ' . $service_provider
-				);
-			}
-
-			return new $service_provider();
-		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
-
-		$this->registerServiceProviders( $service_providers, $container );
-		$this->bootstrapServiceProviders( $service_providers, $container );
-	}
-
-	/**
-	 * Register all service providers.
-	 *
-	 * @param  ServiceProviderInterface[] $service_providers
-	 * @param  Container                  $container
-	 * @return void
-	 */
-	protected function registerServiceProviders( $service_providers, Container $container ) {
-		foreach ( $service_providers as $provider ) {
-			$provider->register( $container );
-		}
-	}
-
-	/**
-	 * Bootstrap all service providers.
-	 *
-	 * @param  ServiceProviderInterface[] $service_providers
-	 * @param  Container                  $container
-	 * @return void
-	 */
-	protected function bootstrapServiceProviders( $service_providers, Container $container ) {
-		foreach ( $service_providers as $provider ) {
-			$provider->bootstrap( $container );
-		}
 	}
 
 	/**
@@ -268,33 +157,17 @@ class Application {
 	}
 
 	/**
-	 * Resolve a dependency from the IoC container.
-	 *
-	 * @param  string     $key
-	 * @return mixed|null
-	 */
-	public function resolve( $key ) {
-		$this->verifyBootstrap();
-
-		if ( ! isset( $this->container()[ $key ] ) ) {
-			return null;
-		}
-
-		return $this->container()[ $key ];
-	}
-
-	/**
 	 * Catch any configuration exceptions and short-circuit to an error page.
 	 *
 	 * @codeCoverageIgnore
 	 * @param  Closure $action
 	 * @return void
 	 */
-	protected function renderConfigurationExceptions( Closure $action ) {
+	protected function renderConfigExceptions( Closure $action ) {
 		try {
 			$action();
 		} catch ( ConfigurationException $exception ) {
-			if ( ! $this->render_configuration_exceptions ) {
+			if ( ! $this->render_config_exceptions ) {
 				throw $exception;
 			}
 

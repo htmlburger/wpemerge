@@ -52,32 +52,6 @@ class ApplicationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::container
-	 */
-	public function testContainer_ReturnContainer() {
-		$container = $this->subject->container();
-		$this->assertInstanceOf( Container::class, $container );
-	}
-
-	/**
-	 * @covers ::verifyBootstrap
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage must be bootstrapped first
-	 */
-	public function testVerifyBootstrap_NotBootstrapped_Exception() {
-		$this->subject->resolve( 'foobar' );
-	}
-
-	/**
-	 * @covers ::verifyBootstrap
-	 */
-	public function testVerifyBootstrap_Bootstrapped_NoException() {
-		$this->subject->bootstrap( [], false );
-		$this->subject->resolve( 'foobar' );
-		$this->assertTrue( true );
-	}
-
-	/**
 	 * @covers ::bootstrap
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage already bootstrapped
