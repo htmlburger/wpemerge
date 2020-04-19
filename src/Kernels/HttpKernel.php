@@ -25,7 +25,6 @@ use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ConvertsToResponseTrait;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
-use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\SortsMiddlewareTrait;
 use WPEmerge\View\ViewService;

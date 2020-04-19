@@ -173,7 +173,7 @@ class Router implements HasRoutesInterface {
 	 * @return array<string, mixed>
 	 */
 	public function mergeAttributes( $old, $new ) {
-		$attributes = [
+		return [
 			'methods' => $this->mergeMethodsAttribute(
 				(array) Arr::get( $old, 'methods', [] ),
 				(array) Arr::get( $new, 'methods', [] )
@@ -204,8 +204,6 @@ class Router implements HasRoutesInterface {
 				Arr::get( $new, 'query', null )
 			),
 		];
-
-		return $attributes;
 	}
 
 	/**

@@ -10,6 +10,7 @@
 namespace WPEmerge\Csrf;
 
 use Closure;
+use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
@@ -35,6 +36,10 @@ class CsrfMiddleware {
 	/**
 	 * Reject requests that fail nonce validation.
 	 *
+	 * @param  RequestInterface     $request
+	 * @param  Closure              $next
+	 * @param  mixed                $action
+	 * @return ResponseInterface
 	 * @throws InvalidCsrfTokenException
 	 */
 	public function handle( RequestInterface $request, Closure $next, $action = -1 ) {

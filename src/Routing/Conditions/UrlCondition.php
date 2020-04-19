@@ -190,12 +190,10 @@ class UrlCondition implements ConditionInterface {
 		$leading = UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $this->getUrl() ), true );
 		$trailing = UrlUtility::addLeadingSlash( UrlUtility::addTrailingSlash( $url ) );
 
-		$concatenated = $this->make( $leading . $trailing, array_merge(
+		return $this->make( $leading . $trailing, array_merge(
 			$this->getUrlWhere(),
 			$where
 		) );
-
-		return $concatenated;
 	}
 
 	/**

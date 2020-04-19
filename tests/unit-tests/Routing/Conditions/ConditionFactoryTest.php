@@ -178,7 +178,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	public function testMake_UnknownConditionType_Exception() {
 		$expected_param = 'foobar';
 
-		$condition = $this->subject->make( [ $expected_param ] );
+		$this->subject->make( [ $expected_param ] );
 	}
 
 	/**
