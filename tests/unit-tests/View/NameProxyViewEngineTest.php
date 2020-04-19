@@ -4,7 +4,7 @@ namespace WPEmergeTests\View;
 
 use Mockery;
 use Pimple\Container;
-use TestApp;
+use WPEmerge\Application\Application;
 use WPEmerge\View\NameProxyViewEngine;
 use WP_UnitTestCase;
 
@@ -12,11 +12,15 @@ use WP_UnitTestCase;
  * @coversDefaultClass \WPEmerge\View\NameProxyViewEngine
  */
 class NameProxyViewEngineTest extends WP_UnitTestCase {
+	public $container;
+
+	public $app;
+
 	public function setUp() {
 		parent::setUp();
 
 		$this->container = new Container();
-		$this->app = new TestApp( $this->container );
+		$this->app = new Application( $this->container );
 		$this->app->bootstrap( [], false );
 	}
 

@@ -30,10 +30,8 @@ use WPEmerge\View\ViewServiceProvider;
 /**
  * Main communication channel with the application.
  */
-abstract class Application {
-	use HasStaticAliasesTrait {
-		__construct as __constructTrait;
-	}
+class Application {
+	use HasAliasesTrait;
 
 	/**
 	 * IoC container.
@@ -96,8 +94,6 @@ abstract class Application {
 		$this->container = $container;
 		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this;
 		$this->render_configuration_exceptions = $render_configuration_exceptions;
-
-		$this->__constructTrait();
 	}
 
 	/**

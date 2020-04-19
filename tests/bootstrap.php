@@ -62,8 +62,6 @@ class WPEmerge_Tests_Bootstrap {
 		if ( ! is_array( $wp->query_vars ) ) {
 			$wp->query_vars = [];
 		}
-
-		require_once $this->tests_dir . '/TestApp.php';
 	}
 
 	/**

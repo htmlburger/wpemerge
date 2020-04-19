@@ -17,13 +17,12 @@ namespace  {
 namespace WPEmerge\Application {
 
 	use Psr\Http\Message\ResponseInterface;
-	use WPEmerge\Csrf\Csrf;
 	use WPEmerge\Requests\RequestInterface;
 	use WPEmerge\Responses\RedirectResponse;
 	use WPEmerge\Routing\RouteBlueprint;
 	use WPEmerge\View\ViewInterface;
 
-	class Application {
+	class Portal {
 		/**
 		 * Get the Application instance.
 		 *

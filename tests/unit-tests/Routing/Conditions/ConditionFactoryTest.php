@@ -3,7 +3,9 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
+use Pimple\Container;
 use stdClass;
+use WPEmerge\Application\Application;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -18,10 +20,14 @@ use WP_UnitTestCase;
  * @coversDefaultClass \WPEmerge\Routing\Conditions\ConditionFactory
  */
 class ConditionFactoryTest extends WP_UnitTestCase {
+	public $request;
+
+	public $subject;
+
 	public function setUp() {
 		parent::setUp();
 
-		$app = new \TestApp( new \Pimple\Container(), false );
+		$app = new Application( new Container(), false );
 		$app->bootstrap( [], false );
 		$condition_types = $app->resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY );
 

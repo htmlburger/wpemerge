@@ -3,7 +3,6 @@
 namespace WPEmergeTests\Application;
 
 use Mockery;
-use TestApp;
 use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
@@ -13,11 +12,15 @@ use WP_UnitTestCase;
  * @coversDefaultClass \WPEmerge\Application\Application
  */
 class ApplicationTest extends WP_UnitTestCase {
+	public $container;
+
+	public $subject;
+
 	public function setUp() {
 		parent::setUp();
 
 		$this->container = new Container();
-		$this->subject = new TestApp( $this->container, false );
+		$this->subject = new Application( $this->container, false );
 		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this->subject;
 	}
 
@@ -34,7 +37,7 @@ class ApplicationTest extends WP_UnitTestCase {
 	 */
 	public function testConstruct() {
 		$container = new Container();
-		$subject = new TestApp( $container );
+		$subject = new Application( $container );
 		$this->assertSame( $container, $subject->container() );
 	}
 
