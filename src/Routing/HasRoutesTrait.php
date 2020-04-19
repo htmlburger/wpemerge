@@ -61,7 +61,7 @@ trait HasRoutesTrait {
 	 * @param  RouteInterface $route
 	 * @return void
 	 */
-	public function removeRoute( $route ) {
+	public function removeRoute( RouteInterface $route ) {
 		$routes = $this->getRoutes();
 
 		$index = array_search( $route, $routes, true );
