@@ -43,30 +43,6 @@ trait HasAttributesTrait {
 	}
 
 	/**
-	 * Set all attributes.
-	 * No attempt to merge attributes is done - this is a direct overwrite operation.
-	 *
-	 * @param  array<string, mixed> $attributes
-	 * @return void
-	 */
-	public function setAttributes( $attributes ) {
-		$this->attributes = $attributes;
-	}
-
-	/**
-	 * Fluent alias for setAttributes().
-	 *
-	 * @codeCoverageIgnore
-	 * @param  array<string, mixed> $attributes
-	 * @return static               $this
-	 */
-	public function attributes( $attributes ) {
-		$this->setAttributes( $attributes );
-
-		return $this;
-	}
-
-	/**
 	 * Set attribute.
 	 *
 	 * @param  string $attribute
@@ -90,6 +66,30 @@ trait HasAttributesTrait {
 	 */
 	public function attribute( $attribute, $value ) {
 		$this->setAttribute( $attribute, $value );
+
+		return $this;
+	}
+
+	/**
+	 * Set all attributes.
+	 * No attempt to merge attributes is done - this is a direct overwrite operation.
+	 *
+	 * @param  array<string, mixed> $attributes
+	 * @return void
+	 */
+	public function setAttributes( $attributes ) {
+		$this->attributes = $attributes;
+	}
+
+	/**
+	 * Fluent alias for setAttributes().
+	 *
+	 * @codeCoverageIgnore
+	 * @param  array<string, mixed> $attributes
+	 * @return static               $this
+	 */
+	public function attributes( $attributes ) {
+		$this->setAttributes( $attributes );
 
 		return $this;
 	}

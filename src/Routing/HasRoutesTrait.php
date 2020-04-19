@@ -9,6 +9,9 @@
 
 namespace WPEmerge\Routing;
 
+use WPEmerge\Exceptions\ConfigurationException;
+use WPEmerge\Support\Arr;
+
 /**
  * Allow objects to have routes
  */
@@ -30,22 +33,43 @@ trait HasRoutesTrait {
 	}
 
 	/**
-	 * Set routes.
-	 *
-	 * @param  RouteInterface[] $routes
-	 * @return void
-	 */
-	public function setRoutes( $routes ) {
-		$this->routes = $routes;
-	}
-
-	/**
 	 * Add a route.
 	 *
 	 * @param  RouteInterface $route
 	 * @return void
 	 */
 	public function addRoute( RouteInterface $route ) {
+		$routes = $this->getRoutes();
+		$name = $route->getAttribute( 'name' );
+
+		foreach ( $routes as $registered ) {
+			if ( $registered === $route ) {
+				throw new ConfigurationException( 'Attempted to register a route twice.' );
+			}
+
+			if ( $name !== '' && $name === $registered->getAttribute( 'name' ) ) {
+				throw new ConfigurationException( "The route name \"$name\" is already registered." );
+			}
+		}
+
 		$this->routes[] = $route;
+	}
+
+	/**
+	 * Remove a route.
+	 *
+	 * @param  RouteInterface $route
+	 * @return void
+	 */
+	public function removeRoute( $route ) {
+		$routes = $this->getRoutes();
+
+		$index = array_search( $route, $routes, true );
+
+		if ( $index === false ) {
+			return;
+		}
+
+		$this->routes = array_values( Arr::except( $routes, $index ) );
 	}
 }

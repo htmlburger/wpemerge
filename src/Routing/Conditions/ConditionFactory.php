@@ -234,6 +234,7 @@ class ConditionFactory {
 			if ( empty( $new ) ) {
 				return null;
 			}
+
 			return $this->condition( $new );
 		} else if ( empty( $new ) ) {
 			return $this->condition( $old );

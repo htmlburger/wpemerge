@@ -213,10 +213,12 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$route->shouldReceive( 'getArguments' )
 			->andReturn( $route_arguments );
 
-		$route->shouldReceive( 'getMiddleware' )
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'middleware', [] )
 			->andReturn( [] );
 
-		$route->shouldReceive( 'getHandler' )
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'handler' )
 			->andReturn( $this->factory_handler );
 
 		$subject->shouldReceive( 'run' )

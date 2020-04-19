@@ -16,21 +16,6 @@ use WPEmerge\Requests\RequestInterface;
  */
 interface HasQueryFilterInterface {
 	/**
-	 * Get the main WordPress query vars filter, if any.
-	 *
-	 * @return callable|null
-	 */
-	public function getQueryFilter();
-
-	/**
-	 * Set the main WordPress query vars filter.
-	 *
-	 * @param  callable|null $query_filter
-	 * @return void
-	 */
-	public function setQueryFilter( $query_filter );
-
-	/**
 	 * Apply the query filter, if any.
 	 *
 	 * @param  RequestInterface $request

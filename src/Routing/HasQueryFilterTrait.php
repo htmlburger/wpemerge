@@ -14,11 +14,9 @@ use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 
 /**
- * Represent an object which has a WordPress query filter.
+ * Represent an object which has a WordPress query filter attribute.
  */
 trait HasQueryFilterTrait {
-	use HasConditionTrait;
-
 	/**
 	 * Query filter.
 	 *
@@ -27,25 +25,13 @@ trait HasQueryFilterTrait {
 	protected $query_filter = null;
 
 	/**
-	 * Get the main WordPress query vars filter, if any.
+	 * Get attribute.
 	 *
-	 * @codeCoverageIgnore
-	 * @return callable|null
+	 * @param  string $attribute
+	 * @param  mixed  $default
+	 * @return mixed
 	 */
-	public function getQueryFilter() {
-		return $this->query_filter;
-	}
-
-	/**
-	 * Set the main WordPress query vars filter.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  callable|null $query_filter
-	 * @return void
-	 */
-	public function setQueryFilter( $query_filter ) {
-		$this->query_filter = $query_filter;
-	}
+	public abstract function getAttribute( $attribute, $default = '' );
 
 	/**
 	 * Apply the query filter, if any.
@@ -55,24 +41,26 @@ trait HasQueryFilterTrait {
 	 * @return array
 	 */
 	public function applyQueryFilter( $request, $query_vars ) {
-		$condition = $this->getCondition();
+		$query = $this->getAttribute( 'query' );
+		$condition = $this->getAttribute( 'condition' );
 
-		if ( $this->getQueryFilter() === null ) {
+		if ( $query === null ) {
 			return $query_vars;
 		}
 
 		if ( ! $condition instanceof UrlCondition ) {
 			throw new ConfigurationException(
-				'Only routes with URL condition can use queries. ' .
+				'Only routes with a URL condition can use queries. ' .
 				'Make sure your route has a URL condition and it is not in a non-URL route group.'
 			);
 		}
 
-		$arguments = $this->getCondition()->getArguments( $request );
-
 		return call_user_func_array(
-			$this->getQueryFilter(),
-			array_merge( [$query_vars], array_values( $arguments ) )
+			$query,
+			array_merge(
+				[$query_vars],
+				array_values( $condition->getArguments( $request ) )
+			)
 		);
 	}
 }

@@ -37,14 +37,26 @@ class RouteTest extends WP_UnitTestCase {
 		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( true );
 
-		$subject1 = new Route( ['BAR'], $condition, $handler );
-		$this->assertFalse( $subject1->isSatisfied( $request ) );
+		$subject = (new Route())->attributes( [
+			'methods' => ['BAR'],
+			'condition' => $condition,
+			'handler' => $handler,
+		] );
+		$this->assertFalse( $subject->isSatisfied( $request ) );
 
-		$subject2 = new Route( ['FOO'], $condition, $handler );
-		$this->assertTrue( $subject2->isSatisfied( $request ) );
+		$subject = (new Route())->attributes( [
+			'methods' => ['FOO'],
+			'condition' => $condition,
+			'handler' => $handler,
+		] );
+		$this->assertTrue( $subject->isSatisfied( $request ) );
 
-		$subject3 = new Route( ['FOO', 'BAR'], $condition, $handler );
-		$this->assertTrue( $subject3->isSatisfied( $request ) );
+		$subject = (new Route())->attributes( [
+			'methods' => ['FOO', 'BAR'],
+			'condition' => $condition,
+			'handler' => $handler,
+		] );
+		$this->assertTrue( $subject->isSatisfied( $request ) );
 	}
 
 	/**
@@ -61,7 +73,11 @@ class RouteTest extends WP_UnitTestCase {
 		$condition->shouldReceive( 'isSatisfied' )
 			->andReturn( false );
 
-		$subject = new Route( ['FOO'], $condition, $handler );
+		$subject = (new Route())->attributes( [
+			'methods' => ['FOO'],
+			'condition' => $condition,
+			'handler' => $handler,
+		] );
 		$this->assertFalse( $subject->isSatisfied( $request ) );
 	}
 
@@ -78,46 +94,11 @@ class RouteTest extends WP_UnitTestCase {
 			->with( $request )
 			->andReturn( $expected );
 
-		$subject = new Route( [], $condition, $handler );
+		$subject = (new Route())->attributes( [
+			'condition' => $condition,
+			'handler' => $handler,
+		] );
+
 		$this->assertSame( $expected, $subject->getArguments( $request ) );
-	}
-
-	/**
-	 * @covers ::decorate
-	 */
-	public function testDecorate_Middleware() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
-		$expected = ['foo'];
-		$subject = new Route( [], $condition, $handler );
-
-		$subject->decorate( [
-			'middleware' => $expected,
-		] );
-
-		$this->assertEquals( $expected, $subject->getMiddleware() );
-	}
-
-	/**
-	 * @covers ::decorate
-	 */
-	public function testDecorate_Query() {
-		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
-		$subject = new Route( [], $condition, $handler );
-
-		$subject->decorate( [] );
-		$this->assertNull( $subject->getQueryFilter() );
-
-		$subject->decorate( [
-			'query' => null,
-		] );
-		$this->assertNull( $subject->getQueryFilter() );
-
-		$query = function () {};
-		$subject->decorate( [
-			'query' => $query,
-		] );
-		$this->assertSame( $query, $subject->getQueryFilter() );
 	}
 }

@@ -10,7 +10,7 @@
 namespace WPEmerge\Middleware;
 
 /**
- * Interface for HasMiddlewareTrait.
+ * Interface for HasControllerMiddlewareTrait.
  */
 interface HasControllerMiddlewareInterface {
 	/**

@@ -231,8 +231,8 @@ class HttpKernel implements HttpKernelInterface {
 
 		$response = $this->run(
 			$request,
-			$route->getMiddleware(),
-			$route->getHandler(),
+			$route->getAttribute( 'middleware', [] ),
+			$route->getAttribute( 'handler' ),
 			array_merge(
 				[$request],
 				$arguments,

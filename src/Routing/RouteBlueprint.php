@@ -10,8 +10,8 @@
 namespace WPEmerge\Routing;
 
 use Closure;
+use WPEmerge\Helpers\HasAttributesTrait;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Support\Arr;
 use WPEmerge\View\ViewService;
 
 /**
@@ -158,7 +158,7 @@ class RouteBlueprint {
 	 * Create a route.
 	 *
 	 * @param  string|Closure $handler
-	 * @return RouteInterface
+	 * @return void
 	 */
 	public function handle( $handler = '' ) {
 		if ( ! empty( $handler ) ) {
@@ -168,18 +168,16 @@ class RouteBlueprint {
 		$route = $this->router->route( $this->getAttributes() );
 
 		$this->router->addRoute( $route );
-
-		return $route;
 	}
 
 	/**
 	 * Handle a request by directly rendering a view.
 	 *
 	 * @param  string|string[] $views
-	 * @return RouteInterface
+	 * @return void
 	 */
 	public function view( $views ) {
-		return $this->handle( function () use ( $views ) {
+		$this->handle( function () use ( $views ) {
 			return $this->view_service->make( $views );
 		} );
 	}
@@ -188,10 +186,10 @@ class RouteBlueprint {
 	 * Match ALL requests.
 	 *
 	 * @param  string|Closure $handler
-	 * @return RouteInterface
+	 * @return void
 	 */
 	public function all( $handler = '' ) {
-		return $this->any()->url( '*' )->handle( $handler );
+		$this->any()->url( '*' )->handle( $handler );
 	}
 
 	/**

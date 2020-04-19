@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Routing\Conditions;
 
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Url as UrlUtility;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Support\Arr;
@@ -43,7 +44,7 @@ class UrlCondition implements ConditionInterface {
 		(?:/)                     # match leading slash
 		(?:\{)                    # opening curly brace
 			(?P<name>[a-z]\w*)    # string starting with a-z and followed by word characters for the parameter name
-			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using literal ?
+			(?P<optional>\?)?     # optionally allow the user to mark the parameter as option using a literal ?
 		(?:\})                    # closing curly brace
 		(?=/)                     # lookahead for a trailing slash
 	~ix';
@@ -159,6 +160,32 @@ class UrlCondition implements ConditionInterface {
 		}
 
 		$this->url = $url;
+	}
+
+	/**
+	 * Make a URL with filled in parameters.
+	 *
+	 * @param  array  $arguments
+	 * @return string
+	 */
+	public function makeUrl( $arguments = [] ) {
+		$url = preg_replace_callback( $this->url_pattern, function ( $matches ) use ( $arguments ) {
+			$name = $matches['name'];
+			$optional = ! empty( $matches['optional'] );
+			$value = '/' . urlencode( Arr::get( $arguments, $name, '' ) );
+
+			if ( $value === '/' ) {
+				if ( ! $optional ) {
+					throw new ConfigurationException( "Required URL parameter \"$name\" is not specified." );
+				}
+
+				$value = '';
+			}
+
+			return $value;
+		}, $this->getUrl() );
+
+		return UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $url ) );
 	}
 
 	/**

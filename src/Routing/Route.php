@@ -9,92 +9,46 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Helpers\Handler;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\HasAttributesTrait;
-use WPEmerge\Middleware\HasMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Support\Arr;
 
 /**
  * Represent a route
  */
 class Route implements RouteInterface, HasQueryFilterInterface {
-	use HasMiddlewareTrait;
+	use HasAttributesTrait;
 	use HasQueryFilterTrait;
-	use HasAttributesTrait {
-		setAttributes as traitSetAttributes;
-	}
-
-	/**
-	 * Allowed methods.
-	 *
-	 * @var string[]
-	 */
-	protected $methods = [];
-
-	/**
-	 * Route handler.
-	 *
-	 * @var Handler
-	 */
-	protected $handler = null;
-
-	/**
-	 * Constructor.
-	 *
-	 * @codeCoverageIgnore
-	 * @param  string[]           $methods
-	 * @param  ConditionInterface $condition
-	 * @param  Handler            $handler
-	 */
-	public function __construct( $methods, $condition, Handler $handler ) {
-		$this->methods = $methods;
-		$this->setCondition( $condition );
-		$this->handler = $handler;
-	}
-
-	/**
-	 * Get allowed methods.
-	 *
-	 * @codeCoverageIgnore
-	 * @return string[]
-	 */
-	public function getMethods() {
-		return $this->methods;
-	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
-		if ( ! in_array( $request->getMethod(), $this->methods ) ) {
+		$methods = $this->getAttribute( 'methods', [] );
+		$condition = $this->getAttribute( 'condition' );
+
+		if ( ! in_array( $request->getMethod(), $methods ) ) {
 			return false;
 		}
 
-		return $this->condition->isSatisfied( $request );
+		if ( ! $condition instanceof ConditionInterface ) {
+			throw new ConfigurationException( 'Route does not have a condition.' );
+		}
+
+		return $condition->isSatisfied( $request );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return $this->getCondition()->getArguments( $request );
-	}
+		$condition = $this->getAttribute( 'condition' );
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setAttributes( $attributes ) {
-		$this->traitSetAttributes( $attributes );
-
-		$middleware = $this->getAttribute( 'middleware', [] );
-		$query = $this->getAttribute( 'query', null );
-
-		$this->middleware( $middleware );
-
-		if ( $query !== null) {
-			$this->setQueryFilter( $query );
+		if ( ! $condition instanceof ConditionInterface ) {
+			throw new ConfigurationException( 'Route does not have a condition.' );
 		}
+
+		return $condition->getArguments( $request );
 	}
 }

@@ -250,7 +250,13 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 		$this->router->shouldReceive( 'route' )
 			->andReturn( $route );
 
-		$this->assertSame( $route, $this->subject->handle() );
+		$this->router->shouldReceive( 'addRoute' )
+			->with( $route )
+			->once();
+
+		$this->subject->handle();
+
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -272,7 +278,9 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			} )
 			->once();
 
-		$this->assertSame( $view, $this->subject->view( $view_name ) );
+		$this->subject->view( $view_name );
+
+		$this->assertTrue( true );
 	}
 
 	/**
@@ -299,7 +307,9 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 			->with( $route )
 			->once();
 
-		$this->assertSame( $route, $this->subject->all( $handler ) );
+		$this->subject->all( $handler );
+
+		$this->assertTrue( true );
 	}
 
 	/**

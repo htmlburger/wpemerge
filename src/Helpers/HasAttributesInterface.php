@@ -10,7 +10,7 @@
 namespace WPEmerge\Helpers;
 
 /**
- * Represent an object which has a route condition.
+ * Represent an object which has an array of attributes.
  */
 interface HasAttributesInterface {
 	/**
@@ -30,6 +30,24 @@ interface HasAttributesInterface {
 	public function getAttributes();
 
 	/**
+	 * Set attribute.
+	 *
+	 * @param  string $attribute
+	 * @param  mixed  $value
+	 * @return void
+	 */
+	public function setAttribute( $attribute, $value );
+
+	/**
+	 * Fluent alias for setAttribute().
+	 *
+	 * @param  string $attribute
+	 * @param  mixed  $value
+	 * @return static $this
+	 */
+	public function attribute( $attribute, $value );
+
+	/**
 	 * Set attributes.
 	 * No attempt to merge attributes is done - this is a direct overwrite operation.
 	 *
@@ -37,4 +55,12 @@ interface HasAttributesInterface {
 	 * @return void
 	 */
 	public function setAttributes( $attributes );
+
+	/**
+	 * Fluent alias for setAttributes().
+	 *
+	 * @param  array<string, mixed> $attributes
+	 * @return static               $this
+	 */
+	public function attributes( $attributes );
 }

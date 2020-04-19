@@ -25,26 +25,41 @@ class HasRoutesTraitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::setRoutes
-	 * @covers ::getRoutes
-	 */
-	public function testSetRoutes() {
-		$route = Mockery::mock( RouteInterface::class );
-
-		$this->subject->setRoutes( [$route] );
-		$this->assertSame( $route, $this->subject->getRoutes()[0] );
-	}
-
-	/**
 	 * @covers ::addRoute
 	 */
 	public function testAddRoute() {
 		$route1 = Mockery::mock( RouteInterface::class );
 		$route2 = Mockery::mock( RouteInterface::class );
 
-		$this->subject->setRoutes( [$route1] );
+		$route1->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( '' );
+
+		$route2->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( '' );
+
+		$this->subject->addRoute( $route1 );
 		$this->subject->addRoute( $route2 );
 		$this->assertSame( $route2, $this->subject->getRoutes()[1] );
+	}
+
+	/**
+	 * @covers ::removeRoute
+	 */
+	public function testRemoveRoute() {
+		$route = Mockery::mock( RouteInterface::class );
+
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( '' );
+
+		$this->subject->removeRoute( $route );
+		$this->assertEquals( [], $this->subject->getRoutes() );
+		$this->subject->addRoute( $route );
+		$this->assertEquals( [$route], $this->subject->getRoutes() );
+		$this->subject->removeRoute( $route );
+		$this->assertEquals( [], $this->subject->getRoutes() );
 	}
 }
 

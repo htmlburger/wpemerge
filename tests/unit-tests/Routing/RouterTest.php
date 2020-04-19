@@ -149,6 +149,7 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( 'foo', $this->subject->mergeNameAttribute( 'foo', '' ) );
 		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( 'foo', 'bar' ) );
 		$this->assertEquals( 'foo.bar.baz', $this->subject->mergeNameAttribute( 'foo.bar', 'baz' ) );
+		$this->assertEquals( 'foo.bar.baz', $this->subject->mergeNameAttribute( 'foo.bar.', '.baz' ) );
 	}
 
 	/**
@@ -207,7 +208,10 @@ class RouterTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Route does not have any assigned request methods
 	 */
 	public function testRoute_NoMethods_Exception() {
-		$this->subject->route( [] );
+		$this->subject->route( [
+			'condition' => function () {},
+			'handler' => function () {},
+		] );
 	}
 
 	/**
@@ -251,13 +255,13 @@ class RouterTest extends WP_UnitTestCase {
 		} );
 
 		$this->assertInstanceOf( RouteInterface::class, $route );
-		$this->assertEquals( ['GET', 'POST'], $route->getMethods() );
-		$this->assertEquals( '/foo/{foo}/bar/{bar}/', $route->getCondition()->getUrl() );
-		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getCondition()->getUrlWhere() );
-		$this->assertEquals( ['foo', 'bar'], $route->getMiddleware() );
-		$this->assertSame( $route_attributes['handler'], $route->getHandler()->get() );
+		$this->assertEquals( ['GET', 'POST'], $route->getAttribute( 'methods' ) );
+		$this->assertEquals( '/foo/{foo}/bar/{bar}/', $route->getAttribute( 'condition' )->getUrl() );
+		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getAttribute( 'condition' )->getUrlWhere() );
+		$this->assertEquals( ['foo', 'bar'], $route->getAttribute( 'middleware', [] ) );
+		$this->assertSame( $route_attributes['handler'], $route->getAttribute( 'handler' )->get() );
 
-		$query_filter = $route->getQueryFilter();
+		$query_filter = $route->getAttribute( 'query' );
 		$this->assertEquals( ['foo' => 1, 'bar' => 1], $query_filter( [] ) );
 
 		// TODO namespace A: null; B: null
@@ -275,9 +279,10 @@ class RouterTest extends WP_UnitTestCase {
 	public function testExecute_SatisfiedRoute_Route() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
-		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
-		$route->shouldReceive( 'getCondition' )
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'condition' )
 			->andReturn( $condition );
 
 		$route->shouldReceive( 'isSatisfied' )
@@ -295,14 +300,24 @@ class RouterTest extends WP_UnitTestCase {
 	public function testExecute_UnsatisfiedRoutes_Null() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
-		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
-		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing( [] );
+		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route2 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
-		$route1->shouldReceive( 'getCondition' )
+		$route1->shouldReceive( 'getAttribute' )
+			->with( 'condition' )
 			->andReturn( $condition );
 
-		$route2->shouldReceive( 'getCondition' )
+		$route1->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( '' );
+
+		$route2->shouldReceive( 'getAttribute' )
+			->with( 'condition' )
 			->andReturn( $condition );
+
+		$route2->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( '' );
 
 		$route1->shouldReceive( 'isSatisfied' )
 			->andReturn( false );

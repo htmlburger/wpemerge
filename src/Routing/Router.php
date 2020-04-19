@@ -16,6 +16,7 @@ use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmerge\Support\Arr;
 
 /**
@@ -174,7 +175,7 @@ class Router implements HasRoutesInterface {
 	 */
 	public function mergeNameAttribute( $old, $new ) {
 		$name = array_filter( [$old, $new] );
-		return implode( '.', $name );
+		return preg_replace( '/\.{2,}/', '.', implode( '.', $name ) );
 	}
 
 	/**
@@ -303,6 +304,10 @@ class Router implements HasRoutesInterface {
 	 * @return Handler
 	 */
 	protected function routeHandler( $handler, $namespace ) {
+		if ( $handler === null ) {
+			throw new ConfigurationException( 'No route handler specified. Did you miss to call handle()?' );
+		}
+
 		return $this->handler_factory->make( $handler, '', $namespace );
 	}
 
@@ -314,27 +319,22 @@ class Router implements HasRoutesInterface {
 	 */
 	public function route( $attributes ) {
 		$attributes = $this->mergeAttributes( $this->getGroup(), $attributes );
+		$attributes = array_merge(
+			$attributes,
+			[
+				'condition' => $this->routeCondition( $attributes['condition'] ),
+				'handler' => $this->routeHandler( $attributes['handler'], $attributes['namespace'] ),
+			]
+		);
 
-		$methods = Arr::get( $attributes, 'methods', [] );
-		$condition = Arr::get( $attributes, 'condition', null );
-		$handler = Arr::get( $attributes, 'handler', '' );
-		$namespace = Arr::get( $attributes, 'namespace', '' );
-
-		if ( empty( $methods ) ) {
+		if ( empty( $attributes['methods'] ) ) {
 			throw new ConfigurationException(
 				'Route does not have any assigned request methods. ' .
 				'Did you miss to call get() or post() on your route definition, for example?'
 			);
 		}
 
-		$condition = $this->routeCondition( $condition );
-		$handler = $this->routeHandler( $handler, $namespace );
-
-		$route = new Route( $methods, $condition, $handler );
-
-		$route->decorate( $attributes );
-
-		return $route;
+		return (new Route())->attributes( $attributes );
 	}
 
 	/**
@@ -359,21 +359,27 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Get the url for a named route.
 	 *
-	 * @param  string $route
+	 * @param  string $name
 	 * @param  array  $arguments
 	 * @return string
 	 */
-	public function getRouteUrl( $request, $arguments ) {
-		/** @var $routes RouteInterface[] */
+	public function getRouteUrl( $name, $arguments = [] ) {
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {
-			if (  $route->isSatisfied( $request ) ) {
-				$this->setCurrentRoute( $route );
-				return $route;
+			if ( $route->getAttribute( 'name' ) === $name ) {
+				$condition = $route->getAttribute( 'condition' );
+
+				if ( ! $condition instanceof UrlCondition ) {
+					throw new ConfigurationException(
+						'Only routes with a URL condition can be used to generate a route URL.'
+					);
+				}
+
+				return home_url( $condition->makeUrl( $arguments ) );
 			}
 		}
 
-		return null;
+		throw new ConfigurationException( "No route registered with the name \"$name\"." );
 	}
 }

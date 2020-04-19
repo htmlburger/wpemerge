@@ -21,18 +21,18 @@ interface HasRoutesInterface {
 	public function getRoutes();
 
 	/**
-	 * Set routes.
-	 *
-	 * @param  RouteInterface[] $routes
-	 * @return void
-	 */
-	public function setRoutes( $routes );
-
-	/**
 	 * Add a route.
 	 *
 	 * @param  RouteInterface $route
 	 * @return void
 	 */
 	public function addRoute( RouteInterface $route );
+
+	/**
+	 * Remove a route.
+	 *
+	 * @param  RouteInterface $route
+	 * @return void
+	 */
+	public function removeRoute( RouteInterface $route );
 }

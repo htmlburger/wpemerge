@@ -9,15 +9,13 @@
 
 namespace WPEmerge\Routing;
 
-use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HasAttributesInterface;
-use WPEmerge\Middleware\HasMiddlewareInterface;
 use WPEmerge\Requests\RequestInterface;
 
 /**
  * Interface that routes must implement
  */
-interface RouteInterface extends HasAttributesInterface, HasConditionInterface, HasMiddlewareInterface {
+interface RouteInterface extends HasAttributesInterface {
 	/**
 	 * Get whether the route is satisfied.
 	 *

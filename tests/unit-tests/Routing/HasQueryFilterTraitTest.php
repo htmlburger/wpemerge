@@ -17,7 +17,7 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = Mockery::mock( HasQueryFilterTraitImplementation::class )->makePartial();
+		$this->subject = $this->getMockForTrait( HasQueryFilterTrait::class );
 	}
 
 	public function tearDown() {
@@ -44,10 +44,18 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 		$arguments = ['arg1', 'arg2'];
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 		$condition = Mockery::mock( UrlCondition::class );
-		$subject = new Route( [], $condition, Mockery::mock( Handler::class ) );
-		$subject->setQueryFilter( function( $query_vars, $arg1, $arg2 ) {
-			return array_merge( $query_vars, [$arg1, $arg2] );
-		} );
+
+		$this->subject->method( 'getAttribute' )
+			->withConsecutive(
+				['query'],
+				['condition']
+			)
+			->will( $this->onConsecutiveCalls(
+				function( $query_vars, $arg1, $arg2 ) {
+					return array_merge( $query_vars, [$arg1, $arg2] );
+				},
+				$condition
+			) );
 
 		$condition->shouldReceive( 'isSatisfied' )
 			  ->andReturn( true );
@@ -55,22 +63,27 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 		$condition->shouldReceive( 'getArguments' )
 			  ->andReturn( $arguments );
 
-		$this->assertEquals( ['arg0', 'arg1', 'arg2'], $subject->applyQueryFilter( $request, ['arg0'] ) );
+		$this->assertEquals( ['arg0', 'arg1', 'arg2'], $this->subject->applyQueryFilter( $request, ['arg0'] ) );
 	}
 
 	/**
 	 * @covers ::applyQueryFilter
 	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Only routes with URL condition can use queries
+	 * @expectedExceptionMessage Only routes with a URL condition can use queries
 	 */
 	public function testApplyQueryFilter_NonUrlCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
-		$this->subject->setQueryFilter( function() {} );
+		$this->subject->method( 'getAttribute' )
+			->withConsecutive(
+				['query'],
+				['condition']
+			)
+			->will( $this->onConsecutiveCalls(
+				function() {},
+				null
+			) );
+
 		$this->subject->applyQueryFilter( $request, [] );
 	}
-}
-
-class HasQueryFilterTraitImplementation {
-	use HasQueryFilterTrait;
 }
