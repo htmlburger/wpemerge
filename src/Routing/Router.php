@@ -49,7 +49,7 @@ class Router implements HasRoutesInterface {
 	/**
 	 * Current active route.
 	 *
-	 * @var RouteInterface
+	 * @var RouteInterface|null
 	 */
 	protected $current_route = null;
 
