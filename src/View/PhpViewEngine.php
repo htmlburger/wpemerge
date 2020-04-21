@@ -14,6 +14,13 @@ namespace WPEmerge\View;
  */
 class PhpViewEngine implements ViewEngineInterface {
 	/**
+	 * Name of view file header based on which to resolve layouts.
+	 *
+	 * @var string
+	 */
+	protected $layout_file_header = 'Layout';
+
+	/**
 	 * View compose action.
 	 *
 	 * @var callable
@@ -107,7 +114,7 @@ class PhpViewEngine implements ViewEngineInterface {
 	protected function getViewLayout( PhpView $view ) {
 		$layout_headers = array_filter( get_file_data(
 			$view->getFilepath(),
-			['Layout']
+			[$this->layout_file_header]
 		) );
 
 		if ( empty( $layout_headers ) ) {
