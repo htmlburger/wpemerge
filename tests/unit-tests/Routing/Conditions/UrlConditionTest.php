@@ -53,37 +53,6 @@ class UrlConditionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::makeUrl
-	 */
-	public function testMakeUrl() {
-		$subject = new UrlCondition( '' );
-		$this->assertEquals( '/', $subject->makeUrl() );
-
-		$subject = new UrlCondition( '/' );
-		$this->assertEquals( '/', $subject->makeUrl() );
-
-		$subject = new UrlCondition( '/{arg?}' );
-		$this->assertEquals( '/', $subject->makeUrl() );
-		$this->assertEquals( '/foo', $subject->makeUrl( ['arg' => 'foo'] ) );
-
-		$subject = new UrlCondition( '/base/{arg1}' );
-		$this->assertEquals( '/base/foo', $subject->makeUrl( ['arg1' => 'foo'] ) );
-
-		$subject = new UrlCondition( '/base/{arg1}/{arg2}' );
-		$this->assertEquals( '/base/foo/bar', $subject->makeUrl( ['arg1' => 'foo', 'arg2' => 'bar'] ) );
-
-		$subject = new UrlCondition( '/base/{arg1}/{arg2?}/{arg3}' );
-		$this->assertEquals( '/base/foo/bar/baz', $subject->makeUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz'] ) );
-		$this->assertEquals( '/base/foo/baz', $subject->makeUrl( ['arg1' => 'foo', 'arg3' => 'baz'] ) );
-
-		$subject = new UrlCondition( '/base/{arg1}/{arg2?}/mid/{arg3}/{arg4?}' );
-		$this->assertEquals( '/base/foo/mid/baz', $subject->makeUrl( ['arg1' => 'foo', 'arg3' => 'baz'] ) );
-		$this->assertEquals( '/base/foo/bar/mid/baz', $subject->makeUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz'] ) );
-		$this->assertEquals( '/base/foo/mid/baz/fbz', $subject->makeUrl( ['arg1' => 'foo', 'arg3' => 'baz', 'arg4' => 'fbz'] ) );
-		$this->assertEquals( '/base/foo/bar/mid/baz/fbz', $subject->makeUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz', 'arg4' => 'fbz'] ) );
-	}
-
-	/**
 	 * @covers ::getUrlWhere
 	 * @covers ::setUrlWhere
 	 */
@@ -305,5 +274,46 @@ class UrlConditionTest extends WP_UnitTestCase {
 		$subject5 = new UrlCondition( '/foo/{param1}/baz/{param2}/2/{param3?}/' );
 		$this->assertEquals( '~^/foo/(?P<param1>[^/]+)/baz/(?P<param2>[^/]+)/2(?:/(?P<param3>[^/]+))?/?$~', $subject5->getValidationPattern( $subject5->getUrl() ) );
 
+	}
+
+	/**
+	 * @covers ::toUrl
+	 */
+	public function testToUrl() {
+		$subject = new UrlCondition( '' );
+		$this->assertEquals( home_url( '/' ), $subject->toUrl() );
+
+		$subject = new UrlCondition( '/' );
+		$this->assertEquals( home_url( '/' ), $subject->toUrl() );
+
+		$subject = new UrlCondition( '/{arg?}' );
+		$this->assertEquals( home_url( '/' ), $subject->toUrl() );
+		$this->assertEquals( home_url( '/foo' ), $subject->toUrl( ['arg' => 'foo'] ) );
+
+		$subject = new UrlCondition( '/base/{arg1}' );
+		$this->assertEquals( home_url( '/base/foo' ), $subject->toUrl( ['arg1' => 'foo'] ) );
+
+		$subject = new UrlCondition( '/base/{arg1}/{arg2}' );
+		$this->assertEquals( home_url( '/base/foo/bar' ), $subject->toUrl( ['arg1' => 'foo', 'arg2' => 'bar'] ) );
+
+		$subject = new UrlCondition( '/base/{arg1}/{arg2?}/{arg3}' );
+		$this->assertEquals( home_url( '/base/foo/bar/baz' ), $subject->toUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz'] ) );
+		$this->assertEquals( home_url( '/base/foo/baz' ), $subject->toUrl( ['arg1' => 'foo', 'arg3' => 'baz'] ) );
+
+		$subject = new UrlCondition( '/base/{arg1}/{arg2?}/mid/{arg3}/{arg4?}' );
+		$this->assertEquals( home_url( '/base/foo/mid/baz' ), $subject->toUrl( ['arg1' => 'foo', 'arg3' => 'baz'] ) );
+		$this->assertEquals( home_url( '/base/foo/bar/mid/baz' ), $subject->toUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz'] ) );
+		$this->assertEquals( home_url( '/base/foo/mid/baz/fbz' ), $subject->toUrl( ['arg1' => 'foo', 'arg3' => 'baz', 'arg4' => 'fbz'] ) );
+		$this->assertEquals( home_url( '/base/foo/bar/mid/baz/fbz' ), $subject->toUrl( ['arg1' => 'foo', 'arg2' => 'bar', 'arg3' => 'baz', 'arg4' => 'fbz'] ) );
+	}
+
+	/**
+	 * @covers ::toUrl
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Required URL parameter
+	 */
+	public function testToUrl_MissingArgument_Exception() {
+		$subject = new UrlCondition( '/{arg1}' );
+		$subject->toUrl();
 	}
 }

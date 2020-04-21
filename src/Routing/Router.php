@@ -16,7 +16,7 @@ use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\UrlableInterface;
 use WPEmerge\Support\Arr;
 
 /**
@@ -367,17 +367,19 @@ class Router implements HasRoutesInterface {
 		$routes = $this->getRoutes();
 
 		foreach ( $routes as $route ) {
-			if ( $route->getAttribute( 'name' ) === $name ) {
-				$condition = $route->getAttribute( 'condition' );
-
-				if ( ! $condition instanceof UrlCondition ) {
-					throw new ConfigurationException(
-						'Only routes with a URL condition can be used to generate a route URL.'
-					);
-				}
-
-				return home_url( $condition->makeUrl( $arguments ) );
+			if ( $route->getAttribute( 'name' ) !== $name ) {
+				continue;
 			}
+
+			$condition = $route->getAttribute( 'condition' );
+
+			if ( ! $condition instanceof UrlableInterface ) {
+				throw new ConfigurationException(
+					'Route condition is not resolvable to a URL.'
+				);
+			}
+
+			return $condition->toUrl( $arguments );
 		}
 
 		throw new ConfigurationException( "No route registered with the name \"$name\"." );

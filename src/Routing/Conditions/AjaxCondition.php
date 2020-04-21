@@ -16,7 +16,7 @@ use WPEmerge\Requests\RequestInterface;
  *
  * @codeCoverageIgnore
  */
-class AjaxCondition implements ConditionInterface {
+class AjaxCondition implements ConditionInterface, UrlableInterface {
 	/**
 	 * Ajax action to check against.
 	 *
@@ -100,5 +100,12 @@ class AjaxCondition implements ConditionInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return ['action' => $this->action];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toUrl( $arguments = [] ) {
+		return add_query_arg( 'action', $this->action, self_admin_url( 'admin-ajax.php' ) );
 	}
 }

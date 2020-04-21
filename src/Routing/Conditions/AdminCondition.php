@@ -16,7 +16,7 @@ use WPEmerge\Requests\RequestInterface;
  *
  * @codeCoverageIgnore
  */
-class AdminCondition implements ConditionInterface {
+class AdminCondition implements ConditionInterface, UrlableInterface {
 	/**
 	 * Menu slug.
 	 *
@@ -73,6 +73,23 @@ class AdminCondition implements ConditionInterface {
 	 * {@inheritDoc}
 	 */
 	public function getArguments( RequestInterface $request ) {
-		return ['hook' => get_plugin_page_hookname( $this->menu, $this->parent_menu )];
+		return [
+			'menu' => $this->menu,
+			'parent_menu' => $this->parent_menu,
+			'hook' => get_plugin_page_hookname( $this->menu, $this->parent_menu )
+		];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toUrl( $arguments = [] ) {
+		if ( ! function_exists( 'menu_page_url' ) ) {
+			// Attempted to resolve an admin url while not in the admin which can only happen
+			// by mistake as admin routes are defined in the admin context only.
+			return home_url( '/' );
+		}
+
+		return menu_page_url( $this->menu, false );
 	}
 }

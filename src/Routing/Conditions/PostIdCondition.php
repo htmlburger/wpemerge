@@ -16,29 +16,29 @@ use WPEmerge\Requests\RequestInterface;
  *
  * @codeCoverageIgnore
  */
-class PostIdCondition implements ConditionInterface {
+class PostIdCondition implements ConditionInterface, UrlableInterface {
 	/**
 	 * Post id to check against
 	 *
-	 * @var string
+	 * @var integer
 	 */
-	protected $post_id = '';
+	protected $post_id = 0;
 
 	/**
 	 * Constructor
 	 *
 	 * @codeCoverageIgnore
-	 * @param string $post_id
+	 * @param integer $post_id
 	 */
 	public function __construct( $post_id ) {
-		$this->post_id = $post_id;
+		$this->post_id = (int) $post_id;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function isSatisfied( RequestInterface $request ) {
-		return ( is_singular() && (int) $this->post_id === (int) get_the_ID() );
+		return ( is_singular() && $this->post_id === (int) get_the_ID() );
 	}
 
 	/**
@@ -46,5 +46,12 @@ class PostIdCondition implements ConditionInterface {
 	 */
 	public function getArguments( RequestInterface $request ) {
 		return ['post_id' => $this->post_id];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toUrl( $arguments = [] ) {
+		return get_permalink( $this->post_id );
 	}
 }

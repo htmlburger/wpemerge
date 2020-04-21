@@ -26,6 +26,7 @@ trait HasRoutesTrait {
 	/**
 	 * Get routes.
 	 *
+	 * @codeCoverageIgnore
 	 * @return RouteInterface[]
 	 */
 	public function getRoutes() {

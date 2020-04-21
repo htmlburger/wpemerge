@@ -17,7 +17,7 @@ use WPEmerge\Support\Arr;
 /**
  * Check against the current url
  */
-class UrlCondition implements ConditionInterface {
+class UrlCondition implements ConditionInterface, UrlableInterface {
 	const WILDCARD = '*';
 
 	/**
@@ -163,32 +163,6 @@ class UrlCondition implements ConditionInterface {
 	}
 
 	/**
-	 * Make a URL with filled in parameters.
-	 *
-	 * @param  array  $arguments
-	 * @return string
-	 */
-	public function makeUrl( $arguments = [] ) {
-		$url = preg_replace_callback( $this->url_pattern, function ( $matches ) use ( $arguments ) {
-			$name = $matches['name'];
-			$optional = ! empty( $matches['optional'] );
-			$value = '/' . urlencode( Arr::get( $arguments, $name, '' ) );
-
-			if ( $value === '/' ) {
-				if ( ! $optional ) {
-					throw new ConfigurationException( "Required URL parameter \"$name\" is not specified." );
-				}
-
-				$value = '';
-			}
-
-			return $value;
-		}, $this->getUrl() );
-
-		return UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $url ) );
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function getUrlWhere() {
@@ -296,5 +270,28 @@ class UrlCondition implements ConditionInterface {
 		}
 
 		return $validation_pattern;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toUrl( $arguments = [] ) {
+		$url = preg_replace_callback( $this->url_pattern, function ( $matches ) use ( $arguments ) {
+			$name = $matches['name'];
+			$optional = ! empty( $matches['optional'] );
+			$value = '/' . urlencode( Arr::get( $arguments, $name, '' ) );
+
+			if ( $value === '/' ) {
+				if ( ! $optional ) {
+					throw new ConfigurationException( "Required URL parameter \"$name\" is not specified." );
+				}
+
+				$value = '';
+			}
+
+			return $value;
+		}, $this->getUrl() );
+
+		return home_url( UrlUtility::addLeadingSlash( UrlUtility::removeTrailingSlash( $url ) ) );
 	}
 }

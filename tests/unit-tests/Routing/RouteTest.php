@@ -29,7 +29,6 @@ class RouteTest extends WP_UnitTestCase {
 	public function testIsSatisfied() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
@@ -40,22 +39,20 @@ class RouteTest extends WP_UnitTestCase {
 		$subject = (new Route())->attributes( [
 			'methods' => ['BAR'],
 			'condition' => $condition,
-			'handler' => $handler,
 		] );
 		$this->assertFalse( $subject->isSatisfied( $request ) );
 
 		$subject = (new Route())->attributes( [
 			'methods' => ['FOO'],
 			'condition' => $condition,
-			'handler' => $handler,
 		] );
 		$this->assertTrue( $subject->isSatisfied( $request ) );
 
 		$subject = (new Route())->attributes( [
 			'methods' => ['FOO', 'BAR'],
 			'condition' => $condition,
-			'handler' => $handler,
 		] );
+
 		$this->assertTrue( $subject->isSatisfied( $request ) );
 	}
 
@@ -65,7 +62,6 @@ class RouteTest extends WP_UnitTestCase {
 	public function testIsSatisfied_ConditionFalse_False() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
 
 		$request->shouldReceive( 'getMethod' )
 			->andReturn( 'FOO' );
@@ -76,9 +72,27 @@ class RouteTest extends WP_UnitTestCase {
 		$subject = (new Route())->attributes( [
 			'methods' => ['FOO'],
 			'condition' => $condition,
-			'handler' => $handler,
 		] );
+
 		$this->assertFalse( $subject->isSatisfied( $request ) );
+	}
+
+	/**
+	 * @covers ::isSatisfied
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route does not have a condition
+	 */
+	public function testIsSatisfied_NoCondition_Exception() {
+		$request = Mockery::mock( RequestInterface::class );
+
+		$request->shouldReceive( 'getMethod' )
+			->andReturn( 'FOO' );
+
+		$subject = (new Route())->attributes( [
+			'methods' => ['FOO'],
+		] );
+
+		$subject->isSatisfied( $request );
 	}
 
 	/**
@@ -87,7 +101,6 @@ class RouteTest extends WP_UnitTestCase {
 	public function testGetArguments_PassThroughCondition() {
 		$request = Mockery::mock( RequestInterface::class );
 		$condition = Mockery::mock( ConditionInterface::class );
-		$handler = Mockery::mock( Handler::class );
 		$expected = ['foo'];
 
 		$condition->shouldReceive( 'getArguments' )
@@ -96,9 +109,23 @@ class RouteTest extends WP_UnitTestCase {
 
 		$subject = (new Route())->attributes( [
 			'condition' => $condition,
-			'handler' => $handler,
 		] );
 
 		$this->assertSame( $expected, $subject->getArguments( $request ) );
+	}
+
+	/**
+	 * @covers ::getArguments
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route does not have a condition
+	 */
+	public function testGetArguments_NoCondition_Exception() {
+		$request = Mockery::mock( RequestInterface::class );
+
+		$subject = (new Route())->attributes( [
+			'methods' => ['FOO'],
+		] );
+
+		$subject->getArguments( $request );
 	}
 }

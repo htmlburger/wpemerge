@@ -8,6 +8,7 @@ use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
+use WPEmerge\Routing\Conditions\UrlableInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
 use WP_UnitTestCase;
@@ -331,6 +332,64 @@ class RouterTest extends WP_UnitTestCase {
 		$this->subject->addRoute( $route2 );
 
 		$this->assertNull( $this->subject->execute( $request, '' ) );
+	}
+
+	/**
+	 * @covers ::getRouteUrl
+	 */
+	public function testGetRouteUrl() {
+		$route = Mockery::mock( RouteInterface::class );
+		$condition = Mockery::mock( UrlableInterface::class );
+		$name = 'foo';
+		$arguments = ['foo'];
+		$expected = '/foo';
+
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( $name );
+
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'condition' )
+			->andReturn( $condition );
+
+		$condition->shouldReceive( 'toUrl' )
+			->with( $arguments )
+			->andReturn( $expected );
+
+		$this->subject->addRoute( $route );
+
+		$this->assertEquals( $expected, $this->subject->getRouteUrl( $name, $arguments ) );
+	}
+
+	/**
+	 * @covers ::getRouteUrl
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage Route condition is not resolvable to a URL
+	 */
+	public function testGetRouteUrl_NonUrlableCondition_Exception() {
+		$route = Mockery::mock( RouteInterface::class );
+		$name = 'foo';
+
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'name' )
+			->andReturn( $name );
+
+		$route->shouldReceive( 'getAttribute' )
+			->with( 'condition' )
+			->andReturn( null );
+
+		$this->subject->addRoute( $route );
+
+		$this->subject->getRouteUrl( $name );
+	}
+
+	/**
+	 * @covers ::getRouteUrl
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No route registered with the name
+	 */
+	public function testGetRouteUrl_NoRoute_Exception() {
+		$this->subject->getRouteUrl( 'foo' );
 	}
 }
 
