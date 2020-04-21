@@ -338,17 +338,18 @@ class RouterTest extends WP_UnitTestCase {
 	 * @covers ::getRouteUrl
 	 */
 	public function testGetRouteUrl() {
-		$route = Mockery::mock( RouteInterface::class );
+		$route1 = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
+		$route2 = Mockery::mock( RouteInterface::class );
 		$condition = Mockery::mock( UrlableInterface::class );
 		$name = 'foo';
 		$arguments = ['foo'];
 		$expected = '/foo';
 
-		$route->shouldReceive( 'getAttribute' )
+		$route2->shouldReceive( 'getAttribute' )
 			->with( 'name' )
 			->andReturn( $name );
 
-		$route->shouldReceive( 'getAttribute' )
+		$route2->shouldReceive( 'getAttribute' )
 			->with( 'condition' )
 			->andReturn( $condition );
 
@@ -356,7 +357,8 @@ class RouterTest extends WP_UnitTestCase {
 			->with( $arguments )
 			->andReturn( $expected );
 
-		$this->subject->addRoute( $route );
+		$this->subject->addRoute( $route1 );
+		$this->subject->addRoute( $route2 );
 
 		$this->assertEquals( $expected, $this->subject->getRouteUrl( $name, $arguments ) );
 	}
