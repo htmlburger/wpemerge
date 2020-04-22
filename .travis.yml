@@ -5,35 +5,50 @@ os: linux
 dist: trusty
 
 php:
-  - 5.5
-  - 5.6
-  - 7.2
-  - 7.3
   - 7.4
+  - 7.3
+  - 7.2
+  - 5.6
 
 env:
-  - WP_VERSION=5.4 WP_MULTISITE=0
-  - WP_VERSION=5.3 WP_MULTISITE=0
-  - WP_VERSION=4.9 WP_MULTISITE=0
-  - WP_VERSION=4.7 WP_MULTISITE=0
+  - WP_VERSION=5.4
+  - WP_VERSION=5.3
 
-matrix:
+jobs:
   fast_finish: true
 
   include:
+    - php: 5.6
+      env: WP_VERSION=5.4
+    - php: 5.6
+      env: WP_VERSION=5.3
+    - php: 5.6
+      env: WP_VERSION=4.9
+    - php: 5.6
+      env: WP_VERSION=4.7
+    - php: 5.5
+      env: WP_VERSION=4.9
+    - php: 5.5
+      env: WP_VERSION=4.7
     - php: 5.5
       env: WP_VERSION=4.7 WP_MULTISITE=1
 
 before_script:
   - mysql -e "create database IF NOT EXISTS wpemerge_tests;" -uroot
   - bash tests/bin/install.sh wpemerge_tests root '' localhost $WP_VERSION
+  # WP currently only works on PHPUnit ^7, so we need to enforce this on high PHP versions.
+  - if [[ $TRAVIS_PHP_VERSION > '7.1' ]]; then composer require --dev phpunit/phpunit:^7; fi
+  # On PHP 7.4+ Mockery ^0.9 will fail with 'Cannot use "parent"' errors.
+  - if [[ $TRAVIS_PHP_VERSION > '7.3' ]]; then composer require --dev --update-with-all-dependencies mockery/mockery:^1; fi
 
 script:
   # Check all PHP files for syntax errors.
   # The usage of bash + || exit 1 is to ensure xargs does not exit on first error.
   - find src/ \( -name '*.php' \) | xargs -n1 bash -c 'php -lf $0 || exit 1'
-  - phpunit --coverage-clover=./tmp/clover.xml
+  # Run tests.
+  - composer run test
 
 after_script:
+  # Upload coverage to Scrutinizer-CI.
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ./tmp/clover.xml
