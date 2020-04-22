@@ -1,8 +1,8 @@
-dist: trusty
-
 language: php
 
-sudo: false
+os: linux
+
+dist: trusty
 
 php:
   - 5.5
@@ -12,7 +12,7 @@ php:
   - 7.4
 
 env:
-  - WP_VERSION=master WP_MULTISITE=0
+  - WP_VERSION=5.4 WP_MULTISITE=0
   - WP_VERSION=5.3 WP_MULTISITE=0
   - WP_VERSION=4.9 WP_MULTISITE=0
   - WP_VERSION=4.7 WP_MULTISITE=0
@@ -23,9 +23,6 @@ matrix:
   include:
     - php: 5.5
       env: WP_VERSION=4.7 WP_MULTISITE=1
-
-before_install:
-  - composer self-update
 
 before_script:
   - mysql -e "create database IF NOT EXISTS wpemerge_tests;" -uroot
