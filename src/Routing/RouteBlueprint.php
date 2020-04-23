@@ -53,9 +53,9 @@ class RouteBlueprint {
 	 * @return static   $this
 	 */
 	public function methods( $methods ) {
-		$methods = array_merge(
-			$this->getAttribute( 'methods', [] ),
-			$methods
+		$methods = $this->router->mergeMethodsAttribute(
+			(array) $this->getAttribute( 'methods', [] ),
+			(array) $methods
 		);
 
 		return $this->attribute( 'methods', $methods );
@@ -85,7 +85,7 @@ class RouteBlueprint {
 		}
 
 		$condition = $this->router->mergeConditionAttribute(
-			$this->getAttribute( 'condition' ),
+			$this->getAttribute( 'condition', null ),
 			$condition
 		);
 
@@ -99,7 +99,7 @@ class RouteBlueprint {
 	 * @return static          $this
 	 */
 	public function middleware( $middleware ) {
-		$middleware = array_merge(
+		$middleware = $this->router->mergeMiddlewareAttribute(
 			(array) $this->getAttribute( 'middleware', [] ),
 			(array) $middleware
 		);
@@ -116,6 +116,11 @@ class RouteBlueprint {
 	 * @return static $this
 	 */
 	public function setNamespace( $namespace ) {
+		$namespace = $this->router->mergeNamespaceAttribute(
+			$this->getAttribute( 'namespace', '' ),
+			$namespace
+		);
+
 		return $this->attribute( 'namespace', $namespace );
 	}
 

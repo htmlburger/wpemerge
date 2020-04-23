@@ -151,6 +151,16 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( 'foo', 'bar' ) );
 		$this->assertEquals( 'foo.bar.baz', $this->subject->mergeNameAttribute( 'foo.bar', 'baz' ) );
 		$this->assertEquals( 'foo.bar.baz', $this->subject->mergeNameAttribute( 'foo.bar.', '.baz' ) );
+
+		$this->assertEquals( '', $this->subject->mergeNameAttribute( '.', '' ) );
+		$this->assertEquals( '', $this->subject->mergeNameAttribute( '', '.' ) );
+		$this->assertEquals( '', $this->subject->mergeNameAttribute( '.', '.' ) );
+		$this->assertEquals( '', $this->subject->mergeNameAttribute( '...', '...' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( 'foo.', '.bar' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( '.foo', 'bar.' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( '.foo.', 'bar.' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( '.foo', '.bar.' ) );
+		$this->assertEquals( 'foo.bar', $this->subject->mergeNameAttribute( '.foo.', '.bar.' ) );
 	}
 
 	/**
@@ -227,6 +237,7 @@ class RouterTest extends WP_UnitTestCase {
 			'condition' => ['url', 'foo/{foo}', ['foo' => '/^foo$/']],
 			'middleware' => ['foo'],
 			'namespace' => 'foo',
+			'name' => 'foo',
 			'handler' => 'foo',
 			'query' => function ( $query_vars ) {
 				$query_vars['foo'] = 1;
@@ -239,6 +250,7 @@ class RouterTest extends WP_UnitTestCase {
 			'condition' => ['url', 'bar/{bar}', ['bar' => '/^bar$/']],
 			'middleware' => ['bar'],
 			'namespace' => 'bar',
+			'name' => 'bar',
 			'handler' => function () {},
 			'query' => function ( $query_vars ) {
 				$query_vars['bar'] = 1;
@@ -259,7 +271,8 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertEquals( ['GET', 'POST'], $route->getAttribute( 'methods' ) );
 		$this->assertEquals( '/foo/{foo}/bar/{bar}/', $route->getAttribute( 'condition' )->getUrl() );
 		$this->assertEquals( ['foo' => '/^foo$/', 'bar' => '/^bar$/'], $route->getAttribute( 'condition' )->getUrlWhere() );
-		$this->assertEquals( ['foo', 'bar'], $route->getAttribute( 'middleware', [] ) );
+		$this->assertEquals( ['foo', 'bar'], $route->getAttribute( 'middleware' ) );
+		$this->assertEquals( 'foo.bar', $route->getAttribute( 'name' ) );
 		$this->assertSame( $route_attributes['handler'], $route->getAttribute( 'handler' )->get() );
 
 		$query_filter = $route->getAttribute( 'query' );

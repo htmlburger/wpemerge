@@ -174,8 +174,15 @@ class Router implements HasRoutesInterface {
 	 * @return string
 	 */
 	public function mergeNameAttribute( $old, $new ) {
-		$name = array_filter( [$old, $new] );
-		return preg_replace( '/\.{2,}/', '.', implode( '.', $name ) );
+		$name = implode( '.', array_filter( [$old, $new] ) );
+
+		// Trim dots.
+		$name = preg_replace( '/^\.+|\.+$/', '', $name );
+
+		// Reduce multiple dots to a single one.
+		$name = preg_replace( '/\.{2,}/', '.', $name );
+
+		return $name;
 	}
 
 	/**
@@ -218,8 +225,8 @@ class Router implements HasRoutesInterface {
 			),
 
 			'name' => $this->mergeNameAttribute(
-				Arr::get( $old, 'name', null ),
-				Arr::get( $new, 'name', null )
+				Arr::get( $old, 'name', '' ),
+				Arr::get( $new, 'name', '' )
 			),
 		];
 	}

@@ -14,6 +14,12 @@ use WPEmerge\View\ViewService;
  * @coversDefaultClass \WPEmerge\Routing\RouteBlueprint
  */
 class RouteBlueprintTest extends WP_UnitTestCase {
+	public $router;
+
+	public $view_service;
+
+	public $subject;
+
 	public function setUp() {
 		parent::setUp();
 
@@ -54,11 +60,14 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::methods
 	 */
 	public function testMethods() {
-		$this->assertSame( $this->subject, $this->subject->methods( ['foo'] ) );
-		$this->assertEquals( ['foo'], $this->subject->getAttribute( 'methods' ) );
+		$router = Mockery::mock( Router::class )->makePartial();
+		$subject = Mockery::mock( RouteBlueprint::class, [$router, $this->view_service] )->makePartial();
 
-		$this->assertSame( $this->subject, $this->subject->methods( ['bar'] ) );
-		$this->assertEquals( ['foo', 'bar'], $this->subject->getAttribute( 'methods' ) );
+		$this->assertSame( $subject, $subject->methods( ['foo'] ) );
+		$this->assertEquals( ['foo'], $subject->getAttribute( 'methods' ) );
+
+		$this->assertSame( $subject, $subject->methods( ['bar'] ) );
+		$this->assertEquals( ['foo', 'bar'], $subject->getAttribute( 'methods' ) );
 	}
 
 	/**
@@ -118,22 +127,28 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::middleware
 	 */
 	public function testMiddleware() {
-		$this->assertSame( $this->subject, $this->subject->middleware( ['foo'] ) );
-		$this->assertEquals( ['foo'], $this->subject->getAttribute( 'middleware' ) );
+		$router = Mockery::mock( Router::class )->makePartial();
+		$subject = Mockery::mock( RouteBlueprint::class, [$router, $this->view_service] )->makePartial();
 
-		$this->assertSame( $this->subject, $this->subject->middleware( ['bar'] ) );
-		$this->assertEquals( ['foo', 'bar'], $this->subject->getAttribute( 'middleware' ) );
+		$this->assertSame( $subject, $subject->middleware( ['foo'] ) );
+		$this->assertEquals( ['foo'], $subject->getAttribute( 'middleware' ) );
+
+		$this->assertSame( $subject, $subject->middleware( ['bar'] ) );
+		$this->assertEquals( ['foo', 'bar'], $subject->getAttribute( 'middleware' ) );
 	}
 
 	/**
 	 * @covers ::setNamespace
 	 */
 	public function testSetNamespace() {
-		$this->assertSame( $this->subject, $this->subject->setNamespace( 'foo' ) );
-		$this->assertEquals( 'foo', $this->subject->getAttribute( 'namespace' ) );
+		$router = Mockery::mock( Router::class )->makePartial();
+		$subject = Mockery::mock( RouteBlueprint::class, [$router, $this->view_service] )->makePartial();
 
-		$this->assertSame( $this->subject, $this->subject->setNamespace( 'bar' ) );
-		$this->assertEquals( 'bar', $this->subject->getAttribute( 'namespace' ) );
+		$this->assertSame( $subject, $subject->setNamespace( 'foo' ) );
+		$this->assertEquals( 'foo', $subject->getAttribute( 'namespace' ) );
+
+		$this->assertSame( $subject, $subject->setNamespace( 'bar' ) );
+		$this->assertEquals( 'bar', $subject->getAttribute( 'namespace' ) );
 	}
 
 	/**
@@ -290,6 +305,10 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 		$handler = 'foo';
 		$route = Mockery::mock( RouteInterface::class );
 
+		$this->router->shouldReceive( 'mergeMethodsAttribute' )
+			->with( [], ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'] )
+			->andReturn( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'] );
+
 		$this->router->shouldReceive( 'mergeConditionAttribute' )
 			->with( '', ['url', '*', []] )
 			->andReturn( '*' );
@@ -322,37 +341,33 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::any
 	 */
 	public function testMethodShortcuts() {
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$router = Mockery::mock( Router::class )->makePartial();
+
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->get();
 		$this->assertEquals( ['GET', 'HEAD'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->post();
 		$this->assertEquals( ['POST'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->put();
 		$this->assertEquals( ['PUT'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->patch();
 		$this->assertEquals( ['PATCH'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->delete();
 		$this->assertEquals( ['DELETE'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->options();
 		$this->assertEquals( ['OPTIONS'], $subject->getAttribute( 'methods' ) );
 
-
-		$subject = new RouteBlueprint( $this->router, $this->view_service );
+		$subject = new RouteBlueprint( $router, $this->view_service );
 		$subject->any();
 		$this->assertEquals( ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $subject->getAttribute( 'methods' ) );
 	}
