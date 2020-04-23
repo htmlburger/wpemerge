@@ -113,40 +113,6 @@ class ApplicationTest extends WP_UnitTestCase {
 		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
 	}
-
-	/**
-	 * @covers ::alias
-	 */
-	public function testAlias_String_ResolveFromContainer() {
-		$alias = 'test';
-		$service_key = 'test_service';
-
-		$container = $this->subject->container();
-		$container[ $service_key ] = function() {
-			return new \WPEmergeTestTools\TestService();
-		};
-
-		$this->subject->bootstrap( [], false );
-		$this->subject->alias( $alias, $service_key );
-
-		$this->assertSame( $container[ $service_key ], $this->subject->{$alias}() );
-	}
-
-	/**
-	 * @covers ::alias
-	 */
-	public function testAlias_Closure_CallClosure() {
-		$expected = 'foo';
-		$alias = 'test';
-		$closure = function () use ( $expected ) {
-			return $expected;
-		};
-
-		$this->subject->bootstrap( [], false );
-		$this->subject->alias( $alias, $closure );
-
-		$this->assertEquals( $expected, $this->subject->{$alias}() );
-	}
 }
 
 class ApplicationTestServiceProviderMock implements ServiceProviderInterface {

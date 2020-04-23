@@ -11,6 +11,7 @@ namespace WPEmerge\Application;
 
 use Closure;
 use BadMethodCallException;
+use WPEmerge\Support\Arr;
 
 /**
  * Add methods to classes at runtime.
@@ -27,21 +28,6 @@ trait HasAliasesTrait {
 	protected $aliases = [];
 
 	/**
-	 * Register an alias.
-	 *
-	 * @param  string         $alias
-	 * @param  string|Closure $target
-	 * @param  string         $method
-	 * @return void
-	 */
-	public function alias( $alias, $target, $method = '' ) {
-		$this->aliases[ $alias ] = [
-			'target' => $target,
-			'method' => $method,
-		];
-	}
-
-	/**
 	 * Get whether an alias is registered.
 	 *
 	 * @param  string  $alias
@@ -49,6 +35,56 @@ trait HasAliasesTrait {
 	 */
 	public function hasAlias( $alias ) {
 		return isset( $this->aliases[ $alias ] );
+	}
+
+	/**
+	 * Get a registered alias.
+	 *
+	 * @param  string     $alias
+	 * @return array|null
+	 */
+	public function getAlias( $alias ) {
+		if ( ! $this->hasAlias( $alias ) ) {
+			return null;
+		}
+
+		return $this->aliases[ $alias ];
+	}
+
+	/**
+	 * Register an alias.
+	 * Useful when passed the return value of getAlias() to restore
+	 * a previously registered alias, for example.
+	 *
+	 * @param  array<string, mixed> $alias
+	 * @return void
+	 */
+	public function setAlias( $alias ) {
+		$name = Arr::get( $alias, 'name' );
+
+		$this->aliases[ $name ] = [
+			'name' => $name,
+			'target' => Arr::get( $alias, 'target' ),
+			'method' => Arr::get( $alias, 'method', '' ),
+		];
+	}
+
+	/**
+	 * Register an alias.
+	 * Identical to setAlias but with a more user-friendly interface.
+	 *
+	 * @codeCoverageIgnore
+	 * @param  string         $alias
+	 * @param  string|Closure $target
+	 * @param  string         $method
+	 * @return void
+	 */
+	public function alias( $alias, $target, $method = '' ) {
+		$this->setAlias( [
+			'name' => $alias,
+			'target' => $target,
+			'method' => $method,
+		] );
 	}
 
 	/**
