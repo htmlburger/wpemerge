@@ -3,11 +3,9 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\CanFilterQueryInterface;
 use WPEmerge\Routing\HasQueryFilterTrait;
-use WPEmerge\Routing\Route;
 use WP_UnitTestCase;
 
 /**
@@ -40,10 +38,10 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::applyQueryFilter
 	 */
-	public function testApplyQueryFilter_UrlCondition_FilteredArray() {
+	public function testApplyQueryFilter_CanFilterQueryCondition_FilteredArray() {
 		$arguments = ['arg1', 'arg2'];
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
-		$condition = Mockery::mock( UrlCondition::class );
+		$condition = Mockery::mock( CanFilterQueryInterface::class );
 
 		$this->subject->method( 'getAttribute' )
 			->withConsecutive(
@@ -69,9 +67,9 @@ class HasQueryFilterTraitTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::applyQueryFilter
 	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Only routes with a URL condition can use queries
+	 * @expectedExceptionMessage Only routes with a condition implementing the
 	 */
-	public function testApplyQueryFilter_NonUrlCondition_Exception() {
+	public function testApplyQueryFilter_NonCanFilterQueryCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 
 		$this->subject->method( 'getAttribute' )

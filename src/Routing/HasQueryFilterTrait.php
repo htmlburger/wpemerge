@@ -11,7 +11,7 @@ namespace WPEmerge\Routing;
 
 use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Routing\Conditions\UrlCondition;
+use WPEmerge\Routing\Conditions\CanFilterQueryInterface;
 
 /**
  * Represent an object which has a WordPress query filter attribute.
@@ -48,9 +48,10 @@ trait HasQueryFilterTrait {
 			return $query_vars;
 		}
 
-		if ( ! $condition instanceof UrlCondition ) {
+		if ( ! $condition instanceof CanFilterQueryInterface ) {
 			throw new ConfigurationException(
-				'Only routes with a URL condition can use queries. ' .
+				'Only routes with a condition implementing the ' . CanFilterQueryInterface::class . ' ' .
+				'interface can apply query filters. ' .
 				'Make sure your route has a URL condition and it is not in a non-URL route group.'
 			);
 		}

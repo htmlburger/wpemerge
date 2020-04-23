@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7;
 use Mockery;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
+use WPEmerge\Application\Application;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ErrorHandlerInterface;
 use WPEmerge\Helpers\Handler;
@@ -38,6 +39,14 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$this->view_service = Mockery::mock( ViewService::class )->shouldIgnoreMissing();
 		$this->error_handler = Mockery::mock( ErrorHandlerInterface::class )->shouldIgnoreMissing();
 		$this->factory_handler = Mockery::mock( Handler::class );
+
+		$app = Mockery::mock( Application::class );
+		$this->container->shouldReceive( 'offsetGet' )
+			->with( WPEMERGE_APPLICATION_KEY )
+			->andReturn( $app );
+
+		$app->shouldReceive( 'renderConfigExceptions' )
+			->andReturnUsing( function ( $action ) { return $action(); } );
 
 		$this->handler_factory->shouldReceive( 'make' )
 			->andReturn( $this->factory_handler );

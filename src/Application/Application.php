@@ -163,7 +163,7 @@ class Application {
 	 * @param  Closure $action
 	 * @return void
 	 */
-	protected function renderConfigExceptions( Closure $action ) {
+	public function renderConfigExceptions( Closure $action ) {
 		try {
 			$action();
 		} catch ( ConfigurationException $exception ) {

@@ -17,7 +17,7 @@ use WPEmerge\Support\Arr;
 /**
  * Check against the current url
  */
-class UrlCondition implements ConditionInterface, UrlableInterface {
+class UrlCondition implements ConditionInterface, UrlableInterface, CanFilterQueryInterface {
 	const WILDCARD = '*';
 
 	/**

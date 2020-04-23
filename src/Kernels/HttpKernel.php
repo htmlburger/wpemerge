@@ -307,7 +307,9 @@ class HttpKernel implements HttpKernelInterface {
 				continue;
 			}
 
-			$query_vars = $route->applyQueryFilter( $this->request, $query_vars );
+			$this->container[ WPEMERGE_APPLICATION_KEY ]->renderConfigExceptions( function () use ( $route, &$query_vars ) {
+				$query_vars = $route->applyQueryFilter( $this->request, $query_vars );
+			} );
 			break;
 		}
 
