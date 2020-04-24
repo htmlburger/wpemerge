@@ -29,9 +29,10 @@ This guide covers all the steps required to release a new version for all packag
 
 ## 6. htmlburger/wpemerge-theme
 
-1. Update and commit `composer.json` with the latest version requirements for:
+1. Run `yarn i18n`.
+2. Update and commit `composer.json` with the latest version requirements for:
     - `htmlburger/wpemerge`
     - `htmlburger/wpemerge-theme-core`
     - `htmlburger/wpemerge-cli`
-2. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
-3. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
+3. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
+4. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
