@@ -107,7 +107,7 @@ class UrlCondition implements ConditionInterface, UrlableInterface, CanFilterQue
 		}
 
 		$validation_pattern = $this->getValidationPattern( $this->getUrl() );
-		$url = UrlUtility::getPath( $request );
+		$url = UrlUtility::addTrailingSlash( UrlUtility::getPath( $request ) );
 		$match = (bool) preg_match( $validation_pattern, $url );
 
 		if ( ! $match || empty( $this->getUrlWhere() ) ) {
@@ -122,7 +122,7 @@ class UrlCondition implements ConditionInterface, UrlableInterface, CanFilterQue
 	 */
 	public function getArguments( RequestInterface $request ) {
 		$validation_pattern = $this->getValidationPattern( $this->getUrl() );
-		$url = UrlUtility::getPath( $request );
+		$url = UrlUtility::addTrailingSlash( UrlUtility::getPath( $request ) );
 		$matches = [];
 		$success = preg_match( $validation_pattern, $url, $matches );
 
