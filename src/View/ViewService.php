@@ -177,6 +177,11 @@ class ViewService {
 	 * @return void
 	 */
 	public function triggerPartialHooks( $name ) {
+		if ( ! function_exists( 'apply_filters' ) ) {
+			// We are not in a WordPress environment - skip triggering hooks.
+			return;
+		}
+
 		$core_partial = '/^(header|sidebar|footer)(?:-(.*?))?(\.|$)/i';
 		$matches = [];
 		$is_partial = preg_match( $core_partial, $name, $matches );

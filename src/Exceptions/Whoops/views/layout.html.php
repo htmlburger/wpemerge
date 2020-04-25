@@ -13,12 +13,8 @@
  * @noinspection ALL
  */
 
-$is_admin = function_exists( 'is_admin' ) && is_admin();
-$is_ajax = wp_doing_ajax();
-
-if ( ! apply_filters( 'wpemerge.pretty_errors.apply_admin_styles', true ) ) {
-	$is_admin = false;
-}
+$is_admin = function_exists( 'is_admin' ) && is_admin() && apply_filters( 'wpemerge.pretty_errors.apply_admin_styles', true );
+$is_ajax = function_exists( 'wp_doing_ajax' ) && wp_doing_ajax();
 
 if ( $is_admin && ! $is_ajax ) {
 	?>
