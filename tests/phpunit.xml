@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-	bootstrap="./tests/bootstrap.php"
+	bootstrap="./bootstrap.php"
 	colors="true"
 	stopOnError="false"
 	beStrictAboutOutputDuringTests="true"
@@ -12,16 +12,16 @@
 	>
 	<testsuites>
 		<testsuite name="WPEmerge Test Suite">
-			<directory suffix=".php">./tests/unit-tests/</directory>
+			<directory suffix=".php">./unit-tests/</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">./src</directory>
+			<directory suffix=".php">../src</directory>
 			<exclude>
-				<directory suffix=".php">./src/Exceptions/Whoops</directory>
-				<directory suffix=".php">./src/Support</directory>
-				<file>./src/view.php</file>
+				<directory suffix=".php">../src/Exceptions/Whoops</directory>
+				<directory suffix=".php">../src/Support</directory>
+				<file>../src/view.php</file>
 			</exclude>
 		</whitelist>
 	</filter>

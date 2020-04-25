@@ -15,6 +15,6 @@ Sample usage:
 ## Running Tests
 
 1. Install PHPUnit globally using `composer require phpunit/phpunit`.
-2. Run `phpunit` in the root directory of the framework.
+2. Run `composer run test:unit` in the root directory of the framework.
 
 Refer to the [phpunit command line test runner reference](https://phpunit.com/manual/current/en/phpunit-book.html#textui) for more information and command line options.

@@ -4,6 +4,8 @@ os: linux
 
 dist: trusty
 
+services: docker
+
 php:
   - 7.4
   - 7.3
@@ -30,8 +32,8 @@ jobs:
       env: WP_VERSION=4.9
     - php: 5.5
       env: WP_VERSION=4.7
-    - php: 5.5
-      env: WP_VERSION=4.7 WP_MULTISITE=1
+    - php: 7.4
+      env: WP_VERSION=5.4 ACCEPTANCE=1
 
 before_script:
   - mysql -e "create database IF NOT EXISTS wpemerge_tests;" -uroot
@@ -40,13 +42,16 @@ before_script:
   - if [[ $TRAVIS_PHP_VERSION > '7.1' ]]; then composer require --dev phpunit/phpunit:^7; fi
   # On PHP 7.4+ Mockery ^0.9 will fail with 'Cannot use "parent"' errors.
   - if [[ $TRAVIS_PHP_VERSION > '7.3' ]]; then composer require --dev --update-with-all-dependencies mockery/mockery:^1; fi
+  - if [[ "$ACCEPTANCE" == "1" ]]; then composer run test:acceptance:install; fi
 
 script:
   # Check all PHP files for syntax errors.
   # The usage of bash + || exit 1 is to ensure xargs does not exit on first error.
   - find src/ \( -name '*.php' \) | xargs -n1 bash -c 'php -lf $0 || exit 1'
-  # Run tests.
-  - composer run test
+  # Run unit tests.
+  - composer run test:unit
+  # Run acceptance tests.
+  - if [[ "$ACCEPTANCE" == "1" ]]; then bash wpacceptance.sh; fi
 
 after_script:
   # Upload coverage to Scrutinizer-CI.

@@ -13,6 +13,7 @@ build:
 
 filter:
   excluded_paths:
+    - 'acceptance/*'
     - 'src/Support/*'
     - 'tests/*'
     - 'tmp/*'

@@ -46,6 +46,8 @@
   },
   "scripts": {
     "lint": "phpcs",
-    "test": "phpunit --coverage-clover=./tmp/clover.xml"
+    "test:unit": "phpunit --configuration=./tests/phpunit.xml --coverage-clover=./tmp/clover.xml",
+    "test:acceptance": "wpacceptance run",
+    "test:acceptance:install": "composer config minimum-stability dev && composer config prefer-stable true && composer require --dev 10up/wpacceptance:0.16.*"
   }
 }
