@@ -43,13 +43,15 @@ trait HasRoutesTrait {
 		$routes = $this->getRoutes();
 		$name = $route->getAttribute( 'name' );
 
-		foreach ( $routes as $registered ) {
-			if ( $registered === $route ) {
-				throw new ConfigurationException( 'Attempted to register a route twice.' );
-			}
+		if ( in_array( $route, $routes, true ) ) {
+			throw new ConfigurationException( 'Attempted to register a route twice.' );
+		}
 
-			if ( $name !== '' && $name === $registered->getAttribute( 'name' ) ) {
-				throw new ConfigurationException( "The route name \"$name\" is already registered." );
+		if ( $name !== '' ) {
+			foreach ( $routes as $registered ) {
+				if ( $name === $registered->getAttribute( 'name' ) ) {
+					throw new ConfigurationException( "The route name \"$name\" is already registered." );
+				}
 			}
 		}
 
