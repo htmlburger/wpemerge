@@ -77,7 +77,7 @@ class ApplicationTraitTest extends WP_UnitTestCase {
 	 */
 	public function testCallStatic_InvalidMethod_Exception() {
 		FooApp::make();
-		FooApp::foo();
+		FooApp::traitTestMagicMethod();
 	}
 
 	/**
@@ -85,9 +85,9 @@ class ApplicationTraitTest extends WP_UnitTestCase {
 	 */
 	public function testCallStatic_Method_MethodCalled() {
 		FooApp::make();
-		FooApp::alias( 'test', function () { return 'foo'; } );
+		FooApp::alias( 'traitTestMagicMethod', function () { return 'foo'; } );
 
-		$this->assertTrue( FooApp::hasAlias( 'test' ) );
+		$this->assertTrue( FooApp::hasAlias( 'traitTestMagicMethod' ) );
 	}
 
 	/**
