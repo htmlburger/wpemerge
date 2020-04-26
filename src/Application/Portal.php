@@ -17,6 +17,7 @@ use WPEmerge\Support\Arr;
  * Provides static access to an application instance.
  *
  * @codeCoverageIgnore
+ * @mixin PortalMixin
  */
 class Portal {
 	/**

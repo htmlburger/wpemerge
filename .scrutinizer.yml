@@ -13,11 +13,11 @@ build:
 
 filter:
   excluded_paths:
+    - 'src/Application/PortalMixin.php'
     - 'src/Support/*'
     - 'tests/*'
     - 'tmp/*'
     - '.sami.php'
-    - '_ide_helper.php'
   dependency_paths:
     - wordpress/
 
