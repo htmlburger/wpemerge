@@ -13,7 +13,7 @@ build:
 
 filter:
   excluded_paths:
-    - 'src/Application/PortalMixin.php'
+    - 'src/Application/ApplicationMixin.php'
     - 'src/Support/*'
     - 'tests/*'
     - 'tmp/*'

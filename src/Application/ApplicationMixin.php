@@ -18,10 +18,16 @@ use WPEmerge\View\ViewInterface;
 
 /**
  * Can be applied to your App class via a "@mixin" annotation for better IDE support.
+ * This class is not meant to be used in any other capacity.
  *
  * @codeCoverageIgnore
  */
-class PortalMixin {
+final class ApplicationMixin {
+	/**
+	 * Prevent class instantiation.
+	 */
+	private function __construct() {}
+
 	// --- Methods --------------------------------------- //
 
 	/**
