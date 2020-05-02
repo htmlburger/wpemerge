@@ -331,6 +331,7 @@ class HttpKernel implements HttpKernelInterface {
 
 		$response = $this->handle( $this->request, [$template] );
 
+		// A route has matched so we use its response.
 		if ( $response instanceof ResponseInterface ) {
 			if ( $response->getStatusCode() === 404 ) {
 				$wp_query->set_404();
@@ -341,6 +342,7 @@ class HttpKernel implements HttpKernelInterface {
 			return WPEMERGE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'view.php';
 		}
 
+		// No route has matched, but we still want to compose views.
 		$composers = $this->view_service->getComposersForView( $template );
 
 		if ( ! empty( $composers ) ) {
