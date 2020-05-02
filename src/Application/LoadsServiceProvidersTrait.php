@@ -62,7 +62,7 @@ trait LoadsServiceProvidersTrait {
 			Arr::get( $container[ WPEMERGE_CONFIG_KEY ], 'providers', [] )
 		);
 
-		$service_providers = array_map( function ( $service_provider ) {
+		$service_providers = array_map( function ( $service_provider ) use ( $container ) {
 			if ( ! is_subclass_of( $service_provider, ServiceProviderInterface::class ) ) {
 				throw new ConfigurationException(
 					'The following class does not implement ' .
@@ -70,7 +70,12 @@ trait LoadsServiceProvidersTrait {
 				);
 			}
 
-			return new $service_provider();
+			// Provide container access to the service provider instance
+			// so bootstrap hooks can be unhooked e.g.:
+			// remove_action( 'some_action', [\App::resolve( SomeServiceProvider::class ), 'methodAddedToAction'] );
+			$container[ $service_provider ] = new $service_provider();
+
+			return $container[ $service_provider ];
 		}, $container[ WPEMERGE_SERVICE_PROVIDERS_KEY ] );
 
 		$this->registerServiceProviders( $service_providers, $container );
