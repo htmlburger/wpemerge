@@ -28,7 +28,7 @@ WP Emerge is completely open source and we encourage everybody to participate by
         session_start(); // required only if you use Flash and OldInput
     } );
 
-    WPEmerge::bootstrap( [
+    \App::make()->bootstrap( [
         'routes'              => [
             'web'   => __DIR__ . '/wpemerge-dev/web.php',
             'admin' => __DIR__ . '/wpemerge-dev/admin.php',
@@ -41,7 +41,7 @@ WP Emerge is completely open source and we encourage everybody to participate by
     <?php
     use WPEmerge\Facades\Route;
 
-    Route::get()
+    \App::route()->get()
         ->url( '/' )
         ->handle( function () {
             return \App::output( 'Hello World!' );

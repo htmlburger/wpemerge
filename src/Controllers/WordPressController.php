@@ -48,7 +48,7 @@ class WordPressController {
 			throw new ConfigurationException(
 				'Attempted to run the default WordPress controller on an ' .
 				'admin or AJAX page. Did you miss to specify a custom handler for ' .
-				'a route or accidentally used Route::all() during admin ' .
+				'a route or accidentally used \App::route()->all() during admin ' .
 				'requests?'
 			);
 		}
