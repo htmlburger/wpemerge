@@ -183,13 +183,6 @@ final class ApplicationMixin {
 	public static function error( $status ) {}
 
 	/**
-	 * Create a new route.
-	 *
-	 * @codeCoverageIgnore
-	 * @return RouteBlueprint
-	 */
-	public static function route() {}
-	/**
 	 * Get the ViewService instance.
 	 *
 	 * @codeCoverageIgnore
@@ -208,6 +201,23 @@ final class ApplicationMixin {
 	public static function view( $views ) {}
 
 	/**
+	 * Output child layout content.
+	 *
+	 * @codeCoverageIgnore
+	 * @see    \WPEmerge\View\PhpViewEngine::getLayoutContent()
+	 * @return void
+	 */
+	public static function layoutContent() {}
+
+	/**
+	 * Create a new route.
+	 *
+	 * @codeCoverageIgnore
+	 * @return RouteBlueprint
+	 */
+	public static function route() {}
+
+	/**
 	 * Output the specified view.
 	 *
 	 * @codeCoverageIgnore
@@ -218,13 +228,4 @@ final class ApplicationMixin {
 	 * @return void
 	 */
 	public static function render( $views, $context = [] ) {}
-
-	/**
-	 * Output child layout content.
-	 *
-	 * @codeCoverageIgnore
-	 * @see    \WPEmerge\View\PhpViewEngine::getLayoutContent()
-	 * @return void
-	 */
-	public static function layoutContent() {}
 }
