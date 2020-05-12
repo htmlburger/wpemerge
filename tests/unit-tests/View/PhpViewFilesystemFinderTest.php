@@ -14,7 +14,7 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->subject = new PhpViewFilesystemFinder();
+		$this->subject = new PhpViewFilesystemFinder( [ get_stylesheet_directory(), get_template_directory() ] );
 	}
 
 	public function tearDown() {
@@ -101,18 +101,5 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 		$this->assertEquals( $subview, $this->subject->resolveFilepath( 'subview.php' ) );
 		$this->assertEquals( $subview, $this->subject->resolveFilepath( '/subview' ) );
 		$this->assertEquals( $subview, $this->subject->resolveFilepath( 'subview' ) );
-	}
-
-	/**
-	 * @covers ::resolveFilepath
-	 * @covers ::resolveFromWordPress
-	 */
-	public function testResolveFilepath_WordPress() {
-		$index = realpath( MixedType::normalizePath( locate_template( 'index.php', false ) ) );
-
-		$this->assertEquals( $index, $this->subject->resolveFilepath( '/index.php' ) );
-		$this->assertEquals( $index, $this->subject->resolveFilepath( 'index.php' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistant' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( '' ) );
 	}
 }

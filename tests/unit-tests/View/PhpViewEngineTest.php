@@ -20,7 +20,7 @@ class PhpViewEngineTest extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->compose_action = [Mockery::mock()->shouldIgnoreMissing(), '__invoke'];
-		$this->finder = new PhpViewFilesystemFinder( [] );
+		$this->finder = new PhpViewFilesystemFinder( [ get_stylesheet_directory(), get_template_directory() ] );
 		$this->subject = new PhpViewEngine( $this->compose_action, $this->finder );
 	}
 

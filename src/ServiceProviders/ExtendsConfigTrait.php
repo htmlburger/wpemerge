@@ -17,6 +17,37 @@ use WPEmerge\Support\Arr;
  */
 trait ExtendsConfigTrait {
 	/**
+	 * Recursively replace default values with the passed config.
+	 * - If either value is not an array, the config value will be used.
+	 * - If both are an indexed array, the config value will be used.
+	 * - If either is a keyed array, array_replace will be used with config having priority.
+	 *
+	 * @param  mixed $default
+	 * @param  mixed $config
+	 * @return mixed
+	 */
+	protected function replaceConfig( $default, $config ) {
+		if ( ! is_array( $default ) || ! is_array( $config ) ) {
+			return $config;
+		}
+
+		$default_is_indexed = array_keys( $default ) === range( 0, count( $default ) - 1 );
+		$config_is_indexed = array_keys( $config ) === range( 0, count( $config ) - 1 );
+
+		if ( $default_is_indexed && $config_is_indexed ) {
+			return $config;
+		}
+
+		$result = $default;
+
+		foreach ( $config as $key => $value ) {
+			$result[ $key ] = $this->replaceConfig( Arr::get( $default, $key ), $value );
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Extends the WP Emerge config in the container with a new key.
 	 *
 	 * @param  Container $container
@@ -28,13 +59,9 @@ trait ExtendsConfigTrait {
 		$config = isset( $container[ WPEMERGE_CONFIG_KEY ] ) ? $container[ WPEMERGE_CONFIG_KEY ] : [];
 		$config = Arr::get( $config, $key, $default );
 
-		if ( $config !== $default && is_array( $config ) && is_array( $default ) ) {
-			$config = array_replace_recursive( $default, $config );
-		}
-
 		$container[ WPEMERGE_CONFIG_KEY ] = array_merge(
 			$container[ WPEMERGE_CONFIG_KEY ],
-			[$key => $config]
+			[$key => $this->replaceConfig( $default, $config )]
 		);
 	}
 }

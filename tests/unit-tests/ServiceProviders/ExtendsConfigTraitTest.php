@@ -105,21 +105,23 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 	public function testExtendConfig_IndexedArray_Replace() {
 		$container = new Container( [
 			WPEMERGE_CONFIG_KEY => [
-				'foo' => [
+				'first' => [
 					'bar',
 				],
-				'foobar' => [
+				'second' => [
 					'foobar' => [
+						'barfoo',
 						'barfoo',
 					]
 				],
-				'foobarbaz' => [
+				'third' => [
 				],
 			],
 		] );
 
-		$key = 'foo';
+		$key = 'first';
 		$default = [
+			'foo',
 			'foo',
 		];
 		$expected = [
@@ -130,7 +132,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $container[ WPEMERGE_CONFIG_KEY ][ $key ] );
 
-		$key = 'foobar';
+		$key = 'second';
 		$default = [
 			'foobar' => [
 				'foobar',
@@ -138,6 +140,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 		];
 		$expected = [
 			'foobar' => [
+				'barfoo',
 				'barfoo',
 			],
 		];

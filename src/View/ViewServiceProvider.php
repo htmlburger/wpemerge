@@ -27,7 +27,7 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		/** @var Container $container */
-		$this->extendConfig( $container, 'views', '' );
+		$this->extendConfig( $container, 'views', [get_stylesheet_directory(), get_template_directory()] );
 
 		$this->extendConfig( $container, 'view_composers', [
 			'namespace' => 'App\\ViewComposers\\',

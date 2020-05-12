@@ -80,10 +80,6 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 			$file = $this->resolveFromCustomDirectories( $view );
 		}
 
-		if ( ! $file ) {
-			$file = $this->resolveFromWordPress( $view );
-		}
-
 		return $file;
 	}
 
@@ -115,33 +111,18 @@ class PhpViewFilesystemFinder implements ViewFinderInterface {
 		foreach ( $directories as $directory ) {
 			$file = MixedType::normalizePath( $directory . DIRECTORY_SEPARATOR . $view );
 
-			if ( ! file_exists( $file ) ) {
+			if ( ! is_file( $file ) ) {
 				// Try adding a .php extension.
 				$file .= '.php';
 			}
 
-			if ( file_exists( $file ) ) {
+			$file = realpath( $file );
+
+			if ( $file && is_file( $file ) ) {
 				return $file;
 			}
 		}
 
 		return '';
-	}
-
-	/**
-	 * Resolve a view if WordPress can locate it.
-	 *
-	 * @param  string $view
-	 * @return string
-	 */
-	protected function resolveFromWordPress( $view ) {
-		$file = locate_template( $view, false );
-
-		if ( ! $file ) {
-			// Try adding a .php extension.
-			$file = locate_template( $view . '.php', false );
-		}
-
-		return $this->resolveFromAbsoluteFilepath( $file );
 	}
 }
