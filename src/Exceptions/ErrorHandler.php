@@ -148,7 +148,10 @@ class ErrorHandler implements ErrorHandlerInterface {
 			return $response;
 		}
 
-		error_log( $exception );
+		if ( ! defined( 'WPEMERGE_TEST_DIR' ) ) {
+			// Only log errors if we are not running the WP Emerge test suite.
+			error_log( $exception );
+		}
 
 		if ( ! $this->debug ) {
 			return $this->response_service->error( 500 );
