@@ -25,6 +25,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::extendConfig
+	 * @covers ::replaceConfig
 	 */
 	public function testExtendConfig_ConfigNotSet_Default() {
 		$container = new Container( [
@@ -41,6 +42,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::extendConfig
+	 * @covers ::replaceConfig
 	 */
 	public function testExtendConfig_NotArrays_Replace() {
 		$container = new Container( [
@@ -59,6 +61,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::extendConfig
+	 * @covers ::replaceConfig
 	 */
 	public function testExtendConfig_Arrays_RecursiveReplace() {
 		$container = new Container( [
@@ -101,6 +104,7 @@ class ExtendsConfigTraitTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::extendConfig
+	 * @covers ::replaceConfig
 	 */
 	public function testExtendConfig_IndexedArray_Replace() {
 		$container = new Container( [
