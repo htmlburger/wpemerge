@@ -35,7 +35,8 @@ This guide covers all the steps required to release a new version for all packag
     - `htmlburger/wpemerge-app-core`
     - `htmlburger/wpemerge-cli`
 3. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
-4. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
+4. Update call to `myapp_should_load_wpemerge()` with the latest minimum version required.
+5. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
 
 ## 7. htmlburger/wpemerge-plugin
 
@@ -45,4 +46,5 @@ This guide covers all the steps required to release a new version for all packag
     - `htmlburger/wpemerge-app-core`
     - `htmlburger/wpemerge-cli`
 3. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
-4. Create a new release: https://github.com/htmlburger/wpemerge-plugin/releases/new
+4. Update call to `myapp_should_load_wpemerge()` with the latest minimum version required.
+5. Create a new release: https://github.com/htmlburger/wpemerge-plugin/releases/new
