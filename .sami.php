@@ -14,9 +14,8 @@ use Sami\Parser\Filter\PublicFilter;
 define( 'DS', DIRECTORY_SEPARATOR );
 
 $repository = 'htmlburger/wpemerge';
-$relative_dir = 'src';
-$dir = __DIR__ . DS . $relative_dir;
-$documentation_dir = __DIR__ . DS . 'api-reference';
+$dir = __DIR__ . DS . 'wpemerge' . DS . 'src';
+$documentation_dir = dirname( __DIR__ );
 
 $versions = GitVersionCollection::create($dir)
 	->addFromTags('*.*.*')
@@ -26,7 +25,7 @@ return new \Sami\Sami( $dir, [
 	'title' => 'WP Emerge',
 	'versions' => $versions,
 	'remote_repository' => new GitHubRemoteRepository( $repository, dirname( $dir ) ),
-	'build_dir' => $documentation_dir . DS . 'build' . DS . '%version%',
+	'build_dir' => $documentation_dir . DS . '%version%',
 	'cache_dir' => $documentation_dir . DS . 'cache' . DS . '%version%',
 	'filter' => new PublicFilter(),
 ] );
