@@ -4,7 +4,7 @@ This guide covers all the steps required to release a new version for all packag
 
 ## 1. htmlburger/wpemerge
 
-1. Edit config.php and update WPEMERGE_VERSION.
+1. Update and commit WPEMERGE_VERSION in `config.php` with the latest version.
 2. Create a new release: https://github.com/htmlburger/wpemerge/releases/new
 
 ## 2. htmlburger/wpemerge-cli
@@ -30,21 +30,23 @@ This guide covers all the steps required to release a new version for all packag
 ## 6. htmlburger/wpemerge-theme
 
 1. Run `yarn i18n`.
-2. Update and commit `composer.json` with the latest version requirements for:
+2. Update `composer.json` with the latest version requirements for:
     - `htmlburger/wpemerge`
     - `htmlburger/wpemerge-app-core`
     - `htmlburger/wpemerge-cli`
-3. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
+3. Update `composer.json` with the latest version of this package (otherwise packagist.org will not update).
 4. Update call to `my_app_should_load_wpemerge()` with the latest minimum version required.
-5. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
+5. Commit.
+6. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
 
 ## 7. htmlburger/wpemerge-plugin
 
 1. Run `yarn i18n`.
-2. Update and commit `composer.json` with the latest version requirements for:
+2. Update `composer.json` with the latest version requirements for:
     - `htmlburger/wpemerge`
     - `htmlburger/wpemerge-app-core`
     - `htmlburger/wpemerge-cli`
-3. Update and commit `composer.json` with the latest version of this package (otherwise packagist.org will not update).
+3. Update `composer.json` with the latest version of this package (otherwise packagist.org will not update).
 4. Update call to `my_app_should_load_wpemerge()` with the latest minimum version required.
-5. Create a new release: https://github.com/htmlburger/wpemerge-plugin/releases/new
+5. Commit.
+6. Create a new release: https://github.com/htmlburger/wpemerge-plugin/releases/new
