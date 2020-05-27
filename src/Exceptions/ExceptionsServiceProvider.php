@@ -27,9 +27,11 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+
 		$this->extendConfig( $container, 'debug', [
-			'enable' => true,
-			'pretty_errors' => true,
+			'enable' => $debug,
+			'pretty_errors' => $debug,
 		] );
 
 		$container[ DebugDataProvider::class ] = function ( $container ) {

@@ -59,7 +59,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function register() {
-		if ( $this->whoops !== null ) {
+		if ( $this->debug && $this->whoops !== null ) {
 			$this->whoops->register();
 		}
 	}
@@ -69,7 +69,7 @@ class ErrorHandler implements ErrorHandlerInterface {
 	 * @codeCoverageIgnore
 	 */
 	public function unregister() {
-		if ( $this->whoops !== null ) {
+		if ( $this->debug && $this->whoops !== null ) {
 			$this->whoops->unregister();
 		}
 	}
