@@ -38,6 +38,7 @@ This guide covers all the steps required to release a new version for all packag
 4. Update call to `my_app_should_load_wpemerge()` with the latest minimum version required.
 5. Commit.
 6. Create a new release: https://github.com/htmlburger/wpemerge-theme/releases/new
+7. Update the composer example in the Quickstart docs for Bedrock with the exact new version number.
 
 ## 7. htmlburger/wpemerge-plugin
 
