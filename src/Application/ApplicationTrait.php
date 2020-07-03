@@ -9,7 +9,6 @@
 
 namespace WPEmerge\Application;
 
-use BadMethodCallException;
 use WPEmerge\Exceptions\ConfigurationException;
 
 /**
@@ -66,7 +65,6 @@ trait ApplicationTrait {
 	 */
 	public static function __callStatic( $method, $parameters ) {
 		$application = static::getApplication();
-		$callable = [$application, $method];
 
 		if ( ! $application ) {
 			throw new ConfigurationException(
@@ -75,10 +73,6 @@ trait ApplicationTrait {
 			);
 		}
 
-		if ( ! is_callable( $callable ) ) {
-			throw new BadMethodCallException( 'Method ' . get_class( $application ) . '::' . $method . '() does not exist.' );
-		}
-
-		return call_user_func_array( $callable, $parameters );
+		return call_user_func_array( [$application, $method], $parameters );
 	}
 }
