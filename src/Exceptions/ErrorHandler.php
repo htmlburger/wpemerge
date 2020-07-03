@@ -149,8 +149,10 @@ class ErrorHandler implements ErrorHandlerInterface {
 		}
 
 		if ( ! defined( 'WPEMERGE_TEST_DIR' ) ) {
+			// @codeCoverageIgnoreStart
 			// Only log errors if we are not running the WP Emerge test suite.
 			error_log( $exception );
+			// @codeCoverageIgnoreEnd
 		}
 
 		if ( ! $this->debug ) {
