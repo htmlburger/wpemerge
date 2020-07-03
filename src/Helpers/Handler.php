@@ -13,6 +13,7 @@ use Closure;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmerge\Exceptions\ConfigurationException;
+use WPEmerge\Support\Arr;
 
 /**
  * Represent a generic handler - a Closure or a class method to be resolved from the service container
@@ -53,7 +54,7 @@ class Handler {
 	}
 
 	/**
-	 * Parse a raw handler to a Closure or a [class, method] array
+	 * Parse a raw handler to a Closure or a [class, method, namespace] array
 	 *
 	 * @param  string|Closure     $raw_handler
 	 * @param  string             $default_method
@@ -65,11 +66,43 @@ class Handler {
 			return $raw_handler;
 		}
 
+		if ( is_array( $raw_handler ) ) {
+			return $this->parseFromArray( $raw_handler, $default_method, $namespace );
+		}
+
 		return $this->parseFromString( $raw_handler, $default_method, $namespace );
 	}
 
 	/**
-	 * Parse a raw string handler to a [class, method] array
+	 * Parse a [Class::class, 'method'] array handler to a [class, method, namespace] array
+	 *
+	 * @param  string     $raw_handler
+	 * @param  string     $default_method
+	 * @param  string     $namespace
+	 * @return array|null
+	 */
+	protected function parseFromArray( $raw_handler, $default_method, $namespace ) {
+		$class = Arr::get( $raw_handler, 0, '' );
+		$class = preg_replace( '/^\\\\+/', '', $class );
+		$method = Arr::get( $raw_handler, 1, $default_method );
+
+		if ( empty( $class ) ) {
+			return null;
+		}
+
+		if ( empty( $method ) ) {
+			return null;
+		}
+
+		return [
+			'class' => $class,
+			'method' => $method,
+			'namespace' => $namespace,
+		];
+	}
+
+	/**
+	 * Parse a 'Controller@method' or 'Controller::method' string handler to a [class, method, namespace] array
 	 *
 	 * @param  string     $raw_handler
 	 * @param  string     $default_method
@@ -77,21 +110,7 @@ class Handler {
 	 * @return array|null
 	 */
 	protected function parseFromString( $raw_handler, $default_method, $namespace ) {
-		list( $class, $method ) = array_pad( preg_split( '/@|::/', $raw_handler, 2 ), 2, '' );
-
-		if ( empty( $method ) ) {
-			$method = $default_method;
-		}
-
-		if ( ! empty( $class ) && ! empty( $method ) ) {
-			return [
-				'class' => $class,
-				'method' => $method,
-				'namespace' => $namespace,
-			];
-		}
-
-		return null;
+		return $this->parseFromArray( preg_split( '/@|::/', $raw_handler, 2 ), $default_method, $namespace );
 	}
 
 	/**

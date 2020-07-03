@@ -51,7 +51,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 */
-	public function testSet_Closure_Closure() {
+	public function testParse_Closure_Closure() {
 		$expected = function() {};
 
 		$subject = new Handler( $this->factory, $expected );
@@ -62,16 +62,145 @@ class HandlerTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * @covers ::parse
-	 * @covers ::parseFromString
+	 * @covers ::parseFromArray
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No or invalid handler
 	 */
-	public function testSet_ClassWithoutMethodWithDefault_Array() {
+	public function testParseFromArray_EmptyArray_Exception() {
+		new Handler( $this->factory, [] );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No or invalid handler
+	 */
+	public function testParseFromArray_MalformedArray_Exception() {
+		new Handler( $this->factory, ['', \WPEmergeTestTools\TestService::class, 'foo'] );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No or invalid handler
+	 */
+	public function testParseFromArray_FQCNWithoutMethod_Exception() {
+		new Handler( $this->factory, [\WPEmergeTestTools\TestService::class] );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 */
+	public function testParseFromArray_FQCNWithLeadingBackslash_LeadingBackslashTrimmed() {
 		$expected = [
-			'class' => '\WPEmergeTestTools\TestService',
+			'class' => 'WPEmergeTestTools\\TestService',
+			'method' => 'foo',
+			'namespace' => '',
+		];
+
+		$subject = new Handler( $this->factory, ['\\WPEmergeTestTools\\TestService', 'foo'] );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 */
+	public function testParseFromArray_FQCNWithoutMethodWithDefault_Array() {
+		$expected = [
+			'class' => \WPEmergeTestTools\TestService::class,
 			'method' => 'defaultMethod',
 			'namespace' => '',
 		];
 
-		$subject = new Handler( $this->factory, '\WPEmergeTestTools\TestService', 'defaultMethod' );
+		$subject = new Handler( $this->factory, [\WPEmergeTestTools\TestService::class], 'defaultMethod' );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
+	 * @expectedExceptionMessage No or invalid handler
+	 */
+	public function testParseFromArray_FQCNWithEmptyMethod_Exception() {
+		new Handler( $this->factory, [\WPEmergeTestTools\TestService::class, ''] );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 */
+	public function testParseFromArray_FQCNWithMethod_Array() {
+		$expected = [
+			'class' => \WPEmergeTestTools\TestService::class,
+			'method' => 'foo',
+			'namespace' => '',
+		];
+
+		$subject = new Handler( $this->factory, [\WPEmergeTestTools\TestService::class, 'foo'] );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 */
+	public function testParseFromArray_ClassWithNamespace_Array() {
+		$expected = [
+			'class' => 'TestService',
+			'method' => 'defaultMethod',
+			'namespace' => 'WPEmergeTestTools\\',
+		];
+
+		$subject = new Handler( $this->factory, ['TestService'], 'defaultMethod', 'WPEmergeTestTools\\' );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromArray
+	 */
+	public function testParseFromArray_FQCNWithNamespace_Array() {
+		$expected = [
+			'class' => 'TestService',
+			'method' => 'defaultMethod',
+			'namespace' => 'WPEmergeTestTools\\',
+		];
+
+		$subject = new Handler( $this->factory, [\TestService::class], 'defaultMethod', 'WPEmergeTestTools\\' );
+
+		$this->assertEquals( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 * @covers ::parse
+	 * @covers ::parseFromString
+	 */
+	public function testParseFromString_ClassWithoutMethodWithDefault_Array() {
+		$expected = [
+			'class' => 'WPEmergeTestTools\\TestService',
+			'method' => 'defaultMethod',
+			'namespace' => '',
+		];
+
+		$subject = new Handler( $this->factory, 'WPEmergeTestTools\\TestService', 'defaultMethod' );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -83,8 +212,8 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
 	 * @expectedExceptionMessage No or invalid handler
 	 */
-	public function testSet_ClassWithoutMethodWithoutDefault_Exception() {
-		$subject = new Handler( $this->factory, '\WPEmergeTestTools\TestService' );
+	public function testParseFromString_ClassWithoutMethodWithoutDefault_Exception() {
+		new Handler( $this->factory, 'WPEmergeTestTools\\TestService' );
 	}
 
 	/**
@@ -92,14 +221,14 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::parse
 	 * @covers ::parseFromString
 	 */
-	public function testSet_ClassAtMethod_Array() {
+	public function testParseFromString_ClassAtMethod_Array() {
 		$expected = [
-			'class' => '\WPEmergeTestTools\TestService',
+			'class' => 'WPEmergeTestTools\\TestService',
 			'method' => 'getTest',
 			'namespace' => '',
 		];
 
-		$subject = new Handler( $this->factory, '\WPEmergeTestTools\TestService@getTest' );
+		$subject = new Handler( $this->factory, 'WPEmergeTestTools\\TestService@getTest' );
 
 		$this->assertEquals( $expected, $subject->get() );
 	}
@@ -109,27 +238,16 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::parse
 	 * @covers ::parseFromString
 	 */
-	public function testSet_ClassColonsMethod_Array() {
+	public function testParseFromString_ClassColonsMethod_Array() {
 		$expected = [
-			'class' => '\WPEmergeTestTools\TestService',
+			'class' => 'WPEmergeTestTools\\TestService',
 			'method' => 'getTest',
 			'namespace' => '',
 		];
 
-		$subject = new Handler( $this->factory, '\WPEmergeTestTools\TestService::getTest' );
+		$subject = new Handler( $this->factory, 'WPEmergeTestTools\\TestService::getTest' );
 
 		$this->assertEquals( $expected, $subject->get() );
-	}
-
-	/**
-	 * @covers ::__construct
-	 * @covers ::parse
-	 * @covers ::parseFromString
-	 * @expectedException \WPEmerge\Exceptions\Exception
-	 * @expectedExceptionMessage No or invalid handler
-	 */
-	public function testSet_InvalidString_ThrowException() {
-		$subject = new Handler( $this->factory, '\WPEmergeTestTools\TestService' );
 	}
 
 	/**
@@ -145,7 +263,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::make
 	 */
 	public function testMake_ClassWithoutPrefix_Instance() {
-		$subject = new Handler( $this->factory, '\\WPEmergeTests\\Helpers\\HandlerTestMock@foo' );
+		$subject = new Handler( $this->factory, 'WPEmergeTests\\Helpers\\HandlerTestMock@foo' );
 		$this->assertInstanceOf( \WPEmergeTests\Helpers\HandlerTestMock::class, $subject->make() );
 	}
 
@@ -153,7 +271,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @covers ::make
 	 */
 	public function testMake_ClassWithPrefix_Instance() {
-		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', '\\WPEmergeTests\\Helpers\\' );
+		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', 'WPEmergeTests\\Helpers\\' );
 		$this->assertInstanceOf( \WPEmergeTests\Helpers\HandlerTestMock::class, $subject->make() );
 	}
 
@@ -163,7 +281,7 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Class not found
 	 */
 	public function testMake_NonexistantClassWithPrefix_Exception() {
-		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', '\\WPEmergeTests\\NonexistantNamespace\\' );
+		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', 'WPEmergeTests\\NonexistantNamespace\\' );
 		$subject->make();
 	}
 
