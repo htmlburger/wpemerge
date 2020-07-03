@@ -24,7 +24,7 @@ interface ViewFinderInterface {
 	/**
 	 * Return a canonical string representation of the view name.
 	 *
-	 * @param  string  $view
+	 * @param  string $view
 	 * @return string
 	 */
 	public function canonical( $view );

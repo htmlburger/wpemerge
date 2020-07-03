@@ -189,6 +189,28 @@ class ViewServiceTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers ::exists
+	 */
+	public function testExists() {
+		$this->engine->shouldReceive( 'exists' )
+			->with( 'foo' )
+			->andReturn( true );
+
+		$this->assertTrue( $this->subject->exists( 'foo' ) );
+	}
+
+	/**
+	 * @covers ::canonical
+	 */
+	public function testCanonical() {
+		$this->engine->shouldReceive( 'canonical' )
+			->with( 'foo' )
+			->andReturn( 'foo.php' );
+
+		$this->assertEquals( 'foo.php', $this->subject->canonical( 'foo' ) );
+	}
+
+	/**
 	 * @covers ::make
 	 */
 	public function testMake() {

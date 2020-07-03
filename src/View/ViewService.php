@@ -160,7 +160,27 @@ class ViewService {
 	}
 
 	/**
-	 * Create a view instance.
+	 * Check if a view exists.
+	 *
+	 * @param  string  $view
+	 * @return boolean
+	 */
+	public function exists( $view ) {
+		return $this->engine->exists( $view );
+	}
+
+	/**
+	 * Return a canonical string representation of the view name.
+	 *
+	 * @param  string $view
+	 * @return string
+	 */
+	public function canonical( $view ) {
+		return $this->engine->canonical( $view );
+	}
+
+	/**
+	 * Create a view instance from the first view name that exists.
 	 *
 	 * @param  string|string[] $views
 	 * @return ViewInterface
