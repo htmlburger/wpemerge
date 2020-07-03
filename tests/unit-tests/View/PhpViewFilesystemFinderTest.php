@@ -31,7 +31,7 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 		$this->assertTrue( $this->subject->exists( WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view.php' ) );
 		$this->assertTrue( $this->subject->exists( 'index.php' ) );
 		$this->assertTrue( $this->subject->exists( 'index' ) );
-		$this->assertFalse( $this->subject->exists( 'nonexistant' ) );
+		$this->assertFalse( $this->subject->exists( 'nonexistent' ) );
 		$this->assertFalse( $this->subject->exists( '' ) );
 	}
 
@@ -44,7 +44,7 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $this->subject->canonical( $expected ) );
 		$this->assertEquals( $expected, $this->subject->canonical( 'index.php' ) );
 		$this->assertEquals( $expected, $this->subject->canonical( 'index' ) );
-		$this->assertEquals( '', $this->subject->canonical( 'nonexistant' ) );
+		$this->assertEquals( '', $this->subject->canonical( 'nonexistent' ) );
 		$this->assertEquals( '', $this->subject->canonical( '' ) );
 	}
 
@@ -58,7 +58,7 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 
 		$this->assertEquals( $file, $this->subject->resolveFilepath( $file ) );
 		$this->assertEquals( '', $this->subject->resolveFilepath( $directory ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistant' ) );
+		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistent' ) );
 		$this->assertEquals( '', $this->subject->resolveFilepath( '' ) );
 	}
 
@@ -81,16 +81,16 @@ class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
 		$this->assertEquals( $view, $this->subject->resolveFilepath( 'view.php' ) );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( '/view' ) );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( 'view' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( '/nonexistant' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistant' ) );
+		$this->assertEquals( '', $this->subject->resolveFilepath( '/nonexistent' ) );
+		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistent' ) );
 
 		$this->subject->setDirectories( [WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR] );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( '/view.php' ) );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( 'view.php' ) );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( '/view' ) );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( 'view' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( '/nonexistant' ) );
-		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistant' ) );
+		$this->assertEquals( '', $this->subject->resolveFilepath( '/nonexistent' ) );
+		$this->assertEquals( '', $this->subject->resolveFilepath( 'nonexistent' ) );
 
 		$this->subject->setDirectories( [$fixtures, $subdirectory] );
 		$this->assertEquals( $view, $this->subject->resolveFilepath( '/view.php' ) );

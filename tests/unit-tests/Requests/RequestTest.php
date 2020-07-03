@@ -158,7 +158,7 @@ class RequestTest extends WP_UnitTestCase {
 	 * @covers ::server
 	 * @covers ::headers
 	 */
-	public function testGet_NonExistantKey_ReturnNull() {
+	public function testGet_NonExistentKey_ReturnNull() {
 		$expected = null;
 		$key = 'key';
 
@@ -194,7 +194,7 @@ class RequestTest extends WP_UnitTestCase {
 	 * @covers ::server
 	 * @covers ::headers
 	 */
-	public function testGet_NonExistantKeyWithDefault_ReturnDefault() {
+	public function testGet_NonExistentKeyWithDefault_ReturnDefault() {
 		$expected = 'foo';
 		$key = 'key';
 

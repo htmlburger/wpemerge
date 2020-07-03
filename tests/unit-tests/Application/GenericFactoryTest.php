@@ -49,8 +49,8 @@ class GenericFactoryTest extends WP_UnitTestCase {
 	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found
 	 */
-	public function testMake_UnknownNonexistantClass_Exception() {
-		$class = \WPEmergeTestTools\NonExistantClass::class;
+	public function testMake_UnknownNonexistentClass_Exception() {
+		$class = \WPEmergeTestTools\NonExistentClass::class;
 
 		$this->container->shouldReceive( 'offsetExists' )
 			->with( $class )

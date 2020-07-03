@@ -106,7 +106,7 @@ class MixedTypeTest extends WP_UnitTestCase {
 	public function testIsClass() {
 		$this->assertTrue( MixedType::isClass( 'stdClass' ) );
 		$this->assertTrue( MixedType::isClass( TestService::class ) );
-		$this->assertFalse( MixedType::isClass( 'NonExistantClassName' ) );
+		$this->assertFalse( MixedType::isClass( 'NonExistentClassName' ) );
 		$this->assertFalse( MixedType::isClass( 1 ) );
 		$this->assertFalse( MixedType::isClass( new stdClass() ) );
 		$this->assertFalse( MixedType::isClass( [] ) );

@@ -280,8 +280,8 @@ class HandlerTest extends WP_UnitTestCase {
 	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
 	 * @expectedExceptionMessage Class not found
 	 */
-	public function testMake_NonexistantClassWithPrefix_Exception() {
-		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', 'WPEmergeTests\\NonexistantNamespace\\' );
+	public function testMake_NonexistentClassWithPrefix_Exception() {
+		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', 'WPEmergeTests\\NonexistentNamespace\\' );
 		$subject->make();
 	}
 

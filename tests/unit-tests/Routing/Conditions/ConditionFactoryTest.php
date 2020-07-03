@@ -197,9 +197,9 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage does not exist
 	 */
-	public function testMake_NonexistantConditionType_Exception() {
-		$subject = new ConditionFactory( ['nonexistant_condition_type' => 'Nonexistant\\Condition\\Type\\Class'] );
-		$subject->make( ['nonexistant_condition_type'] );
+	public function testMake_NonexistentConditionType_Exception() {
+		$subject = new ConditionFactory( ['nonexistent_condition_type' => 'Nonexistent\\Condition\\Type\\Class'] );
+		$subject->make( ['nonexistent_condition_type'] );
 	}
 
 	/**

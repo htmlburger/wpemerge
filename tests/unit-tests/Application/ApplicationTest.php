@@ -92,9 +92,9 @@ class ApplicationTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::resolve
 	 */
-	public function testResolve_NonexistantKey_ReturnNull() {
+	public function testResolve_NonexistentKey_ReturnNull() {
 		$expected = null;
-		$container_key = 'nonexistantcontainerkey';
+		$container_key = 'nonexistentcontainerkey';
 
 		$this->subject->bootstrap( [], false );
 		$this->assertSame( $expected, $this->subject->resolve( $container_key ) );
