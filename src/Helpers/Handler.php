@@ -36,10 +36,10 @@ class Handler {
 	/**
 	 * Constructor
 	 *
-	 * @param GenericFactory $factory
-	 * @param string|Closure $raw_handler
-	 * @param string         $default_method
-	 * @param string         $namespace
+	 * @param GenericFactory       $factory
+	 * @param string|array|Closure $raw_handler
+	 * @param string               $default_method
+	 * @param string               $namespace
 	 */
 	public function __construct( GenericFactory $factory, $raw_handler, $default_method = '', $namespace = '' ) {
 		$this->factory = $factory;
@@ -56,9 +56,9 @@ class Handler {
 	/**
 	 * Parse a raw handler to a Closure or a [class, method, namespace] array
 	 *
-	 * @param  string|Closure     $raw_handler
-	 * @param  string             $default_method
-	 * @param  string             $namespace
+	 * @param  string|array|Closure $raw_handler
+	 * @param  string               $default_method
+	 * @param  string               $namespace
 	 * @return array|Closure|null
 	 */
 	protected function parse( $raw_handler, $default_method, $namespace ) {
@@ -76,7 +76,7 @@ class Handler {
 	/**
 	 * Parse a [Class::class, 'method'] array handler to a [class, method, namespace] array
 	 *
-	 * @param  string     $raw_handler
+	 * @param  array      $raw_handler
 	 * @param  string     $default_method
 	 * @param  string     $namespace
 	 * @return array|null
