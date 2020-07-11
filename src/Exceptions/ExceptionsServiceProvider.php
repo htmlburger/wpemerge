@@ -9,6 +9,7 @@
 
 namespace WPEmerge\Exceptions;
 
+use Pimple\Container;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use WPEmerge\Exceptions\Whoops\DebugDataProvider;
@@ -34,6 +35,16 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 			'pretty_errors' => $debug,
 		] );
 
+		$this->registerPrettyErrorHandler( $container );
+		$this->registerErrorHandler( $container );
+	}
+
+	/**
+	 * Register the pretty error handler service.
+	 *
+	 * @param Container $container
+	 */
+	protected function registerPrettyErrorHandler( $container ) {
 		$container[ DebugDataProvider::class ] = function ( $container ) {
 			return new DebugDataProvider( $container );
 		};
@@ -65,7 +76,14 @@ class ExceptionsServiceProvider implements ServiceProviderInterface {
 
 			return $run;
 		};
+	}
 
+	/**
+	 * Register the error handler service.
+	 *
+	 * @param Container $container
+	 */
+	protected function registerErrorHandler( $container ) {
 		$container[ WPEMERGE_EXCEPTIONS_ERROR_HANDLER_KEY ] = function ( $container ) {
 			$debug = $container[ WPEMERGE_CONFIG_KEY ]['debug'];
 			$whoops = $debug['pretty_errors'] ? $container[ Run::class ] : null;
