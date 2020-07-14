@@ -174,7 +174,7 @@ class RouteBlueprint {
 
 		$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 1 );
 
-		if ( ! empty( $trace ) ) {
+		if ( ! empty( $trace ) && ! empty( $trace[0]['file'] ) ) {
 			$route->attribute( '__definition', $trace[0]['file'] . ':' . $trace[0]['line'] );
 		}
 
