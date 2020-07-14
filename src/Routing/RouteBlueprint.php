@@ -172,6 +172,12 @@ class RouteBlueprint {
 
 		$route = $this->router->route( $this->getAttributes() );
 
+		$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 1 );
+
+		if ( ! empty( $trace ) ) {
+			$route->attribute( '__definition', $trace[0]['file'] . ':' . $trace[0]['line'] );
+		}
+
 		$this->router->addRoute( $route );
 	}
 

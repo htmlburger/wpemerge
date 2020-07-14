@@ -212,7 +212,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 */
 	public function testHandle_Handler_SetHandlerAttribute() {
 		$this->router->shouldReceive( 'route' )
-			->andReturn( Mockery::mock( RouteInterface::class ) );
+			->andReturn( Mockery::mock( RouteInterface::class )->shouldIgnoreMissing() );
 
 		$this->subject->handle( 'foo' );
 
@@ -224,7 +224,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 */
 	public function testHandle_EmptyHandler_PassAttributes() {
 		$attributes = ['foo' => 'bar'];
-		$route = Mockery::mock( RouteInterface::class );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$this->router->shouldReceive( 'route' )
 			->with( $attributes )
@@ -242,7 +242,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_EmptyHandler_AddRouteToRouter() {
-		$route = Mockery::mock( RouteInterface::class );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$this->router->shouldReceive( 'route' )
 			->andReturn( $route );
@@ -260,7 +260,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 * @covers ::handle
 	 */
 	public function testHandle_EmptyHandler_ReturnRoute() {
-		$route = Mockery::mock( RouteInterface::class );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$this->router->shouldReceive( 'route' )
 			->andReturn( $route );
@@ -303,7 +303,7 @@ class RouteBlueprintTest extends WP_UnitTestCase {
 	 */
 	public function testAll() {
 		$handler = 'foo';
-		$route = Mockery::mock( RouteInterface::class );
+		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$this->router->shouldReceive( 'mergeMethodsAttribute' )
 			->with( [], ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'] )
