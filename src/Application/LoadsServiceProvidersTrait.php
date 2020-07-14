@@ -65,7 +65,7 @@ trait LoadsServiceProvidersTrait {
 		$service_providers = array_map( function ( $service_provider ) use ( $container ) {
 			if ( ! is_subclass_of( $service_provider, ServiceProviderInterface::class ) ) {
 				throw new ConfigurationException(
-					'The following class does not implement ' .
+					'The following class is not defined or does not implement ' .
 					ServiceProviderInterface::class . ': ' . $service_provider
 				);
 			}
