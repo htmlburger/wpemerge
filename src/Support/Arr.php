@@ -10,8 +10,7 @@ use ArrayAccess;
  * @credit (limited version of) illuminate/support
  * @codeCoverageIgnore
  */
-class Arr
-{
+class Arr {
 	/**
 	 * Determine whether the given value is array accessible.
 	 *
