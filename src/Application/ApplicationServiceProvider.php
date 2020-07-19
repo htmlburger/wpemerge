@@ -46,6 +46,16 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 			return new HandlerFactory( $c[ WPEMERGE_APPLICATION_GENERIC_FACTORY_KEY ] );
 		};
 
+		$container[ WPEMERGE_APPLICATION_FILESYSTEM_KEY ] = function ( $c ) {
+			global $wp_filesystem;
+
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+
+			WP_Filesystem();
+
+			return $wp_filesystem;
+		};
+
 		$app = $container[ WPEMERGE_APPLICATION_KEY ];
 		$app->alias( 'app', WPEMERGE_APPLICATION_KEY );
 		$app->alias( 'closure', WPEMERGE_APPLICATION_CLOSURE_FACTORY_KEY );

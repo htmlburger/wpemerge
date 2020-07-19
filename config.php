@@ -40,6 +40,10 @@ if ( ! defined( 'WPEMERGE_APPLICATION_CLOSURE_FACTORY_KEY' ) ) {
 	define( 'WPEMERGE_APPLICATION_CLOSURE_FACTORY_KEY', 'wpemerge.application.closure_factory' );
 }
 
+if ( ! defined( 'WPEMERGE_APPLICATION_FILESYSTEM_KEY' ) ) {
+	define( 'WPEMERGE_APPLICATION_FILESYSTEM_KEY', 'wpemerge.application.filesystem' );
+}
+
 if ( ! defined( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY' ) ) {
 	define( 'WPEMERGE_HELPERS_HANDLER_FACTORY_KEY', 'wpemerge.handlers.helper_factory' );
 }
