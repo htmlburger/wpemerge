@@ -151,8 +151,9 @@ class Flash {
 	protected function addToRequest( $request_key, $key, $new_items ) {
 		$this->validateStore();
 
+		$get = $request_key === self::CURRENT_KEY ? 'get' : 'getNext';
 		$new_items = MixedType::toArray( $new_items );
-		$items = MixedType::toArray( $this->get( $key, [] ) );
+		$items = MixedType::toArray( $this->$get( $key, [] ) );
 		$this->flashed[ $request_key ][ $key ] = array_merge( $items, $new_items );
 	}
 
