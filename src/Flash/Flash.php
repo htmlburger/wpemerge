@@ -152,7 +152,7 @@ class Flash {
 		$this->validateStore();
 
 		$new_items = MixedType::toArray( $new_items );
-		$items = MixedType::toArray( $this->get( $key, [] ) );
+		$items = MixedType::toArray( $this->getFromRequest( $request_key, $key, [] ) );
 		$this->flashed[ $request_key ][ $key ] = array_merge( $items, $new_items );
 	}
 

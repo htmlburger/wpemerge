@@ -66,11 +66,13 @@ class FlashTest extends WP_UnitTestCase {
 		$subject = new Flash( $store );
 
 		$subject->add( 'foo', 'foobar' );
+		$subject->add( 'foo', ['barfoo'] );
 		$subject->add( 'bar', ['barbaz', 'bazfoo'] );
+		$subject->add( 'bar', 'bazbar' );
 
-		$this->assertEquals( ['foobar'], $subject->getNext( 'foo' ) );
-		$this->assertEquals( ['barbaz', 'bazfoo'], $subject->getNext( 'bar' ) );
-		$this->assertEquals( ['foo' => ['foobar'], 'bar' => ['barbaz', 'bazfoo']], $subject->getNext() );
+		$this->assertEquals( ['foobar', 'barfoo'], $subject->getNext( 'foo' ) );
+		$this->assertEquals( ['barbaz', 'bazfoo', 'bazbar'], $subject->getNext( 'bar' ) );
+		$this->assertEquals( ['foo' => ['foobar', 'barfoo'], 'bar' => ['barbaz', 'bazfoo', 'bazbar']], $subject->getNext() );
 	}
 
 	/**
@@ -84,11 +86,13 @@ class FlashTest extends WP_UnitTestCase {
 		$subject = new Flash( $store );
 
 		$subject->addNow( 'foo', 'foobar' );
+		$subject->addNow( 'foo', ['barfoo'] );
 		$subject->addNow( 'bar', ['barbaz', 'bazfoo'] );
+		$subject->addNow( 'bar', 'bazbar' );
 
-		$this->assertEquals( ['foobar'], $subject->get( 'foo' ) );
-		$this->assertEquals( ['barbaz', 'bazfoo'], $subject->get( 'bar' ) );
-		$this->assertEquals( ['foo' => ['foobar'], 'bar' => ['barbaz', 'bazfoo']], $subject->get() );
+		$this->assertEquals( ['foobar', 'barfoo'], $subject->get( 'foo' ) );
+		$this->assertEquals( ['barbaz', 'bazfoo', 'bazbar'], $subject->get( 'bar' ) );
+		$this->assertEquals( ['foo' => ['foobar', 'barfoo'], 'bar' => ['barbaz', 'bazfoo', 'bazbar']], $subject->get() );
 	}
 
 	/**
