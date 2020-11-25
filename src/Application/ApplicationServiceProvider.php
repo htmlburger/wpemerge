@@ -27,6 +27,7 @@ class ApplicationServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		$this->extendConfig( $container, 'providers', [] );
+		$this->extendConfig( $container, 'namespace', 'App\\' );
 
 		$upload_dir = wp_upload_dir();
 		$cache_dir = MixedType::addTrailingSlash( $upload_dir['basedir'] ) . 'wpemerge' . DIRECTORY_SEPARATOR . 'cache';

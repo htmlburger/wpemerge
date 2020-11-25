@@ -27,10 +27,12 @@ class ViewServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( $container ) {
 		/** @var Container $container */
+		$namespace = $container[ WPEMERGE_CONFIG_KEY ]['namespace'];
+
 		$this->extendConfig( $container, 'views', [get_stylesheet_directory(), get_template_directory()] );
 
 		$this->extendConfig( $container, 'view_composers', [
-			'namespace' => 'App\\ViewComposers\\',
+			'namespace' => $namespace . 'ViewComposers\\',
 		] );
 
 		$container[ WPEMERGE_VIEW_SERVICE_KEY ] = function ( $c ) {

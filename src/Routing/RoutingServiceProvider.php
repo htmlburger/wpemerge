@@ -46,12 +46,14 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 	 * {@inheritDoc}
 	 */
 	public function register( $container ) {
+		$namespace = $container[ WPEMERGE_CONFIG_KEY ]['namespace'];
+
 		$this->extendConfig( $container, 'routes', [
 			'web' => [
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['web'],
-					'namespace' => 'App\\Controllers\\Web\\',
+					'namespace' => $namespace . 'Controllers\\Web\\',
 					'handler' => 'WPEmerge\\Controllers\\WordPressController@handle',
 				],
 			],
@@ -59,14 +61,14 @@ class RoutingServiceProvider implements ServiceProviderInterface {
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['admin'],
-					'namespace' => 'App\\Controllers\\Admin\\',
+					'namespace' => $namespace . 'Controllers\\Admin\\',
 				],
 			],
 			'ajax' => [
 				'definitions' => '',
 				'attributes'  => [
 					'middleware' => ['ajax'],
-					'namespace' => 'App\\Controllers\\Ajax\\',
+					'namespace' => $namespace . 'Controllers\\Ajax\\',
 				],
 			],
 		] );
