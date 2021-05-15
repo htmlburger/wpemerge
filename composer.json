@@ -30,7 +30,7 @@
     "guzzlehttp/psr7": "^1.5"
   },
   "require-dev": {
-    "mockery/mockery": "^0.9",
+    "mockery/mockery": "^1.4.3",
     "filp/whoops": "^2.2",
     "squizlabs/php_codesniffer": "^3.3",
     "phpcompatibility/php-compatibility": "^9.0"

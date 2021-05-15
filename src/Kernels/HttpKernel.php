@@ -174,7 +174,7 @@ class HttpKernel implements HttpKernelInterface {
 	 * @return ResponseInterface
 	 */
 	protected function executeHandler( Handler $handler, $arguments = [] ) {
-		$response = call_user_func_array( [$handler, 'execute'], $arguments );
+		$response = call_user_func_array( [$handler, 'execute'], array_values( $arguments ) );
 		$response = $this->toResponse( $response );
 
 		if ( ! $response instanceof ResponseInterface ) {
