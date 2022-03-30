@@ -5,18 +5,13 @@ namespace WPEmergeTests\Application;
 use BadMethodCallException;
 use Mockery;
 use WPEmerge\Application\ApplicationTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\ApplicationTrait
  */
-class ApplicationTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+class ApplicationTraitTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 
 		FooApp::setApplication( null );

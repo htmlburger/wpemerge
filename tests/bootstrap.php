@@ -1,7 +1,6 @@
 <?php
 
 class WPEmerge_Tests_Bootstrap {
-
 	/**
 	 * The bootstrap instance.
 	 *
@@ -47,11 +46,11 @@ class WPEmerge_Tests_Bootstrap {
 			define( 'SCRIPT_DEBUG', false );
 		}
 
+		// load dependencies
+		require_once $this->library_directory . '/vendor/autoload.php';
+
 		// load test function so tests_add_filter() is available
 		require_once $this->wp_tests_dir . '/includes/functions.php';
-
-		// load plugin
-		tests_add_filter( 'muplugins_loaded', [$this, 'load_plugin'] );
 
 		// load the WP testing environment
 		require_once $this->wp_tests_dir . '/includes/bootstrap.php';
@@ -63,14 +62,6 @@ class WPEmerge_Tests_Bootstrap {
 			$wp->query_vars = [];
 		}
 	}
-
-	/**
-	 * Load the plugin
-	 */
-	public function load_plugin() {
-		require_once $this->library_directory . '/vendor/autoload.php';
-	}
-
 	/**
 	 * Get the single tests boostrap instance
 	 *
@@ -83,7 +74,6 @@ class WPEmerge_Tests_Bootstrap {
 
 		return static::$instance;
 	}
-
 }
 
 WPEmerge_Tests_Bootstrap::instance();

@@ -6,26 +6,23 @@ use Mockery;
 use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
 use Pimple\Container;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\Application
  */
-class ApplicationTest extends WP_UnitTestCase {
+class ApplicationTest extends TestCase {
 	public $container;
 
 	public $subject;
 
-	public function setUp() {
-		parent::setUp();
-
+	public function set_up() {
 		$this->container = new Container();
 		$this->subject = new Application( $this->container, false );
 		$this->container[ WPEMERGE_APPLICATION_KEY ] = $this->subject;
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->container );
