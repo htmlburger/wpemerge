@@ -47,6 +47,7 @@
   },
   "scripts": {
     "lint": "phpcs",
+    "install-test-env": "WPEMERGE_PHP_VER=$(php -r 'echo PHP_MAJOR_VERSION . \".\" . PHP_MINOR_VERSION;') && if [ \"$WPEMERGE_PHP_VER\" \\> \"7.1\" ] && [ \"$WPEMERGE_PHP_VER\" \\< \"8.0\" ]; then composer require --dev phpunit/phpunit:^7 yoast/phpunit-polyfills; else composer require --dev phpunit/phpunit yoast/phpunit-polyfills; fi",
     "test": "phpunit --coverage-clover=./tmp/clover.xml"
   }
 }
