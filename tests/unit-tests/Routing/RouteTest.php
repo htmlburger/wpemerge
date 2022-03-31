@@ -3,23 +3,16 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use Psr\Http\Message\ResponseInterface;
-use WPEmerge\Helpers\Handler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Route
  */
-class RouteTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+class RouteTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 	}
 

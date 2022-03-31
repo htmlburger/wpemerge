@@ -3,12 +3,12 @@
 namespace WPEmergeTests\Requests;
 
 use WPEmerge\Requests\Request;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Requests\Request
  */
-class RequestTest extends WP_UnitTestCase {
+class RequestTest extends TestCase {
 	/**
 	 * @covers ::getMethod
 	 * @covers ::getMethodOverride

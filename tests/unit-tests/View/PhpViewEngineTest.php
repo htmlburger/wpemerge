@@ -8,24 +8,20 @@ use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\PhpViewFilesystemFinder;
 use WPEmerge\View\ViewInterface;
-use WPEmerge\View\ViewService;
 use WPEmergeTestTools\Helper;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpViewEngine
  */
-class PhpViewEngineTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class PhpViewEngineTest extends TestCase {
+	public function set_up() {
 		$this->compose_action = [Mockery::mock()->shouldIgnoreMissing(), '__invoke'];
 		$this->finder = new PhpViewFilesystemFinder( [ get_stylesheet_directory(), get_template_directory() ] );
 		$this->subject = new PhpViewEngine( $this->compose_action, $this->finder );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->compose_action );

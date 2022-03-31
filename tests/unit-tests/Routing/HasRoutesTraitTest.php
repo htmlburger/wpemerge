@@ -5,21 +5,17 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\HasRoutesTrait
  */
-class HasRoutesTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class HasRoutesTraitTest extends TestCase {
+	public function set_up() {
 		$this->subject = new HasRoutesTraitTestImplementation();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
+	public function tear_down() {
 		unset( $this->condition_factory );
 		unset( $this->subject );
 	}

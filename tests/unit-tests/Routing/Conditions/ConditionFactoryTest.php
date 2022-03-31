@@ -14,19 +14,17 @@ use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\ConditionFactory
  */
-class ConditionFactoryTest extends WP_UnitTestCase {
+class ConditionFactoryTest extends TestCase {
 	public $request;
 
 	public $subject;
 
-	public function setUp() {
-		parent::setUp();
-
+	public function set_up() {
 		$app = new Application( new Container(), false );
 		$app->bootstrap( [], false );
 		$condition_types = $app->resolve( WPEMERGE_ROUTING_CONDITION_TYPES_KEY );
@@ -35,8 +33,7 @@ class ConditionFactoryTest extends WP_UnitTestCase {
 		$this->subject = new ConditionFactory( $condition_types );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->request );

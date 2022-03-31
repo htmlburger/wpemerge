@@ -2,14 +2,13 @@
 
 namespace WPEmergeTests\Helpers;
 
-use Mockery;
 use WPEmerge\Helpers\Arguments;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Arguments
  */
-class ArgumentsTest extends WP_UnitTestCase {
+class ArgumentsTest extends TestCase {
 	/**
 	 * @covers ::flip
 	 */

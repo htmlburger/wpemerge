@@ -6,12 +6,12 @@ use Mockery;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Requests\RequestInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\MultipleCondition
  */
-class MultipleConditionTest extends WP_UnitTestCase {
+class MultipleConditionTest extends TestCase {
 	/**
 	 * @covers ::isSatisfied
 	 */

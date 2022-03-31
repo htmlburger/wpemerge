@@ -6,20 +6,17 @@ use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\CanFilterQueryInterface;
 use WPEmerge\Routing\HasQueryFilterTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\HasQueryFilterTrait
  */
-class HasQueryFilterTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class HasQueryFilterTraitTest extends TestCase {
+	public function set_up() {
 		$this->subject = $this->getMockForTrait( HasQueryFilterTrait::class );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->subject );

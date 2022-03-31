@@ -5,7 +5,6 @@ namespace WPEmergeTests\Middleware;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Middleware\ExecutesMiddlewareTrait;
 use WPEmerge\Requests\RequestInterface;
@@ -13,21 +12,19 @@ use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub1;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub2;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub3;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStubWithParameters;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ExecutesMiddlewareTrait
  */
-class ExecutesMiddlewareTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ExecutesMiddlewareTraitTest extends TestCase {
+	public function set_up() {
 		$this->request = Mockery::mock( RequestInterface::class );
 		$this->factory = Mockery::mock( GenericFactory::class );
 		$this->subject = new ExecutesMiddlewareTraitImplementation( $this->factory );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->request );

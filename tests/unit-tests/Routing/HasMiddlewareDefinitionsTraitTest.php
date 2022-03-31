@@ -4,20 +4,15 @@ namespace WPEmergeTests\Routing;
 
 use Closure;
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\HasMiddlewareDefinitionsTrait
  */
-class HasMiddlewareDefinitionsTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+class HasMiddlewareDefinitionsTraitTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 	}
 

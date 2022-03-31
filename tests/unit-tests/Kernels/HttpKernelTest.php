@@ -19,17 +19,15 @@ use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\HasQueryFilterInterface;
 use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Routing\Router;
-use WP_UnitTestCase;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Kernels\HttpKernel
  */
-class HttpKernelTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class HttpKernelTest extends TestCase {
+	public function set_up() {
 		$this->container = Mockery::mock( Container::class );
 		$this->factory = Mockery::mock( GenericFactory::class )->shouldIgnoreMissing();
 		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
@@ -54,8 +52,7 @@ class HttpKernelTest extends WP_UnitTestCase {
 		$this->subject = new HttpKernel( $this->container, $this->factory, $this->handler_factory, $this->response_service, $this->request, $this->router, $this->view_service, $this->error_handler );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->container );

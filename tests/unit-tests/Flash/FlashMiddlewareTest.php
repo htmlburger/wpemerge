@@ -5,21 +5,18 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Flash\FlashMiddleware;
 use WPEmerge\Requests\RequestInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Flash\FlashMiddleware
  */
-class FlashMiddlewareTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class FlashMiddlewareTest extends TestCase {
+	public function set_up() {
 		$this->flash = Mockery::mock( \WPEmerge\Flash\Flash::class );
 		$this->subject = new FlashMiddleware( $this->flash );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->flash );

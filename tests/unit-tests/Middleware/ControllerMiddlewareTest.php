@@ -4,18 +4,13 @@ namespace WPEmergeTests\Middleware;
 
 use Mockery;
 use WPEmerge\Middleware\ControllerMiddleware;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ControllerMiddleware
  */
-class ControllerMiddlewareTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+class ControllerMiddlewareTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 	}
 

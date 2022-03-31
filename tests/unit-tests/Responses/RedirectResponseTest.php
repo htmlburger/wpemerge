@@ -5,15 +5,13 @@ namespace WPEmergeTests\Responses;
 use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\RedirectResponse
  */
-class RedirectResponseTest extends WP_UnitTestCase {
-	public function tearDown() {
-		parent::tearDown();
-
+class RedirectResponseTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 	}
 

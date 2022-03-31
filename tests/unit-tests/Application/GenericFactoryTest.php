@@ -5,21 +5,18 @@ namespace WPEmergeTests\Application;
 use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\GenericFactory;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\GenericFactory
  */
-class GenericFactoryTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class GenericFactoryTest extends TestCase {
+	public function set_up() {
 		$this->container = Mockery::mock( Container::class );
 		$this->subject = new GenericFactory( $this->container );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->container );

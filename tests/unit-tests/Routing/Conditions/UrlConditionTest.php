@@ -5,12 +5,12 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\UrlCondition
  */
-class UrlConditionTest extends WP_UnitTestCase {
+class UrlConditionTest extends TestCase {
 	/**
 	 * @covers ::setUrl
 	 */

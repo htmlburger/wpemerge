@@ -5,12 +5,12 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use WPEmerge\Routing\Conditions\CustomCondition;
 use WPEmerge\Requests\RequestInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\CustomCondition
  */
-class CustomConditionTest extends WP_UnitTestCase {
+class CustomConditionTest extends TestCase {
 	/**
 	 * @covers ::isSatisfied
 	 */

@@ -4,26 +4,23 @@ namespace WPEmergeTests\Input;
 
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
-use WP_UnitTestCase;
 use WPEmerge\Middleware\UserLoggedOutMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserLoggedOutMiddleware
  */
-class UserLoggedOutMiddlewareTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class UserLoggedOutMiddlewareTest extends TestCase {
+	public function set_up() {
 		$this->user_id = 0;
 		$this->response_service = Mockery::mock( ResponseService::class );
 		$this->response = Mockery::mock( ResponseInterface::class );
 		$this->subject = new UserLoggedOutMiddleware( $this->response_service );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		wp_set_current_user( 0 );

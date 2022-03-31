@@ -11,15 +11,13 @@ use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlableInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Router
  */
-class RouterTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class RouterTest extends TestCase {
+	public function set_up() {
 		$this->condition_factory = new ConditionFactory( [
 			'url' => \WPEmerge\Routing\Conditions\UrlCondition::class,
 			'custom' => \WPEmerge\Routing\Conditions\CustomCondition::class,
@@ -34,8 +32,7 @@ class RouterTest extends WP_UnitTestCase {
 			->andReturn( $this->factory_handler );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->condition_factory );

@@ -3,27 +3,24 @@
 namespace WPEmergeTests\Application;
 
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Application\HasAliasesTrait;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\HasAliasesTrait
  */
-class HasAliasesTraitTest extends WP_UnitTestCase {
+class HasAliasesTraitTest extends TestCase {
 	public $subject;
 
 	public $resolver;
 
-	public function setUp() {
-		parent::setUp();
-
+	public function set_up() {
 		$this->resolver = Mockery::mock();
 		$this->subject = new HasAliasesTraitTestImplementation();
 		$this->subject->resolver = $this->resolver;
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->resolver );

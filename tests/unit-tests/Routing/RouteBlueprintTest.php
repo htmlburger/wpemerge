@@ -5,31 +5,28 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge\Routing\RouteBlueprint;
 use WPEmerge\Routing\RouteInterface;
-use WP_UnitTestCase;
 use WPEmerge\Routing\Router;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\RouteBlueprint
  */
-class RouteBlueprintTest extends WP_UnitTestCase {
+class RouteBlueprintTest extends TestCase {
 	public $router;
 
 	public $view_service;
 
 	public $subject;
 
-	public function setUp() {
-		parent::setUp();
-
+	public function set_up() {
 		$this->router = Mockery::mock( Router::class )->shouldIgnoreMissing();
 		$this->view_service = Mockery::mock( ViewService::class );
 		$this->subject = Mockery::mock( RouteBlueprint::class, [$this->router, $this->view_service] )->makePartial();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->router );

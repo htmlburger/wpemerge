@@ -3,14 +3,14 @@
 namespace WPEmergeTests\Helpers;
 
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Helpers\Url;
 use WPEmerge\Requests\RequestInterface;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Url
  */
-class UrlTest extends WP_UnitTestCase {
+class UrlTest extends TestCase {
 	/**
 	 * @covers ::getPath
 	 */

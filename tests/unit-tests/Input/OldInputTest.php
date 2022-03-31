@@ -5,22 +5,19 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Flash\Flash;
 use WPEmerge\Input\OldInput;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Input\OldInput
  */
-class OldInputTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class OldInputTest extends TestCase {
+	public function set_up() {
 		$this->flash = Mockery::mock( Flash::class );
 		$this->flash_key = '__foobar';
 		$this->subject = new OldInput( $this->flash, $this->flash_key );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->subject );

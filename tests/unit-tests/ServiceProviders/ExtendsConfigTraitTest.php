@@ -2,24 +2,19 @@
 
 namespace WPEmergeTests\ServiceProviders;
 
-use Mockery;
 use Pimple\Container;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\ServiceProviders\ExtendsConfigTrait
  */
-class ExtendsConfigTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ExtendsConfigTraitTest extends TestCase {
+	public function set_up() {
 		$this->subject = $this->getMockForTrait( ExtendsConfigTrait::class );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
+	public function tear_down() {
 		unset( $this->subject );
 	}
 

@@ -5,13 +5,13 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Requests\RequestInterface;
-use WP_UnitTestCase;
 use WPEmerge\Routing\Conditions\NegateCondition;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\NegateCondition
  */
-class NegateConditionTest extends WP_UnitTestCase {
+class NegateConditionTest extends TestCase {
 	/**
 	 * @covers ::isSatisfied
 	 */

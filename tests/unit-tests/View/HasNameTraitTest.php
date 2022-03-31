@@ -3,12 +3,12 @@
 namespace WPEmergeTests\View;
 
 use WPEmerge\View\HasNameTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\HasNameTrait
  */
-class HasNameTraitTest extends WP_UnitTestCase {
+class HasNameTraitTest extends TestCase {
 	/**
 	 * @covers ::getName
 	 * @covers ::setName

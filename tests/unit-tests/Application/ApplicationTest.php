@@ -3,9 +3,9 @@
 namespace WPEmergeTests\Application;
 
 use Mockery;
+use Pimple\Container;
 use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
-use Pimple\Container;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**

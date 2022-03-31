@@ -8,15 +8,13 @@ use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\View\ViewService;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewEngineInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\ViewService
  */
-class ViewServiceTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ViewServiceTest extends TestCase {
+	public function set_up() {
 		$this->engine = Mockery::mock( ViewEngineInterface::class )->shouldIgnoreMissing();
 		$this->handler_factory = Mockery::mock( HandlerFactory::class )->shouldIgnoreMissing();
 		$this->factory_handler = Mockery::mock( Handler::class );
@@ -26,8 +24,7 @@ class ViewServiceTest extends WP_UnitTestCase {
 			->andReturn( $this->factory_handler );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->engine );

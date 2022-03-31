@@ -5,26 +5,22 @@ namespace WPEmergeTests\Responses;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Requests\RequestInterface;
-use WPEmerge\Responses\RedirectResponse;
 use WPEmerge\Responses\ResponseService;
-use WP_UnitTestCase;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\ResponseService
  */
-class ResponseServiceTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ResponseServiceTest extends TestCase {
+	public function set_up() {
 		$this->request = Mockery::mock( RequestInterface::class );
 		$this->view_service = Mockery::mock( ViewService::class );
 		$this->subject = new ResponseService( $this->request, $this->view_service );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->request );

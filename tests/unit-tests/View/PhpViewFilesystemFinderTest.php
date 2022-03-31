@@ -5,20 +5,17 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\View\PhpViewFilesystemFinder;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpViewFilesystemFinder
  */
-class PhpViewFilesystemFinderTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class PhpViewFilesystemFinderTest extends TestCase {
+	public function set_up() {
 		$this->subject = new PhpViewFilesystemFinder( [ get_stylesheet_directory(), get_template_directory() ] );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->subject );

@@ -6,24 +6,21 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use Mockery;
 use Psr\Http\Message\ResponseInterface;
-use WP_UnitTestCase;
 use WPEmerge\Responses\ConvertsToResponseTrait;
 use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Responses\ResponseService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\ConvertsToResponseTrait
  */
-class ConvertsToResponseTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ConvertsToResponseTraitTest extends TestCase {
+	public function set_up() {
 		$this->response_service = Mockery::mock( ResponseService::class )->shouldIgnoreMissing();
 		$this->subject = new ConvertsToResponseTraitImplementation( $this->response_service );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->response_service );

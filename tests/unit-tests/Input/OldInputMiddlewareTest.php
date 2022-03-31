@@ -6,21 +6,18 @@ use Mockery;
 use WPEmerge\Input\OldInput;
 use WPEmerge\Input\OldInputMiddleware;
 use WPEmerge\Requests\RequestInterface;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Input\OldInputMiddleware
  */
-class OldInputMiddlewareTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class OldInputMiddlewareTest extends TestCase {
+	public function set_up() {
 		$this->old_input = Mockery::mock( OldInput::class );
 		$this->subject = new OldInputMiddleware( $this->old_input );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->old_input );

@@ -3,19 +3,14 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Routing\SortsMiddlewareTrait;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\SortsMiddlewareTrait
  */
-class SortsMiddlewareTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+class SortsMiddlewareTraitTest extends TestCase {
+	public function tear_down() {
 		Mockery::close();
 	}
 

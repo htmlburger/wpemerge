@@ -2,14 +2,13 @@
 
 namespace WPEmergeTests\View;
 
-use Mockery;
 use WPEmerge\View\HasContextTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\HasContextTrait
  */
-class HasContextTraitTest extends WP_UnitTestCase {
+class HasContextTraitTest extends TestCase {
 	/**
 	 * @covers ::getContext
 	 * @covers ::with

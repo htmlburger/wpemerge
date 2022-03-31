@@ -6,12 +6,12 @@ use ArrayAccess;
 use Mockery;
 use stdClass;
 use WPEmerge\Flash\Flash;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Flash\Flash
  */
-class FlashTest extends WP_UnitTestCase {
+class FlashTest extends TestCase {
 	/**
 	 * @covers ::getStore
 	 * @covers ::setStore

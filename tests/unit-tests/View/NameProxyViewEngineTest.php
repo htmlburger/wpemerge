@@ -6,27 +6,23 @@ use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\Application;
 use WPEmerge\View\NameProxyViewEngine;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\NameProxyViewEngine
  */
-class NameProxyViewEngineTest extends WP_UnitTestCase {
+class NameProxyViewEngineTest extends TestCase {
 	public $container;
 
 	public $app;
 
-	public function setUp() {
-		parent::setUp();
-
+	public function set_up() {
 		$this->container = new Container();
 		$this->app = new Application( $this->container );
 		$this->app->bootstrap( [], false );
 	}
 
-	public function tearDown() {
-		parent::setUp();
-
+	public function tear_down() {
 		unset( $this->container['engine_mockup'] );
 		unset( $this->container );
 		unset( $this->app );

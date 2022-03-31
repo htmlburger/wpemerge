@@ -4,20 +4,17 @@ namespace WPEmergeTests\Middleware;
 
 use Mockery;
 use WPEmerge\Middleware\HasControllerMiddlewareTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\HasControllerMiddlewareTrait
  */
-class HasControllerMiddlewareTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class HasControllerMiddlewareTest extends TestCase {
+	public function set_up() {
 		$this->subject = $this->getMockForTrait( HasControllerMiddlewareTrait::class );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->subject );

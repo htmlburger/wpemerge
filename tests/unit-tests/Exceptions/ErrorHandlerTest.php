@@ -7,26 +7,22 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
 use Mockery;
 use Whoops\RunInterface;
-use WP_UnitTestCase;
 use WPEmerge\Exceptions\ErrorHandler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\NotFoundException;
-use WPEmerge\View\ViewService;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Exceptions\ErrorHandler
  */
-class ErrorHandlerTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ErrorHandlerTest extends TestCase {
+	public function set_up() {
 		$this->response_service = Mockery::mock( ResponseService::class );
 		$this->subject = new ErrorHandler( $this->response_service, null, false );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->response_service );

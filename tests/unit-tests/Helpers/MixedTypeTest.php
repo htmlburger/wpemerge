@@ -6,12 +6,12 @@ use Mockery;
 use stdClass;
 use WPEmerge\Helpers\MixedType;
 use WPEmergeTestTools\TestService;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\MixedType
  */
-class MixedTypeTest extends WP_UnitTestCase {
+class MixedTypeTest extends TestCase {
 	public function callableStub( $message = 'foobar' ) {
 		return $message;
 	}

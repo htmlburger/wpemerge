@@ -6,22 +6,18 @@ use Mockery;
 use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\ViewInterface;
-use WPEmergeTestTools\Helper;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpView
  */
-class PhpViewTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class PhpViewTest extends TestCase {
+	public function set_up() {
 		$this->engine = Mockery::mock( PhpViewEngine::class )->shouldIgnoreMissing();
 		$this->subject = new PhpView( $this->engine );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->engine );

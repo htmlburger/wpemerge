@@ -3,23 +3,20 @@
 namespace WPEmergeTests\Middleware;
 
 use Mockery;
-use WP_UnitTestCase;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasControllerMiddlewareInterface;
 use WPEmerge\Middleware\ReadsHandlerMiddlewareTrait;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ReadsHandlerMiddlewareTrait
  */
-class ReadsHandlerMiddlewareTraitTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class ReadsHandlerMiddlewareTraitTest extends TestCase {
+	public function set_up() {
 		$this->subject = new ReadsHandlerMiddlewareTraitImplementation();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->subject );

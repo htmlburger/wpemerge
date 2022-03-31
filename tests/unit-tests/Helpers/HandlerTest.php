@@ -3,19 +3,17 @@
 namespace WPEmergeTests\Helpers;
 
 use Mockery;
+use stdClass;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmerge\Helpers\Handler;
-use stdClass;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Handler
  */
-class HandlerTest extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
-
+class HandlerTest extends TestCase {
+	public function set_up() {
 		$this->factory = Mockery::mock( GenericFactory::class );
 
 		$this->factory->shouldReceive( 'make' )
@@ -28,8 +26,7 @@ class HandlerTest extends WP_UnitTestCase {
 			} );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		Mockery::close();
 
 		unset( $this->factory );
