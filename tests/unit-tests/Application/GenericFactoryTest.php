@@ -5,7 +5,7 @@ namespace WPEmergeTests\Application;
 use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\GenericFactory;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\GenericFactory

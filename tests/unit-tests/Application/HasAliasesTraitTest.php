@@ -4,7 +4,7 @@ namespace WPEmergeTests\Application;
 
 use Mockery;
 use WPEmerge\Application\HasAliasesTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\HasAliasesTrait

@@ -6,7 +6,7 @@ use Mockery;
 use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\ViewInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpView

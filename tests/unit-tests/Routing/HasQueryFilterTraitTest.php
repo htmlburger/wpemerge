@@ -6,7 +6,7 @@ use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\CanFilterQueryInterface;
 use WPEmerge\Routing\HasQueryFilterTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\HasQueryFilterTrait

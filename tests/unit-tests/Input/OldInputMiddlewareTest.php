@@ -6,7 +6,7 @@ use Mockery;
 use WPEmerge\Input\OldInput;
 use WPEmerge\Input\OldInputMiddleware;
 use WPEmerge\Requests\RequestInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Input\OldInputMiddleware

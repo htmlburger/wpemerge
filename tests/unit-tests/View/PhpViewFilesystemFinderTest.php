@@ -5,7 +5,7 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\Helpers\MixedType;
 use WPEmerge\View\PhpViewFilesystemFinder;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpViewFilesystemFinder

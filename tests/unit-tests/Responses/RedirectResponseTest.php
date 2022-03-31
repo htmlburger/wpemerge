@@ -5,7 +5,7 @@ namespace WPEmergeTests\Responses;
 use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\RedirectResponse;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\RedirectResponse

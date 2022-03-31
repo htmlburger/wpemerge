@@ -5,7 +5,7 @@ namespace WPEmergeTests\Application;
 use BadMethodCallException;
 use Mockery;
 use WPEmerge\Application\ApplicationTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\ApplicationTrait

@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing;
 use Mockery;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\HasRoutesTrait

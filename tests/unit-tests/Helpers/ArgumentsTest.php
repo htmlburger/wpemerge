@@ -3,7 +3,7 @@
 namespace WPEmergeTests\Helpers;
 
 use WPEmerge\Helpers\Arguments;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Arguments

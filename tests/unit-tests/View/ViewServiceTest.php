@@ -8,7 +8,7 @@ use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\View\ViewService;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewEngineInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\ViewService

@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Middleware\UserCanMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserCanMiddleware
@@ -43,7 +43,7 @@ class UserCanMiddlewareTest extends TestCase {
 		$next = function () { return true; };
 		$request = Mockery::mock( RequestInterface::class );
 
-		$this->user_ids['admin'] = $this->factory->user->create( [
+		$this->user_ids['admin'] = $this->wp_factory()->user->create( [
 			'role' => 'administrator',
 		] );
 		wp_set_current_user( $this->user_ids['admin'] );
@@ -59,7 +59,7 @@ class UserCanMiddlewareTest extends TestCase {
 		$next = function () {};
 		$url = home_url();
 
-		$this->user_ids['subscriber'] = $this->factory->user->create( [
+		$this->user_ids['subscriber'] = $this->wp_factory()->user->create( [
 			'role' => 'subscriber',
 		] );
 		wp_set_current_user( $this->user_ids['subscriber'] );
@@ -83,7 +83,7 @@ class UserCanMiddlewareTest extends TestCase {
 		$next = function () {};
 		$url = home_url( '/foo' );
 
-		$this->user_ids['subscriber'] = $this->factory->user->create( [
+		$this->user_ids['subscriber'] = $this->wp_factory()->user->create( [
 			'role' => 'subscriber',
 		] );
 		wp_set_current_user( $this->user_ids['subscriber'] );
@@ -107,15 +107,15 @@ class UserCanMiddlewareTest extends TestCase {
 		$next = function () { return true; };
 		$url = home_url();
 
-		$this->user_ids['user1'] = $this->factory->user->create( [
+		$this->user_ids['user1'] = $this->wp_factory()->user->create( [
 			'role' => 'contributor',
 		] );
 
-		$this->user_ids['user2'] = $this->factory->user->create( [
+		$this->user_ids['user2'] = $this->wp_factory()->user->create( [
 			'role' => 'contributor',
 		] );
 
-		$post_id = $this->factory->post->create( [
+		$post_id = $this->wp_factory()->post->create( [
 			'post_type' => 'post',
 			'post_status' => 'private',
 			'post_author' => $this->user_ids['user1'],

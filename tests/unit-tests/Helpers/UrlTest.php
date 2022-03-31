@@ -5,7 +5,7 @@ namespace WPEmergeTests\Helpers;
 use Mockery;
 use WPEmerge\Helpers\Url;
 use WPEmerge\Requests\RequestInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\Url

@@ -4,7 +4,7 @@ namespace WPEmergeTests\Middleware;
 
 use Mockery;
 use WPEmerge\Middleware\ControllerMiddleware;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ControllerMiddleware

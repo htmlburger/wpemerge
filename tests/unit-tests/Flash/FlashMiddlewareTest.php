@@ -5,7 +5,7 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Flash\FlashMiddleware;
 use WPEmerge\Requests\RequestInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Flash\FlashMiddleware

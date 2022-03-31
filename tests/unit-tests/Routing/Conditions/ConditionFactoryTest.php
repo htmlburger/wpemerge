@@ -14,7 +14,7 @@ use WPEmerge\Routing\Conditions\MultipleCondition;
 use WPEmerge\Routing\Conditions\NegateCondition;
 use WPEmerge\Routing\Conditions\PostIdCondition;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\ConditionFactory

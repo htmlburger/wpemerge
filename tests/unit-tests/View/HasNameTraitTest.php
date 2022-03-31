@@ -3,7 +3,7 @@
 namespace WPEmergeTests\View;
 
 use WPEmerge\View\HasNameTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\HasNameTrait

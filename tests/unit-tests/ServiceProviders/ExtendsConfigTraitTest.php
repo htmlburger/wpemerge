@@ -4,7 +4,7 @@ namespace WPEmergeTests\ServiceProviders;
 
 use Pimple\Container;
 use WPEmerge\ServiceProviders\ExtendsConfigTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\ServiceProviders\ExtendsConfigTrait

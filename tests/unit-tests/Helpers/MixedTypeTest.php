@@ -6,7 +6,7 @@ use Mockery;
 use stdClass;
 use WPEmerge\Helpers\MixedType;
 use WPEmergeTestTools\TestService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Helpers\MixedType

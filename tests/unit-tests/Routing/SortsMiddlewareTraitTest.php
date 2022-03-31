@@ -4,7 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Mockery;
 use WPEmerge\Routing\SortsMiddlewareTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\SortsMiddlewareTrait

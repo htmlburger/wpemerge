@@ -21,7 +21,7 @@ use WPEmerge\Routing\RouteInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\View\ViewInterface;
 use WPEmerge\View\ViewService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Kernels\HttpKernel

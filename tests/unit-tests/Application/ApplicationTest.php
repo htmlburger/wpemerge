@@ -6,7 +6,7 @@ use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\Application;
 use WPEmerge\ServiceProviders\ServiceProviderInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Application\Application

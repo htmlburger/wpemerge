@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Middleware\UserLoggedOutMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserLoggedOutMiddleware
@@ -52,7 +52,7 @@ class UserLoggedOutMiddlewareTest extends TestCase {
 		$next = function () {};
 		$url = home_url();
 
-		$this->user_id = $this->factory->user->create();
+		$this->user_id = $this->wp_factory()->user->create();
 		wp_set_current_user( $this->user_id );
 
 		$this->response_service->shouldReceive( 'redirect' )
@@ -74,7 +74,7 @@ class UserLoggedOutMiddlewareTest extends TestCase {
 		$next = function () {};
 		$url = home_url( '/foo' );
 
-		$this->user_id = $this->factory->user->create();
+		$this->user_id = $this->wp_factory()->user->create();
 		wp_set_current_user( $this->user_id );
 
 		$this->response_service->shouldReceive( 'redirect' )

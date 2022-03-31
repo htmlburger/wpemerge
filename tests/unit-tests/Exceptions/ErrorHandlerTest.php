@@ -11,7 +11,7 @@ use WPEmerge\Exceptions\ErrorHandler;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
 use WPEmerge\Routing\NotFoundException;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Exceptions\ErrorHandler

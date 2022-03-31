@@ -3,7 +3,7 @@
 namespace WPEmergeTests\View;
 
 use WPEmerge\View\HasContextTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\HasContextTrait

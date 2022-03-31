@@ -12,7 +12,7 @@ use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub1;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub2;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStub3;
 use WPEmergeTests\Routing\HttpKernelTestMiddlewareStubWithParameters;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ExecutesMiddlewareTrait

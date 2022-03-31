@@ -5,7 +5,7 @@ namespace WPEmergeTests\Input;
 use Mockery;
 use WPEmerge\Flash\Flash;
 use WPEmerge\Input\OldInput;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Input\OldInput

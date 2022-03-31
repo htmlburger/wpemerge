@@ -9,7 +9,7 @@ use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\PhpViewFilesystemFinder;
 use WPEmerge\View\ViewInterface;
 use WPEmergeTestTools\Helper;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\View\PhpViewEngine

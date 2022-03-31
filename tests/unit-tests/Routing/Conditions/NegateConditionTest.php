@@ -6,7 +6,7 @@ use Mockery;
 use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\NegateCondition;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\NegateCondition

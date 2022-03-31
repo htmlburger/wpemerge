@@ -11,7 +11,7 @@ use WPEmerge\Routing\Conditions\ConditionInterface;
 use WPEmerge\Routing\Conditions\UrlableInterface;
 use WPEmerge\Routing\Router;
 use WPEmerge\Routing\RouteInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Router

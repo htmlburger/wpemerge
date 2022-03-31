@@ -5,7 +5,7 @@ namespace WPEmergeTests\Routing\Conditions;
 use Mockery;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Routing\Conditions\UrlCondition

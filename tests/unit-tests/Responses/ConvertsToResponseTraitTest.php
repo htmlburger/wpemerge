@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Responses\ConvertsToResponseTrait;
 use WPEmerge\Responses\ResponsableInterface;
 use WPEmerge\Responses\ResponseService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Responses\ConvertsToResponseTrait

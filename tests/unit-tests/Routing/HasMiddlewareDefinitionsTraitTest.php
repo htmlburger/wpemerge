@@ -6,7 +6,7 @@ use Closure;
 use Mockery;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\HasMiddlewareDefinitionsTrait

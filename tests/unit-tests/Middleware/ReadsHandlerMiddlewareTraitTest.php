@@ -6,7 +6,7 @@ use Mockery;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Middleware\HasControllerMiddlewareInterface;
 use WPEmerge\Middleware\ReadsHandlerMiddlewareTrait;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\ReadsHandlerMiddlewareTrait

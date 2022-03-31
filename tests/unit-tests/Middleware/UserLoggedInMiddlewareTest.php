@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use WPEmerge\Middleware\UserLoggedInMiddleware;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Responses\ResponseService;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Middleware\UserLoggedInMiddleware
@@ -41,7 +41,7 @@ class UserLoggedInMiddlewareTest extends TestCase {
 		$next = function () { return true; };
 		$request = Mockery::mock( RequestInterface::class );
 
-		$this->user_id = $this->factory->user->create();
+		$this->user_id = $this->wp_factory()->user->create();
 		wp_set_current_user( $this->user_id );
 
 		$this->assertTrue( $this->subject->handle( $request, $next ) );

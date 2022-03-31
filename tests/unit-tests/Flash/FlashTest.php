@@ -6,7 +6,7 @@ use ArrayAccess;
 use Mockery;
 use stdClass;
 use WPEmerge\Flash\Flash;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use WPEmergeTestTools\TestCase;
 
 /**
  * @coversDefaultClass \WPEmerge\Flash\Flash
