@@ -60,8 +60,10 @@ class WordPressController {
 			);
 		}
 
+		$status_code = http_response_code();
+
 		return $this->view_service->make( $view )
 			->toResponse()
-			->withStatus( http_response_code() );
+			->withStatus( is_int( $status_code ) ? $status_code : 200 );
 	}
 }

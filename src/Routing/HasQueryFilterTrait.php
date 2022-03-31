@@ -31,7 +31,7 @@ trait HasQueryFilterTrait {
 	 * @param  mixed  $default
 	 * @return mixed
 	 */
-	public abstract function getAttribute( $attribute, $default = '' );
+	abstract public function getAttribute( $attribute, $default = '' );
 
 	/**
 	 * Apply the query filter, if any.
