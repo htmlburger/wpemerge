@@ -23,13 +23,6 @@ jobs:
             wp-versions: '4.7'
           - php-versions: '5.5'
             wp-versions: '4.7'
-        # php-versions: ['5.5']
-        # wp-versions: ['4.7']
-        # phpunit-versions: ['7.5.20']
-        # include:
-        # - operating-system: 'ubuntu-latest'
-        #   php-versions: '7.2'
-        #   phpunit-versions: '8.5.21'
 
     steps:
       - uses: actions/checkout@v3
@@ -40,7 +33,6 @@ jobs:
           my-cnf: |
             collation_server=utf8_unicode_ci
             character_set_server=utf8
-          # root-password: ${{ env.DB_PASS }}
 
       - name: Set up database
         run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE IF NOT EXISTS wpemerge_tests;'
@@ -51,31 +43,21 @@ jobs:
       - name: Does GitHub ruin my shhhstuff?
         run: cat tmp/wordpress-tests-lib/wp-tests-config.php
 
-      # - name: Clone WordPress
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: 'git://develop.git.wordpress.org/'
-      #     ref: ${{ matrix.wp-versions }}
-      #     path: ${{ env.WP_DIR }}
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: xdebug
-          # tools: phpunit
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      # - name: Cache Composer packages
-      #   id: composer-cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: vendor
-      #     key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-${{ matrix.php-versions }}-${{ matrix.wp-versions }}
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress
