@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\CanFilterQueryInterface;
 use WPEmerge\Routing\HasQueryFilterTrait;
@@ -63,8 +64,6 @@ class HasQueryFilterTraitTest extends TestCase {
 
 	/**
 	 * @covers ::applyQueryFilter
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Only routes with a condition implementing the
 	 */
 	public function testApplyQueryFilter_NonCanFilterQueryCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
@@ -79,6 +78,8 @@ class HasQueryFilterTraitTest extends TestCase {
 				null
 			) );
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Only routes with a condition implementing the' );
 		$this->subject->applyQueryFilter( $request, [] );
 	}
 }

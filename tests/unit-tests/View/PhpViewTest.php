@@ -5,6 +5,7 @@ namespace WPEmergeTests\View;
 use Mockery;
 use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
+use WPEmerge\View\ViewException;
 use WPEmerge\View\ViewInterface;
 use WPEmergeTestTools\TestCase;
 
@@ -80,20 +81,21 @@ class PhpViewTest extends TestCase {
 
 	/**
 	 * @covers ::toString
-	 * @expectedException \WPEmerge\View\ViewException
-	 * @expectedExceptionMessage must have a name
 	 */
 	public function testToString_WithoutName() {
+		$this->expectException( ViewException::class );
+		$this->expectExceptionMessage( 'must have a name' );
 		$this->subject->toString();
 	}
 
 	/**
 	 * @covers ::toString
-	 * @expectedException \WPEmerge\View\ViewException
-	 * @expectedExceptionMessage must have a filepath
 	 */
 	public function testToString_WithoutFilepath() {
 		$this->subject->setName( 'foo' );
+
+		$this->expectException( ViewException::class );
+		$this->expectExceptionMessage( 'must have a filepath' );
 		$this->subject->toString();
 	}
 

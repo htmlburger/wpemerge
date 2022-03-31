@@ -6,6 +6,7 @@ use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\Application;
 use WPEmerge\View\NameProxyViewEngine;
+use WPEmerge\View\ViewNotFoundException;
 use WPEmergeTestTools\TestCase;
 
 /**
@@ -152,8 +153,6 @@ class NameProxyViewEngineTest extends TestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \WPEmerge\View\ViewNotFoundException
-	 * @expectedExceptionMessage View not found
 	 */
 	public function testMake_NoView_EmptyString() {
 		$view = '';
@@ -170,6 +169,8 @@ class NameProxyViewEngineTest extends TestCase {
 
 		$subject = new NameProxyViewEngine( $this->app, [], 'engine_mockup' );
 
+		$this->expectException( ViewNotFoundException::class );
+		$this->expectExceptionMessage( 'View not found' );
 		$subject->make( [$view] );
 	}
 }

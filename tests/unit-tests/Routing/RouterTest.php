@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Handler;
 use WPEmerge\Helpers\HandlerFactory;
 use WPEmerge\Requests\RequestInterface;
@@ -80,10 +81,10 @@ class RouterTest extends TestCase {
 
 	/**
 	 * @covers ::mergeConditionAttribute
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route condition is not a valid
 	 */
 	public function testMergeConditionAttribute_Invalid_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Route condition is not a valid' );
 		$this->subject->mergeConditionAttribute( '', new \stdClass() );
 	}
 
@@ -201,21 +202,21 @@ class RouterTest extends TestCase {
 
 	/**
 	 * @covers ::routeCondition
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No route condition specified
 	 */
 	public function testRouteCondition_NoCondition_Exception() {
 		$subject = new RouterTestImplementation( $this->condition_factory, $this->handler_factory );
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No route condition specified' );
 		$subject->publicRouteCondition( null );
 	}
 
 	/**
 	 * @covers ::route
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route does not have any assigned request methods
 	 */
 	public function testRoute_NoMethods_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Route does not have any assigned request methods' );
 		$this->subject->route( [
 			'condition' => function () {},
 			'handler' => function () {},
@@ -375,8 +376,6 @@ class RouterTest extends TestCase {
 
 	/**
 	 * @covers ::getRouteUrl
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route condition is not resolvable to a URL
 	 */
 	public function testGetRouteUrl_NonUrlableCondition_Exception() {
 		$route = Mockery::mock( RouteInterface::class );
@@ -392,15 +391,17 @@ class RouterTest extends TestCase {
 
 		$this->subject->addRoute( $route );
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Route condition is not resolvable to a URL' );
 		$this->subject->getRouteUrl( $name );
 	}
 
 	/**
 	 * @covers ::getRouteUrl
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No route registered with the name
 	 */
 	public function testGetRouteUrl_NoRoute_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No route registered with the name' );
 		$this->subject->getRouteUrl( 'foo' );
 	}
 }

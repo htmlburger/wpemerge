@@ -133,13 +133,14 @@ class ErrorHandlerTest extends TestCase {
 	/**
 	 * @covers ::getResponse
 	 * @covers ::toDebugResponse
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Rethrown exception
 	 */
 	public function testGetResponse_DebugException_RethrowException() {
 		$exception = new Exception( 'Rethrown exception' );
 		$request = Mockery::mock( RequestInterface::class )->shouldIgnoreMissing();
 		$subject = new ErrorHandler( $this->response_service, null, true );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'Rethrown exception' );
 		$subject->getResponse( $request, $exception );
 	}
 }

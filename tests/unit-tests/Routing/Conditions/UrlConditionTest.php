@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing\Conditions;
 
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\UrlCondition;
 use WPEmergeTestTools\TestCase;
@@ -309,11 +310,12 @@ class UrlConditionTest extends TestCase {
 
 	/**
 	 * @covers ::toUrl
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Required URL parameter
 	 */
 	public function testToUrl_MissingArgument_Exception() {
 		$subject = new UrlCondition( '/{arg1}' );
+
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Required URL parameter' );
 		$subject->toUrl();
 	}
 }

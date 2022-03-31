@@ -5,6 +5,7 @@ namespace WPEmergeTests\Application;
 use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\GenericFactory;
+use WPEmerge\Exceptions\ClassNotFoundException;
 use WPEmergeTestTools\TestCase;
 
 /**
@@ -43,8 +44,6 @@ class GenericFactoryTest extends TestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
-	 * @expectedExceptionMessage Class not found
 	 */
 	public function testMake_UnknownNonexistentClass_Exception() {
 		$class = \WPEmergeTestTools\NonExistentClass::class;
@@ -53,6 +52,8 @@ class GenericFactoryTest extends TestCase {
 			->with( $class )
 			->andReturn( false );
 
+		$this->expectException( ClassNotFoundException::class );
+		$this->expectExceptionMessage( 'Class not found' );
 		$this->subject->make( $class );
 	}
 

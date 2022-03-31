@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Route;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -72,8 +73,6 @@ class RouteTest extends TestCase {
 
 	/**
 	 * @covers ::isSatisfied
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route does not have a condition
 	 */
 	public function testIsSatisfied_NoCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class );
@@ -85,6 +84,8 @@ class RouteTest extends TestCase {
 			'methods' => ['FOO'],
 		] );
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Route does not have a condition' );
 		$subject->isSatisfied( $request );
 	}
 
@@ -109,8 +110,6 @@ class RouteTest extends TestCase {
 
 	/**
 	 * @covers ::getArguments
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Route does not have a condition
 	 */
 	public function testGetArguments_NoCondition_Exception() {
 		$request = Mockery::mock( RequestInterface::class );
@@ -119,6 +118,8 @@ class RouteTest extends TestCase {
 			'methods' => ['FOO'],
 		] );
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Route does not have a condition' );
 		$subject->getArguments( $request );
 	}
 }

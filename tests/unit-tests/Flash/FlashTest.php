@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Flash;
 
 use ArrayAccess;
+use Exception;
 use Mockery;
 use stdClass;
 use WPEmerge\Flash\Flash;
@@ -185,60 +186,65 @@ class FlashTest extends TestCase {
 	/**
 	 * @covers ::getFromRequest
 	 * @covers ::validateStore
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage without an active session
 	 */
 	public function testGetFromRequest_InvalidStore_ThrowException() {
 		$store = new stdClass();
 		$subject = new Flash( $store );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'without an active session' );
 		$subject->get( 'foo' );
 	}
 
 	/**
 	 * @covers ::addToRequest
 	 * @covers ::validateStore
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage without an active session
 	 */
 	public function testAddToRequest_InvalidStore_ThrowException() {
 		$store = new stdClass();
 		$subject = new Flash( $store );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'without an active session' );
 		$subject->add( 'foo', 'foobar' );
 	}
 
 	/**
 	 * @covers ::clearFromRequest
 	 * @covers ::validateStore
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage without an active session
 	 */
 	public function testClearFromRequest_InvalidStore_ThrowException() {
 		$store = new stdClass();
 		$subject = new Flash( $store );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'without an active session' );
 		$subject->clear( 'foo' );
 	}
 
 	/**
 	 * @covers ::shift
 	 * @covers ::validateStore
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage without an active session
 	 */
 	public function testShift_InvalidStore_ThrowException() {
 		$store = new stdClass();
 		$subject = new Flash( $store );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'without an active session' );
 		$subject->shift();
 	}
 
 	/**
 	 * @covers ::save
 	 * @covers ::validateStore
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage without an active session
 	 */
 	public function testSave_InvalidStore_ThrowException() {
 		$store = new stdClass();
 		$subject = new Flash( $store );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'without an active session' );
 		$subject->save();
 	}
 }

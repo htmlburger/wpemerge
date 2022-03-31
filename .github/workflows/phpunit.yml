@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHPUnit Tests
 
 on: push
 
@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -40,10 +40,7 @@ jobs:
       - name: Install WordPress
         run: bash tests/bin/install.sh wpemerge_tests root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
-      - name: Does GitHub ruin my shhhstuff?
-        run: cat tmp/wordpress-tests-lib/wp-tests-config.php
-
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
@@ -62,14 +59,22 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress
 
-      - name: Install PHPUnit
+      - name: Install Test Environment
         run: composer run install-test-env
 
       - name: Validate PHP syntax
+        # The usage of bash + || exit 1 is to ensure xargs does not exit on first error.
         run: find src/ \( -name '*.php' \) | xargs -n1 bash -c 'php -lf $0 || exit 1'
 
       - name: Run tests
         run: composer run test
+
+      - name: Set up PHP 7.x for Scrutinizer
+        if: ${{ matrix.php-versions >= 8.0 }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: xdebug
 
       - name: Upload coverage to Scrutinizer-CI.
         run: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./tmp/clover.xml

@@ -87,8 +87,6 @@ class HttpKernelTest extends TestCase {
 
 	/**
 	 * @covers ::executeHandler
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Response returned by controller is not valid
 	 */
 	public function testExecuteHandler_InvalidResponse_Exception() {
 		$handler = function() {
@@ -117,6 +115,8 @@ class HttpKernelTest extends TestCase {
 				throw $exception;
 			} );
 
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'Response returned by controller is not valid' );
 		$subject->run( $this->request, [], $handler );
 	}
 
@@ -164,8 +164,6 @@ class HttpKernelTest extends TestCase {
 
 	/**
 	 * @covers ::run
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Test exception handled
 	 */
 	public function testRun_Exception_UseErrorHandler() {
 		$exception = new Exception();
@@ -185,6 +183,8 @@ class HttpKernelTest extends TestCase {
 				throw new Exception( 'Test exception handled' );
 			} );
 
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'Test exception handled' );
 		$this->subject->run( $this->request, [], $handler );
 	}
 

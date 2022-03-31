@@ -4,6 +4,7 @@ namespace WPEmergeTests\Routing;
 
 use Closure;
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Middleware\HasMiddlewareDefinitionsTrait;
 use WPEmerge\Requests\RequestInterface;
 use WPEmergeTestTools\TestCase;
@@ -103,11 +104,12 @@ class HasMiddlewareDefinitionsTraitTest extends TestCase {
 
 	/**
 	 * @covers ::expandMiddlewareGroup
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Unknown middleware group
 	 */
 	public function testExpandMiddlewareGroup_Invalid_Exception() {
 		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
+
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Unknown middleware group' );
 		$subject->expandMiddlewareGroup( 'undefined group' );
 	}
 
@@ -173,12 +175,12 @@ class HasMiddlewareDefinitionsTraitTest extends TestCase {
 	/**
 	 * @covers ::expandMiddlewareMolecule
 	 * @covers ::expandMiddlewareAtom
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Unknown middleware
 	 */
 	public function testExpandMiddlewareMolecule_UndefinedString_Exception() {
 		$subject = new HasMiddlewareDefinitionsTraitTestImplementation();
 
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Unknown middleware' );
 		$subject->expandMiddlewareMolecule( 'undefined middleware' );
 	}
 }

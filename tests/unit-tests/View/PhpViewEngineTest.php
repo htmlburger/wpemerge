@@ -8,6 +8,7 @@ use WPEmerge\View\PhpView;
 use WPEmerge\View\PhpViewEngine;
 use WPEmerge\View\PhpViewFilesystemFinder;
 use WPEmerge\View\ViewInterface;
+use WPEmerge\View\ViewNotFoundException;
 use WPEmergeTestTools\Helper;
 use WPEmergeTestTools\TestCase;
 
@@ -81,22 +82,23 @@ class PhpViewEngineTest extends TestCase {
 
 	/**
 	 * @covers ::getViewLayout
-	 * @expectedException \WPEmerge\View\ViewNotFoundException
-	 * @expectedExceptionMessage View layout not found
 	 */
 	public function testMake_WithIncorrectLayout() {
 		// Rely on the fact that view-with-layout.php uses a sprintf() token instead of a real path so it fails.
 		$view = WPEMERGE_TEST_DIR . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'view-with-layout.php';
-		$view = $this->subject->make( [$view] );
+
+		$this->expectException( ViewNotFoundException::class );
+		$this->expectExceptionMessage( 'View layout not found' );
+		$this->subject->make( [$view] );
 	}
 
 	/**
 	 * @covers ::make
 	 * @covers ::makeView
-	 * @expectedException \WPEmerge\View\ViewNotFoundException
-	 * @expectedExceptionMessage View not found
 	 */
 	public function testMake_NoView() {
+		$this->expectException( ViewNotFoundException::class );
+		$this->expectExceptionMessage( 'View not found' );
 		$this->subject->make( [''], [] );
 	}
 

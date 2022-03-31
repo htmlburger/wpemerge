@@ -5,6 +5,7 @@ namespace WPEmergeTests\Application;
 use BadMethodCallException;
 use Mockery;
 use WPEmerge\Application\ApplicationTrait;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmergeTestTools\TestCase;
 
 /**
@@ -58,19 +59,19 @@ class ApplicationTraitTest extends TestCase {
 
 	/**
 	 * @covers ::__callStatic
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Application instance not created
 	 */
 	public function testCallStatic_NullInstance_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Application instance not created' );
 		FooApp::foo();
 	}
 
 	/**
 	 * @covers ::__callStatic
-	 * @expectedException BadMethodCallException
-	 * @expectedExceptionMessage does not exist
 	 */
 	public function testCallStatic_InvalidMethod_Exception() {
+		$this->expectException( BadMethodCallException::class );
+		$this->expectExceptionMessage( 'does not exist' );
 		FooApp::make();
 		FooApp::traitTestMagicMethod();
 	}

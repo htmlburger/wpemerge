@@ -2,10 +2,12 @@
 
 namespace WPEmergeTests\Routing\Conditions;
 
+use Exception;
 use Mockery;
 use Pimple\Container;
 use stdClass;
 use WPEmerge\Application\Application;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Requests\RequestInterface;
 use WPEmerge\Routing\Conditions\ConditionFactory;
 use WPEmerge\Routing\Conditions\ConditionInterface;
@@ -169,33 +171,34 @@ class ConditionFactoryTest extends TestCase {
 	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 * @covers ::getConditionTypeClass
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Unknown condition
 	 */
 	public function testMake_UnknownConditionType_Exception() {
 		$expected_param = 'foobar';
 
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'Unknown condition' );
 		$this->subject->make( [ $expected_param ] );
 	}
 
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage No condition type
 	 */
 	public function testMake_NoConditionType_Exception() {
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'No condition type' );
 		$this->subject->make( [] );
 	}
 
 	/**
 	 * @covers ::make
 	 * @covers ::makeFromArray
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage does not exist
 	 */
 	public function testMake_NonexistentConditionType_Exception() {
 		$subject = new ConditionFactory( ['nonexistent_condition_type' => 'Nonexistent\\Condition\\Type\\Class'] );
+
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'does not exist' );
 		$subject->make( ['nonexistent_condition_type'] );
 	}
 
@@ -226,10 +229,10 @@ class ConditionFactoryTest extends TestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Invalid condition options
 	 */
 	public function testMake_Object_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Invalid condition options' );
 		$this->subject->make( new stdClass() );
 	}
 

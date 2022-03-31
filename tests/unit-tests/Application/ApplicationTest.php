@@ -2,6 +2,7 @@
 
 namespace WPEmergeTests\Application;
 
+use Exception;
 use Mockery;
 use Pimple\Container;
 use WPEmerge\Application\Application;
@@ -50,10 +51,10 @@ class ApplicationTest extends TestCase {
 
 	/**
 	 * @covers ::bootstrap
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage already bootstrapped
 	 */
 	public function testBootstrap_CalledMultipleTimes_ThrowException() {
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'already bootstrapped' );
 		$this->subject->bootstrap( [], false );
 		$this->subject->bootstrap( [], false );
 	}

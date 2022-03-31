@@ -3,6 +3,7 @@
 namespace WPEmergeTests\Routing;
 
 use Mockery;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Routing\HasRoutesTrait;
 use WPEmerge\Routing\RouteInterface;
 use WPEmergeTestTools\TestCase;
@@ -42,20 +43,19 @@ class HasRoutesTraitTest extends TestCase {
 
 	/**
 	 * @covers ::addRoute
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage Attempted to register a route twice
 	 */
 	public function testAddRoute_SameRoute_Exception() {
 		$route = Mockery::mock( RouteInterface::class )->shouldIgnoreMissing();
 
 		$this->subject->addRoute( $route );
+
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'Attempted to register a route twice' );
 		$this->subject->addRoute( $route );
 	}
 
 	/**
 	 * @covers ::addRoute
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage The route name "foo" is already registered
 	 */
 	public function testAddRoute_SameRouteName_Exception() {
 		$route1 = Mockery::mock( RouteInterface::class );
@@ -70,6 +70,9 @@ class HasRoutesTraitTest extends TestCase {
 			->andReturn( 'foo' );
 
 		$this->subject->addRoute( $route1 );
+
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'The route name "foo" is already registered' );
 		$this->subject->addRoute( $route2 );
 	}
 

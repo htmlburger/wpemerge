@@ -6,6 +6,7 @@ use Mockery;
 use stdClass;
 use WPEmerge\Application\GenericFactory;
 use WPEmerge\Exceptions\ClassNotFoundException;
+use WPEmerge\Exceptions\ConfigurationException;
 use WPEmerge\Helpers\Handler;
 use WPEmergeTestTools\TestCase;
 
@@ -60,10 +61,10 @@ class HandlerTest extends TestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromArray
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testParseFromArray_EmptyArray_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No or invalid handler' );
 		new Handler( $this->factory, [] );
 	}
 
@@ -71,10 +72,10 @@ class HandlerTest extends TestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromArray
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testParseFromArray_MalformedArray_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No or invalid handler' );
 		new Handler( $this->factory, ['', \WPEmergeTestTools\TestService::class, 'foo'] );
 	}
 
@@ -82,10 +83,10 @@ class HandlerTest extends TestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromArray
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testParseFromArray_FQCNWithoutMethod_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No or invalid handler' );
 		new Handler( $this->factory, [\WPEmergeTestTools\TestService::class] );
 	}
 
@@ -127,10 +128,10 @@ class HandlerTest extends TestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromArray
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testParseFromArray_FQCNWithEmptyMethod_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No or invalid handler' );
 		new Handler( $this->factory, [\WPEmergeTestTools\TestService::class, ''] );
 	}
 
@@ -206,10 +207,10 @@ class HandlerTest extends TestCase {
 	 * @covers ::__construct
 	 * @covers ::parse
 	 * @covers ::parseFromString
-	 * @expectedException \WPEmerge\Exceptions\ConfigurationException
-	 * @expectedExceptionMessage No or invalid handler
 	 */
 	public function testParseFromString_ClassWithoutMethodWithoutDefault_Exception() {
+		$this->expectException( ConfigurationException::class );
+		$this->expectExceptionMessage( 'No or invalid handler' );
 		new Handler( $this->factory, 'WPEmergeTestTools\\TestService' );
 	}
 
@@ -274,11 +275,12 @@ class HandlerTest extends TestCase {
 
 	/**
 	 * @covers ::make
-	 * @expectedException \WPEmerge\Exceptions\ClassNotFoundException
-	 * @expectedExceptionMessage Class not found
 	 */
 	public function testMake_NonexistentClassWithPrefix_Exception() {
 		$subject = new Handler( $this->factory, 'HandlerTestMock@foo', '', 'WPEmergeTests\\NonexistentNamespace\\' );
+
+		$this->expectException( ClassNotFoundException::class );
+		$this->expectExceptionMessage( 'Class not found' );
 		$subject->make();
 	}
 
