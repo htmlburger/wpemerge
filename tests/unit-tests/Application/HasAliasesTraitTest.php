@@ -114,7 +114,7 @@ class HasAliasesTraitTestImplementation {
 
 	public $resolver = null;
 
-	public function resolve() {
+	public function resolve( $key ) {
 		return call_user_func_array( [$this->resolver, 'resolve'], func_get_args() );
 	}
 }
