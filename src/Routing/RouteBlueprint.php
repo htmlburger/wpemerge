@@ -35,6 +35,37 @@ class RouteBlueprint {
 	protected $view_service = null;
 
 	/**
+	 * Allowed WordPress conditional tags
+	 *
+	 * @var string[]
+	 */
+	protected array $allowedConditionals = [
+		'is_404',
+		'is_archive',
+		'is_attachment',
+		'is_author',
+		'is_category',
+		'is_date',
+		'is_day',
+		'is_front_page',
+		'is_home',
+		'is_month',
+		'is_page',
+		'is_page_template',
+		'is_paged',
+		'is_post_type_archive',
+		'is_privacy_policy',
+		'is_search',
+		'is_single',
+		'is_singular',
+		'is_sticky',
+		'is_tag',
+		'is_tax',
+		'is_time',
+		'is_year',
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
@@ -44,6 +75,43 @@ class RouteBlueprint {
 	public function __construct( Router $router, ViewService $view_service ) {
 		$this->router = $router;
 		$this->view_service = $view_service;
+	}
+
+	/**
+	 * Call WordPress conditional tag
+	 *
+	 * @param  string $name
+	 * @param  array $arguments
+	 * @return static $this
+	 */
+	public function __call( $name, $arguments ) {
+		if ( in_array( $name, $this->getAllowedConditionals(), true ) ) {
+			return $this->get()->where( $name, ...$arguments );
+		}
+
+		throw new \InvalidArgumentException( sprintf( 'Method `%s()` is not allowed WordPress conditional tag', $name ) );
+	}
+
+	/**
+	 * Get list of allowed conditional tags
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedConditionals() {
+		return $this->allowedConditionals;
+	}
+
+	/**
+	 * Handle ajax requests
+	 *
+	 * @param  string $action
+	 * @param  boolean $private
+	 * @param  boolean $public
+	 * @return static   $this
+	 */
+	public function ajax( $action, $private = true, $public = false )
+	{
+		return $this->where( 'ajax', $action, $private, $public );
 	}
 
 	/**
