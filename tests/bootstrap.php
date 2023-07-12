@@ -63,7 +63,7 @@ class WPEmerge_Tests_Bootstrap {
 		}
 	}
 	/**
-	 * Get the single tests boostrap instance
+	 * Get the single tests bootstrap instance
 	 *
 	 * @return WPEmerge_Tests_Bootstrap
 	 */
