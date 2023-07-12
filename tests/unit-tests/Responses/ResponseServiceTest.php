@@ -46,7 +46,7 @@ class ResponseServiceTest extends TestCase {
 	/**
 	 * @covers ::output
 	 */
-	public function testOutut() {
+	public function testOutput() {
 		$expected = 'foobar';
 
 		$subject = $this->subject->output( $expected );

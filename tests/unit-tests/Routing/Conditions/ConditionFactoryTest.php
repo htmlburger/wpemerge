@@ -76,7 +76,7 @@ class ConditionFactoryTest extends TestCase {
 	 * @covers ::parseConditionOptions
 	 * @covers ::conditionTypeRegistered
 	 */
-	public function testMake_CustomConditionWithClosureInArray_CustonCondition() {
+	public function testMake_CustomConditionWithClosureInArray_CustomCondition() {
 		$expected_param = function() {};
 		$expected_class = CustomCondition::class;
 
